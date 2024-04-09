@@ -88,7 +88,7 @@ re: fclean all
 
 #--------------------UTILS----------------------------#
 git:fclean
-	@make -C ../ git
+	@make -C ../ git2
 com:fclean
 	@make -C ../ com 
 norm:

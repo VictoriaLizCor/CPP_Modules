@@ -89,9 +89,16 @@ re: fclean all
 
 #--------------------UTILS----------------------------#
 git:fclean
-	pwd
 	@echo $(CYAN) && git add ./
 	@echo $(GREEN) && git commit -e
+	@echo $(YELLOW) && git push
+git2:fclean
+	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo: \nDone:" >> msg_template 
+	@nano msg_template && sleep 2
+	@pygmentize -g -O style=rainbow_dash msg_template > msg_template
+	@sleep 1
+	@echo $(CYAN) && git add ./
+	@echo $(GREEN) && git commit -F msg_template
 	@echo $(YELLOW) && git push
 com:fclean
 	@script -q /dev/null -c "git status --porcelain -b -s " > tmp_commit_msg
