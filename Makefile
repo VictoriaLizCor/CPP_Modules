@@ -94,10 +94,8 @@ git:fclean
 	@echo $(GREEN) && git commit -e
 	@echo $(YELLOW) && git push
 com:fclean
-	$(eval MSG=$(shell git status --porcelain -b -s --column))
-	@echo $(MSG)
-	git commit -am -F <<EOF
-#	@echo $(CYAN) && git commit -am "$(MSG)"
+# git commit -F -am <<EOF
+	@echo $(CYAN) && git commit -am --porcelain "$(shell git status --porcelain -b)"
 #	@echo $(YELLOW) && git push
 #	git log -2
 #show mesage
