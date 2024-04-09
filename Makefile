@@ -96,6 +96,7 @@ git:fclean
 com:fclean
 	@echo $(CYAN) && git commit -am "$(shell git status --porcelain)"
 	@echo $(YELLOW) && git push
+	git log -2
 #show mesage
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
