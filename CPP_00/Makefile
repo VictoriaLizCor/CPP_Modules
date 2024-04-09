@@ -89,16 +89,9 @@ re: fclean all
 #--------------------UTILS----------------------------#
 git:fclean
 	make -C ../ git
-# @echo $(CYAN) && git add ./
-# @echo $(GREEN) && git commit -e
-# @echo $(YELLOW) && git push
 com:
 	make -C . fclean
 	@make -C ../ com 
-# @echo $(CYAN) && git commit -am m=$1
-# @echo $(YELLOW) && git push
-test:
-	@echo $m
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)

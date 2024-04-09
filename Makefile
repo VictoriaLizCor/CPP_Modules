@@ -94,7 +94,8 @@ git:fclean
 	@echo $(GREEN) && git commit -e
 	@echo $(YELLOW) && git push
 com:fclean
-	@echo $(CYAN) && git commit -am "$(shell git status --porcelain)"
+	$(eval MSG=$(shell git diff -v))
+	@echo $(CYAN) && git commit -am $MSG
 	@echo $(YELLOW) && git push
 	git log -2
 #show mesage
