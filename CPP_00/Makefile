@@ -87,15 +87,15 @@ re: fclean all
 
 
 #--------------------UTILS----------------------------#
-git:	fclean
-		@echo $(CYAN) && git add ./
-		@echo $(GREEN) && git commit -e
-		@echo $(YELLOW) && git push
+git:fclean
+	@echo $(CYAN) && git add ./
+	@echo $(GREEN) && git commit -e
+	@echo $(YELLOW) && git push
 com: fclean
 	make -C ../ com 
 	@echo $(ROOT)
-	# @echo $(CYAN) && git commit -am m=$1
-	# @echo $(YELLOW) && git push
+# @echo $(CYAN) && git commit -am m=$1
+# @echo $(YELLOW) && git push
 
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
