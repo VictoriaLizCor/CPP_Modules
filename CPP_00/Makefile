@@ -88,7 +88,6 @@ re: fclean all
 
 #--------------------UTILS----------------------------#
 git:fclean
-	pwd
 	make -C ../ git
 # @echo $(CYAN) && git add ./
 # @echo $(GREEN) && git commit -e
