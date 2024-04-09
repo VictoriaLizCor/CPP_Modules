@@ -94,10 +94,10 @@ git:fclean
 # @echo $(YELLOW) && git push
 com: fclean
 	make -C ../ com 
-	@echo $(ROOT)
 # @echo $(CYAN) && git commit -am m=$1
 # @echo $(YELLOW) && git push
-
+test:
+	@echo $m
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)

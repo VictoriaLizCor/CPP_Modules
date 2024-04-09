@@ -88,14 +88,14 @@ re: fclean all
 
 
 #--------------------UTILS----------------------------#
-git:	fclean
-		pwd
-		@echo $(CYAN) && git add ./
-		@echo $(GREEN) && git commit -e
-		@echo $(YELLOW) && git push
-com:	fclean
-		@echo $(CYAN) && git commit -am m=$2
-		@echo $(YELLOW) && git push
+git:fclean
+	pwd
+	@echo $(CYAN) && git add ./
+	@echo $(GREEN) && git commit -e
+	@echo $(YELLOW) && git push
+com:fclean
+	@echo $(CYAN) && git commit -am m="$(shell git status --porcelain)"
+	@echo $(YELLOW) && git push
 
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
