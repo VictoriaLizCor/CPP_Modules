@@ -18,7 +18,7 @@ HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
 BUILD_DIR	:= .build/
 DEBUG_DIR	:= $(NAME).dSYM
-ROOT		:= $(cd -P -- "$(dirname -- "$0")" && pwd -P)
+
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 D_FLAGS		+= -g++ -D DEBUG=$(D)
@@ -94,11 +94,12 @@ git:fclean
 	@echo $(GREEN) && git commit -e
 	@echo $(YELLOW) && git push
 com:fclean
-# git commit -F -am <<EOF
-	@echo $(CYAN) && git commit -am --porcelain "$(shell git status --porcelain -b)"
-#	@echo $(YELLOW) && git push
+	@script -q /dev/null -c "git status --porcelain -b -s " > tmp_commit_msg
+	@echo $(CYAN) && git add ./
+	git commit -F tmp_commit_msg
+	@echo $(YELLOW) && git push
+#	@rm tmp_commit_msg
 #	git log -2
-#show mesage
 #git status --porcelain -b -s --column | cat
 
 norm:
