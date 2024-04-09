@@ -1,5 +1,5 @@
 #------ TARGET ------#
-NAME		:= 
+NAME		:= megaphone
 #------ WFLAGS ------#
 D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 # INCLUDES	+= -I include/
@@ -74,7 +74,7 @@ clean:
 	@printf  "\n$(P_NC)"
 
 fclean:clean
-		@printf "$(LF)🧹🗑️ $(P_RED) Clean $(P_GREEN)$(NAME)\n"
+		@printf "$(LF)🧹🗑️ $(P_RED) Clean ($$PWD) $(P_GREEN)$(NAME)\n"
 		@rm -rf $(NAME)
 		@echo $(TRASH_BANNER)
 		@printf "\n$(P_NC)"
@@ -89,8 +89,7 @@ re: fclean all
 #--------------------UTILS----------------------------#
 git:fclean
 	make -C ../ git
-com:
-	make -C . fclean
+com:fclean
 	@make -C ../ com 
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"

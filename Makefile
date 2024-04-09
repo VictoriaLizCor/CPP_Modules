@@ -42,7 +42,7 @@ D_FLAGS		+= -O0 -g3 -pthread -fsanitize=address,undefined -fno-optimize-sibling-
 endif
 
 #------ RULES ------#
-all: $(NAME)   
+#all: $(NAME)   
 $(NAME): $(OBJS)
 ifneq ($(S), -1)
 	@printf "$(LF)\n🚀 $(P_BLUE)Successfully Created $(P_YELLOW)$(NAME)'s Object files 🚀$(FG_TEXT)\n"
@@ -67,7 +67,7 @@ clean:
 	@echo $(RED)
 	@if [ -d "$(BUILD_DIR)" ]; then	\
 		rm -rf $(BUILD_DIR); 		\
-		printf "$(LF)🧹🗑️ $(P_RED) Clean $(P_YELLOW)$(NAME)'s Object files$(P_NC)\n"; \
+		printf "$(LF)🧹🗑️ $(P_RED) Clean ($$PWD) $(P_YELLOW)$(NAME)'s Object files$(P_NC)\n"; \
 	fi
 	@if [ -d "$(DEBUG_DIR)" ]; then	\
 		rm -rf $(DEBUG_DIR); 		\
@@ -75,7 +75,7 @@ clean:
 	@printf  "\n$(P_NC)"
 
 fclean:clean
-		@printf "$(LF)🧹🗑️ $(P_RED) Clean $(P_GREEN)$(NAME)\n"
+		@printf "$(LF)🧹🗑️ $(P_RED) Clean ($$PWD) $(P_GREEN)$(NAME)\n"
 		@rm -rf $(NAME)
 		@echo $(TRASH_BANNER)
 		@printf "\n$(P_NC)"
@@ -94,11 +94,15 @@ git:fclean
 	@echo $(GREEN) && git commit -e
 	@echo $(YELLOW) && git push
 com:fclean
-	$(eval MSG=$(shell git diff -v))
-	@echo $(CYAN) && git commit -am $MSG
-	@echo $(YELLOW) && git push
-	git log -2
+	$(eval MSG=$(shell git status --porcelain -b -s --column))
+	@echo $(MSG)
+	git commit -am -F <<EOF
+#	@echo $(CYAN) && git commit -am "$(MSG)"
+#	@echo $(YELLOW) && git push
+#	git log -2
 #show mesage
+#git status --porcelain -b -s --column | cat
+
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)
@@ -167,15 +171,16 @@ define CPP
 endef
 export CPP
 define TRASH
-	   $(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
-	   $(RAN)⣿⣿⣿⣿⣿⡟⠻⠿⣛⡛⢿⣿⣿⣿⣿⣿⣿⣿$(NC)
-	   $(RAN)⣿⣿⣿⣿⣿⣿⣿⣶⣶⣬⣍⣙⢻⣿⣿⣿⣿⣿$(NC)
-	   $(RAN)⣿⣿⣿⣿⣿⡇⠀⡄⢠⠀⡤⠀⣾⣿⣿⣿⣿⣿$(NC)
-	   $(RAN)⣿⣿⣿⣿⣿⣷⠀⡇⢸⠀⡇⠀⣿⣿⣿⣿⣿⣿$(NC)
-	   $(RAN)⣿⣿⣿⣿⣿⣿⠀⣷⢸⠀⡇⢰⣿⣿⣿⣿⣿⣿$(NC)
-	   $(RAN)⣿⣿⣿⣿⣿⣿⣇⣈⣈⣀⣁⣼⣿⣿⣿⣿⣿⣿$(NC)
-	   $(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
-	   $(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
+
+		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
+		$(RAN)⣿⣿⣿⣿⣿⡟⠻⠿⣛⡛⢿⣿⣿⣿⣿⣿⣿⣿$(NC)
+		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣶⣶⣬⣍⣙⢻⣿⣿⣿⣿⣿$(NC)
+		$(RAN)⣿⣿⣿⣿⣿⡇⠀⡄⢠⠀⡤⠀⣾⣿⣿⣿⣿⣿$(NC)
+		$(RAN)⣿⣿⣿⣿⣿⣷⠀⡇⢸⠀⡇⠀⣿⣿⣿⣿⣿⣿$(NC)
+		$(RAN)⣿⣿⣿⣿⣿⣿⠀⣷⢸⠀⡇⢰⣿⣿⣿⣿⣿⣿$(NC)
+		$(RAN)⣿⣿⣿⣿⣿⣿⣇⣈⣈⣀⣁⣼⣿⣿⣿⣿⣿⣿$(NC)
+		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
+		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
 
 endef
 export TRASH
