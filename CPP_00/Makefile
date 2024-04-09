@@ -92,7 +92,7 @@ git:	fclean
 		@echo $(GREEN) && git commit -e
 		@echo $(YELLOW) && git push
 com:	fclean
-		@echo $(CYAN) && git commit -am $(m)
+		@echo $(CYAN) && git commit -am m=$1
 		@echo $(YELLOW) && git push
 
 norm:
