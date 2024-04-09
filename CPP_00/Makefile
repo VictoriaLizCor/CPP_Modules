@@ -92,8 +92,9 @@ git:fclean
 # @echo $(CYAN) && git add ./
 # @echo $(GREEN) && git commit -e
 # @echo $(YELLOW) && git push
-com: fclean
-	make -C ../ com 
+com:
+	make -C . fclean
+	@make -C ../ com 
 # @echo $(CYAN) && git commit -am m=$1
 # @echo $(YELLOW) && git push
 test:
