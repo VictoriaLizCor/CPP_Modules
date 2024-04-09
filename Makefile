@@ -94,7 +94,7 @@ git:fclean
 	@echo $(GREEN) && git commit -e
 	@echo $(YELLOW) && git push
 com:fclean
-	@echo $(CYAN) && git commit -am m="$(shell git status --porcelain)"
+	@echo $(CYAN) && git commit -am "$(shell git status --porcelain)"
 	@echo $(YELLOW) && git push
 
 norm:
