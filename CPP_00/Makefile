@@ -18,7 +18,6 @@ HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
 BUILD_DIR	:= .build/
 DEBUG_DIR	:= $(NAME).dSYM
-ROOT		:= $(cd -P -- "$(dirname -- "$0")" && pwd -P)
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 D_FLAGS		+= -g++ -D DEBUG=$(D)
@@ -92,10 +91,11 @@ git:	fclean
 		@echo $(CYAN) && git add ./
 		@echo $(GREEN) && git commit -e
 		@echo $(YELLOW) && git push
-com:
+com: fclean
+	make -C ../ com 
 	@echo $(ROOT)
-	@echo $(CYAN) && git commit -am m=$1
-	@echo $(YELLOW) && git push
+	# @echo $(CYAN) && git commit -am m=$1
+	# @echo $(YELLOW) && git push
 
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
