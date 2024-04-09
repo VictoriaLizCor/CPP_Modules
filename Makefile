@@ -93,7 +93,7 @@ git:fclean
 	@echo $(GREEN) && git commit -e
 	@echo $(YELLOW) && git push
 git2:fclean
-	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo: \nDone:" >> msg_template 
+	echo "toDo: \ndone:" >> msg_template 
 #	@nano msg_template && sleep 2
 #	@sleep 1
 	@echo $(CYAN) && git add ./
