@@ -88,9 +88,10 @@ re: fclean all
 
 #--------------------UTILS----------------------------#
 git:fclean
-	@echo $(CYAN) && git add ./
-	@echo $(GREEN) && git commit -e
-	@echo $(YELLOW) && git push
+	pwd
+# @echo $(CYAN) && git add ./
+# @echo $(GREEN) && git commit -e
+# @echo $(YELLOW) && git push
 com: fclean
 	make -C ../ com 
 	@echo $(ROOT)
