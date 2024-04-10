@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:55:53 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/08 14:53:30 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/10 16:14:52 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,3 +28,5 @@ int	main(int argc, char *argv[])
 	}
 	return (0);
 }
+
+$3$$f15bc138aca1e76ec6f4cfd0797ec037
