@@ -103,7 +103,7 @@ git2:fclean
 com:fclean
 	@script -q /dev/null -c "git status --porcelain -b -s " > tmp_commit_msg
 	@echo $(CYAN) && git add ./
-	@git commit -F tmp_commit_msg
+	@git commit -F -
 	@rm tmp_commit_msg
 	@echo $(YELLOW) && git push
 #	git log -2
