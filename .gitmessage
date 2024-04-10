@@ -6,8 +6,9 @@ Fix:
 #   In under 50 characters, description of the commit
 
 [Footer]
-
----
+------------------------------------
+@Autor: Victoria Lizarraga
+------------------------------------
 ####################################
 # Use the prefix naming convention 
 ####################################
