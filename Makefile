@@ -104,7 +104,7 @@ gQuick:fclean gAdd
 	@git status --porcelain -b -s  > msg_template
 	@git commit -aF msg_template
 #	@rm msg_template
-	gPush
+	$(MAKE) gPush
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)
