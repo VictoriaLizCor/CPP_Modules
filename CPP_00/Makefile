@@ -88,9 +88,11 @@ re: fclean all
 
 #--------------------UTILS----------------------------#
 git:fclean
-	@make -C ../ git2
+	@make -C ../ git
 com:fclean
 	@make -C ../ com 
+log:
+	@make -C ../ log
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)

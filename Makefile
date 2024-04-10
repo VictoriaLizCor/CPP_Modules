@@ -1,5 +1,5 @@
 #------ TARGET ------#
-NAME		:= 
+#NAME		:= 
 #------ WFLAGS ------#
 D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 # INCLUDES	+= -I include/
@@ -91,7 +91,9 @@ git:fclean
 	@echo $(CYAN) && git add ./
 	@echo $(GREEN) && git commit -e
 	@echo $(YELLOW) && git push
-git2:fclean
+log:
+	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
+#git2:fclean
 #	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo:"" \ndone:""" >> msg_template 
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
 com:fclean
@@ -101,7 +103,6 @@ com:fclean
 	@git commit -F msg_template
 	@rm msg_template
 	@echo $(YELLOW) && git push
-
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)
