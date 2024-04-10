@@ -8,6 +8,7 @@ D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 # SRCS		:=	
 ROOT		:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
+CURRENT		:= $(shell basename $$PWD)
 #------ DEBUG ------#
 D_BUG			= 0
 #------ Sanitizer ------#
@@ -27,7 +28,8 @@ D_FLAGS		+= -g++ -D DEBUG=$(D_BUG)
 endif
 ifeq ($(SAN), 0)
 #MAKEFLAGS	+= --debug
-OBJS		:= $(addprefix $(SRCS_DIR), $(SRCS))
+OBJS		:= megaphone.cpp
+#OBJS		:= $(addprefix $(SRCS_DIR), $(SRCS))
 else
 #------ CODE FOR OBJECT FILES ------#
 SRCS		:= $(SRCS:%=$(SRC_DIR)%)
@@ -51,7 +53,7 @@ endif
 	@printf "\n$(LF)🎉 $(P_BLUE)Successfully Created $(P_GREEN)$@! 🎉\n$(P_NC)"
 	@echo $(BANNER)
 
-ifneq ($(SAN), -1)
+ifneq ($(SAN), 0)
 $(OBJS): $(BUILD_DIR)%.o : $(SRCS_DIR)%.c | $(BUILD_DIR)
 	@$(CC) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 	@printf "$(LF)🚧 $(P_BLUE)Creating $(P_YELLOW)$@ $(P_BLUE)from $(P_YELLOW) $< $(FG_TEXT)"
@@ -71,7 +73,7 @@ clean:
 	@printf  "\n$(P_NC)"
 
 fclean: clean
-		@printf "$(LF)🧹🗑️ $(P_RED) Clean ($$PWD) $(P_GREEN)$(NAME)\n"
+		@printf "$(LF)🧹🗑️ $(P_RED) Clean $(P_GREEN) $(CURRENT)/$(NAME)\n"
 		@rm -rf $(NAME)
 		@echo $(TRASH_BANNER)
 		@printf "\n$(P_NC)"
@@ -103,6 +105,7 @@ norm:
 test:
 	@echo $(ROOT)
 	@echo $(GIT_REPO)
+	@echo $(CURRENT)
 gAdd:
 	@echo $(CYAN) && git add $(ROOT)
 gCommit:
