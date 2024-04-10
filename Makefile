@@ -87,22 +87,25 @@ re: fclean all
 .PHONY: all clean fclean re
 
 #--------------------UTILS----------------------------#
-git:fclean
+gAdd:
 	@echo $(CYAN) && git add ./
+gCommit:
 	@echo $(GREEN) && git commit -e
+gPush:
 	@echo $(YELLOW) && git push
+git:fclean gAdd gCommit gPush
 log:
 	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 #git2:fclean
 #	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo:"" \ndone:""" >> msg_template 
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
-com:fclean
+gQuick:fclean
 #	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
-	git status --porcelain -b -s  > msg_template
-	@echo $(CYAN) && git add ./
-	@git commit -F msg_template
+	@git status --porcelain -b -s  > msg_template
+#	gAdd
+	@git commit -aF msg_template
 	@rm msg_template
-	@echo $(YELLOW) && git push
+	gPush
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)

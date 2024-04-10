@@ -87,12 +87,23 @@ re: fclean all
 
 
 #--------------------UTILS----------------------------#
+gAdd:
+	@echo $(CYAN) && git add ./
+gCommit:
+	@echo $(GREEN) && git commit -e
+gPush:
+	@echo $(YELLOW) && git push
+#git:fclean gAdd gCommit gPush
 git:fclean
 	@make -C ../ git
-com:fclean
-	@make -C ../ com 
+# @echo $(CYAN) && git add ./
+# @echo $(GREEN) && git commit -e
+# @echo $(YELLOW) && git push
+gQuick:fclean
+	@make -C ../ gQuick
 log:
 	@make -C ../ log
+#git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)
