@@ -99,10 +99,9 @@ log:
 #git2:fclean
 #	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo:"" \ndone:""" >> msg_template 
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
-gQuick:fclean
+gQuick:fclean gAdd
 #	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
 	@git status --porcelain -b -s  > msg_template
-#	gAdd
 	@git commit -aF msg_template
 	@rm msg_template
 	gPush
