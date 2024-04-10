@@ -106,7 +106,7 @@ norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)
 
-#--------------------COLORS----------------------------#
+#--------------------COLORS---------------------------#
 CL_BOLD = \e[1m
 RAN = \033[48;5;237m\033[38;5;255m
 NC = \033[m
