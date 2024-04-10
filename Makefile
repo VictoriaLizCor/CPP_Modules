@@ -94,9 +94,6 @@ git:fclean
 git2:fclean
 #	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo:"" \ndone:""" >> msg_template 
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
-	@echo $(CYAN) && git add ./
-	@echo $(GREEN) && git commit -e .git_tmp/commit_template
-	@echo $(YELLOW) && git push
 com:fclean
 #	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
 	git status --porcelain -b -s  > msg_template
