@@ -93,14 +93,13 @@ git:fclean
 	@echo $(YELLOW) && git push
 git2:fclean
 #	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo:"" \ndone:""" >> msg_template 
-#	@nano msg_template && sleep 2
-#	@sleep 1
-	@echo $(CYAN) && git add ./
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
+	@echo $(CYAN) && git add ./
 	@echo $(GREEN) && git commit -e .git_tmp/commit_template
 	@echo $(YELLOW) && git push
 com:fclean
-	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
+#	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
+	git status --porcelain -b -s  > msg_template
 	@echo $(CYAN) && git add ./
 	@git commit -F msg_template
 	@rm msg_template
