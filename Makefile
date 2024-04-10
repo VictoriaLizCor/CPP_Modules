@@ -103,7 +103,7 @@ gQuick:fclean gAdd
 #	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
 	@git status --porcelain -b -s  > msg_template
 	@git commit -aF msg_template
-	@rm msg_template
+#	@rm msg_template
 	gPush
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
