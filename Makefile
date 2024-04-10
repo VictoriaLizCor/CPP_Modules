@@ -97,7 +97,7 @@ git2:fclean
 #	@sleep 1
 	@echo $(CYAN) && git add ./
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
-	@echo $(GREEN) && git commit -F .git_tmp/commit_template
+	@echo $(GREEN) && git commit -e .git_tmp/commit_template
 	@echo $(YELLOW) && git push
 com:fclean
 	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
@@ -105,8 +105,6 @@ com:fclean
 	@git commit -F msg_template
 	@rm msg_template
 	@echo $(YELLOW) && git push
-#	git log -2
-#git status --porcelain -b -s --column | cat
 
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
