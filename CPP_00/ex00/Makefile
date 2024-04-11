@@ -114,11 +114,10 @@ gPush:
 git:
 	@ls -la $(GIT_REPO) | grep Makefile
 	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
-		$(MAKE) -C $(GIT_REPO) fclean;		\
+		$(MAKE) -C $(GIT_REPO) fclean gAdd gCommit gPush;		\
 	else									\
-		$(MAKE) -C $(PROJECT_ROOT) fclean;	\
+		$(MAKE) -C $(PROJECT_ROOT) fclean gAdd gCommit gPush;	\
 fi
-	@$(MAKE) gAdd gCommit gPush
 gQuick:fclean gAdd
 	@git status --porcelain -b -s > $(GIT_REPO)/msg_template
 	@git commit -F $(GIT_REPO)/msg_template
