@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:55:53 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/11 13:16:28 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/11 16:04:57 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 # include <string>
 # include <cstring>
 
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
+# define STRINGIFY(x) STRINGIFY2(x)
+# define STRINGIFY2(x) #x
 /**
  * @brief Converts a C-style string to uppercase and prints it.
  * This function creates a copy of the input string, converts each character to uppercase using std::toupper, and then prints the resulting string.
@@ -54,6 +59,9 @@ void	str_upper(char *argv)
  */
 int	main(int argc, char *argv[])
 {
+# if (DEBUG > 0)
+		std::cout << "\033[0;31mDEBUG:"<< STRINGIFY(DEBUG) << std::endl;
+# endif
 	std::cout << "\033[0;32m";
 	if (argc != 1)
 	{

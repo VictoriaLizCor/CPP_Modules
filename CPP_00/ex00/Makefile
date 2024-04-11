@@ -6,13 +6,13 @@ D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 #------ SRC FILES & DIRECTORIES ------#
 # SRCS_DIR	:= src/
 # SRCS		:=	
-PROJECT_ROOT		:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
+PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 CURRENT		:= $(shell basename $$PWD)
 #------ DEBUG ------#
-D_BUG			= 0
+D_BUG		?= 0
 #------ Sanitizer ------#
-SAN			= 0
+SAN			?= 0
 #------ DEBUG UTILS ------#
 CC			:= c++
 MAKEFLAGS	+= --no-print-directory
@@ -24,7 +24,8 @@ DEBUG_DIR	:= $(NAME).dSYM
 
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D_BUG), 0)
-D_FLAGS		+= -g++ -D DEBUG=$(D_BUG)
+CC 			= g++
+D_FLAGS		+= -DDEBUG=$(D_BUG)
 endif
 ifeq ($(SAN), 0)
 #MAKEFLAGS	+= --debug
@@ -72,10 +73,14 @@ clean:
 	@printf  "\n$(P_NC)"
 
 fclean: clean
-		@printf "$(LF)🧹🗑️ $(P_RED) Clean $(P_GREEN) $(CURRENT)/$(NAME)\n"
-		@rm -rf $(NAME)
-		@echo $(TRASH_BANNER)
-		@printf "\n$(P_NC)"
+	@if [ -f "$(NAME)" ]; then	\
+		printf "$(LF)🧹🗑️ $(P_RED) Clean $(P_GREEN) $(CURRENT)/$(NAME)\n";	\
+		rm -rf $(NAME);														\
+		echo $(TRASH_BANNER);												\
+	else																	\
+		printf "$(LF)🧹🗑️ $(P_RED) Clean $(P_GREEN) $(CURRENT)\n";			\
+	fi
+	@printf "\n$(P_NC)"
 
 re:     fclean all
 
@@ -95,21 +100,6 @@ val: $(NAME)
 	@$(VALGRIND) ./$(NAME)
 	@$(VALGRIND) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
 
-# val: $(NAME)
-# 	@echo $(RED) $(VALGRIND) ./$(NAME) $(arg) $(E_NC)
-# 	@$(if $(arg), -$(VALGRIND) ./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make val arg=\"write something here\"\n")
-# hel: $(NAME)
-# 	@echo $(BLUE) $(HELGRIND) ./$(NAME) $(arg) $(E_NC)
-# 	@$(if $(arg), -$(HELGRIND) ./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make hel arg=\"write something here\"\n")
-# leaks: $(NAME)
-# 	@echo $(YELLOW) $(MAC_LEAKS) ./$(NAME) $(arg) $(E_NC)
-# 	@$(if $(arg), -$(MAC_LEAKS) ./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make hel arg=\"write something here\"\n")
-# norm:
-# 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
-# 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)
 # #-------------------- GIT UTILS ----------------------------#
 test:
 	@echo $(PROJECT_ROOT)
@@ -122,17 +112,18 @@ gCommit:
 gPush:
 	@echo $(YELLOW) && git push
 git:
-	$(MAKE) -C $(GIT_REPO) fclean
-	$(MAKE) gAdd gCommit gPush
+	@ls -la $(GIT_REPO) | grep Makefile
+	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
+		$(MAKE) -C $(GIT_REPO) fclean;		\
+	else									\
+		$(MAKE) -C $(PROJECT_ROOT) fclean;	\
+fi
+	@$(MAKE) gAdd gCommit gPush
 gQuick:fclean gAdd
 	@git status --porcelain -b -s > $(GIT_REPO)/msg_template
 	@git commit -F $(GIT_REPO)/msg_template
 	@rm $(GIT_REPO)/msg_template
 	$(MAKE) gPush
-log:
-	@git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
-
-
 #--------------------COLORS----------------------------#
 CL_BOLD = \e[1m
 RAN = \033[48;5;237m\033[38;5;255m
