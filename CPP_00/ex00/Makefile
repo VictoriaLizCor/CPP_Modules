@@ -42,7 +42,7 @@ endif
 #-------------------- RULES ----------------------------#
 all: $(NAME)
 $(NAME): $(OBJS)
-ifneq ($(SAN), -1)
+ifneq ($(SAN), 0)
 	@printf "$(LF)\n🚀 $(P_BLUE)Successfully Created $(P_YELLOW)$(NAME)'s Object files 🚀$(FG_TEXT)\n"
 endif
 	@printf "\n"
@@ -52,7 +52,6 @@ endif
 	@$(CC) $(D_FLAGS) $(INCLUDES) -pthread  $^ -o $(NAME)
 	@printf "\n$(LF)🎉 $(P_BLUE)Successfully Created $(P_GREEN)$@! 🎉\n$(P_NC)"
 	@echo $(BANNER)
-
 ifneq ($(SAN), 0)
 $(OBJS): $(BUILD_DIR)%.o : $(SRCS_DIR)%.c | $(BUILD_DIR)
 	@$(CC) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
@@ -82,6 +81,8 @@ re:     fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
+t:
+	./$(NAME)
 start: $(NAME)
 	@echo $(GREEN)./$(NAME) $(arg) $(E_NC)
 	$(if $(arg), -./$(NAME) $(arg), \
@@ -129,7 +130,7 @@ RAN = \033[48;5;237m\033[38;5;255m
 NC = \033[m
 P_RED = \e[1;91m
 P_GREEN = \e[1;32m
-P_BLUE = \e[0;34m
+P_BLUE = \e[0;36m
 P_YELLOW = \e[1;33m
 P_CCYN = \e[0;1;36m
 P_NC = \e[0m
