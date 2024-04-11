@@ -99,11 +99,12 @@ log:
 #git2:fclean
 #	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo:"" \ndone:""" >> msg_template 
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
+#	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 gQuick:fclean gAdd
 #	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
-	@git status --porcelain -b -s  > msg_template
+	@git status --porcelain -b -s > msg_template
 	@git commit -aF msg_template
-#	@rm msg_template
+	@rm msg_template
 	$(MAKE) gPush
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"

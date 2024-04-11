@@ -1,11 +1,11 @@
 ####################################
-[Title]
+[@Title]
 Fix: 
 
-[Description] 
+[@Description] 
 #   In under 50 characters, description of the commit
 
-[Footer]
+[@Footer]
 ------------------------------------
 @Autor: Victoria Lizarraga
 ------------------------------------
