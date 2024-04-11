@@ -81,7 +81,7 @@ re:     fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
-t:
+t:$(NAME)
 	@echo $(BOLD) ./$(NAME) $(E_NC)
 	@./$(NAME)
 	@echo $(BOLD) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC)
@@ -143,7 +143,6 @@ P_YELLOW = \e[1;33m
 P_CCYN = \e[0;1;36m
 P_NC = \e[0m
 LF = \e[1K\r$(P_NC)
-CRLF= \n$(LF)
 FG_TEXT = $(P_NC)\e[38;2;189;147;249m
 
 BOLD = "\033[1m"

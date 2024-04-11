@@ -6,57 +6,59 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:55:53 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/11 12:28:32 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:11:57 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include <iostream>
 # include <string>
 # include <cstring>
-# include <cctype>
-
-char *str_upper(char *str)
-{
-	for (int i = 0; str[i]; i++)
-		str[i] = std::toupper(str[i]);
-	return (str);
-}
-/**
-** Coding Style and Doxygen Documentation
-** @brief Print a string with a newline character.
-** This function takes a char* as input and prints it to the console with a newline character.
-** It converts the char* to a std::string and then inserts a newline character at the end of the string.
-** Finally, it prints the string to the console using std::cout.
-** @param s The char* to print.
- */
-
-void	ft_str(char *s)
-{
-	std::string str(s);
-	std::cout << str_upper((char *)str.c_str());
-}
 
 /**
-** @brief Main function
-** This function is the main entry point of the program.
-** It checks if the user provided any arguments and, if so, it prints each argument with a newline character.
-** If the user did not provide any arguments, it prints a loud and unbearable feedback noise.
-** @param argc The number of command-line arguments.
-** @param argv An array of pointers to the command-line arguments.
-** @return 0 to indicate success.
+ * @brief Converts a C-style string to uppercase and prints it.
+ * This function creates a copy of the input string, converts each character to uppercase using std::toupper, and then prints the resulting string.
+ * The memory allocated for the copy is then deallocated using delete[].
+ * @param argv The C-style string to be converted to uppercase and printed. This string is not modified.
+ * @details
+ * 1. `std::string str(argv);` - This is direct initialization. 
+ * The `std::string` constructor that takes a `const char*` is called directly to initialize `str`.
+ * 2. `std::string str = argv;` - This is copy initialization. Conceptually, this does the same 
+ * thing as direct initialization, but it involves an extra step. First, a temporary `std::string`
+ * object is created from `argv`, and then this temporary object is used to initialize `str`.
+ * In practice, most modern compilers will optimize away the extra step, so there's no 
+ * performance difference between direct and copy initialization.
+ * In general, both forms of initialization are fine to use, and the choice between 
+ * them is largely a matter of personal preference. However, in some cases, direct 
+ * initialization can be more efficient or allow for more control over the initialization process.
+ **/
+void	str_upper(char *argv)
+{
+	char* cpy;
+	std::string str(argv);
+	
+	cpy = new char[str.length() + 1];
+	std::strcpy(cpy, str.c_str());
+	for (int i = 0; cpy[i]; i++)
+		cpy[i] = std::toupper(cpy[i]);
+	std::cout << cpy;
+	delete[] cpy;
+}
+
+/**
+ * @brief The main function of the megaphone program.
+ * This function takes command line arguments, converts them to uppercase using
+ * the str_upper function, and prints them.
+ * @param argc The number of command line arguments.
+ * @param argv The command line arguments.
+ * @return Returns 0 on success.
  */
 int	main(int argc, char *argv[])
 {
 	std::cout << "\033[0;32m";
 	if (argc != 1)
 	{
-		std::cout << str_upper(argv[1]);
-		argv+=2;
-		while (*argv)
-		{
-			ft_str(*argv);
-			argv++;
-		}
+		for (int i = 1; argv[i]; i++)
+			str_upper(argv[i]);
 	}
 	else
 		std::cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *";
