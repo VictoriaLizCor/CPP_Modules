@@ -82,35 +82,27 @@ re:     fclean all
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
 t:
-	@echo $(BOLD) ./$(NAME) $(E_NC)
-	@./$(NAME)
-	@echo $(BOLD) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC)
-	@./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
-# start: $(NAME)
-# 	@echo $(GREEN)./$(NAME) $(arg) $(E_NC)
-# 	$(if $(arg), -./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make start arg=\"write something here\"\n")
+	./$(NAME)
+start: $(NAME)
+	@echo $(GREEN)./$(NAME) $(arg) $(E_NC)
+	$(if $(arg), -./$(NAME) $(arg), \
+		@printf "Input Example: \n\t make val arg=\"2 410 200 200\"\n")
 val: $(NAME)
-	@echo $(RED) $(VALGRIND) $(MAKE) t $(E_NC)
-	@$(VALGRIND) ./$(NAME)
-	@$(VALGRIND) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
-
-# val: $(NAME)
-# 	@echo $(RED) $(VALGRIND) ./$(NAME) $(arg) $(E_NC)
-# 	@$(if $(arg), -$(VALGRIND) ./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make val arg=\"write something here\"\n")
-# hel: $(NAME)
-# 	@echo $(BLUE) $(HELGRIND) ./$(NAME) $(arg) $(E_NC)
-# 	@$(if $(arg), -$(HELGRIND) ./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make hel arg=\"write something here\"\n")
-# leaks: $(NAME)
-# 	@echo $(YELLOW) $(MAC_LEAKS) ./$(NAME) $(arg) $(E_NC)
-# 	@$(if $(arg), -$(MAC_LEAKS) ./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make hel arg=\"write something here\"\n")
-# norm:
-# 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
-# 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)
-# #-------------------- GIT UTILS ----------------------------#
+	@echo $(RED) $(VALGRIND) ./$(NAME) $(arg) $(E_NC)
+	@$(if $(arg), -$(VALGRIND) ./$(NAME) $(arg), \
+		@printf "Input Example: \n\t make val arg=\"2 410 200 200\"\n")
+hel: $(NAME)
+	@echo $(BLUE) $(HELGRIND) ./$(NAME) $(arg) $(E_NC)
+	@$(if $(arg), -$(HELGRIND) ./$(NAME) $(arg), \
+		@printf "Input Example: \n\t make hel arg=\"2 410 200 200\"\n")
+leaks: $(NAME)
+	@echo $(YELLOW) $(MAC_LEAKS) ./$(NAME) $(arg) $(E_NC)
+	@$(if $(arg), -$(MAC_LEAKS) ./$(NAME) $(arg), \
+		@printf "Input Example: \n\t make hel arg=\"2 410 200 200\"\n")
+norm:
+	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
+	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)
+#-------------------- GIT UTILS ----------------------------#
 test:
 	@echo $(ROOT)
 	@echo $(GIT_REPO)
@@ -146,7 +138,6 @@ LF = \e[1K\r$(P_NC)
 CRLF= \n$(LF)
 FG_TEXT = $(P_NC)\e[38;2;189;147;249m
 
-BOLD = "\033[1m"
 CROSS = "\033[8m"
 RED = "\033[1;91m"
 GREEN = "\033[1;32m"
