@@ -6,7 +6,7 @@ D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 #------ SRC FILES & DIRECTORIES ------#
 # SRCS_DIR	:= src/
 # SRCS		:=	
-ROOT		:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
+PROJECT_ROOT		:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 CURRENT		:= $(shell basename $$PWD)
 #------ DEBUG ------#
@@ -112,17 +112,18 @@ val: $(NAME)
 # 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)
 # #-------------------- GIT UTILS ----------------------------#
 test:
-	@echo $(ROOT)
+	@echo $(PROJECT_ROOT)
 	@echo $(GIT_REPO)
 	@echo $(CURRENT)
 gAdd:
-	@echo $(CYAN) && git add $(ROOT)
+	@echo $(CYAN) && git add $(PROJECT_ROOT)
 gCommit:
 	@echo $(GREEN) && git commit -e
 gPush:
 	@echo $(YELLOW) && git push
-#git:fclean gAdd gCommit gPush
-git:fclean gAdd gCommit gPush
+git:
+	$(MAKE) -C $(GIT_REPO) fclean
+	$(MAKE) gAdd gCommit gPush
 gQuick:fclean gAdd
 	@git status --porcelain -b -s > $(GIT_REPO)/msg_template
 	@git commit -F $(GIT_REPO)/msg_template
