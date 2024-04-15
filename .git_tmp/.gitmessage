@@ -1,13 +1,8 @@
 ####################################
-[Title]
-Fix: 
-
-[Description] 
+<Fix>: 
 #   In under 50 characters, description of the commit
-
-[Footer]
 ------------------------------------
-@Autor: Victoria Lizarraga
+Autor: Victoria Lizarraga (@VictoriaLizCor | @lilizarr)
 ------------------------------------
 ####################################
 # Use the prefix naming convention 
