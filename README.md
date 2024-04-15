@@ -4,4 +4,6 @@
 
 ## REFERENCES
 
-*https://en.cppreference.com/w/
+* https://en.cppreference.com/w/
+* https://cplusplus.com/reference/string/string/
+* http://www.cplusplus.com/reference/iomanip/

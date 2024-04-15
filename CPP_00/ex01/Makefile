@@ -2,17 +2,19 @@
 NAME		:= my_awesome_phonebook
 #------ WFLAGS ------#
 D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
-# INCLUDES	+= -I include/
+INCLUDES	+= -I includes/
 #------ SRC FILES & DIRECTORIES ------#
 SRCS_DIR	:= src/
-SRCS		:=	my_awesome_phonebook.cpp
+SRCS		:=	Contact.cpp \
+				Phonebook.cpp 
+#				main.cpp
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 CURRENT		:= $(shell basename $$PWD)
 #------ DEBUG ------#
-D_BUG		?= 0
+D		?= 0
 #------ Sanitizer ------#
-SAN			?= 0
+S			?= 0
 #------ DEBUG UTILS ------#
 CC			:= c++
 MAKEFLAGS	+= --no-print-directory
@@ -23,11 +25,12 @@ BUILD_DIR	:= .build/
 DEBUG_DIR	:= $(NAME).dSYM
 
 #------ ADDING DEBUG FLAGS ------#
-ifneq ($(D_BUG), 0)
-CC 			= g++
+ifneq ($(D), 0)
+CC			= g++
+SRCS		+= main.cpp
 D_FLAGS		+= -DDEBUG=$(D_BUG)
 endif
-ifeq ($(SAN), 0)
+ifeq ($(S), 0)
 #MAKEFLAGS	+= --debug
 OBJS		:= $(addprefix $(SRCS_DIR), $(SRCS))
 else
@@ -42,7 +45,7 @@ endif
 #-------------------- RULES ----------------------------#
 all: $(NAME)
 $(NAME): $(OBJS)
-ifneq ($(SAN), 0)
+ifneq ($(S), 0)
 	@printf "$(LF)\n🚀 $(P_BLUE)Successfully Created $(P_YELLOW)$(NAME)'s Object files 🚀$(FG_TEXT)\n"
 endif
 	@printf "\n"
@@ -52,7 +55,7 @@ endif
 	@$(CC) $(D_FLAGS) $(INCLUDES) -pthread  $^ -o $(NAME)
 	@printf "\n$(LF)🎉 $(P_BLUE)Successfully Created $(P_GREEN)$@! 🎉\n$(P_NC)"
 	@echo $(BANNER)
-ifneq ($(SAN), 0)
+ifneq ($(S), 0)
 $(OBJS): $(BUILD_DIR)%.o : $(SRCS_DIR)%.c | $(BUILD_DIR)
 	@$(CC) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 	@printf "$(LF)🚧 $(P_BLUE)Creating $(P_YELLOW)$@ $(P_BLUE)from $(P_YELLOW) $< $(FG_TEXT)"
