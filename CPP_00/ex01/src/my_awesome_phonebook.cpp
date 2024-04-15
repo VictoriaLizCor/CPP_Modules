@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 13:55:53 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/13 14:57:13 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/15 10:52:17 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <cstring>
 
 #ifndef DEBUG
-#define DEBUG 0
+# define DEBUG 0
 #endif
 /*
 In C++98, you can't directly print a preprocessor macro that expands to an
@@ -28,8 +28,10 @@ a string. `STRINGIFY(DEBUG)` expands to `STRINGIFY2(1)`, which then expands to
 the value of `DEBUG` at compile time, not at runtime. If you change the value of
 `DEBUG` in your code after compilation, it won't affect the printed value.
 */
-#define STRINGIFY(x) STRINGIFY2(x)
-#define STRINGIFY2(x) #x
+#if (DEBUG > 0)
+# define STRINGIFY(x) STRINGIFY2(x)
+# define STRINGIFY2(x) #x
+#endif
 /**
  * @brief Converts a C-style string to uppercase and prints it. This function
  * creates a copy of the input string, converts each character to uppercase
@@ -89,6 +91,5 @@ int main(int argc, char *argv[])
 	else
 		std::cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *";
 	std::cout << "\033[0m" << std::endl;
-	std::cout << "this is a test" << std::endl;
 	return (0);
 }
