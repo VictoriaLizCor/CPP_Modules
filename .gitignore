@@ -54,7 +54,7 @@ dkms.conf
 # Ignored folders
 # test*/
 obj*/
-.vscode*/
+#.vscode*/
 #exe
 ./megaphone
 msg_template

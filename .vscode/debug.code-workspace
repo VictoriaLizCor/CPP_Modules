@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../Eval/CPP_modules"
+		}
+	],
+	"settings": {
+		"accessibility.signals.sounds.volume": 0,
+		"C_Cpp.vcFormat.indent.accessSpecifiers": true,
+		"editor.codeActionsOnSave": {
+			
+		}
+	}
+}

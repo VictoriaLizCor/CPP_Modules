@@ -1,0 +1,14 @@
+{
+	"editor.fontSize": 12,
+	"compiler-explorer.url": "https://godbolt.org", // url of the compiler explorer you want to use.
+	"compiler-explorer.compiler": "armg454", // Compiler code - See help below.
+	"compiler-explorer.options": [
+		"-O3"
+	], // Compiler options
+	"compiler-explorer.debug": true,
+	"window.customTitleBarVisibility": "auto",
+	"rewrap.wrappingColumn": 80,
+	"compiler-explorer.include": [
+		"${workspaceFolder}/CPP_00/ex01/src/${workspaceFolder}/CPP_00/ex01/src/my_awesome_phonebook.cpp"
+	], // true indicates that the extension will print debug to its output channel.
+}
