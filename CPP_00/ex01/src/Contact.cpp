@@ -16,6 +16,7 @@
 
 Contact::Contact() // initialize Info in the constructor's initializer list
 {
+	this->info_size = this->NFields;
 	std::cout << "Contact constructor called" << std::endl;
 	return ;
 }
@@ -26,14 +27,33 @@ Contact::~Contact(void)
 	return ;
 }
 
-void Contact::set_contact_value(const InfoField field, const std::string& value)
+std::string Contact::InfoFieldToString(int field) const
 {
-	this->Info[field] = value;
+	switch(static_cast<_InfoField>(field))
+	{
+		case FirstName:
+			return ("First Name");
+		case LastName: 
+			return ("Last Name");
+		case Nickname:
+			return ("Nickname");
+		case PhoneNumber:
+			return ("Phone Number");
+		case DarkestSecret:
+			return ("Darkest Secret");
+		default:
+			return ("Unknown");
+	}
+}
+
+void Contact::set_value(int field, const std::string& value)
+{
+	this->_Info[field] = value;
 	return ;
 }
 //contact.set_contact_value(Contact::FirstName, "John");
 
-std::string Contact::get_contact_value(const InfoField field) const
+std::string Contact::get_value(int field) const
 {
-	return (this->Info[field]);
+	return (this->_Info[field]);
 }

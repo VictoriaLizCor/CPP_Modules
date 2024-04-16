@@ -3,6 +3,7 @@
 # include "Contact.hpp"
 # include <iostream>
 # include <string>
+# include <cctype>
 
 
 /**
@@ -27,7 +28,6 @@ class PhoneBook
 
 		// Add a contact to the phone book
 		void addContact(const std::string& name, const std::string& phoneNumber);
-
 		// Search for a contact by name
 		void searchContact(const std::string& name);
 

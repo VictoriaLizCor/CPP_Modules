@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 11:54:19 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/15 15:52:13 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/16 13:42:00 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,19 @@
 class Contact
 {
 	public:
-		enum InfoField
+		// Constructor
+		Contact(void);
+		//Destructor
+		~Contact(void);
+		// Getter methods
+		std::string	get_value(int field) const;
+		// Setter methods
+		void		set_value(int field, const std::string& value);
+		std::string	InfoFieldToString(int field) const;
+		int		info_size;
+	private:
+		// Private member variables
+		enum _InfoField
 		{
 			FirstName,
 			LastName,
@@ -39,17 +51,6 @@ class Contact
 			DarkestSecret,
 			NFields
 		};
-		// Constructor
-		Contact(void);
-		//Destructor
-		~Contact(void);
-		// Getter methods
-		std::string get_contact_value(const InfoField field) const;
-		// Setter methods
-		void set_contact_value(const Contact::InfoField field, const std::string& value);
-	private:
-		// Private member variables
-		std::string Info[NFields];
-
-		// You can define your own data structure to store the contacts
+		std::string _Info[NFields];
+		
 };

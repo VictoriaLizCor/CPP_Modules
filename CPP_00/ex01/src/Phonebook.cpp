@@ -1,14 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   phonebook.cpp                                      :+:      :+:    :+:   */
+/*   Phonebook.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 14:00:01 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/15 14:34:18 by lilizarr         ###   ########.fr       */
+/*   Created: 2024/04/16 14:35:04 by lilizarr          #+#    #+#             */
+/*   Updated: 2024/04/16 16:08:06 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "Phonebook.hpp"
 
@@ -24,6 +25,23 @@ PhoneBook::~PhoneBook(void)
 	std::cout << "PhoneBook destructor called" << std::endl;
 	return ;
 }
+
+
+bool check_value(const std::string& str, int (*func)(char))
+{
+	std::string::const_iterator it;
+	
+	it = str.begin();
+	while (it != str.end())
+	{
+		if (!func(*it))
+			return false;
+		it++;
+	}
+	return true;
+}
+// check_value (str, isalpha);
+// check_value (str, isdigit);
 
 // void PhoneBook::_add(Contact* contact)
 // {

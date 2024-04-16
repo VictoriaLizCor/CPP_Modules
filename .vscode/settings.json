@@ -1,5 +1,7 @@
 {
-	"editor.fontSize": 12,
+	// "editor.fontSize": 11,
+	// "window.zoomLevel": 1,
+	// "terminal.integrated.fontSize": 11,
 	"compiler-explorer.url": "https://godbolt.org", // url of the compiler explorer you want to use.
 	"compiler-explorer.compiler": "armg454", // Compiler code - See help below.
 	"compiler-explorer.options": [
@@ -10,5 +12,56 @@
 	"rewrap.wrappingColumn": 80,
 	"compiler-explorer.include": [
 		"${workspaceFolder}/CPP_00/ex01/src/${workspaceFolder}/CPP_00/ex01/src/my_awesome_phonebook.cpp"
-	], // true indicates that the extension will print debug to its output channel.
+	],
+	"files.associations": {
+		"array": "cpp",
+		"atomic": "cpp",
+		"bit": "cpp",
+		"*.tcc": "cpp",
+		"cctype": "cpp",
+		"clocale": "cpp",
+		"cmath": "cpp",
+		"compare": "cpp",
+		"concepts": "cpp",
+		"cstdarg": "cpp",
+		"cstddef": "cpp",
+		"cstdint": "cpp",
+		"cstdio": "cpp",
+		"cstdlib": "cpp",
+		"cstring": "cpp",
+		"cwchar": "cpp",
+		"cwctype": "cpp",
+		"deque": "cpp",
+		"unordered_map": "cpp",
+		"vector": "cpp",
+		"exception": "cpp",
+		"algorithm": "cpp",
+		"functional": "cpp",
+		"iterator": "cpp",
+		"memory": "cpp",
+		"memory_resource": "cpp",
+		"numeric": "cpp",
+		"optional": "cpp",
+		"random": "cpp",
+		"string": "cpp",
+		"string_view": "cpp",
+		"system_error": "cpp",
+		"tuple": "cpp",
+		"type_traits": "cpp",
+		"utility": "cpp",
+		"initializer_list": "cpp",
+		"iosfwd": "cpp",
+		"iostream": "cpp",
+		"istream": "cpp",
+		"limits": "cpp",
+		"new": "cpp",
+		"numbers": "cpp",
+		"ostream": "cpp",
+		"ranges": "cpp",
+		"span": "cpp",
+		"stdexcept": "cpp",
+		"streambuf": "cpp",
+		"cinttypes": "cpp",
+		"typeinfo": "cpp"
+	}, // true indicates that the extension will print debug to its output channel.
 }
