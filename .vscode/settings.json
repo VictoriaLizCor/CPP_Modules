@@ -1,7 +1,7 @@
 {
-	// "editor.fontSize": 11,
-	// "window.zoomLevel": 1,
-	// "terminal.integrated.fontSize": 11,
+	"editor.fontSize": 13,
+	"window.zoomLevel": 1,
+	"terminal.integrated.fontSize": 13,
 	"compiler-explorer.url": "https://godbolt.org", // url of the compiler explorer you want to use.
 	"compiler-explorer.compiler": "armg454", // Compiler code - See help below.
 	"compiler-explorer.options": [

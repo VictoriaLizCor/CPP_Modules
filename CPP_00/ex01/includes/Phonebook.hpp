@@ -1,6 +1,8 @@
 #ifndef PHONEBOOK_HPP
 # define PHONEBOOK_HPP
 # include "Contact.hpp"
+# include "UtilsFunctions.hpp"
+# include <iomanip>
 # include <iostream>
 # include <string>
 # include <cctype>
@@ -19,24 +21,18 @@
 */
 class PhoneBook
 {
-
 	public:
-		// Constructor
-		PhoneBook();
 		// Destructor
-		~PhoneBook();
-
-		// Add a contact to the phone book
-		void addContact(const std::string& name, const std::string& phoneNumber);
-		// Search for a contact by name
-		void searchContact(const std::string& name);
-
+		~PhoneBook(void);
+		void addContact();
+		void searchContact();
+		void showMenu();
 	private:
-		Contact	_contacts[8]; // Array of contacts in the phonebook
-		int		_contactCount;
 		// Private member variables
-		// You can define your own data structure to store the contacts
+		Contact		_contacts[8];
+		static int	_contactCount;
 };
+
 #endif
 
 /*

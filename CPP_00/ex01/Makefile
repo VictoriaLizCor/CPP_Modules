@@ -1,14 +1,14 @@
 #------ TARGET ------#
 NAME		:= phonebook
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
+D_FLAGS		= -Wall -Wextra -std=c++98 #-Werror
 INCLUDES	+= -I includes/
 #------ SRC FILES & DIRECTORIES ------#
 SRCS_DIR	:= src/
-SRCS		:=	Contact.cpp		\
-				Phonebook.cpp	\
+SRCS		:=	Contact.cpp			\
+				UtilsFunctions.cpp	\
+				Phonebook.cpp		\
 				main.cpp
-#				main.cpp
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 CURRENT		:= $(shell basename $$PWD)

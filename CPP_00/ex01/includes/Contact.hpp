@@ -6,11 +6,13 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 11:54:19 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/16 13:42:00 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/17 13:29:11 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
+#ifndef CONTACT_HPP
+# define CONTACT_HPP
+ /*
  * #pragma once is a non-standard but widely supported method for instructing the
  *  compiler to only include a header file once in a single compilation unit. This
  * is useful for preventing issues that can arise from including the same header
@@ -24,33 +26,35 @@
  * subsequent includes of the same header file. This can help to improve
  * compile-time performance and avoid potential issues with redefinition.
 */
-#pragma once
-# include <iostream>
-# include <string>
+# pragma once
+#  include <iostream>
+#  include <string>
 class Contact
 {
 	public:
-		// Constructor
-		Contact(void);
-		//Destructor
-		~Contact(void);
-		// Getter methods
-		std::string	get_value(int field) const;
-		// Setter methods
-		void		set_value(int field, const std::string& value);
-		std::string	InfoFieldToString(int field) const;
-		int		info_size;
-	private:
-		// Private member variables
-		enum _InfoField
+		/*************** Public Variables ***************/
+		enum infoField
 		{
-			FirstName,
-			LastName,
-			Nickname,
-			PhoneNumber,
-			DarkestSecret,
-			NFields
+			firstName,
+			lastName,
+			nickname,
+			phoneNumber,
+			darkestSecret,
+			nFields
 		};
-		std::string _Info[NFields];
+		/*************** Public Methods ***************/
+		// Constructor
+			//Destructor
+			~Contact(void);
+			// Getter methods
+			std::string	getValue(int field) const;
+			// Setter methods
+			void		setValue(int field, const std::string& value);
+			std::string	infoFieldToString(int field) const;
+		private:
+			// Private member variables
+			std::string _info[nFields];
 		
 };
+
+#endif
