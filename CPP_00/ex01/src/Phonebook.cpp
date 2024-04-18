@@ -60,6 +60,7 @@ void PhoneBook::addContact()
 	std::string str;
 	int i = 0;
 
+	i += 1;
 	while(1)
 	{
 		std::cout << "Enter " << contact.fieldToString(i) << ": " << std::endl;
