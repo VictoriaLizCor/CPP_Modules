@@ -60,13 +60,12 @@ void PhoneBook::addContact()
 	std::string str;
 	int i = 0;
 
-	i += 1;
 	while(1)
 	{
 		std::cout << "Enter " << contact.fieldToString(i) << ": " << std::endl;
 		std::getline(std::cin, str);
 		if (str.empty())
-			println("Field cannot be empty.");
+			println(color("Field cannot be empty.", FRED, 1));
 		else
 		{
 			AddContactExt(i, contact, str);
@@ -89,15 +88,19 @@ static void	showContactInfo(Contact contact)
 	}
 }
 
-static void formatedText(std::string idx, const Contact& contact, std::string (Contact::*str)(int) const)
+static void formatedText(int strColor, std::string idx, const Contact& c, std::string (Contact::*str)(int) const)
 {
-	int	i;
+	int			i;
+	std::string	ColoredText;
 
 	i = 0;
-	std::cout << std::setw(10) << idx;
-	while(i <= contact.NICKNAME)
+	println(std::to_string(color(idx, strColor, 0).length()));
+	println(std::to_string(idx.length()));
+	std::cout << std::setw(15) << color(idx, strColor, 0);
+	while(i <= c.NICKNAME)
 	{
-		std::cout << " | " << std::setw(10) << (contact.*str)(i++);
+		ColoredText = color((c.*str)(i++), strColor,0);
+		std::cout << " | " << std::setw(15) << ColoredText;
 	}
 	println("");
 }
@@ -108,10 +111,10 @@ void	PhoneBook::displayPhonebook()
 	std::string str;
 	
 	i = 0;
-	formatedText("Index", _contacts[0], &Contact::fieldToString);
+	formatedText( FDEFAULT, "Index", _contacts[0], &Contact::fieldToString);
 	while(i < _contactIndex)
 	{
-		formatedText(std::to_string(i), _contacts[i], &Contact::getValue);
+		formatedText( DEFAULT, std::to_string(i), _contacts[i], &Contact::getValue);
 		i++;
 	}
 }
@@ -172,6 +175,7 @@ void	PhoneBook::showPhonebookMenu()
 		menuOptions();
 		std::cout << "\nEnter your choice: ";
 		std::getline(std::cin, choice);
+		println("");
 		if (choice == "1")
 			addContact();
 		else if (choice == "2")
