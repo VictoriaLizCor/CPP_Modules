@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/15 11:54:19 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/17 13:29:11 by lilizarr         ###   ########.fr       */
+/*   Created: 2024/04/18 10:16:42 by lilizarr          #+#    #+#             */
+/*   Updated: 2024/04/18 15:09:00 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef CONTACT_HPP
 # define CONTACT_HPP
@@ -35,26 +36,24 @@ class Contact
 		/*************** Public Variables ***************/
 		enum infoField
 		{
-			firstName,
-			lastName,
-			nickname,
-			phoneNumber,
-			darkestSecret,
-			nFields
-		};
+			FIRST_NAME,
+			LAST_NAME,
+			NICKNAME,
+			PHONE_NUMBER,
+			DARKEST_SECRET,
+			N_FIELDS
+        };
 		/*************** Public Methods ***************/
-		// Constructor
-			//Destructor
-			~Contact(void);
-			// Getter methods
-			std::string	getValue(int field) const;
-			// Setter methods
-			void		setValue(int field, const std::string& value);
-			std::string	infoFieldToString(int field) const;
-		private:
-			// Private member variables
-			std::string _info[nFields];
+		//Destructor
+		~Contact(void);
+		// Getter methods
+		std::string	getValue(int field) const;
+		// Setter methods
+		void		setValue(int field, const std::string& value);
+		std::string	fieldToString(int field) const;
+	private:
+		// Private member variables
+		std::string _info[N_FIELDS];
 		
 };
-
 #endif

@@ -41,19 +41,19 @@ Contact::~Contact(void)
  * function does not modify any member variables of the class. It's a promise
  * that calling this function will not change the state of the class instance.
 */
-std::string Contact::infoFieldToString(int field) const
+std::string Contact::fieldToString(int field) const
 {
 	switch(static_cast<Contact::infoField>(field))
 	{
-		case firstName:
+		case FIRST_NAME:
 			return ("First Name");
-		case lastName: 
+		case LAST_NAME: 
 			return ("Last Name");
-		case nickname:
+		case NICKNAME:
 			return ("Nickname");
-		case phoneNumber:
+		case PHONE_NUMBER:
 			return ("Phone Number");
-		case darkestSecret:
+		case DARKEST_SECRET:
 			return ("Darkest Secret");
 		default:
 			return ("Unknown");
@@ -65,7 +65,7 @@ void Contact::setValue(int field, const std::string& value)
 	this->_info[field] = value;
 	return ;
 }
-//contact.set_contact_value(Contact::FirstName, "John");
+//contact.set_contact_value(Contact::FIRSTNAME, "John");
 
 std::string Contact::getValue(int field) const
 {

@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 11:26:55 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/17 12:03:11 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/18 12:27:00 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int main()
 {
 	PhoneBook	phonebook;
 	
-	phonebook.showMenu();
+	phonebook.showPhonebookMenu();
 	return (0);
 }
 

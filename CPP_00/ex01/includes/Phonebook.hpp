@@ -22,15 +22,17 @@
 class PhoneBook
 {
 	public:
+		PhoneBook() : _contactIndex(0) {};
 		// Destructor
 		~PhoneBook(void);
-		void addContact();
-		void searchContact();
-		void showMenu();
+		void	addContact();
+		void	displayPhonebook();
+		void	searchContact();
+		void	showPhonebookMenu();
 	private:
 		// Private member variables
-		Contact		_contacts[8];
-		static int	_contactCount;
+		int		_contactIndex;
+		Contact	_contacts[8];
 };
 
 #endif

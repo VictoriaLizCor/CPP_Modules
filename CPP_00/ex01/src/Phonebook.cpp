@@ -25,25 +25,32 @@
 //*****************************PUBLIC**************************************//
 PhoneBook::~PhoneBook(void)
 {
-	std::cout << "PhoneBook destructor called" << std::endl;
+	// std::cout << "PhoneBook destructor called" << std::endl;
 	return ;
 }
 
 static void AddContactExt(int& i, Contact& contact, std::string& str)
 {
-	if (i == Contact::phoneNumber)
+	if (i == Contact::PHONE_NUMBER)
 	{
 		if (checkInput(str, isdigit))
 			contact.setValue(i++, str);
 		else
-			println("PhoneNumber must be composed of digits.");
+		{
+			str = color("Phone number must be composed of digits.", FRED, 1);
+			println(str);
+		}
 	}
 	else
 	{
 		if (checkInput(str, isalpha))
 			contact.setValue(i++, str);
 		else
-			println( "This field must be composed of alphabetic characters.");
+		{
+			str = contact.fieldToString(i);
+			str = str + " must be composed of alphabetic characters.";
+			println(color(str , FRED, 1));
+		}
 	}
 }
 
@@ -55,18 +62,18 @@ void PhoneBook::addContact()
 
 	while(1)
 	{
-		std::cout << "Enter " << contact.infoFieldToString(i) << ": " << std::endl;
-		std::cin >> str;
+		std::cout << "Enter " << contact.fieldToString(i) << ": " << std::endl;
+		std::getline(std::cin, str);
 		if (str.empty())
 			println("Field cannot be empty.");
 		else
 		{
 			AddContactExt(i, contact, str);
-			if (i == Contact::nFields)
+			if (i == Contact::N_FIELDS)
 				break;
 		}
 	}
-
+	_contacts[_contactIndex++] = contact;
 }
 
 static void	showContactInfo(Contact contact)
@@ -74,27 +81,55 @@ static void	showContactInfo(Contact contact)
 	int	i;
 
 	i = 0;
-	while(i < Contact::nFields)
+	while(i < Contact::N_FIELDS)
 	{
-		println(contact.infoFieldToString(i) + ": " + contact.getValue(i));
+		println(contact.fieldToString(i) + ": " + contact.getValue(i));
 		i++;
 	}
 }
 
-void PhoneBook::searchContact()
+static void formatedText(std::string idx, const Contact& contact, std::string (Contact::*str)(int) const)
 {
-	int i;
-	int index;
-    std::string buffer;
+	int	i;
+
+	i = 0;
+	std::cout << std::setw(10) << idx;
+	while(i <= contact.NICKNAME)
+	{
+		std::cout << " | " << std::setw(10) << (contact.*str)(i++);
+	}
+	println("");
+}
+
+void	PhoneBook::displayPhonebook()
+{
+	int	i;
+	std::string str;
+	
+	i = 0;
+	formatedText("Index", _contacts[0], &Contact::fieldToString);
+	while(i < _contactIndex)
+	{
+		formatedText(std::to_string(i), _contacts[i], &Contact::getValue);
+		i++;
+	}
+}
+
+void	PhoneBook::searchContact()
+{
+	int			i;
+	int			index;
+	std::string	str;
 
 	index = 0;
 	i = 0;
-	buffer = "";
-    // if (PhoneBook::_contactCount == 0) {
-    //     printOut("No contacts to search");
-    //     return ;
-    // }
-
+	if (_contactIndex == 0)
+	{
+		str = color("\nPhonebook empty. Please add a contact first.", FDEFAULT, 0);
+		println(str);
+		return ;
+	}
+	displayPhonebook();
     // printTableHeader();
     // while (i < PhoneBook::_contactCount) {
     //     _printTableContent(i, this->_contacts[i]);
@@ -118,27 +153,33 @@ void PhoneBook::searchContact()
     showContactInfo(this->_contacts[index]);
 }
 
-void	PhoneBook::showMenu()
+static void	menuOptions(void)
 {
-	int choice;
+	println(color("\n***************** MENU ******************", FGREEN, 0));
+	println(color("*\t [ 1 ] - Add Contactt\t\t*", FGREEN, 0));
+	println(color("*\t [ 2 ] - Search Contact\t\t*", FGREEN, 0));
+	println(color("*\t [ 3 ] - Exit\t\t\t*", FGREEN, 0));
+	println(color("*****************************************", FGREEN, 0));
+}
 
-	while (true)
+void	PhoneBook::showPhonebookMenu()
+{
+	std::string	choice;
+
+	while (choice != "3")
 	{
-		std::cout << "1. Add Contact\n";
-		std::cout << "2. Search Contact\n";
-		std::cout << "3. Exit\n";
-		std::cout << "Enter your choice: ";
-		std::cin >> choice;
-		if (choice == 1)
+		menuOptions();
+		std::cout << "\nEnter your choice: ";
+		std::getline(std::cin, choice);
+		if (choice == "1")
 			addContact();
-		else if (choice == 2)
+		else if (choice == "2")
 			searchContact();
-		else if (choice == 3)
+		else if (choice == "3")
 			break;
 		else
-		{
-			std::cout << "Invalid choice. Please try again.\n";
-			continue ;
-		}
+			println(color("Invalid choice. Please try again.", FRED, 1));
 	}
+	println(color("GOOD BYE!", FBLUE, 0));
+	println(color("PS: No data was stored\n", FBLUE, 0));
 }
