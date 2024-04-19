@@ -1,17 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   UtilsFunctions.cpp                                 :+:      :+:    :+:   */
+/*   stringUtils.cpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/19 13:10:44 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/19 15:25:18 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "UtilsFunctions.hpp"
+#include "stringUtils.h"
 
+/**
+ * @brief Applies color formatting to a given message.
+ * 
+ * @param msg The message to be colored.
+ * @param color The color code to be applied.
+ * @param err Flag indicating if the message is an error message.
+ * @return The colored message.
+ */
 std::string	color(std::string msg, int color, bool err)
 {
 	std::string	strColor;
@@ -21,15 +29,18 @@ std::string	color(std::string msg, int color, bool err)
 		return (msg);
 	strColor = "\033[1;" + toString(color) + "m";
 	strDefault = "\033[" + toString(DEFAULT) + "m";
-	// println("\nstrColor = " + toString(strColor.length()));
-	// println("msg[" + msg + "] = " + toString(msg.length()));
-	// println("strDefault = " + toString(strDefault.length()));
 	if (err)
 		return (strColor + "Error: " + msg + strDefault);
 	else
 		return (strColor + msg + strDefault);
 }
 
+/**
+ * @brief Converts an integer value to a string.
+ * 
+ * @param value The integer value to be converted.
+ * @return std::string The string representation of the integer value.
+ */
 std::string toString(int value)
 {
 	std::stringstream ss;
@@ -42,6 +53,14 @@ void	println(std::string str)
 	std::cout << str << std::endl;
 }
 
+/**
+ * @brief Checks if all characters in a string satisfy a given condition.
+ *
+ * @param str The input string to be checked.
+ * @param check_type A function pointer to the condition that each character
+ * must satisfy.
+ * @return true if all characters satisfy the condition, false otherwise.
+ */
 bool	checkInput(const std::string& str, int (*check_type)(int))
 {
 	std::string::const_iterator it;
@@ -56,6 +75,13 @@ bool	checkInput(const std::string& str, int (*check_type)(int))
 	return true;
 }
 
+/**
+ * Calculates the maximum length of strings in an array.
+ * 
+ * @param arraySize The size of the array.
+ * @param arrayData The array of strings.
+ * @return The maximum length of strings in the array.
+ */
 size_t	maxStringLength(int arraySize, std::string* arrayData)
 {
 	int			i;

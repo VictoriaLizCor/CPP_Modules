@@ -1,12 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   phonebook.hpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/19 15:05:40 by lilizarr          #+#    #+#             */
+/*   Updated: 2024/04/19 16:39:15 by lilizarr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHONEBOOK_HPP
 # define PHONEBOOK_HPP
 # include "Contact.hpp"
-# include "UtilsFunctions.hpp"
+# include "stringUtils.h"
 # include <iomanip>
 # include <iostream>
 # include <string>
 # include <cctype>
 # include <sstream>
+
+#ifndef DEBUG
+# define DEBUG 0
+#endif
 
 /**
  * Member attribues
@@ -48,3 +64,35 @@ class PhoneBook
  * through the _contacts array.
  * 
  */
+
+// PhoneBook.hpp
+// class PhoneBook
+// {
+// public:
+//	PhoneBook() : _search(_manager) {};
+//	void showPhonebookMenu();
+// private:
+//	ContactManager _manager;
+//	ContactSearch _search;
+// };
+// ContactManager.hpp
+// class ContactManager
+// {
+// public:
+//	ContactManager() : _contactIndex(0) {};
+//	void addContact();
+// private:
+//	int _contactIndex;
+//	Contact _contacts[8];
+// };
+
+// // ContactSearch.hpp
+// class ContactSearch
+// {
+// public:
+//	ContactSearch(ContactManager& manager) : _manager(manager) {};
+//	void displayContacts();
+//	void searchContact();
+// private:
+//	ContactManager& _manager;
+// };

@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   phonebook.cpp									  :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: lilizarr <lilizarr@student.42.fr>		  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2024/04/16 14:35:04 by lilizarr		  #+#	#+#			 */
-/*   Updated: 2024/04/17 10:35:53 by lilizarr		 ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   phonebook.cpp                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/04/19 15:05:49 by lilizarr          #+#    #+#             */
+/*   Updated: 2024/04/19 16:24:14 by lilizarr         ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include <Phonebook.hpp>
@@ -25,10 +25,26 @@
 //*****************************PUBLIC**************************************//
 PhoneBook::~PhoneBook(void)
 {
-	// std::cout << "PhoneBook destructor called" << std::endl;
 	return ;
 }
 
+/**
+ * @brief Adds a contact to the phonebook.
+ *
+ * This function is responsible for adding a contact to the phonebook. It takes
+ * an index, a Contact object, and a string as parameters. If the index is equal
+ * to Contact::PHONE_NUMBER, it checks if the input string contains only digits.
+ * If it does, it sets the value of the contact at the current index and
+ * increments the index. If the index is not equal to Contact::PHONE_NUMBER, it
+ * checks if the input string contains only alphabetic characters. If it does,
+ * it sets the value of the contact at the current index and increments the
+ * index. If the input string does not meet the requirements, an error message
+ * is printed.
+ *
+ * @param i The index of the contact field.
+ * @param contact The Contact object to add the values to.
+ * @param str The input string to validate and set as the contact value.
+ */
 static void AddContactExt(int& i, Contact& contact, std::string& str)
 {
 	if (i == Contact::PHONE_NUMBER)
@@ -62,7 +78,7 @@ void PhoneBook::addContact()
 	int i;
 
 	i = 0;
-	while(1)
+	while(i < Contact::N_FIELDS)
 	{
 		coloredText = color("Enter " + contact.fieldToString(i) + ": ", FBLUE, 0);
 		println(coloredText);
@@ -70,11 +86,7 @@ void PhoneBook::addContact()
 		if (str.empty())
 			println(color("Field cannot be empty.", FRED, 1));
 		else
-		{
 			AddContactExt(i, contact, str);
-			if (i == Contact::N_FIELDS)
-				break;
-		}
 	}
 	_contacts[_contactIndex++] = contact;
 }
@@ -95,7 +107,7 @@ static std::string*	fieldToStringArray(int size, const Contact& contact, std::st
 }
 
 
-static void	showContactInfo(Contact contact, int size)
+static void	showContactInfo(Contact contact, int size, std::string& index)
 {
 	std::stringstream		field;
 	std::stringstream		value;
@@ -106,6 +118,8 @@ static void	showContactInfo(Contact contact, int size)
 	i = 0;
 	dataArray = fieldToStringArray(size, contact, &Contact::getValue);
 	len = maxStringLength(size, dataArray);
+	println("");
+	println("************** Contact[ " + index + " ] **************");
 	while(i < size)
 	{
 		field.str("");
@@ -115,6 +129,7 @@ static void	showContactInfo(Contact contact, int size)
 		println("  " + color(field.str(), FDEFAULT, 0) + ":\t" + value.str());
 		i++;
 	}
+	println("******************************************");
 	delete[] dataArray;
 }
 
@@ -139,7 +154,7 @@ static void formatedText(int colorType, std::string idx, int size, std::string* 
 		std::cout << "|" << coloredText;
 		i ++;
 	}
-	println("\n");
+	println("");
 }
 
 void	PhoneBook::displayPhonebook()
@@ -163,45 +178,61 @@ void	PhoneBook::displayPhonebook()
 	delete[] dataArray;
 }
 
+static void searchContactExt(std::string& index, int& idx, int& err, int sizeContatcs)
+{
+	if (checkInput(index, isdigit) && !index.empty())
+	{
+		idx = std::stoi(index);
+		println(index + "[" + toString(idx) + "] size = " + toString(sizeContatcs));
+		if (idx < 0 && idx > sizeContatcs)
+			err = 1;
+	}
+	else
+		err = 1;
+}
+
 void	PhoneBook::searchContact()
 {
-	int			i;
-	int			index;
-	std::string	str;
+	std::string	index;
+	int			err;
+	int			idx;
 
-	index = 0;
-	i = 0;
+	err = 0;
+	idx = 0;
 	if (_contactIndex == 0)
 	{
-		str = color("\nPhonebook empty. Please add a contact first.", FDEFAULT, 0);
-		println(str);
+		index = color("\nPhonebook empty. Please add a contact first.", FDEFAULT, 0);
+		println(index);
 		return ;
 	}
 	displayPhonebook();
-    // while (1) {
-    //     printOut("Enter index to display: ");
-    //     std::getline(std::cin, buffer);
-    //     if (buffer.empty()) {
-    //         printOut("Index cannot be empty");
-    //         continue ;
-    //     }
-    //     index = atoi(buffer.c_str());
-    //     if (index < 0 || index >= PhoneBook::_contactCount) {
-    //         printOut("Invalid index");
-    //         continue ;
-    //     }
-    //     break ;
-    // }
-    showContactInfo(this->_contacts[index], Contact::N_FIELDS);
+	while (1)
+	{
+		std::cout << "\nEnter contact index to display: ";
+		std::getline(std::cin, index);
+		println("");
+		searchContactExt(index, idx, err, _contactIndex);
+		println(toString(err) + " " + toString(idx) + " " + index);
+		if (err)
+			println(color("Invalid choice. Please try again.", FRED, 1));
+		else
+		{
+			showContactInfo(this->_contacts[idx], Contact::N_FIELDS, index);
+			break;
+		}
+	}
 }
 
 static void	menuOptions(void)
 {
-	println(color("\n***************** MENU ******************", FGREEN, 0));
-	println(color("*\t [ 1 ] - Add Contactt\t\t*", FGREEN, 0));
-	println(color("*\t [ 2 ] - Search Contact\t\t*", FGREEN, 0));
-	println(color("*\t [ 3 ] - Exit\t\t\t*", FGREEN, 0));
-	println(color("*****************************************", FGREEN, 0));
+	println("");
+	println(color("****************** MENU *******************", FGREEN, 0));
+	println(color("*                                         *", FGREEN, 0));
+	println(color("*\t [ 1 ] - Add Contactt\t\t  *", FGREEN, 0));
+	println(color("*\t [ 2 ] - Search Contact\t\t  *", FGREEN, 0));
+	println(color("*\t [ 3 ] - Exit\t\t\t  *", FGREEN, 0));
+	println(color("*                                         *", FGREEN, 0));
+	println(color("*******************************************", FGREEN, 0));
 }
 
 void	PhoneBook::showPhonebookMenu()

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   UtilsFunctions.hpp                                 :+:      :+:    :+:   */
+/*   stringUtils.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:56:07 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/19 13:11:01 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/19 15:04:16 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef UTILSFUNCTIONS_H
-# define UTILSFUNCTIONS_H
+#ifndef STRINGUTILS_H
+# define STRINGUTILS_H
 # pragma once
 # include <iostream>
 # include <string>
@@ -36,7 +36,7 @@ typedef enum eColor
 	BGREEN		= 42,
 	BBLUE		= 44,
 	BDEFAULT	= 49
-} t_color;
+}	t_color;
 
 void		println(std::string str);
 std::string	toString(int value);
