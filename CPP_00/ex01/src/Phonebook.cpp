@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:49 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/19 16:24:14 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:52:59 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,26 @@
 // }
 
 //*****************************PUBLIC**************************************//
+
+PhoneBook::PhoneBook(void)
+{
+	_contactIndex = 0;
+}
+
+PhoneBook::PhoneBook(Contact contacts[], int size)
+{
+	int	i;
+
+	for (i = 0; i < 8; i++)
+	{
+		if (i < size)
+			_contacts[i] = contacts[i];
+		else
+			_contacts[i] = Contact();
+	}
+	_contactIndex = size;
+}
+
 PhoneBook::~PhoneBook(void)
 {
 	return ;
@@ -167,24 +187,28 @@ void	PhoneBook::displayPhonebook()
 	i = 0;
 	size = Contact::NICKNAME;
 	dataArray = fieldToStringArray(size, _contacts[0], &Contact::fieldToString);
+	println("");
 	formatedText( FDEFAULT, "Index", size, dataArray);
 	delete[] dataArray;
-	dataArray = fieldToStringArray(size, _contacts[i], &Contact::getValue);
 	while(i < _contactIndex)
 	{
+		dataArray = fieldToStringArray(size, _contacts[i], &Contact::getValue);
 		formatedText( DEFAULT, toString(i), size, dataArray);
 		i++;
+		delete[] dataArray;
 	}
-	delete[] dataArray;
 }
 
 static void searchContactExt(std::string& index, int& idx, int& err, int sizeContatcs)
 {
+	bool	flag_idx;
+
 	if (checkInput(index, isdigit) && !index.empty())
 	{
+		err = 0;
 		idx = std::stoi(index);
-		println(index + "[" + toString(idx) + "] size = " + toString(sizeContatcs));
-		if (idx < 0 && idx > sizeContatcs)
+		flag_idx = idx < 0 || idx > sizeContatcs;
+		if (flag_idx)
 			err = 1;
 	}
 	else
@@ -205,14 +229,13 @@ void	PhoneBook::searchContact()
 		println(index);
 		return ;
 	}
-	displayPhonebook();
 	while (1)
 	{
+		displayPhonebook();
 		std::cout << "\nEnter contact index to display: ";
 		std::getline(std::cin, index);
 		println("");
 		searchContactExt(index, idx, err, _contactIndex);
-		println(toString(err) + " " + toString(idx) + " " + index);
 		if (err)
 			println(color("Invalid choice. Please try again.", FRED, 1));
 		else

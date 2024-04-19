@@ -6,13 +6,22 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:59 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/19 15:06:04 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:23:41 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Phonebook.hpp>
 
 //*****************************PUBLIC**************************************//
+Contact::Contact(void)
+{
+	return ;
+}
+Contact::Contact(std::string info[N_FIELDS])
+{
+	for (int i = 0; i < N_FIELDS; i++)
+		_info[i] = info[i];
+}
 
 Contact::~Contact(void)
 {

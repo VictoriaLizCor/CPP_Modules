@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:40 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/19 16:39:15 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:26:20 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,6 @@
 # include <string>
 # include <cctype>
 # include <sstream>
-
-#ifndef DEBUG
-# define DEBUG 0
-#endif
 
 /**
  * Member attribues
@@ -38,7 +34,8 @@
 class PhoneBook
 {
 	public:
-		PhoneBook() : _contactIndex(0) {};
+		PhoneBook(void);
+		PhoneBook(Contact contacts[], int size);
 		// Destructor
 		~PhoneBook(void);
 		void	addContact();

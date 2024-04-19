@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 10:16:42 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/18 15:09:00 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:23:52 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ class Contact
 			N_FIELDS
         };
 		/*************** Public Methods ***************/
+		Contact(void);
+		Contact(std::string info[N_FIELDS]) ;
 		//Destructor
 		~Contact(void);
 		// Getter methods

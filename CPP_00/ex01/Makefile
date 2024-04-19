@@ -29,7 +29,7 @@ DEBUG_DIR	:= $(NAME).dSYM
 ifneq ($(D), 0)
 CC			= g++
 # SRCS		+= main.cpp
-D_FLAGS		+= -DDEBUG=$(D_BUG)
+D_FLAGS		+= -DDEBUG=$(D)
 endif
 ifeq ($(S), 0)
 #MAKEFLAGS	+= --debug

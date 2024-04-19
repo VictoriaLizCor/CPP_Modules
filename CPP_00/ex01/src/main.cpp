@@ -6,23 +6,25 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 11:26:55 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/19 16:40:56 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/19 17:26:24 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <Phonebook.hpp>
 
+#ifndef DEBUG
+# define DEBUG 0
+#endif
 
 int main()
 {
 #if (DEBUG == 0)
 	PhoneBook	phonebook;
-else
-	Contact contacts[8] = {
-	Contact("John Doe", "1234567890", "johndoe@example.com"),
-	Contact("Jane Doe", "0987654321", "janedoe@example.com"),
-	};
-	PhoneBook phonebook(contacts);
+#else
+	std::string info1[Contact::N_FIELDS] = {"Victoria", "Lizarraga", "Vicki", "1234567890", "adfasdfasdfasdf"};
+	std::string info2[Contact::N_FIELDS] = {"Diane", "Ruge", "Dian", "09871234", "zxfsdfasdfasdfewr"};
+	Contact contacts[2] = {Contact(info1), Contact(info2)};
+	PhoneBook phonebook(contacts, 2);
 #endif
 	phonebook.showPhonebookMenu();
 	return (0);
