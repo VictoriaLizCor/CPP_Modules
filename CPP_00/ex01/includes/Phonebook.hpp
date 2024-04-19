@@ -6,7 +6,7 @@
 # include <iostream>
 # include <string>
 # include <cctype>
-
+# include <sstream>
 
 /**
  * Member attribues

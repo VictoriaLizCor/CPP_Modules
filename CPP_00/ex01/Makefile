@@ -13,7 +13,7 @@ PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 CURRENT		:= $(shell basename $$PWD)
 #------ DEBUG ------#
-D		?= 0
+D			?= 0
 #------ Sanitizer ------#
 S			?= 0
 #------ DEBUG UTILS ------#
@@ -37,7 +37,7 @@ OBJS		:= $(addprefix $(SRCS_DIR), $(SRCS))
 else
 #------ CODE FOR OBJECT FILES ------#
 SRCS		:= $(SRCS:%=$(SRC_DIR)%)
-OBJS		:= $(SRCS:$(SRC_DIR)%.c=$(BUILD_DIR)%.o)
+OBJS		:= $(SRCS:$(SRC_DIR)%.cpp=$(BUILD_DIR)%.o)
 DEPS		:= $(OBJS:.o=.d)
 #------ INCLUDE SANATIZER FLAGS ------#
 D_FLAGS		+= -O0 -g3 
@@ -57,7 +57,7 @@ endif
 	@printf "\n$(LF)🎉 $(P_BLUE)Successfully Created $(P_GREEN)$@! 🎉\n$(P_NC)"
 	@echo $(BANNER)
 ifneq ($(S), 0)
-$(OBJS): $(BUILD_DIR)%.o : $(SRCS_DIR)%.c | $(BUILD_DIR)
+$(OBJS): $(BUILD_DIR)%.o : $(SRCS_DIR)%.cpp | $(BUILD_DIR)
 	@$(CC) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 	@printf "$(LF)🚧 $(P_BLUE)Creating $(P_YELLOW)$@ $(P_BLUE)from $(P_YELLOW) $< $(FG_TEXT)"
 

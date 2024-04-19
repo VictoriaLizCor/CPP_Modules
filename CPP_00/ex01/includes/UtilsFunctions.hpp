@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:56:07 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/18 13:48:57 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/19 13:11:01 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,15 @@
 # pragma once
 # include <iostream>
 # include <string>
+# include <sstream>
+
+# ifndef DEFAULT_LEN
+#  define DEFAULT_LEN 4
+# endif
+
+# ifndef COLOR_LEN
+#  define COLOR_LEN 7
+# endif
 
 typedef enum eColor
 {
@@ -30,7 +39,8 @@ typedef enum eColor
 } t_color;
 
 void		println(std::string str);
+std::string	toString(int value);
 std::string	color(std::string msg, int color, bool err);
 bool		checkInput(const std::string& str, int (*check_type)(int));
-
+size_t		maxStringLength(int fieldSize, std::string* arrayData);
 #endif

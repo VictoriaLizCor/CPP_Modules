@@ -56,13 +56,16 @@ static void AddContactExt(int& i, Contact& contact, std::string& str)
 
 void PhoneBook::addContact()
 {
-	Contact contact;
-	std::string str;
-	int i = 0;
+	std::string	str;
+	std::string	coloredText;
+	Contact		contact;
+	int i;
 
+	i = 0;
 	while(1)
 	{
-		std::cout << "Enter " << contact.fieldToString(i) << ": " << std::endl;
+		coloredText = color("Enter " + contact.fieldToString(i) + ": ", FBLUE, 0);
+		println(coloredText);
 		std::getline(std::cin, str);
 		if (str.empty())
 			println(color("Field cannot be empty.", FRED, 1));
@@ -76,47 +79,88 @@ void PhoneBook::addContact()
 	_contacts[_contactIndex++] = contact;
 }
 
-static void	showContactInfo(Contact contact)
+static std::string*	fieldToStringArray(int size, const Contact& contact, std::string (Contact::*str)(int) const)
 {
-	int	i;
+	std::string*	array;
+	int				i;
 
 	i = 0;
-	while(i < Contact::N_FIELDS)
+	array = new std::string[size + 1];
+	while(i <= size)
 	{
-		println(contact.fieldToString(i) + ": " + contact.getValue(i));
+		array[i] = (contact.*str)(i);
 		i++;
 	}
+	return (array);
 }
 
-static void formatedText(int strColor, std::string idx, const Contact& c, std::string (Contact::*str)(int) const)
+
+static void	showContactInfo(Contact contact, int size)
 {
-	int			i;
-	std::string	ColoredText;
+	std::stringstream		field;
+	std::stringstream		value;
+	std::string*			dataArray;
+	size_t					len;
+	int						i;
 
 	i = 0;
-	println(std::to_string(color(idx, strColor, 0).length()));
-	println(std::to_string(idx.length()));
-	std::cout << std::setw(15) << color(idx, strColor, 0);
-	while(i <= c.NICKNAME)
+	dataArray = fieldToStringArray(size, contact, &Contact::getValue);
+	len = maxStringLength(size, dataArray);
+	while(i < size)
 	{
-		ColoredText = color((c.*str)(i++), strColor,0);
-		std::cout << " | " << std::setw(15) << ColoredText;
+		field.str("");
+		field << std::setw(contact.fieldToString(size - 1).length()) << contact.fieldToString(i);
+		value.str("");
+		value << std::setw(len) << dataArray[i];
+		println("  " + color(field.str(), FDEFAULT, 0) + ":\t" + value.str());
+		i++;
 	}
-	println("");
+	delete[] dataArray;
+}
+
+static void formatedText(int colorType, std::string idx, int size, std::string* dataArray)
+{
+	std::stringstream	ss;
+	std::string			coloredText;
+	std::string			trunc;
+	int					i;
+
+	i = 0;
+	ss << std::setw(10) << idx;
+	std::cout << color(ss.str(), colorType, 0);
+	while(i <= size)
+	{
+		ss.str("");
+		trunc = dataArray[i];
+		if (trunc.length() > 10)
+			trunc = trunc.substr(0, 9) + ".";
+		ss << std::setw(10) << trunc;
+		coloredText = color(ss.str(), colorType, 0);
+		std::cout << "|" << coloredText;
+		i ++;
+	}
+	println("\n");
 }
 
 void	PhoneBook::displayPhonebook()
 {
-	int	i;
-	std::string str;
-	
+	std::string		str;
+	std::string*	dataArray;
+	int				i;
+	int				size;
+
 	i = 0;
-	formatedText( FDEFAULT, "Index", _contacts[0], &Contact::fieldToString);
+	size = Contact::NICKNAME;
+	dataArray = fieldToStringArray(size, _contacts[0], &Contact::fieldToString);
+	formatedText( FDEFAULT, "Index", size, dataArray);
+	delete[] dataArray;
+	dataArray = fieldToStringArray(size, _contacts[i], &Contact::getValue);
 	while(i < _contactIndex)
 	{
-		formatedText( DEFAULT, std::to_string(i), _contacts[i], &Contact::getValue);
+		formatedText( DEFAULT, toString(i), size, dataArray);
 		i++;
 	}
+	delete[] dataArray;
 }
 
 void	PhoneBook::searchContact()
@@ -134,12 +178,6 @@ void	PhoneBook::searchContact()
 		return ;
 	}
 	displayPhonebook();
-    // printTableHeader();
-    // while (i < PhoneBook::_contactCount) {
-    //     _printTableContent(i, this->_contacts[i]);
-    //     i++;
-    // }
-
     // while (1) {
     //     printOut("Enter index to display: ");
     //     std::getline(std::cin, buffer);
@@ -154,7 +192,7 @@ void	PhoneBook::searchContact()
     //     }
     //     break ;
     // }
-    showContactInfo(this->_contacts[index]);
+    showContactInfo(this->_contacts[index], Contact::N_FIELDS);
 }
 
 static void	menuOptions(void)
