@@ -13,9 +13,9 @@ PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 CURRENT		:= $(shell basename $$PWD)
 #------ DEBUG ------#
-D			?= 0
+D			= 0
 #------ Sanitizer ------#
-S			?= 0
+S			= 0
 #------ DEBUG UTILS ------#
 CC			:= c++
 MAKEFLAGS	+= --no-print-directory
@@ -89,20 +89,16 @@ re:     fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
-t:$(NAME)
-	@echo $(BOLD) ./$(NAME) $(E_NC)
-	@./$(NAME)
-	@echo $(BOLD) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC)
-	@./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
 # start: $(NAME)
 # 	@echo $(GREEN)./$(NAME) $(arg) $(E_NC)
 # 	$(if $(arg), -./$(NAME) $(arg), \
 # 		@printf "Input Example: \n\t make start arg=\"write something here\"\n")
 val: $(NAME)
-	@echo $(RED) $(VALGRIND) $(MAKE) t $(E_NC)
+	@echo $(GREEN) $(VALGRIND) ./$(NAME) $(E_NC)
 	@$(VALGRIND) ./$(NAME)
-	@$(VALGRIND) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
-
+leaks: $(NAME)
+	@echo $(GREEN) $(MAC_LEAKS) ./$(NAME) $(E_NC)
+	@$(MAC_LEAKS) ./$(NAME)
 # #-------------------- GIT UTILS ----------------------------#
 test:
 	@echo $(PROJECT_ROOT)

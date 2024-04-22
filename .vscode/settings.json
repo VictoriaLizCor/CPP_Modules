@@ -2,17 +2,17 @@
 	"editor.fontSize": 13,
 	"window.zoomLevel": 1,
 	"terminal.integrated.fontSize": 13,
-	"compiler-explorer.url": "https://godbolt.org", // url of the compiler explorer you want to use.
-	"compiler-explorer.compiler": "armg454", // Compiler code - See help below.
-	"compiler-explorer.options": [
-		"-O3"
-	], // Compiler options
-	"compiler-explorer.debug": true,
+	// "compiler-explorer.url": "https://godbolt.org", // url of the compiler explorer you want to use.
+	// "compiler-explorer.compiler": "armg454", // Compiler code - See help below.
+	// "compiler-explorer.options": [
+	// 	"-O3"
+	// ], // Compiler options
+	// "compiler-explorer.debug": true,
+	// "compiler-explorer.include": [
+	// 	"${workspaceFolder}/CPP_00/ex01/",
+	// ],
 	"window.customTitleBarVisibility": "auto",
 	"rewrap.wrappingColumn": 80,
-	"compiler-explorer.include": [
-		"${workspaceFolder}/CPP_00/ex01/src/${workspaceFolder}/CPP_00/ex01/src/my_awesome_phonebook.cpp"
-	],
 	"files.associations": {
 		"array": "cpp",
 		"atomic": "cpp",

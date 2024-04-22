@@ -6,21 +6,23 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:49 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/19 17:52:59 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:46:37 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Phonebook.hpp>
+#include "Phonebook.hpp"
 
-// void PhoneBook::_add(Contact* contact)
-// {
-// 	if (PhoneBook::_contactCount < 8) {
-// 		this->_contacts[PhoneBook::_contactCount++] = *contact;
-// 	} else {
-// 		printOut("Phonebook is full, first contact will be replaced");
-// 		this->_contacts[0] = *contact;
-// 	}
-// }
+//*****************************PRIVATE**************************************//
+void	PhoneBook::_checkAdd(Contact& contact)
+{
+	if (_contactIndex < MAX_CONTACTS)
+		_contacts[_contactIndex++] = contact;
+	else
+	{
+		println(color("Phonebook is full, last added contact will be replaced", FRED, 1));
+		_contacts[MAX_CONTACTS - 1] = contact;
+	}
+}
 
 //*****************************PUBLIC**************************************//
 
@@ -36,11 +38,8 @@ PhoneBook::PhoneBook(Contact contacts[], int size)
 	for (i = 0; i < 8; i++)
 	{
 		if (i < size)
-			_contacts[i] = contacts[i];
-		else
-			_contacts[i] = Contact();
+			addContact(contacts[i]);
 	}
-	_contactIndex = size;
 }
 
 PhoneBook::~PhoneBook(void)
@@ -65,50 +64,73 @@ PhoneBook::~PhoneBook(void)
  * @param contact The Contact object to add the values to.
  * @param str The input string to validate and set as the contact value.
  */
-static void AddContactExt(int& i, Contact& contact, std::string& str)
+static void AddContactExt(int& i, Contact& contact, std::string& str, int& err)
 {
 	if (i == Contact::PHONE_NUMBER)
 	{
-		if (checkInput(str, isdigit))
-			contact.setValue(i++, str);
+		err = !checkInput(str, isalpha);
+		if (err == 0)
+			contact.setValue(i, str);
 		else
 		{
-			str = color("Phone number must be composed of digits.", FRED, 1);
+			str = color("Phone number must be composed of digits and space characters.", FRED, 1);
 			println(str);
 		}
 	}
 	else
 	{
-		if (checkInput(str, isalpha))
-			contact.setValue(i++, str);
+		err = !checkInput(str, isalpha);
+		if (err == 0)
+			contact.setValue(i, str);
 		else
 		{
 			str = contact.fieldToString(i);
-			str = str + " must be composed of alphabetic characters.";
+			str = str + " must be composed of alphabetic and space characters.";
 			println(color(str , FRED, 1));
 		}
 	}
 }
 
+void PhoneBook::addContact(Contact contact)
+{
+	std::string	str;
+	int		i;
+	int		err;
+	
+	i = 0;
+	err = 0;
+	while(i < Contact::N_FIELDS)
+	{
+		str = contact.getValue(i);
+		if (str.empty())
+			println(color("Field cannot be empty.", FRED, 1));
+		else
+			AddContactExt(i, contact, str, err);
+		i++;
+	}
+	_checkAdd(contact);
+}
+
 void PhoneBook::addContact()
 {
 	std::string	str;
-	std::string	coloredText;
 	Contact		contact;
-	int i;
+	int			i;
+	int			err;
 
 	i = 0;
 	while(i < Contact::N_FIELDS)
 	{
-		coloredText = color("Enter " + contact.fieldToString(i) + ": ", FBLUE, 0);
-		println(coloredText);
+		println(color("Enter " + contact.fieldToString(i) + ": ", FBLUE, 0));
 		std::getline(std::cin, str);
 		if (str.empty())
 			println(color("Field cannot be empty.", FRED, 1));
 		else
-			AddContactExt(i, contact, str);
+			AddContactExt(i, contact, str, err);
+		if (!err)
+			i++;
 	}
-	_contacts[_contactIndex++] = contact;
+	_checkAdd(contact);
 }
 
 static std::string*	fieldToStringArray(int size, const Contact& contact, std::string (Contact::*str)(int) const)
@@ -127,7 +149,7 @@ static std::string*	fieldToStringArray(int size, const Contact& contact, std::st
 }
 
 
-static void	showContactInfo(Contact contact, int size, std::string& index)
+static void	showContactInfo(Contact contact, int nFields, std::string tmp)
 {
 	std::stringstream		field;
 	std::stringstream		value;
@@ -136,14 +158,14 @@ static void	showContactInfo(Contact contact, int size, std::string& index)
 	int						i;
 
 	i = 0;
-	dataArray = fieldToStringArray(size, contact, &Contact::getValue);
-	len = maxStringLength(size, dataArray);
-	println("");
-	println("************** Contact[ " + index + " ] **************");
-	while(i < size)
+	dataArray = fieldToStringArray(nFields, contact, &Contact::getValue);
+	len = maxStringLength(nFields, dataArray);
+	println("\n************** Contact[ " + tmp + " ] **************");
+	tmp = contact.fieldToString(Contact::DARKEST_SECRET);
+	while(i < nFields)
 	{
 		field.str("");
-		field << std::setw(contact.fieldToString(size - 1).length()) << contact.fieldToString(i);
+		field << std::setw(tmp.length()) << contact.fieldToString(i);
 		value.str("");
 		value << std::setw(len) << dataArray[i];
 		println("  " + color(field.str(), FDEFAULT, 0) + ":\t" + value.str());
@@ -153,7 +175,7 @@ static void	showContactInfo(Contact contact, int size, std::string& index)
 	delete[] dataArray;
 }
 
-static void formatedText(int colorType, std::string idx, int size, std::string* dataArray)
+static void formatedText(int colorType, std::string idx, int fNickname, std::string* dataArray)
 {
 	std::stringstream	ss;
 	std::string			coloredText;
@@ -163,7 +185,7 @@ static void formatedText(int colorType, std::string idx, int size, std::string* 
 	i = 0;
 	ss << std::setw(10) << idx;
 	std::cout << color(ss.str(), colorType, 0);
-	while(i <= size)
+	while(i <= fNickname)
 	{
 		ss.str("");
 		trunc = dataArray[i];
@@ -182,18 +204,18 @@ void	PhoneBook::displayPhonebook()
 	std::string		str;
 	std::string*	dataArray;
 	int				i;
-	int				size;
+	int				fNickname;
 
 	i = 0;
-	size = Contact::NICKNAME;
-	dataArray = fieldToStringArray(size, _contacts[0], &Contact::fieldToString);
+	fNickname = Contact::NICKNAME;
+	dataArray = fieldToStringArray(fNickname, _contacts[0], &Contact::fieldToString);
 	println("");
-	formatedText( FDEFAULT, "Index", size, dataArray);
+	formatedText( FDEFAULT, "Index", fNickname, dataArray);
 	delete[] dataArray;
 	while(i < _contactIndex)
 	{
-		dataArray = fieldToStringArray(size, _contacts[i], &Contact::getValue);
-		formatedText( DEFAULT, toString(i), size, dataArray);
+		dataArray = fieldToStringArray(fNickname, _contacts[i], &Contact::getValue);
+		formatedText( DEFAULT, toString(i + 1), fNickname, dataArray);
 		i++;
 		delete[] dataArray;
 	}
@@ -206,8 +228,9 @@ static void searchContactExt(std::string& index, int& idx, int& err, int sizeCon
 	if (checkInput(index, isdigit) && !index.empty())
 	{
 		err = 0;
-		idx = std::stoi(index);
-		flag_idx = idx < 0 || idx > sizeContatcs;
+		idx = std::stoi(index) - 1;
+		println(color(toString(idx), FRED,1));
+		flag_idx = idx < 0 || idx >= sizeContatcs;
 		if (flag_idx)
 			err = 1;
 	}
@@ -240,7 +263,7 @@ void	PhoneBook::searchContact()
 			println(color("Invalid choice. Please try again.", FRED, 1));
 		else
 		{
-			showContactInfo(this->_contacts[idx], Contact::N_FIELDS, index);
+			showContactInfo(_contacts[idx], Contact::N_FIELDS, index);
 			break;
 		}
 	}

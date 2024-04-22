@@ -6,11 +6,11 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 11:26:55 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/19 17:26:24 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/22 15:50:03 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <Phonebook.hpp>
+#include "Phonebook.hpp"
 
 #ifndef DEBUG
 # define DEBUG 0
@@ -21,8 +21,8 @@ int main()
 #if (DEBUG == 0)
 	PhoneBook	phonebook;
 #else
-	std::string info1[Contact::N_FIELDS] = {"Victoria", "Lizarraga", "Vicki", "1234567890", "adfasdfasdfasdf"};
-	std::string info2[Contact::N_FIELDS] = {"Diane", "Ruge", "Dian", "09871234", "zxfsdfasdfasdfewr"};
+	std::string info1[Contact::N_FIELDS] = {"Linda Victoria", "Lizarraga Cortes", "Vicki", "1234567890", "adfasdfasdfasdf"};
+	std::string info2[Contact::N_FIELDS] = {"Diana Paulina", "Calvo Cortes", "Diana", "09871233454", "zxfsdfasdfasdfewr"};
 	Contact contacts[2] = {Contact(info1), Contact(info2)};
 	PhoneBook phonebook(contacts, 2);
 #endif

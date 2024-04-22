@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/19 15:25:18 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/22 14:31:49 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ bool	checkInput(const std::string& str, int (*check_type)(int))
 	it = str.begin();
 	while (it != str.end())
 	{
-		if (!check_type(*it))
+		if (!check_type(*it) && !isspace(*it))
 			return false;
 		it++;
 	}

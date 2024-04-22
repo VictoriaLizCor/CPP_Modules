@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:40 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/19 17:26:20 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/22 16:19:26 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,17 @@ class PhoneBook
 		PhoneBook(Contact contacts[], int size);
 		// Destructor
 		~PhoneBook(void);
+		void	addContact(Contact contact);
 		void	addContact();
 		void	displayPhonebook();
 		void	searchContact();
 		void	showPhonebookMenu();
 	private:
 		// Private member variables
+		static const int MAX_CONTACTS = 8;
 		int		_contactIndex;
-		Contact	_contacts[8];
+		Contact	_contacts[MAX_CONTACTS];
+		void	_checkAdd(Contact& contact);
 };
 
 #endif
