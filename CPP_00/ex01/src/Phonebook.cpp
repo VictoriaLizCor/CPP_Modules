@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:49 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/23 17:18:37 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:51:21 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,10 @@ void PhoneBook::addContact()
 		println(color("Enter " + contact.fieldToString(i) + ": ", FBLUE, 0));
 		std::getline(std::cin, str);
 		if (str.empty())
+		{
+			err = 1;
 			println(color("Field cannot be empty.", FRED, 1));
+		}
 		else
 			AddContactExt(i, contact, str, err);
 		if (!err)
@@ -291,12 +294,20 @@ void	PhoneBook::searchContact()
 
 static void	menuOptions(void)
 {
+	std::string	str;
+	
 	println("");
 	println(color("****************** MENU *******************", FGREEN, 0));
 	println(color("*                                         *", FGREEN, 0));
-	println(color("*\t [ 1 ] - Add Contactt\t\t  *", FGREEN, 0));
-	println(color("*\t [ 2 ] - Search Contact\t\t  *", FGREEN, 0));
-	println(color("*\t [ 3 ] - Exit\t\t\t  *", FGREEN, 0));
+	str = ADD;
+	str = "*\t [ " + str + " ] \t- Add Contact\t  *";
+	println(color(str, FGREEN, 0));
+	str = SEARCH;
+	str = "*\t [ " + str + " ] \t- Search Contact  *";
+	println(color(str, FGREEN, 0));
+	str = EXIT;
+	str = "*\t [ " + str + " ] \t- Exit\t\t  *";
+	println(color(str, FGREEN, 0));
 	println(color("*                                         *", FGREEN, 0));
 	println(color("*******************************************", FGREEN, 0));
 }
