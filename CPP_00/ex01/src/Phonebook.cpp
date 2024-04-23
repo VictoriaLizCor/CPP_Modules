@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:49 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/23 16:44:20 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/23 17:18:37 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ static void formatedText(int colorType, std::string idx, int fNickname, std::str
 	i = 0;
 	ss << std::setw(10) << idx;
 	std::cout << color(ss.str(), colorType, 0);
-	while(i <= fNickname)
+	while(i < fNickname)
 	{
 		ss.str("");
 		trunc = dataArray[i];
@@ -218,23 +218,23 @@ static void formatedText(int colorType, std::string idx, int fNickname, std::str
 
 void	PhoneBook::displayPhonebook()
 {
-	std::string		str;
-	std::string*	dataArray;
+	std::string*	contactFieldsArray;
+	std::string*	contactValuesArray;
 	int				i;
 	int				fNickname;
 
 	i = 0;
-	fNickname = Contact::NICKNAME;
-	dataArray = fieldToStringArray(fNickname, _contacts[0], &Contact::fieldToString);
+	fNickname = Contact::NICKNAME + 1;
+	contactFieldsArray = fieldToStringArray(fNickname, _contacts[0], &Contact::fieldToString);
 	println("");
-	formatedText( FDEFAULT, "Index", fNickname, dataArray);
-	delete[] dataArray;
+	formatedText( FDEFAULT, "Index", fNickname, contactFieldsArray);
+	delete[] contactFieldsArray;
 	while(i < _contactIndex)
 	{
-		dataArray = fieldToStringArray(fNickname, _contacts[i], &Contact::getValue);
-		formatedText( DEFAULT, toString(i + 1), fNickname, dataArray);
+		contactValuesArray = fieldToStringArray(fNickname, _contacts[i], &Contact::getValue);
+		formatedText( DEFAULT, toString(i + 1), fNickname, contactValuesArray);
+		delete[] contactValuesArray;
 		i++;
-		delete[] dataArray;
 	}
 }
 
