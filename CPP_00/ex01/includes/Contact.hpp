@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 10:16:42 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/19 17:23:52 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:34:04 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,17 @@ class Contact
 			PHONE_NUMBER,
 			DARKEST_SECRET,
 			N_FIELDS
-        };
+		};
 		/*************** Public Methods ***************/
+		int	index;
 		Contact(void);
-		Contact(std::string info[N_FIELDS]) ;
+# if (DEBUG == 1)
+		Contact(std::string info[N_FIELDS]);
+# endif
 		//Destructor
 		~Contact(void);
 		// Getter methods
+		void		updateIndex(const int contactIndex);
 		std::string	getValue(int field) const;
 		// Setter methods
 		void		setValue(int field, const std::string& value);
@@ -56,6 +60,5 @@ class Contact
 	private:
 		// Private member variables
 		std::string _info[N_FIELDS];
-		
 };
 #endif

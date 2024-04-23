@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   phonebook.hpp                                      :+:      :+:    :+:   */
+/*   Phonebook.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:40 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/22 16:19:26 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:35:27 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,25 @@
 # include <iomanip>
 # include <iostream>
 # include <string>
+# include <cstring>
 # include <cctype>
 # include <sstream>
 
+#ifndef DEBUG
+# define DEBUG 0
+#endif
+
+# if (DEBUG == 1)
+#  include <cstdlib>
+
+#  define ADD "1"
+#  define SEARCH "2"
+#  define EXIT "3"
+# else
+#  define ADD "ADD"
+#  define SEARCH "SEARCH"
+#  define EXIT "EXIT"
+# endif
 /**
  * Member attribues
  * 	A member attribute (also known as a member variable, data member, or
@@ -33,22 +49,25 @@
 */
 class PhoneBook
 {
+	private:
+		// Private member variables
+		static const int _MAX_CONTACTS = 8;
+		int		_contactIndex;
+		Contact	_contacts[_MAX_CONTACTS];
+		void	_checkAdd(Contact& contact);
 	public:
-		PhoneBook(void);
+		static const int MAX_CONTACTS = _MAX_CONTACTS;
+# if (DEBUG == 1)
 		PhoneBook(Contact contacts[], int size);
+		void addContact(Contact contact);
+# endif
+		PhoneBook(void);
 		// Destructor
 		~PhoneBook(void);
-		void	addContact(Contact contact);
 		void	addContact();
 		void	displayPhonebook();
 		void	searchContact();
 		void	showPhonebookMenu();
-	private:
-		// Private member variables
-		static const int MAX_CONTACTS = 8;
-		int		_contactIndex;
-		Contact	_contacts[MAX_CONTACTS];
-		void	_checkAdd(Contact& contact);
 };
 
 #endif

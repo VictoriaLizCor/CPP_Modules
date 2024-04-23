@@ -6,15 +6,12 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 11:26:55 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/22 15:50:03 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:44:58 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Phonebook.hpp"
 
-#ifndef DEBUG
-# define DEBUG 0
-#endif
 
 int main()
 {

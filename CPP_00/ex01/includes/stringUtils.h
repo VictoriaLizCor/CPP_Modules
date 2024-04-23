@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:56:07 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/22 14:22:48 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/23 15:33:19 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,6 @@
 # include <iostream>
 # include <string>
 # include <sstream>
-
-# ifndef DEFAULT_LEN
-#  define DEFAULT_LEN 4
-# endif
-
-# ifndef COLOR_LEN
-#  define COLOR_LEN 7
-# endif
 
 typedef enum eColor
 {

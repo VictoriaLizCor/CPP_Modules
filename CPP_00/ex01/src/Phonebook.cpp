@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   phonebook.cpp                                      :+:      :+:    :+:   */
+/*   Phonebook.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:49 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/22 16:46:37 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:44:20 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 //*****************************PRIVATE**************************************//
 void	PhoneBook::_checkAdd(Contact& contact)
 {
-	if (_contactIndex < MAX_CONTACTS)
+	if (_contactIndex < _MAX_CONTACTS)
 		_contacts[_contactIndex++] = contact;
 	else
 	{
 		println(color("Phonebook is full, last added contact will be replaced", FRED, 1));
-		_contacts[MAX_CONTACTS - 1] = contact;
+		_contacts[_MAX_CONTACTS - 1] = contact;
 	}
 }
 
@@ -31,16 +31,18 @@ PhoneBook::PhoneBook(void)
 	_contactIndex = 0;
 }
 
+#if (DEBUG == 1)
 PhoneBook::PhoneBook(Contact contacts[], int size)
 {
-	int	i;
+	int		i;
 
-	for (i = 0; i < 8; i++)
+	_contactIndex = 0;
+	for (i = 0; i < size; i++)
 	{
-		if (i < size)
-			addContact(contacts[i]);
+		addContact(contacts[i]);
 	}
 }
+#endif
 
 PhoneBook::~PhoneBook(void)
 {
@@ -68,12 +70,12 @@ static void AddContactExt(int& i, Contact& contact, std::string& str, int& err)
 {
 	if (i == Contact::PHONE_NUMBER)
 	{
-		err = !checkInput(str, isalpha);
+		err = !checkInput(str, isdigit);
 		if (err == 0)
 			contact.setValue(i, str);
 		else
 		{
-			str = color("Phone number must be composed of digits and space characters.", FRED, 1);
+			str = color("Phone Number must be composed of digits and space characters.", FRED, 1);
 			println(str);
 		}
 	}
@@ -84,13 +86,15 @@ static void AddContactExt(int& i, Contact& contact, std::string& str, int& err)
 			contact.setValue(i, str);
 		else
 		{
-			str = contact.fieldToString(i);
-			str = str + " must be composed of alphabetic and space characters.";
+			str = "Contact [" + toString(contact.index) + "]: ";
+			str += contact.fieldToString(i);
+			str +=" must be composed of alphabetic and space characters.";
 			println(color(str , FRED, 1));
 		}
 	}
 }
 
+#if (DEBUG == 1)
 void PhoneBook::addContact(Contact contact)
 {
 	std::string	str;
@@ -99,17 +103,29 @@ void PhoneBook::addContact(Contact contact)
 	
 	i = 0;
 	err = 0;
+	contact.updateIndex(_contactIndex);
 	while(i < Contact::N_FIELDS)
 	{
 		str = contact.getValue(i);
 		if (str.empty())
-			println(color("Field cannot be empty.", FRED, 1));
+		{
+			err = true;
+			str = contact.fieldToString(i) + " field cannot be empty.";
+		}
 		else
 			AddContactExt(i, contact, str, err);
+		if (err)
+		{
+			str = "Contact [" + toString(contact.index) + "]: " + str;
+			println(color(str , FRED, 1));
+			println(color("Contacts not added. Please fix fields and try again.", FRED, 1));
+			exit(EXIT_FAILURE);
+		}
 		i++;
 	}
 	_checkAdd(contact);
 }
+#endif
 
 void PhoneBook::addContact()
 {
@@ -119,6 +135,7 @@ void PhoneBook::addContact()
 	int			err;
 
 	i = 0;
+	contact.updateIndex(_contactIndex);
 	while(i < Contact::N_FIELDS)
 	{
 		println(color("Enter " + contact.fieldToString(i) + ": ", FBLUE, 0));
@@ -139,8 +156,8 @@ static std::string*	fieldToStringArray(int size, const Contact& contact, std::st
 	int				i;
 
 	i = 0;
-	array = new std::string[size + 1];
-	while(i <= size)
+	array = new std::string[size];
+	while(i < size)
 	{
 		array[i] = (contact.*str)(i);
 		i++;
@@ -223,13 +240,16 @@ void	PhoneBook::displayPhonebook()
 
 static void searchContactExt(std::string& index, int& idx, int& err, int sizeContatcs)
 {
-	bool	flag_idx;
+	bool				flag_idx;
+	std::istringstream	tmp;
 
 	if (checkInput(index, isdigit) && !index.empty())
 	{
 		err = 0;
-		idx = std::stoi(index) - 1;
-		println(color(toString(idx), FRED,1));
+		tmp.clear();
+		tmp.str(index);
+		tmp >> idx;
+		idx--;
 		flag_idx = idx < 0 || idx >= sizeContatcs;
 		if (flag_idx)
 			err = 1;
@@ -281,21 +301,22 @@ static void	menuOptions(void)
 	println(color("*******************************************", FGREEN, 0));
 }
 
+
 void	PhoneBook::showPhonebookMenu()
 {
 	std::string	choice;
 
-	while (choice != "3")
+	while (1)
 	{
 		menuOptions();
 		std::cout << "\nEnter your choice: ";
 		std::getline(std::cin, choice);
 		println("");
-		if (choice == "1")
+		if (choice == ADD)
 			addContact();
-		else if (choice == "2")
+		else if (choice == SEARCH)
 			searchContact();
-		else if (choice == "3")
+		else if (choice == EXIT)
 			break;
 		else
 			println(color("Invalid choice. Please try again.", FRED, 1));

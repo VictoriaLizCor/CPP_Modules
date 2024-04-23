@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:59 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/22 14:52:22 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/23 16:32:31 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,27 @@
 //*****************************PUBLIC**************************************//
 Contact::Contact(void)
 {
+	index = -1;
 	return ;
 }
+
+#if (DEBUG == 1)
 Contact::Contact(std::string info[N_FIELDS])
 {
 	for (int i = 0; i < N_FIELDS; i++)
 		_info[i] = info[i];
 }
+# endif
 
 Contact::~Contact(void)
 {
 	return ;
 }
 
+void	Contact::updateIndex(const int contactIndex)
+{
+	index = contactIndex;
+}
 /*
  * <static_cast> It's a type of casting operator in C++. It converts one type
  * into another, but the types must be compatible. It performs a compile-time
@@ -35,6 +43,7 @@ Contact::~Contact(void)
  * 
  *  int i = 3;
  *  double d = static_cast<double>(i);  // Converts the integer i into a double
+ * zz
  * 
  * Here's a simplified example of how `static_cast` works: In this example,
  * `static_cast<double>(i)` converts the integer `i` into a double. The
