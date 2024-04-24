@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Phonebook.cpp                                      :+:      :+:    :+:   */
+/*   phonebook.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:49 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/23 17:51:21 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/24 09:48:36 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,18 +295,17 @@ void	PhoneBook::searchContact()
 static void	menuOptions(void)
 {
 	std::string	str;
-	
+	std::string	tmp;
+
 	println("");
 	println(color("****************** MENU *******************", FGREEN, 0));
 	println(color("*                                         *", FGREEN, 0));
-	str = ADD;
-	str = "*\t [ " + str + " ] \t- Add Contact\t  *";
+	str = "*\t [ " + center(ADD, 6) + " ] - Add Contact\t  *";
+	// str = str + center
 	println(color(str, FGREEN, 0));
-	str = SEARCH;
-	str = "*\t [ " + str + " ] \t- Search Contact  *";
+	str = "*\t [ " +  center(SEARCH, 6) + " ] - Search Contact\t  *";
 	println(color(str, FGREEN, 0));
-	str = EXIT;
-	str = "*\t [ " + str + " ] \t- Exit\t\t  *";
+	str = "*\t [ " + center(EXIT, 6) + " ] - Exit\t\t  *";
 	println(color(str, FGREEN, 0));
 	println(color("*                                         *", FGREEN, 0));
 	println(color("*******************************************", FGREEN, 0));

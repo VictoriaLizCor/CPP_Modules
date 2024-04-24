@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/23 17:44:36 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/24 09:29:10 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,10 @@ size_t	maxStringLength(int arraySize, std::string* arrayData)
 	return (len);
 }
 
-// static std::string	center(const std::string& s, int width)
-// {
-// 	int padding = width - s.size();
-// 	int left = padding / 2 + padding % 2;
-// 	int right = padding / 2;
-// 	return (std::string(left, ' ') + s + std::string(right, ' '));
-// }
+std::string	center(std::string s, int width)
+{
+	int padding = width - s.size();
+	int left = padding / 2 + padding % 2;
+	int right = padding / 2;
+	return (std::string(left, ' ') + s + std::string(right, ' '));
+}

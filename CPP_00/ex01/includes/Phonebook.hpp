@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Phonebook.hpp                                      :+:      :+:    :+:   */
+/*   phonebook.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:40 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/23 16:35:27 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/24 09:20:29 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,13 @@
 # if (DEBUG == 1)
 #  include <cstdlib>
 
-#  define ADD "1"
-#  define SEARCH "2"
-#  define EXIT "3"
-# else
 #  define ADD "ADD"
 #  define SEARCH "SEARCH"
 #  define EXIT "EXIT"
+# else
+#  define ADD "1"
+#  define SEARCH "2"
+#  define EXIT "3"
 # endif
 /**
  * Member attribues

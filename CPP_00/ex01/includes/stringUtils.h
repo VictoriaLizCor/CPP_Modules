@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:56:07 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/23 15:33:19 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/24 09:29:16 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,5 @@ std::string	toString(int value);
 std::string	color(std::string msg, int color, bool err);
 bool		checkInput(const std::string& str, int (*check_type)(int));
 size_t		maxStringLength(int fieldSize, std::string* arrayData);
+std::string	center(std::string s, int width);
 #endif
