@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:40 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 09:20:29 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:48:08 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define PHONEBOOK_HPP
 # include "Contact.hpp"
 # include "stringUtils.h"
+# include "phonebookUtils.h"
 # include <iomanip>
 # include <iostream>
 # include <string>
@@ -25,9 +26,11 @@
 # define DEBUG 0
 #endif
 
-# if (DEBUG == 1)
+# if (DEBUG != 0)
 #  include <cstdlib>
+#endif
 
+# if (DEBUG == 2)
 #  define ADD "ADD"
 #  define SEARCH "SEARCH"
 #  define EXIT "EXIT"
@@ -57,17 +60,17 @@ class PhoneBook
 		void	_checkAdd(Contact& contact);
 	public:
 		static const int MAX_CONTACTS = _MAX_CONTACTS;
-# if (DEBUG == 1)
-		PhoneBook(Contact contacts[], int size);
-		void addContact(Contact contact);
-# endif
 		PhoneBook(void);
 		// Destructor
 		~PhoneBook(void);
 		void	addContact();
-		void	displayPhonebook();
+		void	displayPhonebook(int size);
 		void	searchContact();
 		void	showPhonebookMenu();
+# if (DEBUG != 0)
+		PhoneBook(Contact contacts[], int size);
+		void addContact(Contact contact);
+# endif
 };
 
 #endif

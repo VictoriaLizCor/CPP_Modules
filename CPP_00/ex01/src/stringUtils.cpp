@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 09:29:10 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/24 12:07:10 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,18 @@ bool	checkInput(const std::string& str, int (*check_type)(int))
 		if (!check_type(*it) && !isspace(*it))
 			return false;
 		it++;
+	}
+	return true;
+}
+
+bool	isOnlySpaces(const std::string& str)
+{
+	std::string::const_iterator it;
+	
+	for (it = str.begin(); it != str.end(); it++)
+	{
+		if (*it != ' ')
+			return false;
 	}
 	return true;
 }

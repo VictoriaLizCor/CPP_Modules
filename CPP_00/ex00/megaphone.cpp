@@ -5,6 +5,7 @@
 #ifndef DEBUG
 # define DEBUG 0
 #endif
+
 /*
 In C++98, you can't directly print a preprocessor macro that expands to an
 integer using `cout` or `printf` because the preprocessor runs before the
@@ -44,19 +45,14 @@ the value of `DEBUG` at compile time, not at runtime. If you change the value of
  **/
 void str_upper(char *argv)
 {
-	char *cpy;
-	std::string str(argv);
+	char cpy [std::strlen(argv) + 1];
 
-	{
-		cpy = new char[str.length() + 1];
-		std::strcpy(cpy, str.c_str());
-		for (int i = 0; cpy[i]; i++)
-			cpy[i] = std::toupper(cpy[i]);
-		std::cout << cpy;
-		delete[] cpy;
-	}
+	std::strcpy(cpy, argv);
+	for (int i = 0; cpy[i]; i++)
+		cpy[i] = std::toupper(cpy[i]);
+	std::cout << cpy;
 }
-
+//std::toupper(cpy[i]));
 /**
  * @brief The main function of the megaphone program. This function takes
  * command line arguments, converts them to uppercase using the str_upper

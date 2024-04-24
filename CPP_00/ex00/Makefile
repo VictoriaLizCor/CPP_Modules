@@ -87,16 +87,17 @@ re:     fclean all
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
 t:$(NAME)
-	@echo $(BOLD) ./$(NAME) $(E_NC)
+	@echo $(BOLD) ./$(NAME) $(E_NC) "\n"
 	@./$(NAME)
-	@echo $(BOLD) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC)
+	@echo $(BOLD) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC) "\n"
 	@./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
-# start: $(NAME)
-# 	@echo $(GREEN)./$(NAME) $(arg) $(E_NC)
-# 	$(if $(arg), -./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make start arg=\"write something here\"\n")
+leaks: $(NAME)
+	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)
+	@$(MAC_LEAKS) ./$(NAME)
+	@echo $(RED)$(MAC_LEAKS) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC)
+	@$(MAC_LEAKS) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
 val: $(NAME)
-	@echo $(RED) $(VALGRIND) $(MAKE) t $(E_NC)
+	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC)
 	@$(VALGRIND) ./$(NAME)
 	@$(VALGRIND) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
 
@@ -143,6 +144,7 @@ GREEN = "\033[1;32m"
 BLUE = "\033[1;34m"
 YELLOW = "\033[1;33m"
 E_NC	= "\033[m"
+NLINE = "\033[\n"
 CYAN = "\033[0;1;36m"
 BANNER = "$$CPP"
 TRASH_BANNER = "$$TRASH"

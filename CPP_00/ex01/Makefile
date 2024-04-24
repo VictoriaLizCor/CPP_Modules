@@ -8,6 +8,7 @@ SRCS_DIR	:= src/
 SRCS		:=	Contact.cpp			\
 				Phonebook.cpp		\
 				stringUtils.cpp		\
+				debug.cpp		\
 				main.cpp
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
