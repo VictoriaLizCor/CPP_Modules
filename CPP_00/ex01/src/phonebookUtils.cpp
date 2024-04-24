@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   phonebookutils.h                                   :+:      :+:    :+:   */
+/*   phonebookUtils.cpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:44:57 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 12:46:29 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/24 13:48:27 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	showContactInfo(Contact contact, int nFields, std::string tmp)
 	i = 0;
 	fieldToStringArray(dataArray, nFields, contact, &Contact::getValue);
 	len = maxStringLength(nFields, dataArray);
-	println("\n************** Contact[ " + tmp + " ] **************");
+	println("\n************** Contact[ " + tmp + " ] ***************");
 	tmp = contact.fieldToString(Contact::DARKEST_SECRET);
 	while(i < nFields)
 	{
@@ -88,7 +88,7 @@ void	showContactInfo(Contact contact, int nFields, std::string tmp)
 		println("  " + color(field.str(), FDEFAULT, 0) + ":\t" + value.str());
 		i++;
 	}
-	println("******************************************");
+	println("*******************************************");
 }
 
 void formatedText(int colorType, std::string idx, int fNickname, std::string* dataArray)
@@ -153,3 +153,4 @@ void	menuOptions(void)
 	println(color("*                                         *", FGREEN, 0));
 	println(color("*******************************************", FGREEN, 0));
 }
+

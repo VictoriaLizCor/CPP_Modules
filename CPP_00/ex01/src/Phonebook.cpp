@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:49 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 12:46:27 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/24 16:53:23 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,26 @@
 
 //*****************************PRIVATE**************************************//
 void	PhoneBook::_checkAdd(Contact& contact)
-{
+{	
+	std::string	str;
+
 	if (_contactIndex < _MAX_CONTACTS)
 	{
+		int	tmp;
+
+		tmp = _contactIndex;
 		_contacts[_contactIndex++] = contact;
+		_contacts[tmp].updateIndex(_contactIndex);
+		str = "Contact [" + toString(_contacts[tmp].index) + "] added succesfully";
+		println(color(str, FBLUE, 0));
 	}
 	else
 	{
-		println(color("Phonebook is full, last added contact will be replaced", FRED, 1));
+		println(color("\nPhonebook is full, last added contact will be replaced", FRED, 0));
 		_contacts[_MAX_CONTACTS - 1] = contact;
+		str = toString(_contactIndex);
+		str = color("\nContact [ " + str + " ] updated succesfully", FBLUE, 0);
+		println(str);
 	}
 }
 
@@ -50,7 +61,7 @@ void PhoneBook::addContact()
 	while(i < Contact::N_FIELDS)
 	{
 		err = 0;
-		println(color("Enter " + contact.fieldToString(i) + ": ", FBLUE, 0));
+		std::cout<< color("Enter " + contact.fieldToString(i) + ": ", FBLUE, 0);
 		std::getline(std::cin, str);
 		if (str.empty() || isOnlySpaces(str))
 		{
@@ -67,6 +78,7 @@ void PhoneBook::addContact()
 		else
 			i++;
 	}
+	println("");
 	_checkAdd(contact);
 }
 
@@ -88,6 +100,16 @@ void	PhoneBook::displayPhonebook(int size)
 	}
 }
 
+bool	PhoneBook::_checkEmpyPhonebook()
+{
+	if (_contactIndex == 0)
+	{
+		println(color("\nPhonebook empty. Please add a contact first.", FDEFAULT, 0));
+		return (true);
+	}
+	return (false);
+}
+
 void	PhoneBook::searchContact()
 {
 	std::string	index;
@@ -96,12 +118,8 @@ void	PhoneBook::searchContact()
 
 	err = 0;
 	idx = 0;
-	if (_contactIndex == 0)
-	{
-		index = color("\nPhonebook empty. Please add a contact first.", FDEFAULT, 0);
-		println(index);
+	if (_checkEmpyPhonebook())
 		return ;
-	}
 	while (1)
 	{
 		displayPhonebook(Contact::NICKNAME + 1);
@@ -119,23 +137,45 @@ void	PhoneBook::searchContact()
 	}
 }
 
+bool	PhoneBook::_checkFullPhonebook()
+{
+	std::string	choice;
+
+	if (_contactIndex == _MAX_CONTACTS)
+	{
+		println(color("Phonebook is full, last contact will be replaced.", FDEFAULT, 0));
+		while(1)
+		{
+			std::cout << color("Continue yes/no (y/n))? ", FDEFAULT, 0);
+			std::getline(std::cin, choice);
+			println("");
+			if (choice == "yes" || choice == "y")
+				return (true);
+			else if (choice == "no" || choice == "n")
+				return (false);
+		}
+	}
+	return (true);
+}
+
 void	PhoneBook::showPhonebookMenu()
 {
 	std::string	choice;
 
-	while (1)
+	while (choice != EXIT)
 	{
 		menuOptions();
 		std::cout << "\nEnter your choice: ";
 		std::getline(std::cin, choice);
 		println("");
 		if (choice == ADD)
-			addContact();
+		{
+			if (_checkFullPhonebook())
+				addContact();
+		}
 		else if (choice == SEARCH)
 			searchContact();
-		else if (choice == EXIT)
-			break;
-		else
+		else if (choice != EXIT)
 			println(color("Invalid choice. Please try again.", FRED, 1));
 	}
 	println(color("GOOD BYE!", FBLUE, 0));

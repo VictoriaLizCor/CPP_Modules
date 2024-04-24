@@ -6,15 +6,15 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:40 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 12:48:08 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/24 16:09:39 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHONEBOOK_HPP
 # define PHONEBOOK_HPP
 # include "Contact.hpp"
-# include "stringUtils.h"
-# include "phonebookUtils.h"
+# include "stringUtils.hpp"
+# include "phonebookUtils.hpp"
 # include <iomanip>
 # include <iostream>
 # include <string>
@@ -58,8 +58,14 @@ class PhoneBook
 		int		_contactIndex;
 		Contact	_contacts[_MAX_CONTACTS];
 		void	_checkAdd(Contact& contact);
+		bool	_checkFullPhonebook();
+		bool	_checkEmpyPhonebook();
 	public:
 		static const int MAX_CONTACTS = _MAX_CONTACTS;
+# if (DEBUG != 0)
+		PhoneBook(Contact contacts[], int size);
+		void addContact(Contact contact);
+# endif
 		PhoneBook(void);
 		// Destructor
 		~PhoneBook(void);
@@ -67,12 +73,7 @@ class PhoneBook
 		void	displayPhonebook(int size);
 		void	searchContact();
 		void	showPhonebookMenu();
-# if (DEBUG != 0)
-		PhoneBook(Contact contacts[], int size);
-		void addContact(Contact contact);
-# endif
 };
-
 #endif
 
 /*

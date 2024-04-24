@@ -6,11 +6,11 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 12:07:10 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/24 14:09:42 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "stringUtils.h"
+#include "stringUtils.hpp"
 
 /**
  * @brief Applies color formatting to a given message.

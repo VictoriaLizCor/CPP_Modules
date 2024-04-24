@@ -7,6 +7,7 @@ INCLUDES	+= -I includes/
 SRCS_DIR	:= src/
 SRCS		:=	Contact.cpp			\
 				Phonebook.cpp		\
+				phonebookUtils.cpp		\
 				stringUtils.cpp		\
 				debug.cpp		\
 				main.cpp
@@ -95,10 +96,10 @@ re:     fclean all
 # 	$(if $(arg), -./$(NAME) $(arg), \
 # 		@printf "Input Example: \n\t make start arg=\"write something here\"\n")
 val: $(NAME)
-	@echo $(GREEN) $(VALGRIND) ./$(NAME) $(E_NC)
+	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC)
 	@$(VALGRIND) ./$(NAME)
 leaks: $(NAME)
-	@echo $(GREEN) $(MAC_LEAKS) ./$(NAME) $(E_NC)
+	@echo $(RED) $(MAC_LEAKS) ./$(NAME) $(E_NC)
 	@$(MAC_LEAKS) ./$(NAME)
 # #-------------------- GIT UTILS ----------------------------#
 test:

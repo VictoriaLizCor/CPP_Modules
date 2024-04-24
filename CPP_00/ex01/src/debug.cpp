@@ -6,13 +6,14 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:29:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 12:38:06 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/24 16:33:24 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Phonebook.hpp"
 
 #if (DEBUG != 0)
+
 PhoneBook::PhoneBook(Contact contacts[], int size)
 {
 	int		i;
@@ -29,8 +30,10 @@ void PhoneBook::addContact(Contact contact)
 	std::string	str;
 	int		i;
 	int		err;
+	bool	exitFlag;
 	
 	i = 0;
+	exitFlag = false;
 	contact.updateIndex(_contactIndex + 1);
 	while(i < Contact::N_FIELDS)
 	{
@@ -47,13 +50,14 @@ void PhoneBook::addContact(Contact contact)
 		{
 			str = "Contact [" + toString(contact.index) + "]: " + str;
 			println(color(str , FRED, 1));
+			exitFlag = true;
 		}
 		i++;
 	}
-	if (err)
+	if (exitFlag)
 	{
-		println(color("Contacts not added. Please fix fields and try again.", FDEFAULT, 0));
-		exit(EXIT_FAILURE);
+		str = "Contact [" + toString(contact.index) + "] not added";
+		println(color(str + ". Please add manually.", FDEFAULT, 0));
 	}
 	else
 		_checkAdd(contact);

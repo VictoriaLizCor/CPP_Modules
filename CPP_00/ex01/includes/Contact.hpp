@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 10:16:42 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/23 16:34:04 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/24 16:51:35 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ class Contact
 		/*************** Public Methods ***************/
 		int	index;
 		Contact(void);
-# if (DEBUG == 1)
+# if (DEBUG != 0)
 		Contact(std::string info[N_FIELDS]);
 # endif
 		//Destructor
