@@ -6,10 +6,11 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:40 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 16:09:39 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:14:04 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+# pragma once
 #ifndef PHONEBOOK_HPP
 # define PHONEBOOK_HPP
 # include "Contact.hpp"

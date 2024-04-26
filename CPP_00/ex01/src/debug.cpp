@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:29:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 16:33:24 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:02:48 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ PhoneBook::PhoneBook(Contact contacts[], int size)
 	_contactIndex = 0;
 	for (i = 0; i < size; i++)
 	{
-		addContact(contacts[i]);
+		if (_checkFullPhonebook())
+			addContact(contacts[i]);
 	}
 }
 

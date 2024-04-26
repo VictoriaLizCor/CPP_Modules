@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:44:57 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 13:48:27 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:25:17 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ void	showContactInfo(Contact contact, int nFields, std::string tmp)
 	i = 0;
 	fieldToStringArray(dataArray, nFields, contact, &Contact::getValue);
 	len = maxStringLength(nFields, dataArray);
-	println("\n************** Contact[ " + tmp + " ] ***************");
+	tmp = color("Contact [ " + tmp + " ]", FDEFAULT, 0);
+	println("************* " + tmp + " ***************");
 	tmp = contact.fieldToString(Contact::DARKEST_SECRET);
 	while(i < nFields)
 	{
@@ -109,7 +110,7 @@ void formatedText(int colorType, std::string idx, int fNickname, std::string* da
 			trunc = trunc.substr(0, 9) + ".";
 		ss << std::setw(10) << trunc;
 		coloredText = color(ss.str(), colorType, 0);
-		std::cout << "|" << coloredText;
+		std::cout << color("|", FDEFAULT, 0) << coloredText;
 		i ++;
 	}
 	println("");
@@ -141,16 +142,16 @@ void	menuOptions(void)
 	std::string	tmp;
 
 	println("");
-	println(color("****************** MENU *******************", FGREEN, 0));
-	println(color("*                                         *", FGREEN, 0));
+	println(color("****************** MENU *******************", FLGREEN, 0));
+	println(color("*                                         *", FLGREEN, 0));
 	str = "*\t [ " + center(ADD, 6) + " ] - Add Contact\t  *";
 	// str = str + center
-	println(color(str, FGREEN, 0));
+	println(color(str, FLGREEN, 0));
 	str = "*\t [ " +  center(SEARCH, 6) + " ] - Search Contact\t  *";
-	println(color(str, FGREEN, 0));
+	println(color(str, FLGREEN, 0));
 	str = "*\t [ " + center(EXIT, 6) + " ] - Exit\t\t  *";
-	println(color(str, FGREEN, 0));
-	println(color("*                                         *", FGREEN, 0));
-	println(color("*******************************************", FGREEN, 0));
+	println(color(str, FLGREEN, 0));
+	println(color("*                                         *", FLGREEN, 0));
+	println(color("*******************************************", FLGREEN, 0));
 }
 

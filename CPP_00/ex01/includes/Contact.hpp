@@ -6,11 +6,11 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 10:16:42 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 16:51:35 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/26 15:13:58 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
+# pragma once
 #ifndef CONTACT_HPP
 # define CONTACT_HPP
  /*
@@ -27,7 +27,6 @@
  * subsequent includes of the same header file. This can help to improve
  * compile-time performance and avoid potential issues with redefinition.
 */
-# pragma once
 #  include <iostream>
 #  include <string>
 class Contact

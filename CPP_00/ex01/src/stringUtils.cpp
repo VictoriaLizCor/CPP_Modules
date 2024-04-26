@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 14:09:42 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/26 16:07:32 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,17 @@ std::string	color(std::string msg, int color, bool err)
 {
 	std::string	strColor;
 	std::string	strDefault;
-	
+	std::string	fmt;
+
 	if (color == DEFAULT)
 		return (msg);
-	strColor = "\033[1;" + toString(color) + "m";
-	strDefault = "\033[" + toString(DEFAULT) + "m";
+	fmt = C_FMT;
+	if (color >= FDEFAULT)
+		fmt = fmt + "1;";
+	strColor = fmt + toString(color) + "m";
+	strDefault = fmt + toString(DEFAULT) + "m";
 	if (err)
-		return (strColor + "Error: " + msg + strDefault);
+		return (fmt + toString(FLRED) + "m" + "Error: " + msg + strDefault);
 	else
 		return (strColor + msg + strDefault);
 }

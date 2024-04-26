@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:59 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 16:52:05 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/26 14:56:31 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Contact::Contact(void)
 	return ;
 }
 
-#if (DEBUG != 1)
+#if (DEBUG != 0)
 Contact::Contact(std::string info[N_FIELDS])
 {
 	for (int i = 0; i < N_FIELDS; i++)

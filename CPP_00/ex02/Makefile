@@ -1,7 +1,7 @@
 #------ TARGET ------#
-NAME		:= phonebook
+NAME		:= account
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
+D_FLAGS		= -Wall -Wextra -std=c++98 #-Werror
 INCLUDES	+= -I includes/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR	:= src/
@@ -90,10 +90,13 @@ re:     fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
-# start: $(NAME)
-# 	@echo $(GREEN)./$(NAME) $(arg) $(E_NC)
-# 	$(if $(arg), -./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make start arg=\"write something here\"\n")
+diff:$(NAME)
+	@./$(NAME) > docs/test.log
+	@sed 's/\[[^]]*\]//g' docs/test.log > temp1.log
+	@sed 's/\[[^]]*\]//g' docs/intra.log > temp2.log
+	@diff temp1.log temp2.log
+	rm temp1.log temp2.log
+
 val: $(NAME)
 	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC)
 	@$(VALGRIND) ./$(NAME)

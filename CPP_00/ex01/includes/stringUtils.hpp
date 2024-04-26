@@ -1,34 +1,54 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stringUtils.h                                      :+:      :+:    :+:   */
+/*   stringUtils.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/17 12:56:07 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 12:07:03 by lilizarr         ###   ########.fr       */
+/*   Created: 2024/04/26 15:13:36 by lilizarr          #+#    #+#             */
+/*   Updated: 2024/04/26 16:01:26 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+# pragma once
 #ifndef STRINGUTILS_H
 # define STRINGUTILS_H
-# pragma once
 # include <iostream>
 # include <string>
 # include <sstream>
 
+# define C_FMT "\033["
 typedef enum eColor
 {
-	DEFAULT		= 0,
-	FRED		= 31,
-	FGREEN		= 32,
-	FBLUE		= 34,
-	FDEFAULT	= 39,
-	BRED		= 41,
-	BGREEN		= 42,
-	BBLUE		= 44,
-	BDEFAULT	= 49
-}	t_color;
+	DEFAULT			= 0,
+	FBLACK			= 30,
+	FRED			= 31,
+	FGREEN			= 32,
+	FYELLOW			= 33,
+	FBLUE			= 34,
+	FMAGENTA		= 35,
+	FCYAN			= 36,
+	FLGRAY			= 37,
+//\033[38;2;r;g;bm where red, green, and blue color values respectively (from 0 to 255).
+	FDEFAULT		= 39,
+	BBLACK			= 40,
+	BRED			= 41,
+	BGREEN			= 42,
+	BYELLOW			= 43,
+	BBLUE			= 44,
+	BMAGENTA		= 45,
+	BCYAN			= 46,
+	BWHITE			= 47,
+	BDEFAULT		= 49,
+	FDARKGRAY		= 90,
+	FLRED			= 91,
+	FLGREEN			= 92,
+	FLYELLOW		= 93,
+	FLBLUE			= 94,
+	FLMAGENTA		= 95,
+	FLCYAN			= 96,
+	FWHITE			= 97,
+} t_color;
 
 void		println(std::string str);
 std::string	toString(int value);
