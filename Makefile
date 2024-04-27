@@ -33,6 +33,10 @@ gQuick:fclean gAdd
 	@git commit -aF msg_template
 	@rm msg_template
 	$(MAKE) gPush
+# commit correction git commit --amend
+# //avoid last commit message
+soft_reset:
+	git reset --soft HEAD~1
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)
