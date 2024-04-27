@@ -35,7 +35,7 @@ gQuick:fclean gAdd
 	$(MAKE) gPush
 # commit correction git commit --amend
 # //avoid last commit message
-soft_reset:
+soft:
 	git reset --soft HEAD~1
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
