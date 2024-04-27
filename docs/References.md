@@ -4,3 +4,6 @@
 
 ## Repository history best practices
 * https://silvenon.com/blog/better-git-history/introduction
+
+## Git Branching model
+* https://nvie.com/posts/a-successful-git-branching-model/
