@@ -33,6 +33,10 @@ gQuick:fclean gAdd
 	@git commit -aF msg_template
 	@rm msg_template
 	$(MAKE) gPush
+ghook:fclean
+	git commit -a -e 
+	# git commit -am "test"
+#test
 # commit correction git commit --amend
 # //avoid last commit message
 soft:
