@@ -12,6 +12,7 @@
 #include <functional>
 #include "Account.hpp"
 
+/**/
 int		main( void ) {
 
 	typedef std::vector<Account::t>							  accounts_t;
@@ -37,7 +38,16 @@ int		main( void ) {
 	ints_t::iterator	wit_end		= withdrawals.end();
 
 	Account::displayAccountsInfos();
-	std::for_each( acc_begin, acc_end, std::mem_fun_ref( &Account::displayStatus ) );
+/*
+ * std::mem_fun_ref is part of the C++98 standard. It was used to adapt a
+ * pointer to a member function, which could then be used in places expecting a
+ * function object.
+ * std::mem_fun_ref was deprecated in C++11
+ * and removed entirely in C++17. If you're working with C++11 or later, you should
+ * use std::mem_fn or a lambda function instead.
+*/
+
+	std::for_each( acc_begin, acc_end, std::mem_fun_ref(&Account::displayStatus ));
 
 	for ( acc_int_t it( acc_begin, dep_begin );
 		  it.first != acc_end && it.second != dep_end;
@@ -47,7 +57,7 @@ int		main( void ) {
 	}
 
 	Account::displayAccountsInfos();
-	std::for_each( acc_begin, acc_end, std::mem_fun_ref( &Account::displayStatus ) );
+	std::for_each( acc_begin, acc_end, std::mem_fun_ref(&Account::displayStatus ));
 
 	for ( acc_int_t it( acc_begin, wit_begin );
 		  it.first != acc_end && it.second != wit_end;
@@ -58,7 +68,11 @@ int		main( void ) {
 
 	Account::displayAccountsInfos();
 	std::for_each( acc_begin, acc_end, std::mem_fun_ref( &Account::displayStatus ) );
-
+	
+	for (accounts_t::iterator it = acc_begin; it != acc_end; ++it)
+	{
+		delete *it;
+	}
 	return 0;
 }
 

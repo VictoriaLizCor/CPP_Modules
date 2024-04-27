@@ -1,7 +1,19 @@
 {
+	//***************************************************//
+	// "[osx]":
 	"editor.fontSize": 13,
-	"window.zoomLevel": 1.1,
-	"terminal.integrated.fontSize": 13,
+	// "[linux]":
+	// "editor.fontSize": 13,
+	// "window.zoomLevel": 1.1,
+	/*FOR BOTH*/
+	"workbench.startupEditor": "none",
+	"editor.detectIndentation": false,
+	"editor.insertSpaces": false,
+	"audioCues.volume": 0,
+	"doxdocgen.generic.useGitUserEmail": true,
+	"doxdocgen.generic.useGitUserName": true,
+	"doxdocgen.c.triggerSequence": "/**/",
+	//************************************************//
 	// "compiler-explorer.url": "https://godbolt.org", // url of the compiler explorer you want to use.
 	// "compiler-explorer.compiler": "armg454", // Compiler code - See help below.
 	// "compiler-explorer.options": [

@@ -5,11 +5,21 @@ int Account::_totalAmount = 0;
 int Account::_totalNbDeposits = 0;
 int Account::_totalNbWithdrawals = 0;
 
-void Account::_displayTimestamp(void) {
-	std::time_t now = std::time(0);
-	std::tm* localtm = std::localtime(&now);
-	std::cout << "[" << (localtm->tm_year + 1900) * 10000 + (localtm->tm_mon + 1) * 100 + localtm->tm_mday << "_";
-	std::cout << localtm->tm_hour * 10000 + localtm->tm_min * 100 + localtm->tm_sec << "] ";
+// static void formatStr()
+// {
+
+// }
+
+void Account::_displayTimestamp(void)
+{
+	char strTime[20];
+	std::time_t now;
+	std::tm* localtm;
+
+	now = std::time(NULL);
+	localtm = std::localtime(&now);
+	std::strftime(strTime, sizeof(strTime), "[%Y%m%d_%H%M%S]", localtm);
+	std::cout << strTime;
 }
 
 /*
@@ -58,6 +68,7 @@ Account::~Account(void)
 	_displayTimestamp();
 	std::cout << "index:" << _accountIndex << ";amount:" << _amount << ";closed" << std::endl;
 }
+
 
 void Account::makeDeposit(int deposit) {
 	_amount += deposit;
