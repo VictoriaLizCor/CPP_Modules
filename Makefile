@@ -35,7 +35,6 @@ gQuick:fclean gAdd
 	$(MAKE) gPush
 ghook:fclean
 	git commit -am "test"
-#test
 # commit correction git commit --amend
 # //avoid last commit message
 soft:
