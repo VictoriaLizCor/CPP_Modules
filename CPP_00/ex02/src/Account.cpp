@@ -1,14 +1,17 @@
 #include "Account.hpp"
+#include <vector>
 
 int Account::_nbAccounts = 0;
 int Account::_totalAmount = 0;
 int Account::_totalNbDeposits = 0;
 int Account::_totalNbWithdrawals = 0;
+std::vector<Account::t*> _accounts;
 
-// static void formatStr()
-// {
-
-// }
+static void formatStr(std::string str, int value)
+{
+	std::cout << str;
+	std::cout << value;
+}
 
 void Account::_displayTimestamp(void)
 {
@@ -18,7 +21,7 @@ void Account::_displayTimestamp(void)
 
 	now = std::time(NULL);
 	localtm = std::localtime(&now);
-	std::strftime(strTime, sizeof(strTime), "[%Y%m%d_%H%M%S]", localtm);
+	std::strftime(strTime, sizeof(strTime), "[%Y%m%d_%H%M%S] ", localtm);
 	std::cout << strTime;
 }
 
@@ -46,13 +49,20 @@ void Account::_displayTimestamp(void)
  * Therefore, it's generally considered best practice in C++ to use an initializer
  * list to initialize member variables in a constructor.
 */
+Account::Account(void)
+{
+
+}
+
 Account::Account(int initial_deposit) :
 _accountIndex(_nbAccounts++), _amount(initial_deposit), _nbDeposits(0), _nbWithdrawals(0)
 {
-	
+	_accounts.push_back(this);
 	_totalAmount += initial_deposit;
 	_displayTimestamp();
-	std::cout << "index:" << _accountIndex << ";amount:" << _amount << ";created" << std::endl;
+	formatStr("index:", _accountIndex);
+	formatStr(";amount:", _amount);
+	std::cout << ";created" << std::endl;
 }
 
 /*
@@ -63,43 +73,80 @@ _accountIndex(_nbAccounts++), _amount(initial_deposit), _nbDeposits(0), _nbWithd
  * known as the "stack unwinding" process.
  *
 */
+
 Account::~Account(void)
 {
-	_displayTimestamp();
-	std::cout << "index:" << _accountIndex << ";amount:" << _amount << ";closed" << std::endl;
+	_nbAccounts--;
+	if (!_accounts.empty())
+	{
+		_displayTimestamp();
+		formatStr("index:", (*_accounts.begin())->_accountIndex);
+		formatStr(";amount:", (*_accounts.begin())->_amount);
+		std::cout << ";closed"<< std::endl;
+		_accounts.erase(_accounts.begin());
+		return ;
+	}
 }
 
 
-void Account::makeDeposit(int deposit) {
+void Account::makeDeposit(int deposit)
+{
 	_amount += deposit;
 	_nbDeposits++;
 	_totalAmount += deposit;
 	_totalNbDeposits++;
 	_displayTimestamp();
-	std::cout << "index:" << _accountIndex << ";p_amount:" << (_amount - deposit) << ";deposit:" << deposit << ";amount:" << _amount << ";nb_deposits:" << _nbDeposits << std::endl;
+	formatStr("index:", _accountIndex);
+	formatStr(";p_amount:", _amount - deposit);
+	formatStr(";deposit:", deposit);
+	formatStr(";amount:", _amount);
+	formatStr(";nb_deposits:", _nbDeposits);
+	std::cout << std::endl;
 }
 
-bool Account::makeWithdrawal(int withdrawal) {
+bool Account::makeWithdrawal(int withdrawal)
+{
 	_displayTimestamp();
-	if (_amount < withdrawal) {
-		std::cout << "index:" << _accountIndex << ";p_amount:" << _amount << ";withdrawal:refused" << std::endl;
+	formatStr("index:", _accountIndex);
+	if (_amount < withdrawal)
+	{
+		formatStr(";p_amount:", _amount);
+		std::cout << ";withdrawal:refused" << std::endl;
 		return false;
 	}
 	_amount -= withdrawal;
-	_nbWithdrawals++;
 	_totalAmount -= withdrawal;
 	_totalNbWithdrawals++;
-	std::cout << "index:" << _accountIndex << ";p_amount:" << (_amount + withdrawal) << ";withdrawal:" << withdrawal << ";amount:" << _amount << ";nb_withdrawals:" << _nbWithdrawals << std::endl;
+	formatStr(";p_amount:", _amount + withdrawal);
+	formatStr(";withdrawal:", withdrawal);
+	formatStr(";amount:", _amount);
+	formatStr(";nb_withdrawals:", ++_nbWithdrawals);
+	std::cout << std::endl;
 	return true;
 }
 
-int Account::checkAmount(void) const {
-	return _amount;
+void Account::displayStatus(void) const
+{
+	_displayTimestamp();
+	formatStr("index:", _accountIndex);
+	formatStr(";amount:", _amount);
+	formatStr(";deposits:", _nbDeposits);
+	formatStr(";withdrawals:", _nbWithdrawals);
+	std::cout << std::endl;
 }
 
-void Account::displayStatus(void) const {
+void Account::displayAccountsInfos(void) {
 	_displayTimestamp();
-	std::cout << "index:" << _accountIndex << ";amount:" << _amount << ";deposits:" << _nbDeposits << ";withdrawals:" << _nbWithdrawals << std::endl;
+	formatStr("accounts:", _nbAccounts);
+	formatStr(";total:", _totalAmount);
+	formatStr(";deposits:", _totalNbDeposits);
+	formatStr(";withdrawals:", _totalNbWithdrawals);
+	std::cout << std::endl;
+}
+
+int Account::checkAmount(void) const
+{
+	return _amount;
 }
 
 int Account::getNbAccounts(void) {
@@ -116,9 +163,4 @@ int Account::getNbDeposits(void) {
 
 int Account::getNbWithdrawals(void) {
 	return _totalNbWithdrawals;
-}
-
-void Account::displayAccountsInfos(void) {
-	_displayTimestamp();
-	std::cout << "accounts:" << _nbAccounts << ";total:" << _totalAmount << ";deposits:" << _totalNbDeposits << ";withdrawals:" << _totalNbWithdrawals << std::endl;
 }

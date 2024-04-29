@@ -11,7 +11,7 @@ SRC_DIR	:= src/
 # 				stringUtils.cpp		\
 # 				debug.cpp		\
 # 				main.cpp
-SRC		:= $(shell ls $(SRC_DIR) | grep .cpp$)
+SRC			:= $(shell ls $(SRC_DIR) | grep .cpp$)
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 CURRENT		:= $(shell basename $$PWD)
@@ -38,7 +38,7 @@ ifeq ($(S), 0)
 OBJS		:= $(addprefix $(SRC_DIR), $(SRC))
 else
 #------ CODE FOR OBJECT FILES ------#
-OBJS		:= $(SRC:$(SRC_DIR)%.cpp=$(BUILD_DIR)%.o)
+OBJS		:= $(SRC:%.cpp=$(BUILD_DIR)%.o)
 DEPS		:= $(OBJS:.o=.d)
 #------ INCLUDE SANATIZER FLAGS ------#
 D_FLAGS		+= -O0 -g3 
@@ -48,17 +48,18 @@ endif
 all: $(NAME)
 $(NAME): $(OBJS)
 ifneq ($(S), 0)
+	echo $(OBJS)
 	@printf "$(LF)\n🚀 $(P_BLUE)Successfully Created $(P_YELLOW)$(NAME)'s Object files 🚀$(FG_TEXT)\n"
 endif
 	@printf "\n"
 	@printf "$(LF)📚 $(P_BLUE)Create $(P_GREEN)$@ 📚\n"
 	@echo $(GREEN)
 	@printf "$(CC) $(D_FLAGS) $(INCLUDES) $^ -o $@ \n\n";
-	@$(CC) $(D_FLAGS) $(INCLUDES) -pthread  $^ -o $(NAME)
+	@$(CC) $(D_FLAGS) $(INCLUDES) -MMD -MP $^ -o $(NAME)
 	@printf "\n$(LF)🎉 $(P_BLUE)Successfully Created $(P_GREEN)$@! 🎉\n$(P_NC)"
 	@echo $(BANNER)
 ifneq ($(S), 0)
-$(OBJS): $(BUILD_DIR)%.o : $(SRCS_DIR)%.cpp | $(BUILD_DIR)
+$(OBJS): $(BUILD_DIR)%.o : $(SRC_DIR)%.cpp | $(BUILD_DIR)
 	@$(CC) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 	@printf "$(LF)🚧 $(P_BLUE)Creating $(P_YELLOW)$@ $(P_BLUE)from $(P_YELLOW) $< $(FG_TEXT)"
 
@@ -94,9 +95,13 @@ diff:$(NAME)
 	@./$(NAME) > docs/test.log
 	@sed 's/\[[^]]*\]//g' docs/test.log > temp1.log
 	@sed 's/\[[^]]*\]//g' docs/intra.log > temp2.log
-	@diff temp1.log temp2.log
-	rm temp1.log temp2.log
-
+	@diff temp1.log temp2.log > /dev/null && echo $(GREEN)"same output"$(E_NC) || echo $(RED)"different output"$(E_NC)
+	@read -p "Remove files? (y/n) " yn; \
+	case $$yn in \
+		[Yy]* ) rm temp1.log temp2.log docs/test.log;; \
+		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
+	esac
+#echo $(RED) "Last commit reset" $(E_NC)
 val: $(NAME)
 	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC)
 	@$(VALGRIND) ./$(NAME)

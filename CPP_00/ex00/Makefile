@@ -34,7 +34,7 @@ OBJS		:= megaphone.cpp
 else
 #------ CODE FOR OBJECT FILES ------#
 SRCS		:= $(SRCS:%=$(SRC_DIR)%)
-OBJS		:= $(SRCS:$(SRC_DIR)%.c=$(BUILD_DIR)%.o)
+OBJS		:= $(SRCS:$(SRC_DIR)%.cpp=$(BUILD_DIR)%.o)
 DEPS		:= $(OBJS:.o=.d)
 #------ INCLUDE SANATIZER FLAGS ------#
 D_FLAGS		+= -O0 -g3 
