@@ -50,7 +50,7 @@ endif
 	@printf "$(LF)📚 $(P_BLUE)Create $(P_GREEN)$@ 📚\n"
 	@echo $(GREEN)
 	@printf "$(CC) $(D_FLAGS) $(INCLUDES) $^ -o $@ \n\n";
-	@$(CC) $(D_FLAGS) $(INCLUDES) -pthread  $^ -o $(NAME)
+	@$(CC) $(D_FLAGS) $(INCLUDES) $^ -o $(NAME)
 	@printf "\n$(LF)🎉 $(P_BLUE)Successfully Created $(P_GREEN)$@! 🎉\n$(P_NC)"
 	@echo $(BANNER)
 ifneq ($(SAN), 0)
