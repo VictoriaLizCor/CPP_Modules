@@ -12,7 +12,6 @@
 #include <functional>
 #include "Account.hpp"
 
-/**/
 int		main( void ) {
 
 	typedef std::vector<Account::t>								accounts_t;
@@ -38,14 +37,6 @@ int		main( void ) {
 	ints_t::iterator	wit_end		= withdrawals.end();
 
 	Account::displayAccountsInfos();
-/*
- * std::mem_fun_ref is part of the C++98 standard. It was used to adapt a
- * pointer to a member function, which could then be used in places expecting a
- * function object.
- * std::mem_fun_ref was deprecated in C++11
- * and removed entirely in C++17. If you're working with C++11 or later, you should
- * use std::mem_fn or a lambda function instead.
-*/
 
 	std::for_each( acc_begin, acc_end, std::mem_fun_ref(&Account::displayStatus));
 
@@ -73,6 +64,14 @@ int		main( void ) {
 	return 0;
 }
 
+/*
+ * std::mem_fun_ref is part of the C++98 standard. It was used to adapt a
+ * pointer to a member function, which could then be used in places expecting a
+ * function object.
+ * std::mem_fun_ref was deprecated in C++11
+ * and removed entirely in C++17. If you're working with C++11 or later, you should
+ * use std::mem_fn or a lambda function instead.
+*/
 
 // ************************************************************************** //
 // vim: set ts=4 sw=4 tw=80 noexpandtab:                                      //

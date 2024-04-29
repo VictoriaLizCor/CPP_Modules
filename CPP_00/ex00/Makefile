@@ -10,9 +10,9 @@ PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 CURRENT		:= $(shell basename $$PWD)
 #------ DEBUG ------#
-D_BUG		?= 0
+D		= 0
 #------ Sanitizer ------#
-SAN			?= 0
+SAN			= 0
 #------ DEBUG UTILS ------#
 CC			:= c++
 MAKEFLAGS	+= --no-print-directory
@@ -23,9 +23,9 @@ BUILD_DIR	:= .build/
 DEBUG_DIR	:= $(NAME).dSYM
 
 #------ ADDING DEBUG FLAGS ------#
-ifneq ($(D_BUG), 0)
+ifneq ($(D), 0)
 CC 			= g++
-D_FLAGS		+= -DDEBUG=$(D_BUG)
+D_FLAGS		+= -DDEBUG=$(D)
 endif
 ifeq ($(SAN), 0)
 #MAKEFLAGS	+= --debug
@@ -86,8 +86,8 @@ re:     fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
-t:$(NAME)
-	@echo $(BOLD) ./$(NAME) $(E_NC) "\n"
+test:$(NAME)
+	@echo $(BOLD)  $(CYAN) ./$(NAME) $(E_NC) "\n"
 	@./$(NAME)
 	@echo $(BOLD) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC) "\n"
 	@./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
@@ -102,7 +102,7 @@ val: $(NAME)
 	@$(VALGRIND) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
 
 # #-------------------- GIT UTILS ----------------------------#
-test:
+dirs:
 	@echo $(PROJECT_ROOT)
 	@echo $(GIT_REPO)
 	@echo $(CURRENT)

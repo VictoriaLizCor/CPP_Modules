@@ -86,22 +86,32 @@ fclean: clean
 	fi
 	@printf "\n$(P_NC)"
 
-re:     fclean all
+re: fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
-# start: $(NAME)
-# 	@echo $(GREEN)./$(NAME) $(arg) $(E_NC)
-# 	$(if $(arg), -./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make start arg=\"write something here\"\n")
+test:$(NAME)
+	@echo $(BOLD)  $(CYAN) ./$(NAME) $(E_NC) "\n"
+ifeq ($(D),1)
+    # Commands to run when D=1
+else
+    # Commands to run when D=0
+endif
+	@./$(NAME)
 val: $(NAME)
 	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC)
 	@$(VALGRIND) ./$(NAME)
 leaks: $(NAME)
 	@echo $(RED) $(MAC_LEAKS) ./$(NAME) $(E_NC)
 	@$(MAC_LEAKS) ./$(NAME)
-# #-------------------- GIT UTILS ----------------------------#
-test:
+lldb: clear $(NAME)
+	@echo "$(CLEAR)"
+	@lldb ./$(NAME)
+	@echo $(CLEAR)
+clear:
+	@echo $(CLEAR)
+#-------------------- GIT UTILS ----------------------------#
+dirs:
 	@echo $(PROJECT_ROOT)
 	@echo $(GIT_REPO)
 	@echo $(CURRENT)
@@ -117,12 +127,13 @@ git:
 		$(MAKE) -C $(GIT_REPO) fclean gAdd gCommit gPush;		\
 	else									\
 		$(MAKE) -C $(PROJECT_ROOT) fclean gAdd gCommit gPush;	\
-fi
+	fi
 gQuick:fclean gAdd
 	@git status --porcelain -b -s > $(GIT_REPO)/msg_template
 	@git commit -F $(GIT_REPO)/msg_template
 	@rm $(GIT_REPO)/msg_template
 	$(MAKE) gPush
+
 #--------------------COLORS----------------------------#
 CL_BOLD = \e[1m
 RAN = \033[48;5;237m\033[38;5;255m
@@ -136,6 +147,7 @@ P_NC = \e[0m
 LF = \e[1K\r$(P_NC)
 FG_TEXT = $(P_NC)\e[38;2;189;147;249m
 
+CLEAR = "\033c"
 BOLD = "\033[1m"
 CROSS = "\033[8m"
 RED = "\033[1;91m"
@@ -184,3 +196,19 @@ define TRASH
 
 endef
 export TRASH
+
+# LLDB is a powerful command-line debugger that is part of the LLVM project.
+# Here are some basic commands you can use in an LLDB session: 
+#run or r: Starts your program. You can pass arguments to your program by appending them to the
+# run command, like run arg1 arg2.
+# breakpoint set --name <function_name> or b# <function_name>: Sets a breakpoint
+# at the start of a function. breakpoint set --file <file_name> --line
+# <line_number> or b <file_name>:<line_number>: Sets a
+# breakpoint at a specific line in a file.
+# continue or c: Continues execution of your program after it has hit a breakpoint. 
+# step or s: Steps into the next line of code.
+# next or n: Steps over the next line of code.
+# print <expression> or p <expression>: Evaluates an expression and prints the
+# result. This is useful for inspecting the values of variables.
+# frame variable or fr v: Prints all variables in the current stack frame. quit
+# or q: Quits the LLDB session.

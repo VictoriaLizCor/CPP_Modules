@@ -4,8 +4,11 @@ ROOT		:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 DIRS		:= $(abspath $(dir ${shell find ./*/ -name Makefile}))
 
 #--------------------UTILS----------------------------#
+# make all D=1
 all:
-
+	@for dir in $(DIRS); do \
+		$(MAKE) -C $$dir D=$(D) re test; \
+	done
 test:
 	@echo $(ROOT)
 	@echo $(CURRENT)
@@ -28,6 +31,7 @@ log:
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
 #	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 gQuick:fclean gAdd
+# git commit --amend --no-edit
 #	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
 	@git status --porcelain -b -s > msg_template
 	@git commit -aF msg_template
@@ -64,6 +68,7 @@ P_NC = \e[0m
 LF = \e[1K\r$(P_NC)
 FG_TEXT = $(P_NC)\e[38;2;189;147;249m
 
+CLEAR = "\033c"
 CROSS = "\033[8m"
 RED = "\033[1;91m"
 GREEN = "\033[1;32m"

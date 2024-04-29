@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:29:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/26 16:02:48 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/29 15:41:26 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,12 @@
 
 #if (DEBUG != 0)
 
+/**
+ * @brief Constructs a PhoneBook object with the given array of contacts and size.
+ * 
+ * @param contacts The array of contacts.
+ * @param size The size of the array.
+ */
 PhoneBook::PhoneBook(Contact contacts[], int size)
 {
 	int		i;
@@ -26,6 +32,17 @@ PhoneBook::PhoneBook(Contact contacts[], int size)
 	}
 }
 
+/**
+ * @brief Adds a new contact to the phone book.
+ *
+ * This method takes a Contact object as input and adds it to the phone book.
+ * Before adding the contact, it checks each field of the contact for validity.
+ * If a field is empty or contains only spaces, an error message is printed and
+ * the contact is not added. If all fields are valid, the contact is added to
+ * the phone book.
+ *
+ * @param contact The Contact object to be added to the phone book.
+ */
 void PhoneBook::addContact(Contact contact)
 {
 	std::string	str;

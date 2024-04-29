@@ -1,3 +1,16 @@
+/**
+ * @file Account.cpp
+ * @brief Implementation file for the Account class.
+ *
+ * This file contains the implementation of the Account class, which represents
+ * a bank account. It includes member variables for the account index, amount,
+ * number of deposits, and number of withdrawals. The class also provides
+ * methods for making deposits, withdrawals, and displaying the account status.
+ * Additionally, it includes static member variables for tracking the total
+ * number of accounts, total amount, total number of deposits, and total number
+ * of withdrawals. The file also defines helper functions for formatting strings
+ * and displaying timestamps.
+ */
 #include "Account.hpp"
 #include <vector>
 
@@ -5,7 +18,24 @@ int Account::_nbAccounts = 0;
 int Account::_totalAmount = 0;
 int Account::_totalNbDeposits = 0;
 int Account::_totalNbWithdrawals = 0;
+
+/**
+ * vector of pointers to Account objects to store all the accounts and print 
+ * the account index and amount when an account is created or closed.
+ * Necessary to avoit objects destruction with "stack unwinding" process.
+*/
 std::vector<Account::t*> _accounts;
+
+/**
+ * @brief Formats and prints a string and an integer value.
+ *
+ * This function takes a string and an integer value as input,
+ * and prints them to the standard output. The string is printed first,
+ * followed by the integer value, without any spaces or other characters in between.
+ *
+ * @param str The string to be printed.
+ * @param value The integer value to be printed.
+ */
 
 static void formatStr(std::string str, int value)
 {
@@ -13,6 +43,15 @@ static void formatStr(std::string str, int value)
 	std::cout << value;
 }
 
+/**
+ * @brief Displays the current timestamp.
+ *
+ * This method retrieves the current time and formats it into a timestamp,
+ * which is then printed to the standard output. The timestamp is in the format
+ * "YYYYMMDDhhmmss", where "YYYY" is the four-digit year, "MM" is the two-digit month,
+ * "DD" is the two-digit day, "hh" is the two-digit hour, "mm" is the two-digit minute,
+ * and "ss" is the two-digit second.
+ */
 void Account::_displayTimestamp(void)
 {
 	char strTime[20];
@@ -54,6 +93,15 @@ Account::Account(void)
 
 }
 
+/**
+ * @brief Constructs an Account object with the specified initial deposit.
+ * 
+ * This constructor initializes the Account object with the given initial deposit.
+ * It also updates the account index, number of deposits, number of withdrawals,
+ * and adds the account to the list of accounts.
+ * 
+ * @param initial_deposit The initial deposit amount for the account.
+ */
 Account::Account(int initial_deposit) :
 _accountIndex(_nbAccounts++), _amount(initial_deposit), _nbDeposits(0), _nbWithdrawals(0)
 {
@@ -74,6 +122,13 @@ _accountIndex(_nbAccounts++), _amount(initial_deposit), _nbDeposits(0), _nbWithd
  *
 */
 
+/**
+ * @brief Destructor for the Account class.
+ *
+ * This destructor is responsible for closing an account and updating the number
+ * of accounts. If the account is not empty, it displays the timestamp, account
+ * index, amount, and closes the account.
+ */
 Account::~Account(void)
 {
 	_nbAccounts--;
@@ -89,6 +144,11 @@ Account::~Account(void)
 }
 
 
+/**
+ * @brief Makes a deposit into the account.
+ * 
+ * @param deposit The amount to deposit.
+ */
 void Account::makeDeposit(int deposit)
 {
 	_amount += deposit;
@@ -104,6 +164,12 @@ void Account::makeDeposit(int deposit)
 	std::cout << std::endl;
 }
 
+/**
+ * @brief Makes a withdrawal from the account.
+ * 
+ * @param withdrawal The amount to be withdrawn.
+ * @return true if the withdrawal was successful, false otherwise.
+ */
 bool Account::makeWithdrawal(int withdrawal)
 {
 	_displayTimestamp();
@@ -125,6 +191,13 @@ bool Account::makeWithdrawal(int withdrawal)
 	return true;
 }
 
+/**
+ * @brief Displays the status of the account.
+ *
+ * This function displays the current status of the account, including the
+ * account holder's name, account number, balance, and total number of deposits
+ * and withdrawals.
+ */
 void Account::displayStatus(void) const
 {
 	_displayTimestamp();
@@ -135,6 +208,12 @@ void Account::displayStatus(void) const
 	std::cout << std::endl;
 }
 
+/**
+ * @brief Displays the information of all the accounts.
+ * 
+ * This function displays the timestamp, number of accounts, total amount,
+ * total number of deposits, and total number of withdrawals.
+ */
 void Account::displayAccountsInfos(void) {
 	_displayTimestamp();
 	formatStr("accounts:", _nbAccounts);
@@ -144,23 +223,48 @@ void Account::displayAccountsInfos(void) {
 	std::cout << std::endl;
 }
 
+/**
+ * @brief Get the current amount in the account.
+ * 
+ * @return int The current amount in the account.
+ */
 int Account::checkAmount(void) const
 {
 	return _amount;
 }
 
+/**
+ * @brief Returns the total number of accounts created.
+ * 
+ * @return int The total number of accounts.
+ */
 int Account::getNbAccounts(void) {
 	return _nbAccounts;
 }
 
+/**
+ * @brief Returns the total amount of money in the account.
+ * 
+ * @return int The total amount of money in the account.
+ */
 int Account::getTotalAmount(void) {
 	return _totalAmount;
 }
 
+/**
+ * @brief Get the number of deposits made in the account.
+ * 
+ * @return int The number of deposits made.
+ */
 int Account::getNbDeposits(void) {
 	return _totalNbDeposits;
 }
 
+/**
+ * @brief Get the number of withdrawals made from the account.
+ * 
+ * @return int The number of withdrawals made.
+ */
 int Account::getNbWithdrawals(void) {
 	return _totalNbWithdrawals;
 }

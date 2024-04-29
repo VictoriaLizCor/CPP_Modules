@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:44:57 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/26 16:25:17 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/29 15:51:55 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,20 @@ void AddContactExt(int& i, Contact& contact, std::string& str, int& err)
 	}
 }
 
+/**
+ * @brief Converts the fields of a Contact to a string array.
+ *
+ * This function takes a string array, its size, a Contact object, and a
+ * member function pointer as input. It calls the member function for each
+ * field of the Contact and stores the result in the string array. The
+ * member function should take an integer index and return a string.
+ *
+ * @param array The string array to store the field values.
+ * @param size The size of the string array.
+ * @param contact The Contact object to convert.
+ * @param str The member function to call for each field.
+ * @return The string array with the field values.
+ */
 std::string*	fieldToStringArray(std::string *array, int size, const Contact& contact, std::string (Contact::*str)(int) const)
 {
 	int	i;
@@ -65,6 +79,19 @@ std::string*	fieldToStringArray(std::string *array, int size, const Contact& con
 	}
 	return (array);
 }
+
+/**
+ * @brief Displays the details of a contact.
+ *
+ * This function takes a Contact object, the number of fields in the contact,
+ * and a string as input. It converts the fields of the Contact to a string
+ * array and prints them in a formatted manner. The string input is used to
+ * color the contact's index in the output.
+ *
+ * @param contact The Contact object to display.
+ * @param nFields The number of fields in the contact.
+ * @param tmp The string to color the contact's index.
+ */
 
 void	showContactInfo(Contact contact, int nFields, std::string tmp)
 {
@@ -92,6 +119,20 @@ void	showContactInfo(Contact contact, int nFields, std::string tmp)
 	println("*******************************************");
 }
 
+/**
+ * @brief Prints formatted text with color.
+ *
+ * This function takes a color type, an index string, a field count, and a
+ * data array as input. It prints the index and the fields of the data array
+ * in a formatted manner with the specified color. Each field is truncated to
+ * 10 characters, and if a field is longer than 10 characters, it is
+ * abbreviated with a trailing dot.
+ *
+ * @param colorType The color type to use for the text.
+ * @param idx The index string to print.
+ * @param fNickname The number of fields in the data array.
+ * @param dataArray The data array containing the fields to print.
+ */
 void formatedText(int colorType, std::string idx, int fNickname, std::string* dataArray)
 {
 	std::stringstream	ss;
@@ -116,6 +157,20 @@ void formatedText(int colorType, std::string idx, int fNickname, std::string* da
 	println("");
 }
 
+/**
+ * @brief Searches for a contact by index.
+ *
+ * This function takes a string index, an integer index, an error flag, and
+ * the size of the contacts array as input. It checks if the string index is
+ * a valid integer and within the range of the contacts array. If it is, it
+ * converts the string index to an integer and stores it in the integer
+ * index. If it is not, it sets the error flag to 1.
+ *
+ * @param index The string index to search for.
+ * @param idx The integer index to store the converted string index.
+ * @param err The error flag to set if the string index is not valid.
+ * @param sizeContatcs The size of the contacts array.
+ */
 void searchContactExt(std::string& index, int& idx, int& err, int sizeContatcs)
 {
 	bool				flag_idx;
@@ -136,6 +191,15 @@ void searchContactExt(std::string& index, int& idx, int& err, int sizeContatcs)
 		err = 1;
 }
 
+/**
+ * @brief Displays the main menu options.
+ *
+ * This function prints the main menu options for the phone book application.
+ * The options include "Add Contact", "Search Contact", and "Exit". Each
+ * option is displayed with a command number that the user can enter to
+ * select the option. The menu is printed with a green color for better
+ * visibility.
+ */
 void	menuOptions(void)
 {
 	std::string	str;

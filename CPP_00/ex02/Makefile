@@ -91,6 +91,9 @@ re:     fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
+test:$(NAME)
+	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
+	@./$(NAME)
 diff:$(NAME)
 	@./$(NAME) > docs/test.log
 	@sed 's/\[[^]]*\]//g' docs/test.log > temp1.log
@@ -109,7 +112,7 @@ leaks: $(NAME)
 	@echo $(RED) $(MAC_LEAKS) ./$(NAME) $(E_NC)
 	@$(MAC_LEAKS) ./$(NAME)
 # #-------------------- GIT UTILS ----------------------------#
-test:
+dirs:
 	@echo $(PROJECT_ROOT)
 	@echo $(GIT_REPO)
 	@echo $(CURRENT)

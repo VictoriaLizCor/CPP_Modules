@@ -6,19 +6,26 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/26 16:07:32 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/04/29 15:57:07 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "stringUtils.hpp"
 
 /**
- * @brief Applies color formatting to a given message.
- * 
- * @param msg The message to be colored.
- * @param color The color code to be applied.
- * @param err Flag indicating if the message is an error message.
- * @return The colored message.
+ * @brief Applies color formatting to a string message.
+ *
+ * This function accepts a string message, a color code, and a boolean error
+ * flag. It applies the specified color code to the message. If the color code
+ * is DEFAULT, it leaves the message unchanged. If the color code exceeds
+ * FDEFAULT(39), the function applies bold formatting to the message. If the
+ * error flag is set to true, the function applies the FLRED(41) color to the
+ * message and prepends "Error: " to the start of the message.
+ *
+ * @param msg The message to which color formatting will be applied.
+ * @param color The color code defining the color formatting.
+ * @param err The error flag indicating whether the message is an error.
+ * @return The message after color formatting has been applied.
  */
 std::string	color(std::string msg, int color, bool err)
 {
@@ -52,6 +59,15 @@ std::string toString(int value)
 	return ss.str();
 }
 
+/**
+ * @brief Prints a string followed by a newline.
+ *
+ * This function takes a string as input and prints it to the standard output
+ * followed by a newline. It uses the std::cout object from the iostream
+ * library to print the string.
+ *
+ * @param str The string to print.
+ */
 void	println(std::string str)
 {
 	std::cout << str << std::endl;
@@ -79,6 +95,16 @@ bool	checkInput(const std::string& str, int (*check_type)(int))
 	return true;
 }
 
+/**
+ * @brief Checks if a string contains only spaces.
+ *
+ * This function takes a string as input and iterates through each character.
+ * If it finds a character that is not a space, it returns false. If it
+ * doesn't find any non-space characters, it returns true.
+ *
+ * @param str The string to check.
+ * @return true if the string contains only spaces, false otherwise.
+ */
 bool	isOnlySpaces(const std::string& str)
 {
 	std::string::const_iterator it;
@@ -92,11 +118,15 @@ bool	isOnlySpaces(const std::string& str)
 }
 
 /**
- * Calculates the maximum length of strings in an array.
- * 
- * @param arraySize The size of the array.
- * @param arrayData The array of strings.
- * @return The maximum length of strings in the array.
+ * @brief Finds the maximum string length in an array.
+ *
+ * This function takes an array size and a string array as input. It iterates
+ * through the array and finds the length of the longest string. It returns
+ * the length of the longest string.
+ *
+ * @param arraySize The size of the string array.
+ * @param arrayData The string array to search.
+ * @return The length of the longest string in the array.
  */
 size_t	maxStringLength(int arraySize, std::string* arrayData)
 {
