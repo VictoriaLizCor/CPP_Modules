@@ -120,12 +120,20 @@ git:
 		$(MAKE) -C $(GIT_REPO) fclean gAdd gCommit gPush;		\
 	else									\
 		$(MAKE) -C $(PROJECT_ROOT) fclean gAdd gCommit gPush;	\
-fi
+	fi
 gQuick:fclean gAdd
 	@git status --porcelain -b -s > $(GIT_REPO)/msg_template
 	@git commit -F $(GIT_REPO)/msg_template
 	@rm $(GIT_REPO)/msg_template
 	$(MAKE) gPush
+soft:
+	@echo $(GREEN) "Last two commits:" $(E_NC)
+	@git log -2
+	@read -p "Do you want to reset the last commit? (y/n) " yn; \
+	case $$yn in \
+		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \
+		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
+	esac
 #--------------------COLORS----------------------------#
 CL_BOLD = \e[1m
 RAN = \033[48;5;237m\033[38;5;255m
