@@ -39,7 +39,13 @@ ghook:fclean
 # commit correction git commit --amend
 # //avoid last commit message
 soft:
-	git reset --soft HEAD~1
+	@echo $(GREEN) "Last two commits:" $(E_NC)
+	@git log -2
+	@read -p "Do you want to reset the last commit? (y/n) " yn; \
+	case $$yn in \
+		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \
+		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
+	esac
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)
