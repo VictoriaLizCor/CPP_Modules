@@ -2,14 +2,12 @@
 NAME		:= megaphone
 #------ WFLAGS ------#
 D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
-# INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir ${shell find $(PROJECT_ROOT) -name Makefile}))
 CURRENT		:= $(shell basename $$PWD)
-# SRCS_DIR	:= src/
-SRC			:= megaphone.cpp
+SRC			:=  $(shell ls | grep .cpp$)
 #------ DEBUG ------#
 D			= 0
 #------ Sanitizer ------#
@@ -28,7 +26,7 @@ ifneq ($(D), 0)
 CC 			= g++
 D_FLAGS		+= -DDEBUG=$(D)
 endif
-ifeq ($(SAN), 0)
+ifeq ($(S), 0)
 OBJS		:= $(SRC)
 else
 #------ CODE FOR OBJECT FILES ------#
@@ -122,10 +120,8 @@ git:
 	else									\
 		$(MAKE) -C $(PROJECT_ROOT) cleanAll gAdd gCommit gPush;	\
 	fi
-gQuick:fclean gAdd
-	@git status --porcelain -b -s > $(GIT_REPO)/msg_template
-	@git commit -F $(GIT_REPO)/msg_template
-	@rm $(GIT_REPO)/msg_template
+gQuick:cleanAll gAdd
+	@git commit --amend --no-edit -e
 	$(MAKE) gPush
 soft:
 	@echo $(GREEN) "Last two commits:" $(E_NC)

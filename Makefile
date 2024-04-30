@@ -1,4 +1,4 @@
-#MAKEFLAGS	+= --no-print-directory
+MAKEFLAGS	+= --no-print-directory
 CURRENT		:= $(shell basename $$PWD)
 ROOT_REPO	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/)
 DIRS		:= $(abspath $(dir ${shell find ./*/ -name Makefile}))
@@ -35,11 +35,10 @@ log:
 #	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 gQuick:cleanAll gAdd
 # git commit --amend --no-edit
-#	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
-#	@git status --porcelain -b -s > msg_template
-#	@git commit -aF msg_template
-#	@rm msg_template
-	git commit --amend --no-edit -e
+	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
+	@git status --porcelain -b -s > msg_template
+	@git commit -aF msg_template
+	@rm msg_template
 	$(MAKE) gPush
 ghook:fclean
 	git commit -am "test"

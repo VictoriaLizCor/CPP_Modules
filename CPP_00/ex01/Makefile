@@ -11,7 +11,7 @@ SRC_DIR	:= src/
 # 				stringUtils.cpp		\
 # 				debug.cpp		\
 # 				main.cpp
-SRC		:= $(shell ls $(SRC_DIR) | grep .cpp$)
+SRC			:= $(shell ls $(SRC_DIR) | grep .cpp$)
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir ${shell find $(PROJECT_ROOT) -name Makefile}))
