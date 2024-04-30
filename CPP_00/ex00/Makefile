@@ -4,15 +4,16 @@ NAME		:= megaphone
 D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 # INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
-# SRCS_DIR	:= src/
-# SRCS		:=	
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
+DIRS		:= $(abspath $(dir ${shell find $(PROJECT_ROOT) -name Makefile}))
 CURRENT		:= $(shell basename $$PWD)
+# SRCS_DIR	:= src/
+SRC			:= megaphone.cpp
 #------ DEBUG ------#
-D		= 0
+D			= 0
 #------ Sanitizer ------#
-SAN			= 0
+S			= 0
 #------ DEBUG UTILS ------#
 CC			:= c++
 MAKEFLAGS	+= --no-print-directory
@@ -28,13 +29,10 @@ CC 			= g++
 D_FLAGS		+= -DDEBUG=$(D)
 endif
 ifeq ($(SAN), 0)
-#MAKEFLAGS	+= --debug
-OBJS		:= megaphone.cpp
-#OBJS		:= $(addprefix $(SRCS_DIR), $(SRCS))
+OBJS		:= $(SRC)
 else
 #------ CODE FOR OBJECT FILES ------#
-SRCS		:= $(SRCS:%=$(SRC_DIR)%)
-OBJS		:= $(SRCS:$(SRC_DIR)%.cpp=$(BUILD_DIR)%.o)
+OBJS		:=  $(SRC:%.cpp=$(BUILD_DIR)%.o)
 DEPS		:= $(OBJS:.o=.d)
 #------ INCLUDE SANATIZER FLAGS ------#
 D_FLAGS		+= -O0 -g3 
@@ -43,18 +41,18 @@ endif
 #-------------------- RULES ----------------------------#
 all: $(NAME)
 $(NAME): $(OBJS)
-ifneq ($(SAN), 0)
+ifneq ($(S), 0)
 	@printf "$(LF)\n🚀 $(P_BLUE)Successfully Created $(P_YELLOW)$(NAME)'s Object files 🚀$(FG_TEXT)\n"
 endif
 	@printf "\n"
 	@printf "$(LF)📚 $(P_BLUE)Create $(P_GREEN)$@ 📚\n"
 	@echo $(GREEN)
-	@printf "$(CC) $(D_FLAGS) $(INCLUDES) $^ -o $@ \n\n";
+	@printf "$(CC) $(D_FLAGS) $(INCLUDES) $(P_YELLOW) $^ $(P_GREEN) -o $@ $(FG_TEXT) \n\n";
 	@$(CC) $(D_FLAGS) $(INCLUDES) $^ -o $(NAME)
 	@printf "\n$(LF)🎉 $(P_BLUE)Successfully Created $(P_GREEN)$@! 🎉\n$(P_NC)"
 	@echo $(BANNER)
-ifneq ($(SAN), 0)
-$(OBJS): $(BUILD_DIR)%.o : $(SRCS_DIR)%.c | $(BUILD_DIR)
+ifneq ($(S), 0)
+$(OBJS): $(BUILD_DIR)%.o : $(SRC) | $(BUILD_DIR)
 	@$(CC) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 	@printf "$(LF)🚧 $(P_BLUE)Creating $(P_YELLOW)$@ $(P_BLUE)from $(P_YELLOW) $< $(FG_TEXT)"
 
@@ -82,7 +80,7 @@ fclean: clean
 	fi
 	@printf "\n$(P_NC)"
 
-re:     fclean all
+re: fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
@@ -103,9 +101,14 @@ val: $(NAME)
 
 # #-------------------- GIT UTILS ----------------------------#
 dirs:
+	@echo $(DIRS)
 	@echo $(PROJECT_ROOT)
 	@echo $(GIT_REPO)
 	@echo $(CURRENT)
+cleanAll:
+	@for dir in $(DIRS); do \
+		$(MAKE) -C $$dir fclean; \
+	done
 gAdd:
 	@echo $(CYAN) && git add $(PROJECT_ROOT)
 gCommit:
@@ -115,15 +118,23 @@ gPush:
 git:
 	@ls -la $(GIT_REPO) | grep Makefile
 	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
-		$(MAKE) -C $(GIT_REPO) fclean gAdd gCommit gPush;		\
+		$(MAKE) -C $(GIT_REPO) cleanAll gAdd gCommit gPush;		\
 	else									\
-		$(MAKE) -C $(PROJECT_ROOT) fclean gAdd gCommit gPush;	\
-fi
+		$(MAKE) -C $(PROJECT_ROOT) cleanAll gAdd gCommit gPush;	\
+	fi
 gQuick:fclean gAdd
 	@git status --porcelain -b -s > $(GIT_REPO)/msg_template
 	@git commit -F $(GIT_REPO)/msg_template
 	@rm $(GIT_REPO)/msg_template
 	$(MAKE) gPush
+soft:
+	@echo $(GREEN) "Last two commits:" $(E_NC)
+	@git log -2
+	@read -p "Do you want to reset the last commit? (y/n) " yn; \
+	case $$yn in \
+		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \
+		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
+	esac
 #--------------------COLORS----------------------------#
 CL_BOLD = \e[1m
 RAN = \033[48;5;237m\033[38;5;255m

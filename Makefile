@@ -1,16 +1,19 @@
 #MAKEFLAGS	+= --no-print-directory
 CURRENT		:= $(shell basename $$PWD)
-ROOT		:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
+ROOT_REPO	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/)
 DIRS		:= $(abspath $(dir ${shell find ./*/ -name Makefile}))
-
+#------ DEBUG ------#
+D			= 0
+#------ Sanitizer ------#
+S			= 0
 #--------------------UTILS----------------------------#
-# make all D=1
+# Called with -> make all D=1
 all:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir D=$(D) re test; \
 	done
-test:
-	@echo $(ROOT)
+dirs:
+	@echo $(ROOT_REPO)
 	@echo $(CURRENT)
 	@echo $(DIRS)
 gAdd:
@@ -19,11 +22,11 @@ gCommit:
 	@echo $(GREEN) && git commit -e
 gPush:
 	@echo $(YELLOW) && git push
-fclean:
+cleanAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir fclean; \
 	done
-git:fclean gAdd gCommit gPush
+git:cleanAll gAdd gCommit gPush
 log:
 	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 #git2:fclean

@@ -14,6 +14,7 @@ SRC_DIR	:= src/
 SRC			:= $(shell ls $(SRC_DIR) | grep .cpp$)
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
+DIRS		:= $(abspath $(dir ${shell find $(PROJECT_ROOT) -name Makefile}))
 CURRENT		:= $(shell basename $$PWD)
 #------ DEBUG ------#
 D			= 0
@@ -48,13 +49,12 @@ endif
 all: $(NAME)
 $(NAME): $(OBJS)
 ifneq ($(S), 0)
-	echo $(OBJS)
 	@printf "$(LF)\n🚀 $(P_BLUE)Successfully Created $(P_YELLOW)$(NAME)'s Object files 🚀$(FG_TEXT)\n"
 endif
 	@printf "\n"
 	@printf "$(LF)📚 $(P_BLUE)Create $(P_GREEN)$@ 📚\n"
 	@echo $(GREEN)
-	@printf "$(CC) $(D_FLAGS) $(INCLUDES) $^ -o $@ \n\n";
+	@printf "$(CC) $(D_FLAGS) $(INCLUDES) $(P_YELLOW) $^ $(P_GREEN) -o $@ $(FG_TEXT) \n\n";
 	@$(CC) $(D_FLAGS) $(INCLUDES) $^ -o $(NAME)
 	@printf "\n$(LF)🎉 $(P_BLUE)Successfully Created $(P_GREEN)$@! 🎉\n$(P_NC)"
 	@echo $(BANNER)
@@ -113,9 +113,14 @@ leaks: $(NAME)
 	@$(MAC_LEAKS) ./$(NAME)
 # #-------------------- GIT UTILS ----------------------------#
 dirs:
+	@echo $(DIRS)
 	@echo $(PROJECT_ROOT)
 	@echo $(GIT_REPO)
 	@echo $(CURRENT)
+cleanAll:
+	@for dir in $(DIRS); do \
+		$(MAKE) -C $$dir fclean; \
+	done
 gAdd:
 	@echo $(CYAN) && git add $(PROJECT_ROOT)
 gCommit:
@@ -125,9 +130,9 @@ gPush:
 git:
 	@ls -la $(GIT_REPO) | grep Makefile
 	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
-		$(MAKE) -C $(GIT_REPO) fclean gAdd gCommit gPush;		\
+		$(MAKE) -C $(GIT_REPO) cleanAll gAdd gCommit gPush;		\
 	else									\
-		$(MAKE) -C $(PROJECT_ROOT) fclean gAdd gCommit gPush;	\
+		$(MAKE) -C $(PROJECT_ROOT) cleanAll gAdd gCommit gPush;	\
 	fi
 gQuick:fclean gAdd
 	@git status --porcelain -b -s > $(GIT_REPO)/msg_template
