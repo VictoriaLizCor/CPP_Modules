@@ -33,12 +33,13 @@ log:
 #	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo:"" \ndone:""" >> msg_template 
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
 #	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
-gQuick:fclean gAdd
+gQuick:cleanAll gAdd
 # git commit --amend --no-edit
 #	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
-	@git status --porcelain -b -s > msg_template
-	@git commit -aF msg_template
-	@rm msg_template
+#	@git status --porcelain -b -s > msg_template
+#	@git commit -aF msg_template
+#	@rm msg_template
+	git commit --amend --no-edit -e
 	$(MAKE) gPush
 ghook:fclean
 	git commit -am "test"
