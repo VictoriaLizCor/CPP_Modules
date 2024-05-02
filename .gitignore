@@ -55,7 +55,6 @@ dkms.conf
 # test*/
 obj*/
 #.vscode*/
-#exe
-./megaphone
 msg_template
-eval/
+evals/
+*.DS_Store

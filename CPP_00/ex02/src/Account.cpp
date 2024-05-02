@@ -105,7 +105,7 @@ Account::Account(void)
 Account::Account(int initial_deposit) :
 _accountIndex(_nbAccounts++), _amount(initial_deposit), _nbDeposits(0), _nbWithdrawals(0)
 {
-	_accounts.push_back(this);
+	// _accounts.push_back(this);
 	_totalAmount += initial_deposit;
 	_displayTimestamp();
 	formatStr("index:", _accountIndex);
@@ -132,15 +132,15 @@ _accountIndex(_nbAccounts++), _amount(initial_deposit), _nbDeposits(0), _nbWithd
 Account::~Account(void)
 {
 	_nbAccounts--;
-	if (!_accounts.empty())
-	{
+	// if (!_accounts.empty())
+	// {
 		_displayTimestamp();
 		formatStr("index:", (*_accounts.begin())->_accountIndex);
 		formatStr(";amount:", (*_accounts.begin())->_amount);
 		std::cout << ";closed"<< std::endl;
-		_accounts.erase(_accounts.begin());
-		return ;
-	}
+		// _accounts.erase(_accounts.begin());
+		// return ;
+	// }
 }
 
 

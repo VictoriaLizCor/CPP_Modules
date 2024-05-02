@@ -43,14 +43,19 @@ the value of `DEBUG` at compile time, not at runtime. If you change the value of
  *    cases, direct initialization can be more efficient or allow for more
  *    control over the initialization process.
  **/
-void str_upper(char *argv)
+void strUpper(int argc, char **argv)
 {
-	char cpy [std::strlen(argv) + 1];
+	for (int i = 1; i < argc; ++i)
+	{
+		std::string prev = argv[i - 1];
+		std::string curr = argv[i];
 
-	std::strcpy(cpy, argv);
-	for (int i = 0; cpy[i]; i++)
-		cpy[i] = std::toupper(cpy[i]);
-	std::cout << cpy;
+		for (size_t j = 0; j < curr.size(); ++j)
+			curr[j] = std::toupper(curr[j]);
+		if (prev[prev.length() - 1] != ' ' && curr[0] != ' ')
+			std::cout << ' ';
+		std::cout << curr;
+	}
 }
 //std::toupper(cpy[i]));
 /**
@@ -69,8 +74,7 @@ int main(int argc, char *argv[])
 	std::cout << "\033[0;32m";
 	if (argc != 1)
 	{
-		for (int i = 1; argv[i]; i++)
-			str_upper(argv[i]);
+		strUpper(argc, argv);
 	}
 	else
 		std::cout << "* LOUD AND UNBEARABLE FEEDBACK NOISE *";

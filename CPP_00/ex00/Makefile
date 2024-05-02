@@ -14,7 +14,7 @@ D			= 0
 S			= 0
 #------ DEBUG UTILS ------#
 CC			:= c++
-MAKEFLAGS	+= --no-print-directory
+# MAKEFLAGS	+= --no-print-directory
 VALGRIND	:= valgrind -s --leak-check=yes --show-leak-kinds=all
 HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
@@ -88,7 +88,7 @@ test:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
 	@./$(NAME)
 	@echo "\n"
-	@echo $(BOLD) $(CYAN) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC) "\n"
+	@echo $(BOLD) $(CYAN) ./$(NAME) 'Damnit " ! " "Sorry students, I thought this thing was off."' $(E_NC) "\n"
 	@./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
 	@echo "\n"
 ############# USE WITH S=0

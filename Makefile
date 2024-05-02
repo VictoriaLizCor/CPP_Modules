@@ -4,7 +4,7 @@ ROOT_CPP_MODULES	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/)
 DIRS				:= $(abspath $(dir ${shell find ./*/ -name Makefile}))
 #------ DEBUG ------#
 D			= 0
-#------ Sanitizer ------#
+#------ Sanitizer ------#+
 S			= 0
 #--------------------UTILS----------------------------#
 # Called with -> make all D=1
@@ -27,6 +27,14 @@ gCommit:
 gPush:
 	@echo $(YELLOW) && git push
 
+find:
+	@for dir in $$(find . -type d -name "CPP_0*"); do \
+		echo $$dir; \
+		for target in $$(find $$dir -name "Makefile"); do \
+			$(MAKE) -C $$(dirname $$makefile) fclean; \
+		done; \
+	done
+
 cleanAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir fclean; \
@@ -35,7 +43,8 @@ cleanAll:
 git: cleanAll gAdd gCommit gPush
 
 log:
-	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
+	@git log -5 --pretty=format:"%s - %h" | pygmentize -g -O style=material
+#	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 #git2:fclean
 #	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo:"" \ndone:""" >> msg_template 
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
@@ -95,7 +104,7 @@ PHILO_BANNER = "$$PHILO"
 TRASH_BANNER = "$$TRASH"
 
 #------------- TEST UTILS -----------------------------------#
-list: 
+list:
 	@ls -la ./*/*
 # start: $(NAME)
 # 	@echo $(GREEN)./$(NAME) $(arg) $(E_NC)

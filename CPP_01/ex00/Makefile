@@ -1,5 +1,5 @@
 #------ TARGET ------#
-NAME		:= account
+# NAME		:= phonebook
 #------ WFLAGS ------#
 D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 INCLUDES	+= -I includes/
@@ -16,13 +16,12 @@ D			= 0
 S			= 0
 #------ DEBUG UTILS ------#
 CC			:= c++
-# MAKEFLAGS	+= --no-print-directory
+MAKEFLAGS	+= --no-print-directory
 VALGRIND	:= valgrind -s --leak-check=yes --show-leak-kinds=all
 HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
 BUILD_DIR	:= .build/
 DEBUG_DIR	:= $(NAME).dSYM
-
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 CC			= g++
@@ -33,7 +32,7 @@ ifeq ($(S), 0)
 OBJS		:= $(addprefix $(SRC_DIR), $(SRC))
 else
 #------ CODE FOR OBJECT FILES ------#
-OBJS		:= $(SRC:%.cpp=$(BUILD_DIR)%.o)
+OBJS		:= $(SRC:$(SRC_DIR)%.cpp=$(BUILD_DIR)%.o)
 DEPS		:= $(OBJS:.o=.d)
 #------ INCLUDE SANATIZER FLAGS ------#
 D_FLAGS		+= -O0 -g3 
@@ -43,6 +42,7 @@ endif
 all: $(NAME)
 
 $(NAME): $(OBJS)
+
 ifneq ($(S), 0)
 	@printf "$(LF)\n🚀 $(P_BLUE)Successfully Created $(P_YELLOW)$(NAME)'s Object files 🚀$(FG_TEXT)\n"
 endif
@@ -89,36 +89,28 @@ re: fclean all
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
 test:$(NAME)
-	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
+	@echo $(BOLD)  $(CYAN) ./$(NAME) $(E_NC) "\n"
 	@./$(NAME)
 	@echo "\n"
 ############# USE WITH S=0
-leaks: $(NAME)
-	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)  "\n"
-	@$(MAC_LEAKS) ./$(NAME)
-	@echo "\n"
-	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC) "\n"
-	@$(MAC_LEAKS) ./$(NAME)
-	@echo "\n"
-
 val: $(NAME)
 	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC) "\n"
 	@$(VALGRIND) ./$(NAME)
 	@echo "\n"
-## Diff with intra
-diff:$(NAME)
-	@./$(NAME) > docs/test.log
-	@sed 's/\[[^]]*\]//g' docs/test.log > docs/temp1.log
-	@sed 's/\[[^]]*\]//g' docs/intra.log > docs/temp2.log
-	@diff docs/temp1.log docs/temp2.log > /dev/null && echo $(GREEN)"Same output"$(E_NC) || echo $(RED)"different output"$(E_NC)
-	@read -p "Remove files? (y/n) " yn; \
-	case $$yn in \
-		[Yy]* ) rm docs/temp1.log docs/temp2.log docs/test.log;; \
-		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
-	esac
 
+leaks: $(NAME)
+	@echo $(RED) $(MAC_LEAKS) ./$(NAME) $(E_NC) "\n"
+	@$(MAC_LEAKS) ./$(NAME)
+	@echo "\n"
 
-# #-------------------- GIT UTILS ----------------------------#
+lldb: clear $(NAME)
+	@echo "$(CLEAR)"
+	@lldb ./$(NAME)
+	@echo $(CLEAR)
+
+clear:
+	@echo $(CLEAR)
+#-------------------- GIT UTILS ----------------------------#
 dirs:
 	@echo $(DIRS)
 	@echo PROJECT_ROOT: $(CYAN) $(PROJECT_ROOT) $(E_NC)
@@ -160,7 +152,7 @@ soft:
 		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
-#--------------------COLORS----------------------------#
+#-------------------- COLORS ----------------------------#
 # For print
 CL_BOLD = \e[1m
 RAN = \033[48;5;237m\033[38;5;255m
@@ -222,3 +214,20 @@ define TRASH
 		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
 endef
 export TRASH
+
+# LLDB is a powerful command-line debugger that is part of the LLVM project.
+# Here are some basic commands you can use in an LLDB session: 
+#run or r: Starts your program. You can pass arguments to your program by appending them to the
+# run command, like run arg1 arg2.
+# breakpoint set --name <function_name> or b# <function_name>: Sets a breakpoint
+# at the start of a function. breakpoint set --file <file_name> --line
+# <line_number> or b <file_name>:<line_number>: Sets a
+# breakpoint at a specific line in a file.
+# continue or c: Continues execution of your program after it has hit a breakpoint. 
+# step or s: Steps into the next line of code.
+# next or n: Steps over the next line of code.
+# print <expression> or p <expression>: Evaluates an expression and prints the
+# result. This is useful for inspecting the values of variables.
+# frame variable or fr v: Prints all variables in the current stack frame. quit
+# or q: Quits the LLDB session.
+#CVb3d2023

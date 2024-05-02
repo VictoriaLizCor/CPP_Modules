@@ -16,7 +16,7 @@ D			= 0
 S			= 0
 #------ DEBUG UTILS ------#
 CC			:= c++
-MAKEFLAGS	+= --no-print-directory
+# MAKEFLAGS	+= --no-print-directory
 VALGRIND	:= valgrind -s --leak-check=yes --show-leak-kinds=all
 HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
@@ -32,7 +32,7 @@ ifeq ($(S), 0)
 OBJS		:= $(addprefix $(SRC_DIR), $(SRC))
 else
 #------ CODE FOR OBJECT FILES ------#
-OBJS		:= $(SRC:$(SRC_DIR)%.cpp=$(BUILD_DIR)%.o)
+OBJS		:= $(SRC:%.cpp=$(BUILD_DIR)%.o)
 DEPS		:= $(OBJS:.o=.d)
 #------ INCLUDE SANATIZER FLAGS ------#
 D_FLAGS		+= -O0 -g3 
