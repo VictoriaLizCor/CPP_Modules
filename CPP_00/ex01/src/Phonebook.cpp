@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:49 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/02 14:35:34 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:55:40 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,8 @@ bool	PhoneBook::_checkFullPhonebook()
 
 	if (_contactIndex == _MAX_CONTACTS)
 	{
-		println(color("\nWarning: Phonebook is full, last added contact will be replaced\n", FYELLOW, 0));
+		choice = "Warning: Phonebook is full, Contact[" + toString(_updatedIndex + 1) + "] will be replaced";
+		println(color("\n" + choice + "\n", FYELLOW, 0));
 		while(true)
 		{
 			std::cout << color("Continue yes/no (y/n))? ", FDEFAULT, 0);
