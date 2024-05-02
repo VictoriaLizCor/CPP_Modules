@@ -34,9 +34,9 @@ cleanAll:
 
 git: cleanAll gAdd gCommit gPush
 
-
 log:
-	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
+	@git log -5 --pretty=format:"%s - %h" | pygmentize -g -O style=material
+#	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 #git2:fclean
 #	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo:"" \ndone:""" >> msg_template 
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
