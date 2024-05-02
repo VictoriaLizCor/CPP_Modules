@@ -34,6 +34,7 @@ cleanAll:
 
 git: cleanAll gAdd gCommit gPush
 
+
 log:
 	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 #git2:fclean
