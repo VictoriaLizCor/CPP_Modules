@@ -108,14 +108,15 @@ val: $(NAME)
 ## Diff with intra
 diff:$(NAME)
 	@./$(NAME) > docs/test.log
-	@sed 's/\[[^]]*\]//g' docs/test.log > temp1.log
-	@sed 's/\[[^]]*\]//g' docs/intra.log > temp2.log
-	@diff temp1.log temp2.log > /dev/null && echo $(GREEN)"Same output"$(E_NC) || echo $(RED)"different output"$(E_NC)
+	@sed 's/\[[^]]*\]//g' docs/test.log > docs/temp1.log
+	@sed 's/\[[^]]*\]//g' docs/intra.log > docs/temp2.log
+	@diff docs/temp1.log docs/temp2.log > /dev/null && echo $(GREEN)"Same output"$(E_NC) || echo $(RED)"different output"$(E_NC)
 	@read -p "Remove files? (y/n) " yn; \
 	case $$yn in \
-		[Yy]* ) rm temp1.log temp2.log docs/test.log;; \
+		[Yy]* ) rm docs/temp1.log docs/temp2.log docs/test.log;; \
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
+
 
 # #-------------------- GIT UTILS ----------------------------#
 dirs:

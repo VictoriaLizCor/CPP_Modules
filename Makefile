@@ -95,6 +95,8 @@ PHILO_BANNER = "$$PHILO"
 TRASH_BANNER = "$$TRASH"
 
 #------------- TEST UTILS -----------------------------------#
+list: 
+	@ls -la ./*/*
 # start: $(NAME)
 # 	@echo $(GREEN)./$(NAME) $(arg) $(E_NC)
 # 	$(if $(arg), -./$(NAME) $(arg), \
