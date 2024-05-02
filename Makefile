@@ -41,7 +41,7 @@ log:
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
 #	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 gQuick:cleanAll gAdd
-# git commit --amend --no-edit
+# git commit --amend --no-edit 
 	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
 	@git status --porcelain -b -s > msg_template
 	@git commit -aF msg_template
