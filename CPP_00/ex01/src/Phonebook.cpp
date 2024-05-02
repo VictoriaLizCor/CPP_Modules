@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:49 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/29 15:48:40 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:35:34 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,12 @@ void	PhoneBook::_checkAdd(Contact& contact)
 	}
 	else
 	{
-		_contacts[_MAX_CONTACTS - 1] = contact;
-		str = color("Contact [" + toString(_contactIndex) + "]", FLCYAN, 0);
+		_contacts[_updatedIndex] = contact;
+		str = color("Contact [" + toString(_updatedIndex + 1) + "]", FLCYAN, 0);
 		str = str + color(" updated succesfully", FLBLUE, 0);
+		_updatedIndex++;
+		if (_updatedIndex == _MAX_CONTACTS)
+			_updatedIndex = 0;
 		println(str);
 	}
 }
@@ -56,6 +59,7 @@ void	PhoneBook::_checkAdd(Contact& contact)
 PhoneBook::PhoneBook(void)
 {
 	_contactIndex = 0;
+	_updatedIndex = 0;
 }
 
 /**
@@ -90,7 +94,7 @@ void PhoneBook::addContact()
 	if (_contactIndex >= 0 && _contactIndex < _MAX_CONTACTS)
 		contact.updateIndex(_contactIndex + 1);
 	else
-		contact.updateIndex(_contactIndex);
+		contact.updateIndex(_updatedIndex + 1);
 	while(i < Contact::N_FIELDS)
 	{
 		err = 0;

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   phonebook.hpp                                      :+:      :+:    :+:   */
+/*   Phonebook.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:05:40 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/26 15:14:04 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:03:25 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ class PhoneBook
 	private:
 		// Private member variables
 		static const int _MAX_CONTACTS = 8;
+		int		_updatedIndex;
 		int		_contactIndex;
 		Contact	_contacts[_MAX_CONTACTS];
 		void	_checkAdd(Contact& contact);

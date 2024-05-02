@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 15:24:06 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/24 15:38:44 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:35:07 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	main()
 	PhoneBook phonebook;
 #else
 	int size;
-	const int N_CONTACTS = PhoneBook::MAX_CONTACTS + 1;
+	const int N_CONTACTS = 11;
 	std::string info[N_CONTACTS][Contact::N_FIELDS] =
 	{
 		{"Linda Victoria", "Lizarraga Cortes", "Vicki", "788", "adfasdfasdfasdf"}, //1
@@ -31,8 +31,10 @@ int	main()
 		{"Leon", "Cielo", "itoeritoepor", "656", "leoeleoe"}, //7
 		{"bsdfg", "hertye", "tykrmdfgs", "056934056", "vmvnv"}, //8
 		{"ABCDE", "FGHIJ", "KLMNO", "80034056", "PQRST"},//9
+		{"Linda Victoria", "Lizarraga Cortes", "Vicki", "788", "adfasdfasdfasdf"}, //10
+		{"Diana Paulina", "Calvo Cortes", "Diana", "09871233454", "zxfsdfasdfasdfewr"}, //11
 	};
-	Contact contacts[PhoneBook::MAX_CONTACTS + 1];
+	Contact contacts[N_CONTACTS];
 	size = sizeof(info) / sizeof(info[0]);
 	for (int i = 0; i < size; ++i)
 		contacts[i] = Contact(info[i]);

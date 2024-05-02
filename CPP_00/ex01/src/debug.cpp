@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:29:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/29 15:41:26 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/02 14:27:41 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ PhoneBook::PhoneBook(Contact contacts[], int size)
 	int		i;
 
 	_contactIndex = 0;
+	_updatedIndex = 0;
 	for (i = 0; i < size; i++)
 	{
 		if (_checkFullPhonebook())
@@ -52,7 +53,7 @@ void PhoneBook::addContact(Contact contact)
 	
 	i = 0;
 	exitFlag = false;
-	contact.updateIndex(_contactIndex + 1);
+	contact.updateIndex(_updatedIndex + 1);
 	while(i < Contact::N_FIELDS)
 	{
 		err = 0;
