@@ -1,7 +1,7 @@
-MAKEFLAGS	+= --no-print-directory
-CURRENT		:= $(shell basename $$PWD)
-ROOT_REPO	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/)
-DIRS		:= $(abspath $(dir ${shell find ./*/ -name Makefile}))
+MAKEFLAGS			+= --no-print-directory
+CURRENT				:= $(shell basename $$PWD)
+ROOT_CPP_MODULES	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/)
+DIRS				:= $(abspath $(dir ${shell find ./*/ -name Makefile}))
 #------ DEBUG ------#
 D			= 0
 #------ Sanitizer ------#
@@ -12,21 +12,28 @@ all:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir D=$(D) re test; \
 	done
+
 dirs:
-	@echo $(ROOT_REPO)
+	@echo ROOT_CPP_MODULES: $(CYAN) $(ROOT_CPP_MODULES) $(E_NC)
 	@echo $(CURRENT)
 	@echo $(DIRS)
+
 gAdd:
-	@echo $(CYAN) && git add .
+	@echo $(CYAN) && git add $(ROOT_CPP_MODULES)
+
 gCommit:
 	@echo $(GREEN) && git commit -e
+
 gPush:
 	@echo $(YELLOW) && git push
+
 cleanAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir fclean; \
 	done
+
 git:cleanAll gAdd gCommit gPush
+
 log:
 	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 #git2:fclean
@@ -40,6 +47,7 @@ gQuick:cleanAll gAdd
 	@git commit -aF msg_template
 	@rm msg_template
 	$(MAKE) gPush
+
 ghook:fclean
 	git commit -am "test"
 #te
@@ -53,6 +61,10 @@ soft:
 		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
+# git reset --soft HEAD~1 undoes the last commit and leaves your
+# files and staging area in the state they were in prior to the commit. This is
+# useful if you made a commit prematurely and need to add more changes or modify
+# the commit message.
 norm:
 	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
 	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)

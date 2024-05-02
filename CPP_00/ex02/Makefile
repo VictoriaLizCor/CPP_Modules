@@ -1,16 +1,10 @@
 #------ TARGET ------#
 NAME		:= account
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 #-Werror
+D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 INCLUDES	+= -I includes/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR	:= src/
-# SRC		:=	Contact.cpp			\
-# 				Phonebook.cpp		\
-# 				phonebookUtils.cpp		\
-# 				stringUtils.cpp		\
-# 				debug.cpp		\
-# 				main.cpp
 SRC			:= $(shell ls $(SRC_DIR) | grep .cpp$)
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
@@ -47,6 +41,7 @@ D_FLAGS		+= -fsanitize=address,undefined
 endif
 #-------------------- RULES ----------------------------#
 all: $(NAME)
+
 $(NAME): $(OBJS)
 ifneq ($(S), 0)
 	@printf "$(LF)\n🚀 $(P_BLUE)Successfully Created $(P_YELLOW)$(NAME)'s Object files 🚀$(FG_TEXT)\n"
@@ -58,6 +53,7 @@ endif
 	@$(CC) $(D_FLAGS) $(INCLUDES) $^ -o $(NAME)
 	@printf "\n$(LF)🎉 $(P_BLUE)Successfully Created $(P_GREEN)$@! 🎉\n$(P_NC)"
 	@echo $(BANNER)
+
 ifneq ($(S), 0)
 $(OBJS): $(BUILD_DIR)%.o : $(SRC_DIR)%.cpp | $(BUILD_DIR)
 	@$(CC) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
@@ -66,6 +62,7 @@ $(OBJS): $(BUILD_DIR)%.o : $(SRC_DIR)%.cpp | $(BUILD_DIR)
 $(BUILD_DIR):
 	@mkdir -p $@
 endif
+
 clean:
 	@echo $(RED)
 	@if [ -d "$(BUILD_DIR)" ]; then	\
@@ -87,58 +84,73 @@ fclean: clean
 	fi
 	@printf "\n$(P_NC)"
 
-re:     fclean all
+re: fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
 test:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
 	@./$(NAME)
+	@echo "\n"
+############# USE WITH S=0
+leaks: $(NAME)
+	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)  "\n"
+	@$(MAC_LEAKS) ./$(NAME)
+	@echo "\n"
+	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC) "\n"
+	@$(MAC_LEAKS) ./$(NAME)
+	@echo "\n"
+
+val: $(NAME)
+	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC) "\n"
+	@$(VALGRIND) ./$(NAME)
+	@echo "\n"
+## Diff with intra
 diff:$(NAME)
 	@./$(NAME) > docs/test.log
 	@sed 's/\[[^]]*\]//g' docs/test.log > temp1.log
 	@sed 's/\[[^]]*\]//g' docs/intra.log > temp2.log
-	@diff temp1.log temp2.log > /dev/null && echo $(GREEN)"same output"$(E_NC) || echo $(RED)"different output"$(E_NC)
+	@diff temp1.log temp2.log > /dev/null && echo $(GREEN)"Same output"$(E_NC) || echo $(RED)"different output"$(E_NC)
 	@read -p "Remove files? (y/n) " yn; \
 	case $$yn in \
 		[Yy]* ) rm temp1.log temp2.log docs/test.log;; \
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
-#echo $(RED) "Last commit reset" $(E_NC)
-val: $(NAME)
-	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC)
-	@$(VALGRIND) ./$(NAME)
-leaks: $(NAME)
-	@echo $(RED) $(MAC_LEAKS) ./$(NAME) $(E_NC)
-	@$(MAC_LEAKS) ./$(NAME)
+
 # #-------------------- GIT UTILS ----------------------------#
 dirs:
 	@echo $(DIRS)
-	@echo $(PROJECT_ROOT)
-	@echo $(GIT_REPO)
+	@echo PROJECT_ROOT: $(CYAN) $(PROJECT_ROOT) $(E_NC)
+	@echo GIT_REPO:  $(CYAN) $(GIT_REPO) $(E_NC)
 	@echo $(CURRENT)
+
 cleanAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir fclean; \
 	done
+
 gAdd:
 	@echo $(CYAN) && git add $(PROJECT_ROOT)
+
 gCommit:
 	@echo $(GREEN) && git commit -e
+
 gPush:
 	@echo $(YELLOW) && git push
+
 git:
-	@ls -la $(GIT_REPO) | grep Makefile
 	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
 		$(MAKE) -C $(GIT_REPO) cleanAll gAdd gCommit gPush;		\
 	else									\
-		$(MAKE) -C $(PROJECT_ROOT) cleanAll gAdd gCommit gPush;	\
+		$(MAKE) -C $(PROJECT_ROOT)/$(CURRENT) cleanAll gAdd gCommit gPush;	\
 	fi
+
 gQuick:fclean gAdd
 	@git status --porcelain -b -s > $(GIT_REPO)/msg_template
 	@git commit -F $(GIT_REPO)/msg_template
 	@rm $(GIT_REPO)/msg_template
 	$(MAKE) gPush
+
 soft:
 	@echo $(GREEN) "Last two commits:" $(E_NC)
 	@git log -2
@@ -148,6 +160,7 @@ soft:
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
 #--------------------COLORS----------------------------#
+# For print
 CL_BOLD = \e[1m
 RAN = \033[48;5;237m\033[38;5;255m
 NC = \033[m
@@ -159,7 +172,8 @@ P_CCYN = \e[0;1;36m
 P_NC = \e[0m
 LF = \e[1K\r$(P_NC)
 FG_TEXT = $(P_NC)\e[38;2;189;147;249m
-
+# For bash
+CLEAR = "\033c"
 BOLD = "\033[1m"
 CROSS = "\033[8m"
 RED = "\033[1;91m"
@@ -170,7 +184,6 @@ E_NC	= "\033[m"
 CYAN = "\033[0;1;36m"
 BANNER = "$$CPP"
 TRASH_BANNER = "$$TRASH"
-
 
 define CPP
 
@@ -194,6 +207,7 @@ define CPP
 
 endef
 export CPP
+
 define TRASH
 
 		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
@@ -205,6 +219,5 @@ define TRASH
 		$(RAN)⣿⣿⣿⣿⣿⣿⣇⣈⣈⣀⣁⣼⣿⣿⣿⣿⣿⣿$(NC)
 		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
 		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
-
 endef
 export TRASH

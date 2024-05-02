@@ -5,12 +5,6 @@ D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 INCLUDES	+= -I includes/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR	:= src/
-# SRC		:=	Contact.cpp			\
-# 				Phonebook.cpp		\
-# 				phonebookUtils.cpp		\
-# 				stringUtils.cpp		\
-# 				debug.cpp		\
-# 				main.cpp
 SRC			:= $(shell ls $(SRC_DIR) | grep .cpp$)
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
@@ -28,7 +22,6 @@ HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
 BUILD_DIR	:= .build/
 DEBUG_DIR	:= $(NAME).dSYM
-
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 CC			= g++
@@ -47,7 +40,9 @@ D_FLAGS		+= -fsanitize=address,undefined
 endif
 #-------------------- RULES ----------------------------#
 all: $(NAME)
+
 $(NAME): $(OBJS)
+
 ifneq ($(S), 0)
 	@printf "$(LF)\n🚀 $(P_BLUE)Successfully Created $(P_YELLOW)$(NAME)'s Object files 🚀$(FG_TEXT)\n"
 endif
@@ -67,6 +62,7 @@ $(OBJS): $(BUILD_DIR)%.o : $(SRC_DIR)%.cpp | $(BUILD_DIR)
 $(BUILD_DIR):
 	@mkdir -p $@
 endif
+
 clean:
 	@echo $(RED)
 	@if [ -d "$(BUILD_DIR)" ]; then	\
@@ -94,52 +90,60 @@ re: fclean all
 #------------- TEST UTILS -----------------------------------#
 test:$(NAME)
 	@echo $(BOLD)  $(CYAN) ./$(NAME) $(E_NC) "\n"
-ifeq ($(D),1)
-    # Commands to run when D=1
-else
-    # Commands to run when D=0
-endif
 	@./$(NAME)
+	@echo "\n"
+############# USE WITH S=0
 val: $(NAME)
-	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC)
+	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC) "\n"
 	@$(VALGRIND) ./$(NAME)
+	@echo "\n"
+
 leaks: $(NAME)
-	@echo $(RED) $(MAC_LEAKS) ./$(NAME) $(E_NC)
+	@echo $(RED) $(MAC_LEAKS) ./$(NAME) $(E_NC) "\n"
 	@$(MAC_LEAKS) ./$(NAME)
+	@echo "\n"
+
 lldb: clear $(NAME)
 	@echo "$(CLEAR)"
 	@lldb ./$(NAME)
 	@echo $(CLEAR)
+
 clear:
 	@echo $(CLEAR)
 #-------------------- GIT UTILS ----------------------------#
 dirs:
 	@echo $(DIRS)
-	@echo $(PROJECT_ROOT)
-	@echo $(GIT_REPO)
+	@echo PROJECT_ROOT: $(CYAN) $(PROJECT_ROOT) $(E_NC)
+	@echo GIT_REPO:  $(CYAN) $(GIT_REPO) $(E_NC)
 	@echo $(CURRENT)
+
 cleanAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir fclean; \
 	done
+
 gAdd:
 	@echo $(CYAN) && git add $(PROJECT_ROOT)
+
 gCommit:
 	@echo $(GREEN) && git commit -e
+
 gPush:
 	@echo $(YELLOW) && git push
+
 git:
-	@ls -la $(GIT_REPO) | grep Makefile
 	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
 		$(MAKE) -C $(GIT_REPO) cleanAll gAdd gCommit gPush;		\
 	else									\
-		$(MAKE) -C $(PROJECT_ROOT) cleanAll gAdd gCommit gPush;	\
+		$(MAKE) -C $(PROJECT_ROOT)/$(CURRENT) cleanAll gAdd gCommit gPush;	\
 	fi
+
 gQuick:fclean gAdd
 	@git status --porcelain -b -s > $(GIT_REPO)/msg_template
 	@git commit -F $(GIT_REPO)/msg_template
 	@rm $(GIT_REPO)/msg_template
 	$(MAKE) gPush
+
 soft:
 	@echo $(GREEN) "Last two commits:" $(E_NC)
 	@git log -2
@@ -148,7 +152,8 @@ soft:
 		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
-#--------------------COLORS----------------------------#
+#-------------------- COLORS ----------------------------#
+# For print
 CL_BOLD = \e[1m
 RAN = \033[48;5;237m\033[38;5;255m
 NC = \033[m
@@ -160,7 +165,7 @@ P_CCYN = \e[0;1;36m
 P_NC = \e[0m
 LF = \e[1K\r$(P_NC)
 FG_TEXT = $(P_NC)\e[38;2;189;147;249m
-
+# For bash
 CLEAR = "\033c"
 BOLD = "\033[1m"
 CROSS = "\033[8m"
@@ -172,7 +177,6 @@ E_NC	= "\033[m"
 CYAN = "\033[0;1;36m"
 BANNER = "$$CPP"
 TRASH_BANNER = "$$TRASH"
-
 
 define CPP
 
@@ -196,6 +200,7 @@ define CPP
 
 endef
 export CPP
+
 define TRASH
 
 		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
@@ -207,7 +212,6 @@ define TRASH
 		$(RAN)⣿⣿⣿⣿⣿⣿⣇⣈⣈⣀⣁⣼⣿⣿⣿⣿⣿⣿$(NC)
 		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
 		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
-
 endef
 export TRASH
 

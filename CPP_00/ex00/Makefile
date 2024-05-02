@@ -20,7 +20,6 @@ HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
 BUILD_DIR	:= .build/
 DEBUG_DIR	:= $(NAME).dSYM
-
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 CC 			= g++
@@ -38,6 +37,7 @@ D_FLAGS		+= -fsanitize=address,undefined
 endif
 #-------------------- RULES ----------------------------#
 all: $(NAME)
+
 $(NAME): $(OBJS)
 ifneq ($(S), 0)
 	@printf "$(LF)\n🚀 $(P_BLUE)Successfully Created $(P_YELLOW)$(NAME)'s Object files 🚀$(FG_TEXT)\n"
@@ -49,6 +49,7 @@ endif
 	@$(CC) $(D_FLAGS) $(INCLUDES) $^ -o $(NAME)
 	@printf "\n$(LF)🎉 $(P_BLUE)Successfully Created $(P_GREEN)$@! 🎉\n$(P_NC)"
 	@echo $(BANNER)
+
 ifneq ($(S), 0)
 $(OBJS): $(BUILD_DIR)%.o : $(SRC) | $(BUILD_DIR)
 	@$(CC) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
@@ -57,6 +58,7 @@ $(OBJS): $(BUILD_DIR)%.o : $(SRC) | $(BUILD_DIR)
 $(BUILD_DIR):
 	@mkdir -p $@
 endif
+
 clean:
 	@echo $(RED)
 	@if [ -d "$(BUILD_DIR)" ]; then	\
@@ -83,46 +85,61 @@ re: fclean all
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
 test:$(NAME)
-	@echo $(BOLD)  $(CYAN) ./$(NAME) $(E_NC) "\n"
+	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
 	@./$(NAME)
-	@echo $(BOLD) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC) "\n"
+	@echo "\n"
+	@echo $(BOLD) $(CYAN) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC) "\n"
 	@./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
+	@echo "\n"
+############# USE WITH S=0
 leaks: $(NAME)
-	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)
+	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)  "\n"
 	@$(MAC_LEAKS) ./$(NAME)
-	@echo $(RED)$(MAC_LEAKS) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC)
+	@echo "\n"
+	@echo $(RED)$(MAC_LEAKS) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC) "\n"
 	@$(MAC_LEAKS) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
+	@echo "\n"
+
 val: $(NAME)
-	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC)
+	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC) "\n"
 	@$(VALGRIND) ./$(NAME)
+	@echo "\n"
+	@echo $(RED)$(VALGRIND) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."$(E_NC) "\n"
 	@$(VALGRIND) ./$(NAME) Damnit " ! " "Sorry students, I thought this thing was off."
+	@echo "\n"
 
 # #-------------------- GIT UTILS ----------------------------#
 dirs:
 	@echo $(DIRS)
-	@echo $(PROJECT_ROOT)
-	@echo $(GIT_REPO)
+	@echo PROJECT_ROOT: $(CYAN) $(PROJECT_ROOT) $(E_NC)
+	@echo GIT_REPO:  $(CYAN) $(GIT_REPO) $(E_NC)
 	@echo $(CURRENT)
+
 cleanAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir fclean; \
 	done
+
 gAdd:
 	@echo $(CYAN) && git add $(PROJECT_ROOT)
+
 gCommit:
 	@echo $(GREEN) && git commit -e
+
 gPush:
 	@echo $(YELLOW) && git push
+
 git:
-	@ls -la $(GIT_REPO) | grep Makefile
 	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
 		$(MAKE) -C $(GIT_REPO) cleanAll gAdd gCommit gPush;		\
 	else									\
-		$(MAKE) -C $(PROJECT_ROOT) cleanAll gAdd gCommit gPush;	\
+		$(MAKE) -C $(PROJECT_ROOT)/$(CURRENT) cleanAll gAdd gCommit gPush;	\
 	fi
+
 gQuick:cleanAll gAdd
 	@git commit --amend --no-edit -e
 	$(MAKE) gPush
+
 soft:
 	@echo $(GREEN) "Last two commits:" $(E_NC)
 	@git log -2
@@ -131,7 +148,7 @@ soft:
 		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
-#--------------------COLORS----------------------------#
+#-------------------- COLORS ----------------------------#
 CL_BOLD = \e[1m
 RAN = \033[48;5;237m\033[38;5;255m
 NC = \033[m
@@ -156,7 +173,6 @@ CYAN = "\033[0;1;36m"
 BANNER = "$$CPP"
 TRASH_BANNER = "$$TRASH"
 
-
 define CPP
 
 		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢟⡋⣇⠧⣹⢰⡛⡻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
@@ -178,6 +194,7 @@ define CPP
 		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣄⡀⠀⠀⢀⣠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
 
 endef
+
 export CPP
 define TRASH
 
@@ -190,6 +207,5 @@ define TRASH
 		$(RAN)⣿⣿⣿⣿⣿⣿⣇⣈⣈⣀⣁⣼⣿⣿⣿⣿⣿⣿$(NC)
 		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
 		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
-
 endef
 export TRASH
