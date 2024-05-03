@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   stringUtils.hpp                                    :+:      :+:    :+:   */
+/*   Zombie.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/04/26 15:13:36 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/03 16:01:20 by lilizarr         ###   ########.fr       */
+/*   Created: 2024/05/03 11:15:04 by lilizarr          #+#    #+#             */
+/*   Updated: 2024/05/03 17:42:24 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# pragma once
-#ifndef STRINGUTILS_H
-# define STRINGUTILS_H
+#pragma once
+#ifndef ZOMBIE_HPP
+# define ZOMBIE_HPP
 # include <iostream>
 # include <string>
 # include <sstream>
 
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
+
 # define C_FMT "\033["
+# define C_DEFAULT "\033[0m"
+
 typedef enum eColor
 {
 	DEFAULT			= 0,
@@ -28,7 +34,7 @@ typedef enum eColor
 	FBLUE			= 34,
 	FMAGENTA		= 35,
 	FCYAN			= 36,
-	FLGRAY			= 37,
+	FGRAY			= 37,
 	FLRGB			= 38, //\033[38;2;r;g;bm (rgb:from 0 to 255).
 	FDEFAULT		= 39,
 	BBLACK			= 40,
@@ -48,15 +54,21 @@ typedef enum eColor
 	FLMAGENTA		= 95,
 	FLCYAN			= 96,
 	FWHITE			= 97,
+	COLOR_COUNT	 	= 27,
 } t_color;
 
-void		println(std::string str);
-std::string	toString(int value);
-std::string	color(std::string msg, int color, bool err);
-bool		checkInput(const std::string& str, int (*check_type)(int));
-bool		isOnlySpaces(const std::string& str);
-size_t		maxStringLength(int fieldSize, std::string* arrayData);
-std::string	center(std::string s, int width);
-std::string rColorRGB(int r, int g, int b);
-std::string rColor(std::string msg, int bold);
+
+class Zombie
+{
+	private:
+		std::string	_color;
+		std::string	_name;
+	public:
+		Zombie();
+		Zombie(std::string name);
+		~Zombie();
+		void announce(void);
+};
+Zombie*	newZombie(std::string name);
+void	randomChump(std::string name);
 #endif

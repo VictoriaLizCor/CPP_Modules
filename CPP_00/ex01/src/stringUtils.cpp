@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/29 15:57:07 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/03 16:01:04 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,27 @@ std::string toString(int value)
 	std::stringstream ss;
 	ss << value;
 	return ss.str();
+}
+
+std::string rColorRGB(int r, int g, int b)
+{
+	std::stringstream ss;
+
+	ss << toString(FLRGB) << ";2;";
+	ss << toString(r) << ";" << toString(g) << ";" << toString(b) << "m";
+	return (ss.str());
+}
+
+std::string rColor(std::string msg, int bold)
+{
+	std::stringstream strColor;
+	std::string	fmt;
+
+	fmt = C_FMT;
+	if (bold)
+		fmt = fmt + "1;";
+	strColor << fmt << rColorRGB(rand() % 256, rand() % 256, rand() % 256);
+	return (strColor.str() + msg + fmt + toString(DEFAULT) + "m");
 }
 
 /**
