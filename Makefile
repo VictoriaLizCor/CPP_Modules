@@ -31,7 +31,7 @@ find:
 	@for dir in $$(find . -type d -name "CPP_0*"); do \
 		echo $$dir; \
 		for target in $$(find $$dir -name "Makefile"); do \
-			$(MAKE) -C $$(dirname $$makefile) fclean; \
+			$(MAKE) -C $$target fclean; \
 		done; \
 	done
 
