@@ -1,5 +1,5 @@
 #------ TARGET ------#
-# NAME		:= phonebook
+NAME		:= phonebook
 #------ WFLAGS ------#
 D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 INCLUDES	+= -I includes/
@@ -7,7 +7,7 @@ INCLUDES	+= -I includes/
 SRC_DIR	:= src/
 SRC			:= $(shell ls $(SRC_DIR) | grep .cpp$)
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
-GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
+GIT_REPO	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir ${shell find $(PROJECT_ROOT) -name Makefile}))
 CURRENT		:= $(shell basename $$PWD)
 #------ DEBUG ------#

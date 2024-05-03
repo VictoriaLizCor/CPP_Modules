@@ -129,20 +129,27 @@ _accountIndex(_nbAccounts++), _amount(initial_deposit), _nbDeposits(0), _nbWithd
  * of accounts. If the account is not empty, it displays the timestamp, account
  * index, amount, and closes the account.
  */
+// Account::~Account(void)
+// {
+// 	_nbAccounts--;
+// 	if (!_accounts.empty())
+// 	{
+// 		_displayTimestamp();
+// 		formatStr("index:", (*_accounts.begin())->_accountIndex);
+// 		formatStr(";amount:", (*_accounts.begin())->_amount);
+// 		std::cout << ";closed"<< std::endl;
+// 		_accounts.erase(_accounts.begin());
+// 		return ;
+// 	}
+// }
 Account::~Account(void)
 {
 	_nbAccounts--;
-	// if (!_accounts.empty())
-	// {
-		_displayTimestamp();
-		formatStr("index:", (*_accounts.begin())->_accountIndex);
-		formatStr(";amount:", (*_accounts.begin())->_amount);
-		std::cout << ";closed"<< std::endl;
-		// _accounts.erase(_accounts.begin());
-		// return ;
-	// }
+	_displayTimestamp();
+	formatStr("index:", _accountIndex);
+	formatStr(";amount:", _amount);
+	std::cout << ";closed"<< std::endl;
 }
-
 
 /**
  * @brief Makes a deposit into the account.

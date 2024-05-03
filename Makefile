@@ -1,7 +1,7 @@
 MAKEFLAGS			+= --no-print-directory
 CURRENT				:= $(shell basename $$PWD)
 ROOT_CPP_MODULES	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/)
-DIRS				:= $(abspath $(dir ${shell find ./*/ -name Makefile}))
+DIRS				:= $(abspath $(dir ${shell find ./*/ -type d -name "CPP_0*"}))
 #------ DEBUG ------#
 D			= 0
 #------ Sanitizer ------#+
@@ -9,8 +9,11 @@ S			= 0
 #--------------------UTILS----------------------------#
 # Called with -> make all D=1
 all:
-	@for dir in $(DIRS); do \
-		$(MAKE) -C $$dir D=$(D) re test; \
+	@for mod in $(DIRS); do \
+		echo "\n"$(BLUE)$$(basename $$mod) $(E_NC) ; \
+		for subdir in $$(find $$mod -type d -name "ex0*"); do \
+			$(MAKE) -C $$subdir D=$(D) re test; \
+		done; \
 	done
 
 dirs:
@@ -27,17 +30,12 @@ gCommit:
 gPush:
 	@echo $(YELLOW) && git push
 
-find:
-	@for dir in $$(find . -type d -name "CPP_0*"); do \
-		echo $$dir; \
-		for target in $$(find $$dir -name "Makefile"); do \
-			$(MAKE) -C $$target fclean; \
-		done; \
-	done
-
 cleanAll:
-	@for dir in $(DIRS); do \
-		$(MAKE) -C $$dir fclean; \
+	@for mod in $(DIRS); do \
+		echo "\n"$(BLUE)$$(basename $$mod) $(E_NC) ; \
+		for subdir in $$(find $$mod -type d -name "ex0*"); do \
+			$(MAKE) -C $$subdir fclean; \
+		done; \
 	done
 
 git: cleanAll gAdd gCommit gPush
