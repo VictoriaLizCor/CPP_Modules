@@ -56,7 +56,8 @@ quick:cleanAll gAdd
 	$(MAKE) gPush
 
 ghook:cleanAll
-	git commit -am "test"
+	@echo $(GREEN) && git commit -am "test"
+	@echo $(YELLOW) && git push
 # commit correction git commit --amend
 # //avoid last commit message
 soft:
