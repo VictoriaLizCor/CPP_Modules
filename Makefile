@@ -47,7 +47,7 @@ log:
 #	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo:"" \ndone:""" >> msg_template 
 #	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
 #	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
-gQuick:cleanAll gAdd
+quick:cleanAll gAdd
 # git commit --amend --no-edit 
 	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
 	@git status --porcelain -b -s > msg_template
@@ -55,9 +55,8 @@ gQuick:cleanAll gAdd
 	@rm msg_template
 	$(MAKE) gPush
 
-ghook:fclean
+ghook:cleanAll
 	git commit -am "test"
-#te
 # commit correction git commit --amend
 # //avoid last commit message
 soft:
@@ -73,7 +72,7 @@ template:
 pre-commit:
 	cp .settings/prepare-commit-msg .git/hooks/
 	chmod +x .git/hooks/prepare-commit-msg
-	
+
 # git reset --soft HEAD~1 undoes the last commit and leaves your
 # files and staging area in the state they were in prior to the commit. This is
 # useful if you made a commit prematurely and need to add more changes or modify

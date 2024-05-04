@@ -42,7 +42,6 @@
 # fi
 
 # ///////////////////////////////////////////////
-#!/bin/bash
 prefix="TICKET"
 # The Ticket ID prefix you want to include to your commit messages.
 
