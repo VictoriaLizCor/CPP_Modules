@@ -39,9 +39,11 @@ cleanAll:
 	done
 
 git: cleanAll gAdd gCommit gPush
-
+# make log m=style
 log:
-	@git log -5 --pretty=format:"%s - %h" | pygmentize -g -O style=material
+	@git log -10 --pretty=format:"'%h'%m%s {%cd}" --date=format:'%Y-%m-%d %H:%M' | pygmentize -g -O  style=$$m | cut -d'|' -f1
+plog:
+	@git log -10 --pretty=format:"'%h'%m%s {%cd}" --date=format:'%Y-%m-%d %H:%M' | pygmentize -g -O  style=material | cut -d'|' -f1
 #	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 #git2:fclean
 #	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo:"" \ndone:""" >> msg_template 
@@ -56,13 +58,13 @@ quick:cleanAll gAdd
 	$(MAKE) gPush
 
 ghook:cleanAll
-	@echo $(GREEN) && git commit -am "test"
-	@echo $(YELLOW) && git push
+	@echo $(GREEN) && git commit -am "update:quick commit"
+#	@echo $(YELLOW) && git push
 # commit correction git commit --amend
 # //avoid last commit message
 soft:
-	@echo $(GREEN) "Last two commits:" $(E_NC)
-	@git log -2
+	@echo && echo $(GREEN) "Last 10 commits:" $(E_NC)
+	@$(MAKE) plog && echo 
 	@read -p "Do you want to reset the last commit? (y/n) " yn; \
 	case $$yn in \
 		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \

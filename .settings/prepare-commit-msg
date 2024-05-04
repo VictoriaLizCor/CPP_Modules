@@ -55,17 +55,22 @@ branchName=$(git symbolic-ref --short HEAD)
 # echo "$branchName" | cut -d'-' -f2
 BranchTicket1=$(git symbolic-ref --short HEAD | sed -nE 's,([A-Z]?-?[0-9]+)-.+,\1,p')
 BranchTicket2=$(git symbolic-ref --short HEAD | sed -nE 's,.+-([0-9]+),\1,p')
-ticketID=$(echo "[$BranchTicket1(TICKET:#$BranchTicket2]")
+ticketID=$(echo "🆔[$BranchTicket1(TICKET:#$BranchTicket2)]")
 # [cpp00ex02(TICKET:#0001)]
 # Read the commit message into an array
 LINES=()
 while IFS= read -r line; do
-    LINES+=("$line")
+	LINES+=("$line")
 done < "$COMMIT_MSG_FILE"
 
-# Add the ticket at the second line of the commit message
-printf "%s\n" "${LINES[0]}" "$ticketID" "${LINES[@]:1}" > "$COMMIT_MSG_FILE"
-
+# Check if the commit message file has only one line
+if [ "${#LINES[@]}" -eq 1 ]; then
+	# If the commit message file has only one line, prepend the ticketID to the commit message
+	echo "$ticketID 📝${LINES[0]}" > "$COMMIT_MSG_FILE"
+else
+	# If the commit message file has more than one line, keep the original commit message
+	printf "%s\n" "${LINES[0]}" "$ticketID" "📝${LINES[@]:1}" > "$COMMIT_MSG_FILE"
+fi
 # # Checks if the message already includes the ticket ID.
 # if [[ $message =~ $prefix ]]; then
 #   echo "🆗 The message already has the ticket ID."
