@@ -32,7 +32,7 @@ gPush:
 
 cleanAll:
 	@for mod in $(DIRS); do \
-		echo "\n"$(BLUE)$$(basename $$mod) $(E_NC) ; \
+		echo "\n"$(BLUE)*******************$$(basename $$mod)*******************$(E_NC) ; \
 		for subdir in $$(find $$mod -type d -name "ex0*"); do \
 			$(MAKE) -C $$subdir fclean; \
 		done; \
@@ -68,6 +68,12 @@ soft:
 		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
+template:
+	@git config --local commit.template .settings/.gitmessage
+pre-commit:
+	cp .settings/prepare-commit-msg .git/hooks/
+	chmod +x .git/hooks/prepare-commit-msg
+	
 # git reset --soft HEAD~1 undoes the last commit and leaves your
 # files and staging area in the state they were in prior to the commit. This is
 # useful if you made a commit prematurely and need to add more changes or modify

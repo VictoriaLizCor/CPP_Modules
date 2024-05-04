@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:15:04 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/03 17:42:24 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/04 13:52:59 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@
 #  define DEBUG 0
 # endif
 
+# if (DEBUG == 1)
+#  include <cstdlib>
+# endif
 # define C_FMT "\033["
 # define C_DEFAULT "\033[0m"
 

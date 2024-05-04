@@ -1,18 +1,17 @@
 {
 	//***************************************************//
 	// "[osx]":
-	"editor.fontSize": 13.5,
+	// "editor.fontSize": 13.5,
 	// "[linux]":
-	// "editor.fontSize": 13,
+	"editor.fontSize": 14,
 	"window.zoomLevel": 0,
 	/*FOR BOTH*/
 	"workbench.startupEditor": "none",
 	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
-	"audioCues.volume": 0,
 	"doxdocgen.generic.useGitUserEmail": true,
 	"doxdocgen.generic.useGitUserName": true,
-	"doxdocgen.c.triggerSequence": "/**/",
+	"doxdocgen.c.triggerSequence": "/**",
 	//************************************************//
 	// "compiler-explorer.url": "https://godbolt.org", // url of the compiler explorer you want to use.
 	// "compiler-explorer.compiler": "armg454", // Compiler code - See help below.
@@ -74,6 +73,12 @@
 		"stdexcept": "cpp",
 		"streambuf": "cpp",
 		"cinttypes": "cpp",
-		"typeinfo": "cpp"
-	}, // true indicates that the extension will print debug to its output channel.
+		"typeinfo": "cpp",
+		"ctime": "cpp",
+		"iomanip": "cpp",
+		"sstream": "cpp"
+	},
+	"accessibility.signals.sounds.volume": 0,
+	"C_Cpp.dimInactiveRegions": false,
+	"doxdocgen.generic.commandSuggestionAddPrefix": true, // true indicates that the extension will print debug to its output channel.
 }

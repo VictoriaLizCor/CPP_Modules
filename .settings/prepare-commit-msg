@@ -1,0 +1,100 @@
+#!/bin/bash
+#
+# An example hook script to prepare the commit log message.
+# Called by "git commit" with the name of the file that has the
+# commit message, followed by the description of the commit
+# message's source.  The hook's purpose is to edit the commit
+# message file.  If the hook fails with a non-zero status,
+# the commit is aborted.
+#
+# To enable this hook, rename this file to "prepare-commit-msg".
+
+# This hook includes three examples. The first one removes the
+# "# Please enter the commit message..." help message.
+#
+# The second includes the output of "git diff --name-status -r"
+# into the message, just before the "git status" output.  It is
+# commented because it doesn't cope with --amend or with squashed
+# commits.
+#
+# The third example adds a Signed-off-by line to the message, that can
+# still be edited.  This is rarely a good idea.
+
+# COMMIT_MSG_FILE=$1
+# COMMIT_SOURCE=$2
+# SHA1=$3
+
+# /usr/bin/perl -i.bak -ne 'print unless(m/^. Please enter the commit message/..m/^#$/)' "$COMMIT_MSG_FILE"
+
+# case "$COMMIT_SOURCE,$SHA1" in
+#  ,|template,)
+#    /usr/bin/perl -i.bak -pe '
+#       print "\n" . `git diff --cached --name-status -r`
+# 	 if /^#/ && $first++ == 0' "$COMMIT_MSG_FILE" ;;
+#  *) ;;
+# esac
+
+# SOB=$(git var GIT_COMMITTER_IDENT | sed -n 's/^\(.*>\).*$/Signed-off-by: \1/p')
+# git interpret-trailers --in-place --trailer "$SOB" "$COMMIT_MSG_FILE"
+# if test -z "$COMMIT_SOURCE"
+# then
+#   /usr/bin/perl -i.bak -pe 'print "\n" if !$first_line++' "$COMMIT_MSG_FILE"
+# fi
+
+# ///////////////////////////////////////////////
+#!/bin/bash
+prefix="TICKET"
+# The Ticket ID prefix you want to include to your commit messages.
+
+# Gets the commit message received as parameter and the current branch name.
+COMMIT_MSG_FILE=$1
+message=$(cat "$COMMIT_MSG_FILE")
+branchName=$(git symbolic-ref --short HEAD)
+
+# Gets the last part of the branch name feature/DLS-10263_This_is_the_commit_message -> DLS-10263_This_is_the_commit_message
+# branchName=$(cut -d "/" -f2 <<< "$branchName")
+# echo "$branchName" | cut -d'-' -f2
+BranchTicket1=$(git symbolic-ref --short HEAD | sed -nE 's,([A-Z]?-?[0-9]+)-.+,\1,p')
+BranchTicket2=$(git symbolic-ref --short HEAD | sed -nE 's,.+-([0-9]+),\1,p')
+ticketID=$(echo "[$BranchTicket1(TICKET:#$BranchTicket2]")
+# [cpp00ex02(TICKET:#0001)]
+# Read the commit message into an array
+LINES=()
+while IFS= read -r line; do
+    LINES+=("$line")
+done < "$COMMIT_MSG_FILE"
+
+# Add the ticket at the second line of the commit message
+printf "%s\n" "${LINES[0]}" "$ticketID" "${LINES[@]:1}" > "$COMMIT_MSG_FILE"
+
+# # Checks if the message already includes the ticket ID.
+# if [[ $message =~ $prefix ]]; then
+#   echo "🆗 The message already has the ticket ID."
+#   exit 0
+# fi
+
+# if [[ $branchName =~ $prefix ]]; then
+#   echo "🧐 The current branch name contains the ticket ID. Trying to add it to the commit message..."
+
+#   # Takes from the beginning until the last number before the underscore ((DLS-10263)_This_is_the_commit_message).
+#   ticketID=$(echo "$branchName" | sed -nE 's,([A-Z]?-?[0-9]+)_.+,\1,p')
+
+#   # If the ticket ID is empty, we try to get it from the beginning until the last number before the dash ((DLS-10263)-This-is-the-commit-message).
+#   if [[ -z $ticketID ]]; then
+#     ticketID=$(echo "$branchName" | sed -nE 's,([A-Z]?-?[0-9]+)-.+,\1,p')
+#   fi
+
+#   if [[ -z $ticketID ]]; then
+#       echo "😢 Could not get the ticket ID."
+#       exit 1
+#   fi
+
+#   echo "🆔 ${ticketID}"
+#   output="$ticketID $message"
+#   echo "📩 $output"
+#   echo -e "$output" > "$1"
+
+# else
+#   echo "😐️ The current branch name does not contain the ticket ID '$ticketID'. Ignoring..."
+#   exit 0
+# fi

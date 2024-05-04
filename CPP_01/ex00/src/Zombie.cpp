@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:21:05 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/03 17:46:15 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/04 14:16:40 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,21 @@ static std::string	setColor(std::string msg, int color)
 	std::string	fmt;
 
 	fmt = C_FMT;
+	if (msg.empty())
+	{
+		strColor << fmt << color << "m";
+		return (strColor.str());
+	}
 	if (color >= FDEFAULT)
 		fmt = fmt + "1;";
 	strColor << fmt << color << "m" << msg << C_DEFAULT;
 	return (strColor.str());
 }
 
+static std::string	getColor(std::string msg, std::string color)
+{
+	return (color + msg + C_DEFAULT);
+}
 
 /**
  * @brief Prints a string followed by a newline.
@@ -40,58 +49,104 @@ static void	println(std::string str)
 	std::cout << str << std::endl;
 }
 
+/******************************* CONSTRUCTORS ****************/
 Zombie::Zombie()
 {
-	this->_name = setColor("Unknown", FRED);
-	println("*" + setColor(this->_name, FRED) + ": " + setColor("\tCreated", DEFAULT));
+	_name = "Unknown";
+	_color = setColor("", FRED);
+	println(getColor(_name, _color) + ": " + setColor("\tCreated", DEFAULT));
 	return ;
 }
 
 #if (DEBUG == 1)
+
+static std::string	rColorRGB(int red, int green, int blue)
+{
+	std::stringstream ss;
+
+	ss << C_FMT << "1;" << FLRGB << ";2;";
+	ss << red << ";" << green << ";" << blue << "m";
+	return (ss.str());
+}
+
+static int ft_rand(int min, int max)
+{
+	if (min < 0 || min > 256|| max < 0 || max > 256)
+		return (255);
+	return (rand() % (max - min + 1) + min);
+}
+
+/**
+ * @brief Generate a colored string with optional bold formatting.
+ * 
+ * @param msg The message to be colored.
+ * @param bold Whether to apply bold formatting.
+ * @return std::string The colored string.
+ */
+std::string rColor(int bold)
+{
+	std::stringstream strColor;
+	std::string	fmt;
+
+	fmt = C_FMT;
+	if (bold)
+		fmt = fmt + "1;";
+	strColor << fmt << rColorRGB(ft_rand(80, 150), ft_rand(80, 200), ft_rand(80, 200));
+	return (strColor.str());
+}
+
 Zombie::Zombie(std::string name)
 {
-	this->_name = name;
-	println("*" + this->_name + ": " + setColor("\t\tCreated", FDEFAULT));
+	_name = name;
+	_color = rColor(1);
+	println(getColor(_name, _color) + ": " + setColor("\t\tCreated", FDEFAULT));
 	return ;
 }
+
 #else
-static std::string	redColorRGB(std::string msg)
+
+static std::string	redColorRGB()
 {
 	std::stringstream redStr;
 	std::stringstream gbStr;
-	static int redShade = 128;
+	static int redShade = 150;
 	static int inc = 0;
 
-	if (redShade >= 255)
-		redShade = 128;
-	redShade += (10 + inc);
+	if (redShade >= 210)
+		redShade = 150;
+	redShade += (5 + inc);
 	if (inc >= 20)
 		inc = 0;
-	inc += 1;
-	gbStr << ";" << inc << ";" << inc << "m";
+	inc += 5;
+	gbStr << ";" << inc + 2 << ";" << inc + 2 << "m";
 	redStr << C_FMT << "1;" << FLRGB << ";2;" << redShade << gbStr.str();
-	return (redStr.str() + msg + C_DEFAULT);
+	return (redStr.str());
 }
+
 Zombie::Zombie(std::string name)
 {
-	this->_name = redColorRGB(name);
-	println("*" + this->_name + ": " + setColor("\t\tCreated", FDEFAULT));
+	this->_name = name;
+	this->_color = redColorRGB();
+	println(getColor(_name, _color)+ ": " + setColor("\t\tCreated", FDEFAULT));
 	return ;
 }
 #endif
-
+/*******************************************************/
 Zombie::~Zombie()
 {
-	if (this->_name == setColor("Unknown", FRED))
-		println("*" + this->_name + ": " + setColor("\tDestroyed", DEFAULT));
+	if (this->_name == "Unknown")
+		println(getColor(_name, _color) + ": " + setColor("\tDestroyed", DEFAULT));
 	else
-		println("*" + this->_name + ": " + setColor("\t\tDestroyed", FDARKGRAY));
+		println(getColor(_name, _color) + ": " + setColor("\t\tDestroyed", FDARKGRAY));
 	return ;
 }
 
 
 void	Zombie::announce(void)
 {
-	println(this->_name + ":\t\t" + setColor("BraiiiiiiinnnzzzZ...", BRED));
+	if (this->_name == "Unknown")
+		println(getColor(_name, _color) + ": \t" + setColor("BraiiiiiiinnnzzzZ...", BRED));
+	else
+		println(getColor(_name, _color) + ": \t\t" + setColor("BraiiiiiiinnnzzzZ...", BRED));
 	return ;
 }
