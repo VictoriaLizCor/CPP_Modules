@@ -57,9 +57,10 @@ quick:cleanAll gAdd
 	@rm msg_template
 	$(MAKE) gPush
 
-ghook:cleanAll
-	@echo $(GREEN) && git commit -am "update in files: '$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
-#	@echo $(YELLOW) && git push
+ghook:
+	@echo $(GREEN) && \
+	git commit -am "update in files: '$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
+	@echo $(YELLOW) && git push
 # commit correction git commit --amend
 # //avoid last commit message
 soft:
