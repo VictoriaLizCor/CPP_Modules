@@ -1,5 +1,5 @@
 #------ TARGET ------#
-NAME		:= zombie
+NAME		:= zombieHorde
 #------ WFLAGS ------#
 D_FLAGS		= -Wall -Wextra -std=c++98 #-Werror
 INCLUDES	+= -I includes/

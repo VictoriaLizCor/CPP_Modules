@@ -41,14 +41,14 @@ cleanAll:
 git: cleanAll gAdd gCommit gPush
 # make log m=style
 mlog:
-	@git log -10 --pretty=format:"'%h'%m%s {%cd}" --date=format:'%Y-%m-%d %H:%M' | pygmentize -g -O  style=$$m | cut -d'|' -f1
+	@git log -10 --pretty=format:"'%h'%m%s {%cd}" --date=format:'%Y-%m-%d %H:%M' | \
+	pygmentize -g -O  style=$$m | cut -d'|' -f1
+
 plog:
-	@git log -10 --pretty=format:"'%h'%m%s {%cd}" --date=format:'%Y-%m-%d %H:%M' | pygmentize -g -O  style=material | cut -d'|' -f1
+	@git log -10 --pretty=format:"'%h'%m %s {%cd}" --date=format:'%Y-%m-%d %H:%M' |\
+	pygmentize -g -O  style=material | cut -d'|' -f1
 #	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
-#git2:fclean
-#	@cat .git/COMMIT_EDITMSG > msg_template && echo "toDo:"" \ndone:""" >> msg_template 
-#	pygmentize -g -O style=rainbow_dash .git_tmp/commit_template > msg_template
-#	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
+
 quick:cleanAll gAdd
 # git commit --amend --no-edit 
 	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template

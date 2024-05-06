@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:15:04 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/06 12:45:12 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/04 13:52:59 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ class Zombie
 	public:
 		Zombie();
 		Zombie(std::string name);
-		
 		~Zombie();
 		void announce(void);
 };
-
+Zombie*	newZombie(std::string name);
+void	randomChump(std::string name);
 #endif
