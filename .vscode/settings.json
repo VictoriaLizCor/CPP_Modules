@@ -3,8 +3,8 @@
 	// "[osx]":
 	// "editor.fontSize": 13.5,
 	// "[linux]":
-	"editor.fontSize": 14,
-	"window.zoomLevel": 0,
+	"editor.fontSize": 13,
+	"window.zoomLevel": 0.3,
 	/*FOR BOTH*/
 	"workbench.startupEditor": "none",
 	"editor.detectIndentation": false,

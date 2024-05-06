@@ -6,12 +6,15 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:21:05 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/04 14:16:40 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/06 16:05:09 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Zombie.hpp"
 
+std::string Zombie::getName(Zombie &z){
+	return (z._name);
+}
 
 static std::string	setColor(std::string msg, int color)
 {
@@ -54,7 +57,10 @@ Zombie::Zombie()
 {
 	_name = "Unknown";
 	_color = setColor("", FRED);
-	println(getColor(_name, _color) + ": " + setColor("\tCreated", DEFAULT));
+	if (_name.length() > 5)
+		println(getColor(_name, _color) + ": " + setColor("\tCreated", DEFAULT));
+	else
+		println(getColor(_name, _color) + ": " + setColor("\t\tCreated", DEFAULT));
 	return ;
 }
 
@@ -99,7 +105,10 @@ Zombie::Zombie(std::string name)
 {
 	_name = name;
 	_color = rColor(1);
-	println(getColor(_name, _color) + ": " + setColor("\t\tCreated", FDEFAULT));
+	if (_name.length() > 5)
+		println(getColor(_name, _color) + ": " + setColor("\tCreated", FDEFAULT));
+	else
+		println(getColor(_name, _color) + ": " + setColor("\t\tCreated", FDEFAULT));
 	return ;
 }
 
@@ -127,14 +136,17 @@ Zombie::Zombie(std::string name)
 {
 	this->_name = name;
 	this->_color = redColorRGB();
-	println(getColor(_name, _color)+ ": " + setColor("\t\tCreated", FDEFAULT));
+	if (this->_name.length() > 5)
+		println(getColor(_name, _color) + ": " + setColor("\tDestroyed", FDEFAULT));
+	else
+		println(getColor(_name, _color) + ": " + setColor("\t\tDestroyed", FDEFAULT));
 	return ;
 }
 #endif
 /*******************************************************/
 Zombie::~Zombie()
 {
-	if (this->_name == "Unknown")
+	if (this->_name.length() > 5)
 		println(getColor(_name, _color) + ": " + setColor("\tDestroyed", DEFAULT));
 	else
 		println(getColor(_name, _color) + ": " + setColor("\t\tDestroyed", FDARKGRAY));
@@ -144,7 +156,7 @@ Zombie::~Zombie()
 
 void	Zombie::announce(void)
 {
-	if (this->_name == "Unknown")
+	if (this->_name.length() > 5)
 		println(getColor(_name, _color) + ": \t" + setColor("BraiiiiiiinnnzzzZ...", BRED));
 	else
 		println(getColor(_name, _color) + ": \t\t" + setColor("BraiiiiiiinnnzzzZ...", BRED));
