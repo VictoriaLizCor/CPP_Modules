@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:22:17 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/06 11:49:44 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/06 17:00:27 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,25 +17,8 @@ int	main(void)
 #if (DEBUG == 1)
 	std::srand(time(0));
 #endif
-	Zombie z1;
-	Zombie z3("Robb");
-	Zombie z2("Ned");
-	Zombie* z4 = newZombie("Rick");
-	randomChump("Cate");
-	z1.announce();
-	{
-		Zombie* z5 = newZombie("HEAP");
-		delete z5;
-	}
-	// delete z5;
-	{
-		Zombie z6("STACK");
-		z6.announce();
-		Zombie*	z7 = newZombie("HEAP2");
-		z7->announce();
-		delete z7;
-	}
-	delete z4;
+	Zombie* z1 = zombieHorde(5, "Robb");
+	
 	// z6.announce();
 	return (0);
 }

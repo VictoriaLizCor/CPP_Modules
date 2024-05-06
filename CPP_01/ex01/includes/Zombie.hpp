@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:15:04 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/06 15:52:12 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/06 16:59:35 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,6 @@ class Zombie
 		void announce(void);
 		
 };
-Zombie* zombieHorde(int N, std::string name);
+Zombie *zombieHorde(int N, std::string name);
 
 #endif
