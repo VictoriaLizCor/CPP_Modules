@@ -27,8 +27,20 @@ gAdd:
 gCommit:
 	@echo $(GREEN) && git commit -e
 
+gtest:
+	@ls x > /dev/null || \
+	if [ $$? -ne 0 ]; then \
+		echo $(RED) "Command failed" $(YELLOW); \
+	fi
 gPush:
-	@echo $(YELLOW) && git push
+	@echo $(YELLOW) && git push > /dev/null || \
+	if [ $$? -ne 0 ]; then \
+		echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
+		git push --set-upstream origin $(shell git branch --show-current); \
+	fi
+# @echo $(YELLOW) && git push > /dev/null || \
+# (echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
+# git push --set-upstream origin $(shell git branch --show-current))
 
 cleanAll:
 	@for mod in $(DIRS); do \
@@ -81,9 +93,6 @@ pre-commit:
 # files and staging area in the state they were in prior to the commit. This is
 # useful if you made a commit prematurely and need to add more changes or modify
 # the commit message.
-norm:
-	@printf "$(P_GREEN)norminette ./src ./include $(NC)\n"
-	@norminette ./src ./include | grep "Error" --color || echo $(GREEN)OK$(E_NC)
 .PHONY: gAdd gCommit gPush git gQuick fclean log norm test
 #--------------------COLORS---------------------------#
 CL_BOLD = \e[1m

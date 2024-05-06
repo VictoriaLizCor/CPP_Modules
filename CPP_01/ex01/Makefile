@@ -134,7 +134,11 @@ gCommit:
 	@echo $(GREEN) && git commit -e
 
 gPush:
-	@echo $(YELLOW) && git push
+	@echo $(YELLOW) && git push > /dev/null || \
+	if [ $$? -ne 0 ]; then \
+		echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
+		git push --set-upstream origin $(shell git branch --show-current); \
+	fi
 
 git:
 	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
@@ -143,11 +147,10 @@ git:
 		$(MAKE) -C $(PROJECT_ROOT)/$(CURRENT) cleanAll gAdd gCommit gPush;	\
 	fi
 
-gQuick:fclean gAdd
-	@git status --porcelain -b -s > $(GIT_REPO)/msg_template
-	@git commit -F $(GIT_REPO)/msg_template
-	@rm $(GIT_REPO)/msg_template
-	$(MAKE) gPush
+quick:
+	@echo $(GREEN) && \
+	git commit -am "update in files: '$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
+	@echo $(YELLOW) && git push
 
 soft:
 	@echo $(GREEN) "Last two commits:" $(E_NC)
