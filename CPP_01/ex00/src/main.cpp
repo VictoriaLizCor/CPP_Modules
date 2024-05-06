@@ -6,12 +6,12 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:22:17 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/04 14:12:54 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/06 11:49:44 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Zombie.hpp"
-
+//
 int	main(void)
 {
 #if (DEBUG == 1)

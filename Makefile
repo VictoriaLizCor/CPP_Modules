@@ -40,7 +40,7 @@ cleanAll:
 
 git: cleanAll gAdd gCommit gPush
 # make log m=style
-log:
+mlog:
 	@git log -10 --pretty=format:"'%h'%m%s {%cd}" --date=format:'%Y-%m-%d %H:%M' | pygmentize -g -O  style=$$m | cut -d'|' -f1
 plog:
 	@git log -10 --pretty=format:"'%h'%m%s {%cd}" --date=format:'%Y-%m-%d %H:%M' | pygmentize -g -O  style=material | cut -d'|' -f1
@@ -58,7 +58,7 @@ quick:cleanAll gAdd
 	$(MAKE) gPush
 
 ghook:cleanAll
-	@echo $(GREEN) && git commit -am "update:quick commit"
+	@echo $(GREEN) && git commit -am "update in files: $(shell git diff --name-only --diff-filter=M | paste -sd "," -)"
 #	@echo $(YELLOW) && git push
 # commit correction git commit --amend
 # //avoid last commit message
