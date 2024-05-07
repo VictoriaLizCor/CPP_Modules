@@ -1,7 +1,7 @@
 #------ TARGET ------#
 NAME		:= zombie
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 #-Werror
+D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 INCLUDES	+= -I includes/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR	:= src/

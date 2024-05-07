@@ -6,15 +6,17 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:21:05 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/06 14:17:55 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/07 17:35:07 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Zombie.hpp"
 
+int Zombie::_counter = 0;
+
 static std::string	setColor(std::string msg, int color)
 {
-	std::stringstream strColor;
+	std::ostringstream strColor;
 	std::string	fmt;
 
 	fmt = C_FMT;
@@ -51,7 +53,11 @@ static void	println(std::string str)
 /******************************* CONSTRUCTORS ****************/
 Zombie::Zombie()
 {
-	_name = "Unknown";
+	std::ostringstream newName;
+
+	_counter++;
+	newName << "WhiteWalker" << _counter;
+	_name = newName.str();
 	_color = setColor("", FRED);
 	println(getColor(_name, _color) + ": " + setColor("\tCreated", DEFAULT));
 	return ;
@@ -61,7 +67,7 @@ Zombie::Zombie()
 
 static std::string	rColorRGB(int red, int green, int blue)
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 
 	ss << C_FMT << "1;" << FLRGB << ";2;";
 	ss << red << ";" << green << ";" << blue << "m";
@@ -84,7 +90,7 @@ static int ft_rand(int min, int max)
  */
 std::string rColor(int bold)
 {
-	std::stringstream strColor;
+	std::ostringstream strColor;
 	std::string	fmt;
 
 	fmt = C_FMT;
@@ -94,38 +100,44 @@ std::string rColor(int bold)
 	return (strColor.str());
 }
 
-Zombie::Zombie(std::string name)
+Zombie::Zombie(std::string name): _name(name),_color(rColor(1))
 {
-	_name = name;
-	_color = rColor(1);
-	println(getColor(_name, _color) + ": " + setColor("\t\tCreated", FDEFAULT));
+	_counter++;
+	std::string tab = ": \t";
+	if (this->_name.length() < 6)
+		tab += "\t";
+	println(getColor(_name, _color) + tab + setColor("Created", FDEFAULT));
 	return ;
 }
 
 #else
 
-static std::string	redColorRGB()
+static std::string	rColor(int bold)
 {
-	std::stringstream redStr;
-	std::stringstream gbStr;
-	static int redShade = 150;
-	static int inc = 0;
+	std::ostringstream	redStr;
+	std::ostringstream	gbStr;
+	static int			redShade;
+	static int			inc;
 
-	if (redShade >= 210)
+	if (redShade <= 0 || redShade >= 210)
 		redShade = 150;
 	redShade += (5 + inc);
 	if (inc >= 20)
 		inc = 0;
 	inc += 5;
 	gbStr << ";" << inc + 2 << ";" << inc + 2 << "m";
-	redStr << C_FMT << "1;" << FLRGB << ";2;" << redShade << gbStr.str();
+	if (bold)
+		redStr << C_FMT << "1;" << FLRGB << ";2;" << redShade << gbStr.str();
+	else
+		redStr << C_FMT << FLRGB << ";2;" << redShade << gbStr.str();
 	return (redStr.str());
 }
 
 Zombie::Zombie(std::string name)
 {
+	_counter++;
 	this->_name = name;
-	this->_color = redColorRGB();
+	this->_color = rColor(1);
 	println(getColor(_name, _color)+ ": " + setColor("\t\tCreated", FDEFAULT));
 	return ;
 }
@@ -133,19 +145,37 @@ Zombie::Zombie(std::string name)
 /*******************************************************/
 Zombie::~Zombie()
 {
+	std::string tab = ": \t";
+	
+	if (this->_name.length() < 6)
+		tab += "\t";
 	if (this->_name == "Unknown")
-		println(getColor(_name, _color) + ": " + setColor("\tDestroyed", DEFAULT));
+		println(getColor(_name, _color) + tab + setColor("Destroyed", DEFAULT));
 	else
-		println(getColor(_name, _color) + ": " + setColor("\t\tDestroyed", FDARKGRAY));
+		println(getColor(_name, _color) + tab + setColor("Destroyed", FDARKGRAY));
+	_counter--;
 	return ;
 }
 
+void	Zombie::setName(std::string name)
+{
+	std::string tab = ": \t";
+	
+	if (this->_name.length() < 6)
+		tab += "\t";
+	std::cout << getColor(_name, _color) + tab + setColor("Renamed ", DEFAULT);
+	_name = name;
+	_color = rColor(1);
+	println(getColor(_name, _color));
+	return ;
+}
 
 void	Zombie::announce(void)
 {
-	if (this->_name == "Unknown")
-		println(getColor(_name, _color) + ": \t" + setColor("BraiiiiiiinnnzzzZ...", BRED));
-	else
-		println(getColor(_name, _color) + ": \t\t" + setColor("BraiiiiiiinnnzzzZ...", BRED));
+	std::string tab = ": \t";
+	
+	if (this->_name.length() < 6)
+		tab += "\t";
+	println(getColor(_name, _color) + tab + setColor("BraiiiiiiinnnzzzZ...", BRED));
 	return ;
 }

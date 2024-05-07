@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/24 12:44:57 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/04/29 15:51:55 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:30:03 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ std::string*	fieldToStringArray(std::string *array, int size, const Contact& con
 
 void	showContactInfo(Contact contact, int nFields, std::string tmp)
 {
-	std::stringstream	field;
-	std::stringstream	value;
+	std::ostringstream	field;
+	std::ostringstream	value;
 	std::string			dataArray[nFields];
 	size_t				len;
 	int					i;
@@ -135,7 +135,7 @@ void	showContactInfo(Contact contact, int nFields, std::string tmp)
  */
 void formatedText(int colorType, std::string idx, int fNickname, std::string* dataArray)
 {
-	std::stringstream	ss;
+	std::ostringstream	ss;
 	std::string			coloredText;
 	std::string			trunc;
 	int					i;

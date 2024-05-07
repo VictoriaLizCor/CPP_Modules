@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:21:05 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/06 16:05:09 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:30:03 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ std::string Zombie::getName(Zombie &z){
 
 static std::string	setColor(std::string msg, int color)
 {
-	std::stringstream strColor;
+	std::ostringstream strColor;
 	std::string	fmt;
 
 	fmt = C_FMT;
@@ -68,7 +68,7 @@ Zombie::Zombie()
 
 static std::string	rColorRGB(int red, int green, int blue)
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 
 	ss << C_FMT << "1;" << FLRGB << ";2;";
 	ss << red << ";" << green << ";" << blue << "m";
@@ -91,7 +91,7 @@ static int ft_rand(int min, int max)
  */
 std::string rColor(int bold)
 {
-	std::stringstream strColor;
+	std::ostringstream strColor;
 	std::string	fmt;
 
 	fmt = C_FMT;
@@ -116,8 +116,8 @@ Zombie::Zombie(std::string name)
 
 static std::string	redColorRGB()
 {
-	std::stringstream redStr;
-	std::stringstream gbStr;
+	std::ostringstream redStr;
+	std::ostringstream gbStr;
 	static int redShade = 150;
 	static int inc = 0;
 

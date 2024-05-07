@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:15:04 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/06 16:59:35 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/07 17:11:28 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,21 @@ typedef enum eColor
 class Zombie
 {
 	private:
-		std::string	_color;
 		std::string	_name;
+		std::string	_color;
+		static int	_counter;
 
 	public:
+
 		Zombie();
 		Zombie(std::string name);
+		void setName(std::string name);
 		~Zombie();
 		void announce(void);
-		
 };
-Zombie *zombieHorde(int N, std::string name);
-
+Zombie* zombieHorde(int N, std::string name);
+# if (DEBUG != 0)
+Zombie** ptrzombieHorde(int N, std::string name);
+Zombie* zombieHorde2(int N, std::string name);
+# endif
 #endif

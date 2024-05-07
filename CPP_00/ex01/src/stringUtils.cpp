@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/03 16:01:04 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/07 15:30:03 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,14 @@ std::string	color(std::string msg, int color, bool err)
  */
 std::string toString(int value)
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 	ss << value;
 	return ss.str();
 }
 
 std::string rColorRGB(int r, int g, int b)
 {
-	std::stringstream ss;
+	std::ostringstream ss;
 
 	ss << toString(FLRGB) << ";2;";
 	ss << toString(r) << ";" << toString(g) << ";" << toString(b) << "m";
@@ -70,7 +70,7 @@ std::string rColorRGB(int r, int g, int b)
 
 std::string rColor(std::string msg, int bold)
 {
-	std::stringstream strColor;
+	std::ostringstream strColor;
 	std::string	fmt;
 
 	fmt = C_FMT;

@@ -79,6 +79,6 @@
 		"sstream": "cpp"
 	},
 	"accessibility.signals.sounds.volume": 0,
-	"C_Cpp.dimInactiveRegions": false,
+	"C_Cpp.dimInactiveRegions": true,
 	"doxdocgen.generic.commandSuggestionAddPrefix": true, // true indicates that the extension will print debug to its output channel.
 }
