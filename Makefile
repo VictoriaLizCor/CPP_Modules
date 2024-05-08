@@ -83,6 +83,8 @@ soft:
 		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
+amend:
+	@git commit --amend
 template:
 	@git config --local commit.template .settings/.gitmessage
 pre-commit:
