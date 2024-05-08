@@ -2,17 +2,23 @@
 alias ls='ls --color=auto'
 alias lpyg='pygmentize -L styles'
 #alias pig='pygmentize -g -O style=rainbow_dash'
-alias subl='/opt/sublime_text/sublime_text'
+#alias subl='/opt/sublime_text/sublime_text'
 alias pyg='pygmentize -g -O style=material'
-alias flog="git log -4 --pretty=format:'(%h)%m %s {%cd}' --date=format:'%Y-%m-%d %H:%M'"
 alias glog='git log --abbrev-commit --no-color'
 alias log='git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material'
-alias plog="git log -10 --pretty=format:'(%h)%m %s #%cd' --date=format:'%Y-%m-%d %H:%M' |  pygmentize -g -O style=material | cut -d'|' -f1 "
-alias plog2="git log -10 --pretty=format:'(%h)%m: %s {%cd}' --date=format:'%Y-%m-%d %H:%M' | cut -d'|' -f1  | pygmentize -g -O style=material"
-alias glg='git log -10 --pretty=format:"(%h)%m %s #%cd" --date=format:"%Y-%m-%d %H:%M" | awk "
+alias flog="git log -10 --pretty=format:'(%h)%m %s #%cd' --date=format:'%Y-%m-%d %H:%M'"
+# removing the ~...~ from the log
+alias plog='flog | awk "
+{
+    gsub(/~[^~]*~/, \" \")
+    print
+}" | pyg'
+alias ccut="cut -d'|' -f1"
+#| fold -w 80
+alias clog='flog | awk "
 BEGIN {
     RED=\"\033[0;31m\"
-    YELLOW=\"\033[0;33m\"
+    YELLOW=\"\033[038;5;221m\"
     GREEN=\"\033[0;32m\"
     NO_COLOR=\"\033[0m\"
     LGREEN=\"\033[0;38;5;84m\"
@@ -20,14 +26,15 @@ BEGIN {
     BDEFAULT=\"\033[1;39m\"
 }
 {
-    gsub(/\[[^\]]+\]/, BDEFAULT \"&\" NO_COLOR)
+    gsub(/~[^~]*~/, \" \")
+    gsub(/\[[^\]]+\]/, BDEFAULT \"&\n\" NO_COLOR)
     gsub(/📝[^:]+: /, LGREEN \"&\" NO_COLOR) 
     gsub(/\([a-f0-9]+\)/, YELLOW \"&\" NO_COLOR)
     gsub(/#[0-9\- :]+/, LBLUE \"&\" NO_COLOR)
     print
 }"'
-alias ccut="cut -d'|' -f1"
-alias clog='glg | ccut'
+
+#alias clog='glg'
 alias vs='open ~/.config/Code/User/settings.json'
 alias bs='open ~/.bashrc' 
 alias sb='source ~/.bashrc' 
