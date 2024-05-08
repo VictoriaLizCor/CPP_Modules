@@ -18,6 +18,12 @@ while IFS= read -r line; do
 	LINES+=("$line")
 done < "$COMMIT_MSG_FILE"
 
+# Check if the commit message already contains the TicketID
+if [[ $message == *"$ticketID"* ]]; then
+	# If it does, don't modify the commit message
+	exit 0
+fi
+
 # Check if the commit message file has only one line
 if [ "${#LINES[@]}" -eq 1 ]; then
 	# If the commit message file has only one line, prepend the ticketID to the commit message
