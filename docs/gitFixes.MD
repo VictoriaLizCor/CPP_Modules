@@ -1,5 +1,11 @@
 
 # Divergent branches 
+<!--
+ Safest option:
+	hint:   git config pull.rebase false  # merge (the default strategy)
+#hint:   git config pull.rebase true   # rebase
+#hint:   git config pull.ff only       # fast-forward only
+-->
 The `git pull` command options `--rebase`, `--no-rebase`, and `--ff-only` affect
 how Git handles divergent branches:
 
