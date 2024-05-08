@@ -67,17 +67,25 @@ git checkout old-branch-name
 # Rename the branch
 git branch -m new-branch-name
 ```
-
-Please replace `old-branch-name` and `new-branch-name` with your actual branch names.
-
 If you want to rename the branch while you are on a different branch, you can do so with the following command:
 
 ```bash
 git branch -m old-branch-name new-branch-name
 ```
 
-After renaming, if you have already pushed the branch to the remote, you need to delete the old branch and push the new one:
+## Delete and rename remote branch 
+1. Delete the old-name remote branch and push the new-name local branch:
 
+```bash
+git push origin :old-name new-name
+```
+
+Reset the upstream branch for the new-name local branch:
+
+```bash
+git push origin -u new-name
+```
+2. Another option is 
 ```bash
 # Delete the old branch on remote
 git push origin --delete old-branch-name
@@ -85,5 +93,3 @@ git push origin --delete old-branch-name
 # Push the new branch to remote
 git push origin new-branch-name
 ```
-
-Again, replace `old-branch-name` and `new-branch-name` with your actual branch names.
