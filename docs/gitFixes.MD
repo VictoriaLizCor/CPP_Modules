@@ -15,3 +15,25 @@ how Git handles divergent branches:
    is not possible, the pull operation fails. This maintains a linear commit
    history and doesn't modify the existing history, but doesn't allow divergence
    between local and remote branches.
+
+# Creating new branches
+To create a new branch from another branch in Git, you first need to switch to
+the branch you want to base your new branch on using the `git checkout` command.
+After that, you can create the new branch. Here's how you can do it:
+
+```bash
+git checkout existing-branch-name
+git branch new-branch-name
+git checkout new-branch-name
+```
+
+Alternatively, you can create and switch to the new branch in a single command
+using the `-b` option with the `git checkout` command:
+
+```bash
+git checkout -b new-branch-name existing-branch-name
+```
+
+Replace `existing-branch-name` with the name of the branch you want to base your
+new branch on, and `new-branch-name` with the name you want to give to your new
+branch.
