@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 14:35:51 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/08 14:40:17 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/08 16:25:09 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,6 @@ class Weapon
 		Weapon(std::string type):_type(type){};
 		~Weapon();
 		
-}
+};
 
 # endif
