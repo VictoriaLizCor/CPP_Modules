@@ -5,7 +5,7 @@ how Git handles divergent branches:
 
 1. `git pull --rebase`: Replays your local commits on top of remote changes.
    This creates a linear commit history but modifies the existing history.
-
+	(*NOTE: Primarily use when changes are in local repo)
 2. `git pull --no-rebase`: Merges remote changes into your local branch,
    creating a new merge commit. This maintains the exact commit history but can
    lead to a non-linear history.
