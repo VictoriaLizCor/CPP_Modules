@@ -88,7 +88,28 @@ template:
 pre-commit:
 	cp .settings/prepare-commit-msg .git/hooks/
 	chmod +x .git/hooks/prepare-commit-msg
-
+showcolors:
+	@i=0; \
+	while [ $$i -le 255 ]; do \
+		printf "\e[1;38;5;$$i""m%3d " "$$i"; \
+		if [ $$i -eq 15 ] || [ $$i -gt 15 -a `expr $$i - 15 % 6` -eq 0 ]; then \
+			echo; \
+		fi; \
+		i=`expr $$i + 1`; \
+	done
+rgb:
+	@for r in `seq 0 51 255`; do \
+		for g in `seq 0 51 255`; do \
+			for b in `seq 0 51 255`; do \
+				printf "\e[1;38;2;$$r;$$g;$$b""m%3d,%3d,%3d " "$$r" "$$g" "$$b"; \
+				echo; \
+			done \
+		done \
+	done
+cpp:
+	@for file in includes/*.hpp; do \
+		touch src/$(basename "${file%.*}").cpp; \
+	done
 # git reset --soft HEAD~1 undoes the last commit and leaves your
 # files and staging area in the state they were in prior to the commit. This is
 # useful if you made a commit prematurely and need to add more changes or modify

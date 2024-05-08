@@ -1,16 +1,19 @@
- default:		* fruity:		  abap:
- emacs:			  bw:			* solarized-dark:
- friendly:		  vim:			* solarized-light:
- friendly_grayscale:	  vs:			* sas:
- colorful:		  tango:		- stata:
- autumn:		* rrt:			- stata-light:
- murphy:		  xcode:		* stata-dark:
- manni:			* igor:			* inkpot:
-* material:		  paraiso-light:	* zenburn:
- monokai:		* paraiso-dark:		* gruvbox-dark:
- perldoc:		- lovelace:		* gruvbox-light:
- pastie:		  algol:		* dracula:
- borland:		  algol_nu:		* one-dark:
- trac:			  arduino:		* lilypond:
- native:		* rainbow_dash:
-#$lpyg | grep '^\*' | pr -T -3 > docs/pymentizeStyles.txt
+  default:		* fruity:		  abap:
+  emacs:		  bw:			* solarized-dark:
+  friendly:		  vim:			* solarized-light:
+  friendly_grayscale:	  vs:			* sas:
+  colorful:		  tango:		- stata:
+  autumn:		* rrt:			- stata-light:
+  murphy:		  xcode:		* stata-dark:
+  manni:		* igor:			* inkpot:
+ * material:		  paraiso-light:	* zenburn:
+  monokai:		* paraiso-dark:		* gruvbox-dark:
+  perldoc:		- lovelace:		* gruvbox-light:
+  pastie:		  algol:		* dracula:
+  borland:		  algol_nu:		* one-dark:
+  trac:			  arduino:		* lilypond:
+  native:		* rainbow_dash:
+
+
+
+#pygmentize -L styles | grep '^\*' | pr -T -3 > docs/pymentizeStyles.txt
