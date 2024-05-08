@@ -30,6 +30,6 @@ if [ "${#LINES[@]}" -eq 1 ]; then
 	echo "$ticketID ${LINES[0]}" > "$COMMIT_MSG_FILE"
 else
 	# If the commit message file has more than one line, keep the original commit message
-	printf "%s\n" "${LINES[0]}" "$ticketID" "📝${LINES[@]:1}" > "$COMMIT_MSG_FILE"
+	printf "%s\n" "${LINES[0]}" "$ticketID" "${LINES[@]:1}" > "$COMMIT_MSG_FILE"
 fi
 # ///////////////////////////////////////////////
