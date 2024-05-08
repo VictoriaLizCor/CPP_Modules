@@ -32,6 +32,8 @@ using the `-b` option with the `git checkout` command:
 
 ```bash
 git checkout -b new-branch-name existing-branch-name
+# git checkout -b cpp01ex03-003 $(git branch --show-current) 
+
 ```
 
 Replace `existing-branch-name` with the name of the branch you want to base your
