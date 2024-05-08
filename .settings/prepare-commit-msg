@@ -10,7 +10,7 @@ branchName=$(git symbolic-ref --short HEAD)
 
 BranchTicket1=$(git symbolic-ref --short HEAD | sed -nE 's,([A-Z]?-?[0-9]+)-.+,\1,p')
 BranchTicket2=$(git symbolic-ref --short HEAD | sed -nE 's,.+-([0-9]+),\1,p')
-ticketID=$(echo "🆔[$BranchTicket1(TICKET:#$BranchTicket2)]")
+ticketID=$(echo "🆔[$BranchTicket1{$BranchTicket2}]")
 # [cpp00ex02(TICKET:#0001)]
 # Read the commit message into an array
 LINES=()

@@ -53,7 +53,7 @@ cleanAll:
 git: cleanAll gAdd gCommit gPush
 # make log m=style
 mlog:
-	@git log -10 --pretty=format:"'%h'%m%s {%cd}" --date=format:'%Y-%m-%d %H:%M' | \
+	@git log -5 --pretty=format:"'%h'%m%s {%cd}" --date=format:'%Y-%m-%d %H:%M' | \
 	pygmentize -g -O  style=$$m | cut -d'|' -f1
 
 plog:
@@ -122,22 +122,6 @@ TRASH_BANNER = "$$TRASH"
 #------------- TEST UTILS -----------------------------------#
 list:
 	@ls -la ./*/*
-# start: $(NAME)
-# 	@echo $(GREEN)./$(NAME) $(arg) $(E_NC)
-# 	$(if $(arg), -./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make val arg=\"2 410 200 200\"\n")
-# val: $(NAME)
-# 	@echo $(RED) $(VALGRIND) ./$(NAME) $(arg) $(E_NC)
-# 	@$(if $(arg), -$(VALGRIND) ./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make val arg=\"2 410 200 200\"\n")
-# hel: $(NAME)
-# 	@echo $(BLUE) $(HELGRIND) ./$(NAME) $(arg) $(E_NC)
-# 	@$(if $(arg), -$(HELGRIND) ./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make hel arg=\"2 410 200 200\"\n")
-# leaks: $(NAME)
-# 	@echo $(YELLOW) $(MAC_LEAKS) ./$(NAME) $(arg) $(E_NC)
-# 	@$(if $(arg), -$(MAC_LEAKS) ./$(NAME) $(arg), \
-# 		@printf "Input Example: \n\t make hel arg=\"2 410 200 200\"\n")
 
 define CPP
 	   $(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢟⡋⣇⠧⣹⢰⡛⡻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
