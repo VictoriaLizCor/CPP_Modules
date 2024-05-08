@@ -95,3 +95,25 @@ git push origin --delete old-branch-name
 # Push the new branch to remote
 git push origin new-branch-name
 ```
+# git amend
+The `git commit --amend` command is used to modify the most recent commit. It doesn't work for commits that are not the latest. If you want to modify a commit that is not the latest, you can use an interactive rebase.
+
+Here's how you can do it:
+
+```bash
+git rebase -i HEAD~3
+```
+
+This command will open a text editor with a list of the last 3 commits. Each commit is represented by a line that starts with the word `pick`.
+
+To modify a commit, replace `pick` with `edit` for that commit. Then save and close the editor.
+
+Git will now pause the rebase at the commit you want to edit. You can amend the commit as you want. For example, you can modify the files or use `git commit --amend` to change the commit message.
+
+Once you're done, you can continue the rebase with:
+
+```bash
+git rebase --continue
+```
+
+Please note that this will rewrite the commit history, which can cause problems for others if they have cloned or pulled your repository. Be careful when using `git rebase`.
