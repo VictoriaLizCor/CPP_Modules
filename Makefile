@@ -61,17 +61,17 @@ plog:
 	pygmentize -g -O  style=material | cut -d'|' -f1
 #	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 
-quick:cleanAll gAdd
-# git commit --amend --no-edit 
-	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
-	@git status --porcelain -b -s > msg_template
-	@git commit -aF msg_template
-	@rm msg_template
-	$(MAKE) gPush
+# quick:cleanAll gAdd
+# # git commit --amend --no-edit 
+# 	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
+# 	@git status --porcelain -b -s > msg_template
+# 	@git commit -aF msg_template
+# 	@rm msg_template
+# 	$(MAKE) gPush
 
-ghook:
+quick:
 	@echo $(GREEN) && \
-	git commit -am "📝update in files: '$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
+	git commit -am "📝 update in files: '$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
 	@echo $(YELLOW) && git push
 # commit correction git commit --amend
 # //avoid last commit message
