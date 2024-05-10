@@ -6,12 +6,19 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:22:17 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/06 16:52:40 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/10 14:50:18 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Zombie.hpp"
 
+/**
+ * @brief Compares the addresses of two pointers and prints the result.
+ * 
+ * @param addr1 The address of the first pointer.
+ * @param addr2 The address of the second pointer.
+ * @param name The name of the comparison.
+ */
 void compareAddresses(void* addr1, void* addr2, const std::string& name)
 {
 	if (long(addr1) < long(addr2))

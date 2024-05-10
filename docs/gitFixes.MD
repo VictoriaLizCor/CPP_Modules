@@ -1,5 +1,11 @@
 
 # Divergent branches 
+<!--
+ Safest option:
+	hint:   git config pull.rebase false  # merge (the default strategy)
+#hint:   git config pull.rebase true   # rebase
+#hint:   git config pull.ff only       # fast-forward only
+-->
 The `git pull` command options `--rebase`, `--no-rebase`, and `--ff-only` affect
 how Git handles divergent branches:
 
@@ -32,7 +38,8 @@ using the `-b` option with the `git checkout` command:
 
 ```bash
 git checkout -b new-branch-name existing-branch-name
-# current work git check
+# git checkout -b cpp01ex03-003 $(git branch --show-current) 
+
 ```
 
 Replace `existing-branch-name` with the name of the branch you want to base your
@@ -93,4 +100,32 @@ git push origin --delete old-branch-name
 
 # Push the new branch to remote
 git push origin new-branch-name
+```
+# Commit : Amend previous message
+
+The `git commit --amend` command is used to modify the most recent commit. It doesn't work for commits that are not the latest. If you want to modify a commit that is not the latest, you can use an interactive rebase.
+
+Here's how you can do it:
+
+```bash
+git rebase -i HEAD~3
+```
+
+This command will open a text editor with a list of the last 3 commits. Each commit is represented by a line that starts with the word `pick`.
+
+To modify a commit, replace `pick` with `edit` for that commit. Then save and close the editor.
+
+Git will now pause the rebase at the commit you want to edit. You can amend the commit as you want. For example, you can modify the files or use `git commit --amend` to change the commit message.
+
+Once you're done, you can continue the rebase with:
+
+```bash
+git rebase --continue
+```
+
+Please note that this will rewrite the commit history, which can cause problems for others if they have cloned or pulled your repository. Be careful when using `git rebase`.
+
+# Add commit template to local repository
+```bash
+git config --local commit.template {path-to-commit-template}
 ```

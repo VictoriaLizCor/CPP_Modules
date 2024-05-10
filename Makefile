@@ -71,7 +71,7 @@ quick:cleanAll gAdd
 
 ghook:
 	@echo $(GREEN) && \
-	git commit -am "update in files: '$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
+	git commit -am "📝update in files: '$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
 	@echo $(YELLOW) && git push
 # commit correction git commit --amend
 # //avoid last commit message
@@ -83,6 +83,9 @@ soft:
 		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
+amend:
+	@git commit --amend
+	@git push origin $(shell git branch --show-current) --force-with-lease
 template:
 	@git config --local commit.template .settings/.gitmessage
 pre-commit:

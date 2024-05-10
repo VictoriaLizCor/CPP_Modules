@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 10:44:44 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/08 11:11:53 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/10 14:01:13 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,16 @@ int	main(void)
 	std::cout << "Memory addres of stringPTR variable: \t" << &stringPTR << std::endl;
 #endif
 	std::cout << "Memory addres held by stringPTR: \t" << &stringREF << std::endl;
-	
 	std::cout << std::endl;
-	std::cout << "Value of str variable: \t\t"      << str << std::endl;
+	std::cout << "Value of str variable: \t\t" << str << std::endl;
 	std::cout << "Value pointed by stringPTR: \t" << *stringPTR << std::endl;
 	std::cout << "Value pointed by stringREF: \t" << stringREF << std::endl;
+#if (DEBUG == 1)
+	std::cout << std::endl;
+	str = "HI THIS IS BRAIN 2";
+	std::cout << "New value pointed by stringREF: \t" << stringREF << std::endl;
+	stringREF = "HI THIS IS BRAIN 3";
+	std::cout << "New value of str variable: \t\t" << str << std::endl;
+#endif
 	return (0);
 }

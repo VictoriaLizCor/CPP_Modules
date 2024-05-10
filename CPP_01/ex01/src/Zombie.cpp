@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:21:05 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/07 17:35:07 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/10 14:44:54 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 
 int Zombie::_counter = 0;
 
+/**
+ * @brief Sets the color of a message string.
+ *
+ * This function sets the color of a message string using ANSI escape codes.
+ * If the message string is empty, it returns the color code only.
+ * If the color is greater than or equal to FDEFAULT, it adds "1;" to the format.
+ *
+ * @param msg The message string to colorize.
+ * @param color The color code to use.
+ * @return The colorized message string.
+ */
 static std::string	setColor(std::string msg, int color)
 {
 	std::ostringstream strColor;
@@ -31,6 +42,13 @@ static std::string	setColor(std::string msg, int color)
 	return (strColor.str());
 }
 
+/**
+ * @brief Concatenates a message with a color and returns the result.
+ * 
+ * @param msg The message to be concatenated.
+ * @param color The color to be added to the message.
+ * @return The concatenated string with the color.
+ */
 static std::string	getColor(std::string msg, std::string color)
 {
 	return (color + msg + C_DEFAULT);
@@ -51,6 +69,14 @@ static void	println(std::string str)
 }
 
 /******************************* CONSTRUCTORS ****************/
+/**
+ * @brief Constructs a Zombie object.
+ * 
+ * This constructor initializes a Zombie object by setting its name and color.
+ * The name is set to "WhiteWalker" followed by a counter value, and the color
+ * is set to an empty string with the FRED color code. The constructor also
+ * prints a message indicating that the Zombie has been created.
+ */
 Zombie::Zombie()
 {
 	std::ostringstream newName;
@@ -65,6 +91,19 @@ Zombie::Zombie()
 
 #if (DEBUG == 1)
 
+/**
+ * @brief Generates a formatted string representing an RGB color.
+ *
+ * This function takes three integer values representing the red, green, and
+ * blue components of an RGB color and returns a formatted string representing
+ * the color in ANSI escape code format.
+ *
+ * @param red The red component of the RGB color.
+ * @param green The green component of the RGB color.
+ * @param blue The blue component of the RGB color.
+ * @return A formatted string representing the RGB color in ANSI escape code
+ * format.
+ */
 static std::string	rColorRGB(int red, int green, int blue)
 {
 	std::ostringstream ss;
@@ -74,6 +113,14 @@ static std::string	rColorRGB(int red, int green, int blue)
 	return (ss.str());
 }
 
+
+/**
+ * Generates a random integer between the given minimum and maximum values.
+ *
+ * @param min The minimum value for the random number (inclusive).
+ * @param max The maximum value for the random number (inclusive).
+ * @return A random integer between the minimum and maximum values.
+ */
 static int ft_rand(int min, int max)
 {
 	if (min < 0 || min > 256|| max < 0 || max > 256)
@@ -100,6 +147,11 @@ std::string rColor(int bold)
 	return (strColor.str());
 }
 
+/**
+ * @brief Constructs a Zombie object with the given name.
+ * 
+ * @param name The name of the Zombie.
+ */
 Zombie::Zombie(std::string name): _name(name),_color(rColor(1))
 {
 	_counter++;
@@ -112,6 +164,17 @@ Zombie::Zombie(std::string name): _name(name),_color(rColor(1))
 
 #else
 
+/**
+ * @brief Generates a string representing a color in ANSI escape code format.
+ * 
+ * The generated color string is used for formatting text in the terminal. The
+ * color is determined by the redShade value, which is incremented by a fixed
+ * amount each time the function is called. The color can be made bold by
+ * setting the bold parameter to a non-zero value.
+ *
+ * @param bold A flag indicating whether the color should be bold or not.
+ * @return A string representing the color in ANSI escape code format.
+ */
 static std::string	rColor(int bold)
 {
 	std::ostringstream	redStr;
@@ -133,6 +196,11 @@ static std::string	rColor(int bold)
 	return (redStr.str());
 }
 
+/**
+ * @brief Constructs a Zombie object with the given name.
+ * 
+ * @param name The name of the Zombie.
+ */
 Zombie::Zombie(std::string name)
 {
 	_counter++;
@@ -143,6 +211,17 @@ Zombie::Zombie(std::string name)
 }
 #endif
 /*******************************************************/
+
+/**
+ * @brief Destructor for the Zombie class.
+ * 
+ * This destructor is responsible for destroying a Zombie object.
+ * It prints a message indicating the destruction of the Zombie,
+ * including its name and whether it was destroyed as "Unknown" or not.
+ * The message is printed in a colored format.
+ * 
+ * @return None.
+ */
 Zombie::~Zombie()
 {
 	std::string tab = ": \t";
@@ -157,6 +236,14 @@ Zombie::~Zombie()
 	return ;
 }
 
+/**
+ * @brief Sets the name of the Zombie.
+ * 
+ * This function sets the name of the Zombie object to the specified name.
+ * It also prints a message indicating that the Zombie has been renamed.
+ * 
+ * @param name The new name for the Zombie.
+ */
 void	Zombie::setName(std::string name)
 {
 	std::string tab = ": \t";
@@ -170,6 +257,13 @@ void	Zombie::setName(std::string name)
 	return ;
 }
 
+/**
+ * @brief Announces the zombie's name and emits a sound.
+ * 
+ * This function prints the zombie's name followed by a sound
+ * that represents the zombie's announcement.
+ * The sound emitted is "BraiiiiiiinnnzzzZ...".
+ */
 void	Zombie::announce(void)
 {
 	std::string tab = ": \t";
