@@ -13,8 +13,9 @@ alias plog='flog | awk "
 {
     gsub(/\[[^\]]+\]/, \"&\n\")
     gsub(/~[^~]*~/, \" \")
+    gsub(/#[0-9\- :]+/, \"\n\t\t\t\t\t&\")
     print
-}" | pygmentize -O style=material'
+}" | pygmentize -g -O style=material'
 alias ccut="cut -d'|' -f1"
 #| fold -w 80
 alias clog='flog | awk "
@@ -42,10 +43,21 @@ alias bs='open ~/.bashrc'
 alias sb='source ~/.bashrc'
 alias st='open ~/.config/terminator/config'
 
-#PS1='\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h:\[\033[1;35m\]\w\[\033[1;31m\]\$\[\033[0m\] '
-#PS1='\[\e[32m\][\[\e[m\]\[\e[31m\]\u\[\e[m\]\[\e[33m\]@\[\e[m\]\[\e[32m\]\h\[\e[m\]:\[\e[36m\]\W\[\e[m\]\[\e[32m\]]\[\e[m\]\[\e[32;47m\]\\$\[\e[m\] '
-
-PS1='\[\e[32m\][\[\e[m\]\[\e[1;32m\]\u\[\e[m\]\[\e[1;31m\]@\[\e[m\]\[\e[1;33m\]\h\[\e[m\]:\[\e[1;36m\]\w\[\e[m\]\[\e[32m\]]\[\e[m\]\[\e[32m\]\\$\[\e[m\] '
+PS1='\[\e[32m\]'       # start green color
+PS1+='['               # add [
+PS1+='\[\e[m\]'        # reset color
+PS1+='\[\e[1;32m\]\u'  # user name in bold green
+PS1+='\[\e[m\]'        # reset color
+PS1+='\[\e[1;31m\]@'   # @ in bold red
+PS1+='\[\e[m\]'        # reset color
+PS1+='\[\e[1;33m\]\h'  # host name in bold yellow
+PS1+='\[\e[m\]'        # reset color
+PS1+=':\[\e[1;36m\]\w' # current working directory in bold cyan
+PS1+='\[\e[m\]'        # reset color
+PS1+='\[\e[32m\]]'     # ] in green
+PS1+='\[\e[m\]'        # reset color
+PS1+='\[\e[32m\]\\$ '  # $ in green
+PS1+='\[\e[m\]'        # reset color
 #PS1="\e[0;31m[\u@\h \W]\$ \e[m"
 #source /Users/lilizarr/.docker/init-bash.sh || true # Added by Docker Desktop
 #export PATH=$HOME/.brew/bin:$PATH

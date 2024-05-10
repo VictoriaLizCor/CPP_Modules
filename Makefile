@@ -109,10 +109,10 @@ rgb:
 			done \
 		done \
 	done
-cpp:
-	@for file in includes/*.hpp; do \
-		touch src/$(basename "${file%.*}").cpp; \
-	done
+# cpp:
+# 	@for file in includes/*.hpp; do \
+# 		touch src/$$(basename "$${file%.*}").cpp; \
+# 	done
 # git reset --soft HEAD~1 undoes the last commit and leaves your
 # files and staging area in the state they were in prior to the commit. This is
 # useful if you made a commit prematurely and need to add more changes or modify
