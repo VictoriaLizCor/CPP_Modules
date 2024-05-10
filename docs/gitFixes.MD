@@ -56,6 +56,10 @@ git checkout master
 ```bash
 git merge branch-to-merge
 ```
+## Change merge default message
+```bash
+git merge --edit branch-to-merge
+```
 # Delete the merged branch locally
 ```bash
 git branch -d branch-to-merge
