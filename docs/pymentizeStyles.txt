@@ -17,3 +17,4 @@
 
 
 #pygmentize -L styles | grep '^\*' | pr -T -3 > docs/pymentizeStyles.txt
+setw -g mouse off

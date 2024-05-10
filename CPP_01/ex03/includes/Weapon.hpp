@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 14:35:51 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/08 16:25:09 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/10 13:55:10 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ class Weapon
 	public:
 		Weapon(std::string type):_type(type){};
 		~Weapon();
-		
+		const	std::string &getType();
+		void	setType(std::string type);
 };
 
 # endif

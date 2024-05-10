@@ -71,7 +71,7 @@ quick:cleanAll gAdd
 
 ghook:
 	@echo $(GREEN) && \
-	git commit -am "update in files: '$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
+	git commit -am "📝update in files: '$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
 	@echo $(YELLOW) && git push
 # commit correction git commit --amend
 # //avoid last commit message
