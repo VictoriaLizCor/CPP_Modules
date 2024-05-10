@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:22:17 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/10 14:50:18 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/10 15:56:26 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,10 @@ int	main(void)
 	return (0);
 }
 
-
+/**
+ * NOTE: Zombie::getName(Zombie &z) is a getter function that returns the name
+ * of a Zombie object. Using a static function like this can be a good way to
+ * get its value. However, it's more common to use non-static member functions
+ * (like getters) to access private members. It overrides encapsulation, but
+ * it's a common practice in C++.
+*/

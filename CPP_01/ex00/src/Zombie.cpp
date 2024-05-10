@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 11:21:05 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/10 14:49:52 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/10 15:39:06 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
  * @param z The Zombie object.
  * @return std::string The name of the Zombie object.
  */
-std::string Zombie::getName(Zombie &z){
+std::string Zombie::getName(const Zombie &z){
 	return (z._name);
 }
 
