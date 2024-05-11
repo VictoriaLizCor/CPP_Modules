@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 13:07:44 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/10 17:37:32 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/11 15:24:35 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,39 +49,47 @@ typedef enum eColor
 //  * @param color The color code to be applied to the message.
 //  * @return The colored message.
 //  */
-// static std::string	setColor(std::string msg, int color)
-// {
-// 	std::ostringstream strColor;
-// 	std::string	fmt;
+static std::string	setColor(std::string msg, int color, int err)
+{
+	std::ostringstream strColor;
+	std::string	fmt;
 
-// 	fmt = "\033[";
-// 	if (msg.empty())
-// 	{
-// 		strColor << fmt << color << "m";
-// 		return (strColor.str());
-// 	}
-// 	if (color >= FDEFAULT)
-// 		fmt = fmt + "1;";
-// 	strColor << fmt << color << "m" << msg << "\033[0m";
-// 	return (strColor.str());
-// }
+	fmt = "\033[";
+	if (color == DEFAULT)
+		return (msg);
+	if (err)
+		 msg = "Error: " + msg;
+	if (color >= FDEFAULT)
+		fmt = fmt + "1;";
+	strColor << fmt << color << "m" << msg << "\033[0m";
+	return (strColor.str());
+}
 
 int main(int ac, char **av)
 {
 	if (ac != 4)
 	{
-		std::cerr << "Usage: ./replace filename s1 s2\n";
+		std::cerr << setColor("Usage: ./replace filename s1 s2\n", FRED, 1);
 		return (1);
 	}
 	else if (std::string(av[2]).empty() || std::string(av[3]).empty())
 	{
-		std::cerr << "Error: s1 and s2 must not be empty.\n";
+		std::cerr << setColor("s1 and s2 must not be empty.\n", FRED, 1);
 		return (1);
 	}
 	else
 	{
-		Files files;
-		files.replaceInFile(av[1], av[2], av[3]);
+		//Creates a Files object
+		Files f1(av[1], std::ios::in);
+
+		//Reads from Files instances, creates another one 
+		// and writes to another file, adding ".replace" to the name
+		Files f2(f1, av[2], av[3]);
+
+		//Creates a Files object with the same name as f1
+		// Files f3(f1);
+		Files f4(av[1]);
+		f4.replaceInFile(av[2], av[3]);
 		return (0);
 	}
 }

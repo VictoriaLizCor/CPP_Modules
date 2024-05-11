@@ -10,6 +10,7 @@ PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir ${shell find $(PROJECT_ROOT) -name Makefile}))
 CURRENT		:= $(shell basename $$PWD)
+TEST_FILE	:= docs/funny
 #------ DEBUG ------#
 D			= 0
 #------ Sanitizer ------#
@@ -72,6 +73,7 @@ clean:
 	@if [ -d "$(DEBUG_DIR)" ]; then	\
 		rm -rf $(DEBUG_DIR); 		\
 	fi
+#	rm *.replace*
 	@printf  "\n$(P_NC)"
 
 fclean: clean
@@ -88,10 +90,23 @@ re: fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
-test:$(NAME)
-	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
-	@./$(NAME)
-	@echo "\n"
+cpy:
+	@cp $(TEST_FILE) $(TEST_FILE)Cpy
+	@echo $(YELLOW) "Copied $(TEST_FILE) to $(TEST_FILE)Cpy" $(E_NC)
+#make test arg="funnyCpy Ron Harry"
+test:$(NAME) cpy
+
+	@echo $(BOLD) $(CYAN) ./$(NAME) $(arg) $(E_NC) "\n"
+	@./$(NAME) $(arg)
+	@pygmentize -g -O style=material $(word 1, $(arg)) ; echo
+	@pygmentize -g  -O style=friendly  $(word 1, $(arg)).replace ;echo
+	@pygmentize -g  -O style=monokai  $(word 1, $(arg)).replace2 ;echo
+	@diff $(word 1, $(arg)) $(word 1, $(arg)).replace || true ;echo
+	@diff $(word 1, $(arg)) $(word 1, $(arg)).replace2 || true ;echo
+	@ls -la --color=auto
+	@rm *.replace*
+	@ls -la --color=auto
+	@echo
 ############# USE WITH S=0
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)  "\n"
