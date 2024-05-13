@@ -10,7 +10,8 @@ PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir ${shell find $(PROJECT_ROOT) -name Makefile}))
 CURRENT		:= $(shell basename $$PWD)
-TEST_FILE	:= docs/funny
+TEST_FILE	:= docs/test.txt
+TEST_STRING	:= replace change
 #------ DEBUG ------#
 D			= 0
 #------ Sanitizer ------#
@@ -90,22 +91,38 @@ re: fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
-cpy:
-	@cp $(TEST_FILE) $(TEST_FILE)Cpy
-	@echo $(YELLOW) "Copied $(TEST_FILE) to $(TEST_FILE)Cpy" $(E_NC)
-#make test arg="funnyCpy Ron Harry"
-test:$(NAME) cpy
 
-	@echo $(BOLD) $(CYAN) ./$(NAME) $(arg) $(E_NC) "\n"
-	@./$(NAME) $(arg)
-	@pygmentize -g -O style=material $(word 1, $(arg)) ; echo
-	@pygmentize -g  -O style=friendly  $(word 1, $(arg)).replace ;echo
-	@pygmentize -g  -O style=monokai  $(word 1, $(arg)).replace2 ;echo
-	@diff $(word 1, $(arg)) $(word 1, $(arg)).replace || true ;echo
-	@diff $(word 1, $(arg)) $(word 1, $(arg)).replace2 || true ;echo
-	@ls -la --color=auto
-	@rm *.replace*
-	@ls -la --color=auto
+cpy:
+	cp $(files)
+	@echo $(YELLOW) "Copied $(word 1, $(files)) to $(word 2, $(files))" $(E_NC);
+check_file:
+	@if [ -f "$(TEST_FILE)" ]; then	\
+		FILE_NAME=$(notdir $(basename $(TEST_FILE))); \
+		EXTENSION=$(suffix $(TEST_FILE)); \
+		$(MAKE) cpy files="$(TEST_FILE) $$FILE_NAME'Cpy'$$EXTENSION"; \
+	else	\
+		echo $(RED) "$(TEST_FILE) does not exist" $(E_NC);	\
+	fi
+
+harry:
+	$(MAKE) test arg="docs/funny Ron Harry"
+# make test arg="docs/funny Ron Harry"
+test:$(NAME)
+	$(eval TEST_ARGS = $(if $(arg), $(arg),$(TEST_FILE) $(TEST_STRING)))
+#	$(MAKE) check_file TEST_FILE=$(word 1, $(TEST_ARGS))
+	@echo $(BOLD) $(CYAN) ./$(NAME) $(TEST_ARGS) $(E_NC) "\n"
+	@echo $(word 1, $(TEST_ARGS))
+	@./$(NAME)  $(TEST_ARGS)
+	@pygmentize -g -O style=material $(word 1, $(TEST_ARGS)) ; echo
+	@pygmentize -g -O style=friendly $(word 1, $(TEST_ARGS)).replace ;echo
+	diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace || true ;echo
+	@if [ -z "$(word 1, $(TEST_ARGS)).replace2" ]; then \
+		pygmentize -g -O style=monokai  $(word 1, $(TEST_ARGS)).replace2 ;echo ;\
+		diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace2 || true ;echo ;\
+	fi
+	@ls -la --color=auto docs/
+#	@rm docs/*.replace*
+	@ls -la --color=auto docs/
 	@echo
 ############# USE WITH S=0
 leaks: $(NAME)

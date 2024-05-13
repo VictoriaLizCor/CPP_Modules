@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:09:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/11 15:29:45 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/13 16:52:07 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,30 @@
 # include <sstream>
 # include <string>
 
+typedef enum eColor
+{
+	DEFAULT			= 0,
+	FLBLACK			= 30,
+	FLRED			= 31,
+	FLGREEN			= 32,
+	FLYELLOW		= 33,
+	FLBLUE			= 34,
+	FLMAGENTA		= 35,
+	FLCYAN			= 36,
+	FLGRAY			= 37,
+	FLRGB			= 38, //\033[38;2;r;g;bm (rgb:from 0 to 255).
+	FDEFAULT		= 39,
+	FDARKGRAY		= 90,
+	FRED			= 91,
+	FGREEN			= 92,
+	FYELLOW			= 93,
+	FBLUE			= 94,
+	FMAGENTA		= 95,
+	FCYAN			= 96,
+	FWHITE			= 97,
+	COLOR_COUNT	 	= 27,
+} t_color;
+
 class Files
 {
 	private:
@@ -32,6 +56,7 @@ class Files
 		Files(const Files& file);
 		Files(Files& file, const char* s1, const char* s2);
 		~Files();
+		static std::string setColor(std::string msg, int color, int err);
 		bool fileExists();
 		void openFile(std::ios_base::openmode mode);
 		void closeFile();

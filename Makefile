@@ -85,7 +85,7 @@ soft:
 	esac
 amend:
 	@git commit --amend
-	@git push origin $(shell git branch --show-current) --force-with-lease
+	@git push origin --force-with-lease $(shell git branch --show-current)
 template:
 	@git config --local commit.template .settings/.gitmessage
 pre-commit:
