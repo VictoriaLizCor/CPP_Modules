@@ -93,14 +93,15 @@ re: fclean all
 #------------- TEST UTILS -----------------------------------#
 
 cpy:
-	@cp $(files); wait; \
-	echo $(YELLOW) "Copied $(word 1, $(files)) to $(word 2, $(files))" $(E_NC);
+	@cp $(files)
+	@echo $(YELLOW) "Copied $(word 1, $(files)) to $(word 2, $(files))" $(E_NC);
 checkCpyFile:
 	@if [ -f "$(TEST_FILE)" ]; then	\
 		FILE_NAME=$(notdir $(basename $(TEST_FILE))); \
 		EXTENSION=$(suffix $(TEST_FILE)); \
 		CPY=Cpy; \
-		make cpy files="$(TEST_FILE) $$FILE_NAME$$CPY$$EXTENSION"; wait; \
+		$(MAKE) cpy files="$(TEST_FILE) $$FILE_NAME$$CPY$$EXTENSION"; \
+		$(eval CPY=$(shell find . -name "*$(notdir $(TEST_FILE))Cpy*"))\
 	else	\
 		echo $(RED) "$(TEST_FILE) does not exist" $(E_NC);	\
 	fi
@@ -112,29 +113,36 @@ delete:
 		find . -name "*.replace*" -type f -exec rm -f {} \;; \
 	fi
 harry:
-	@$(MAKE) delete arg=*Cpy*
+#	$(MAKE) delete arg=*Cpy*
 	$(eval TEST_FILE=docs/funny)
-	@make checkCpyFile TEST_FILE=$(TEST_FILE);wait; \
-	$(eval CPY= $(shell find . -name "*$(notdir $(TEST_FILE))Cpy*"))
-	make test arg="$(CPY) Ron Harry"
-	@make delete arg=*Cpy*
+	$(MAKE) checkCpyFile TEST_FILE=$(TEST_FILE);
+#	$(eval CPY=$(shell find . -name "*$(notdir $(TEST_FILE))Cpy*"))
+	$(MAKE) test arg="$(CPY) Ron Harry";
+	$(MAKE) delete arg=*Cpy*
+# @if [ ! -z "$(CPY)" ]; then \
+# 	$(MAKE) test arg="$(CPY) Ron Harry";\
+# else \
+# 	CPY=$(shell find . -name "*$(notdir $(TEST_FILE))Cpy*"); \
+# 	$(MAKE) test arg="$$CPY Ron Harry"; \
+# fi
+#	$(MAKE) delete arg=*Cpy*
 test:$(NAME)
 	$(eval TEST_ARGS = $(if $(arg), $(arg),$(TEST_FILE) $(TEST_STRING)))
 #	$(MAKE) check_file TEST_FILE=$(word 1, $(TEST_ARGS))
 	@echo $(BOLD) $(CYAN) ./$(NAME) $(TEST_ARGS) $(E_NC) "\n"
-	@echo $(word 1, $(TEST_ARGS))
-	@./$(NAME)  $(TEST_ARGS)
-	@pygmentize -g -O style=material $(word 1, $(TEST_ARGS)) ; echo
-	@pygmentize -g -O style=friendly $(word 1, $(TEST_ARGS)).replace ;echo
-	diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace || true ;echo
-	@if [ -z "$(word 1, $(TEST_ARGS)).replace2" ]; then \
-		pygmentize -g -O style=monokai  $(word 1, $(TEST_ARGS)).replace2 ;echo ;\
-		diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace2 || true ;echo ;\
-	fi
-	@ls -R --color=auto
-	$(MAKE) delete
-	@ls -R --color=auto
-	@echo
+# @./$(NAME)  $(TEST_ARGS)
+# @pygmentize -g -O style=material $(word 1, $(TEST_ARGS)) ; echo
+# @pygmentize -g -O style=friendly $(word 1, $(TEST_ARGS)).replace ;echo
+# diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace || true ;echo
+# @if [ -z "$(word 1, $(TEST_ARGS)).replace2" ]; then \
+# 	pygmentize -g -O style=monokai  $(word 1, $(TEST_ARGS)).replace2 ;echo ;\
+# 	diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace2 || true ;echo ;\
+# fi
+# @ls -R --color=auto
+# $(MAKE) delete
+#	@make delete arg=*Cpy*
+# @ls -R --color=auto
+# @echo
 ############# USE WITH S=0
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)  "\n"
