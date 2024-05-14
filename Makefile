@@ -69,7 +69,7 @@ plog:
 # 	@rm msg_template
 # 	$(MAKE) gPush
 
-quick:
+quick: cleanAll
 	@echo $(GREEN) && \
 	git commit -am "📝 update in files: '$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
 	@echo $(YELLOW) && git push
