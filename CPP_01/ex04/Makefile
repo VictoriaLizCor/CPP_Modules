@@ -93,20 +93,31 @@ re: fclean all
 #------------- TEST UTILS -----------------------------------#
 
 cpy:
-	cp $(files)
-	@echo $(YELLOW) "Copied $(word 1, $(files)) to $(word 2, $(files))" $(E_NC);
-check_file:
+	@cp $(files); wait; \
+	echo $(YELLOW) "Copied $(word 1, $(files)) to $(word 2, $(files))" $(E_NC);
+checkCpyFile:
 	@if [ -f "$(TEST_FILE)" ]; then	\
 		FILE_NAME=$(notdir $(basename $(TEST_FILE))); \
 		EXTENSION=$(suffix $(TEST_FILE)); \
-		$(MAKE) cpy files="$(TEST_FILE) $$FILE_NAME'Cpy'$$EXTENSION"; \
+		CPY=Cpy; \
+		make cpy files="$(TEST_FILE) $$FILE_NAME$$CPY$$EXTENSION"; wait; \
 	else	\
 		echo $(RED) "$(TEST_FILE) does not exist" $(E_NC);	\
 	fi
-
+#make delete arg=*Cpy*
+delete:
+	@if [ ! -z "$(arg)" ]; then \
+		find . -name "$(arg)" -type f -exec rm -f {} \;; \
+	else \
+		find . -name "*.replace*" -type f -exec rm -f {} \;; \
+	fi
 harry:
-	$(MAKE) test arg="docs/funny Ron Harry"
-# make test arg="docs/funny Ron Harry"
+	@$(MAKE) delete arg=*Cpy*
+	$(eval TEST_FILE=docs/funny)
+	@make checkCpyFile TEST_FILE=$(TEST_FILE);wait; \
+	$(eval CPY= $(shell find . -name "*$(notdir $(TEST_FILE))Cpy*"))
+	make test arg="$(CPY) Ron Harry"
+	@make delete arg=*Cpy*
 test:$(NAME)
 	$(eval TEST_ARGS = $(if $(arg), $(arg),$(TEST_FILE) $(TEST_STRING)))
 #	$(MAKE) check_file TEST_FILE=$(word 1, $(TEST_ARGS))
@@ -120,9 +131,9 @@ test:$(NAME)
 		pygmentize -g -O style=monokai  $(word 1, $(TEST_ARGS)).replace2 ;echo ;\
 		diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace2 || true ;echo ;\
 	fi
-	@ls -la --color=auto docs/
-#	@rm docs/*.replace*
-	@ls -la --color=auto docs/
+	@ls -R --color=auto
+	$(MAKE) delete
+	@ls -R --color=auto
 	@echo
 ############# USE WITH S=0
 leaks: $(NAME)
