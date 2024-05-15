@@ -19,7 +19,7 @@ S			= 0
 #------ DEBUG UTILS ------#
 CC			:= c++
 MAKEFLAGS	+= --no-print-directory
-VALGRIND	:= valgrind -s --leak-check=yes --show-leak-kinds=all
+VALGRIND	:= valgrind -s --leak-check=yes --SHOW-leak-kinds=all
 HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
 BUILD_DIR	:= .build/
@@ -27,7 +27,7 @@ DEBUG_DIR	:= $(NAME).dSYM
 
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
-CC			= g++
+CC			= g++ -g
 D_FLAGS		+= -DDEBUG=$(D)
 endif
 ifeq ($(S), 0)
@@ -74,7 +74,8 @@ clean:
 	@if [ -d "$(DEBUG_DIR)" ]; then	\
 		rm -rf $(DEBUG_DIR); 		\
 	fi
-#	rm *.replace*
+	@$(MAKE) delete to_remove=*Cpy*;echo
+	@$(MAKE) delete;echo
 	@printf  "\n$(P_NC)"
 
 fclean: clean
@@ -91,7 +92,9 @@ re: fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
-
+t:harry
+	./$(NAME) funnyCpy Ron Harry
+	@$(MAKE) diff
 checkCpyFile:
 	@if [ -f "$(TEST_FILE)" ]; then	\
 		FILE_NAME=$(notdir $(basename $(TEST_FILE))); \
@@ -99,7 +102,7 @@ checkCpyFile:
 		APPEND=Cpy; \
 		NEW=$$FILE_NAME$$APPEND$$EXTENSION; \
 		cp $(TEST_FILE) $$NEW;	\
-		if [ -f $${NEW} ] && [ -z "$(show)" ] && [ "$(show)" = "true" ]; then \
+		if [ -f $${NEW} ] && [ ! -z "$(SHOW)" ] || [ "$(SHOW)" = "false" ]; then \
 			echo $(YELLOW) "Copied $(TEST_FILE) to $$NEW" $(E_NC);	\
 		else \
 			echo $$NEW; \
@@ -110,29 +113,52 @@ checkCpyFile:
 
 delete:
 	@if [ ! -z "$(to_remove)" ]; then \
-		find . -name "$(to_remove)"  ! -name "*.replace*" -type f -exec rm -f {} \;; \
+		find . -name "$(to_remove)" ! -name "*.replace*" -type f -exec rm -f {} \;; \
 	else \
 		find . -name "*.replace*" -type f -exec rm -f {} \;; \
 	fi
 harry:re
-	@$(MAKE) delete to_remove=*Cpy*
+# @$(MAKE) delete to_remove=*Cpy*
 	$(eval TO_COPY=docs/funny)
-	@$(MAKE) checkCpyFile TEST_FILE=$(TO_COPY)
+	@$(MAKE) checkCpyFile TEST_FILE=$(TO_COPY) SHOW=true
+#	@sleep 1
+#	@$(MAKE) runTest arg='Harry Ron'
+# @$(MAKE) runTest > /dev/null; \
+# if [ $$? -ne 0 ]; then \
+# 	echo $(RED) "Command runTest failed" $(E_NC); \
+# else \
+# 	echo $(GREEN) "Command runTest successful" $(E_NC); \
+# fi
+file: clean
+	$(eval TO_COPY=docs/test.txt)
+	@$(MAKE) checkCpyFile TEST_FILE=$(TO_COPY) SHOW=true
 	@sleep 1
-	@$(MAKE) runTest > /dev/null; \
-	if [ $$? -ne 0 ]; then \
-		echo $(RED) "Command failed" $(E_NC); \
-	else \
-		echo $(GREEN) "Command successful" $(E_NC); \
-	fi
+	@$(MAKE) runTest arg='$(TEST_STRING)'
+# @$(MAKE) runTest > /dev/null | cat; \
+# if [ $$? -ne 0 ]; then \
+# 	echo $(RED) "Command runTest failed" $(E_NC); \
+# else \
+# 	echo $(GREEN) "Command runTest successful" $(E_NC); \
+# fi
 runTest:
-	$(eval TMP = $(shell find . -name "*$(notdir $(TO_COPY))Cpy*"))
-	$(MAKE) test arg="$(TMP) Ron Harry"
-test:$(NAME)
+	$(eval TMP = $(shell find . -name "*$(notdir $(TO_COPY))Cpy*" ! -name "*.replace*"))
+	@echo $(TMP)
+	$(MAKE) test arg="$(TMP) $(arg)"
+test:re
 	$(eval TEST_ARGS = $(if $(arg), $(arg),$(shell $(MAKE) checkCpyFile) $(TEST_STRING)))
+ifeq ($(D), 2)
+	@echo $(BOLD) $(CYAN) Run in gdbgui dashboard:"\n" ./$(NAME) $(TEST_ARGS) $(E_NC) "\n"
+	@gdbgui ./$(NAME)
+else
+ifeq ($(D), 1)
 	@echo $(BOLD) $(CYAN) ./$(NAME) $(TEST_ARGS) $(E_NC) "\n"
 	@./$(NAME) $(TEST_ARGS)
-	@grep --color $(word 2, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)) && echo
+else
+	@echo $(BOLD) $(CYAN) ./$(NAME) $(TEST_ARGS) $(E_NC) "\n"
+	@./$(NAME) $(TEST_ARGS)
+endif
+endif
+	grep --color $(word 2, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)) && echo
 	@if [ -f "$(word 1, $(TEST_ARGS)).replace" ]; then \
 		grep --color $(word 3, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace && echo ; \
 		echo $(BLUE) DIFF $(E_NC); \
@@ -156,18 +182,12 @@ val: $(NAME)
 	@$(VALGRIND) ./$(NAME)
 	@echo "\n"
 ## Diff with intra
-diff:$(NAME)
-	@./$(NAME) > docs/test.log
-	@sed 's/\[[^]]*\]//g' docs/test.log > docs/temp1.log
-	@sed 's/\[[^]]*\]//g' docs/intra.log > docs/temp2.log
-	@diff docs/temp1.log docs/temp2.log > /dev/null && echo $(GREEN)"Same output"$(E_NC) || echo $(RED)"different output"$(E_NC)
-	@read -p "Remove files? (y/n) " yn; \
-	case $$yn in \
-		[Yy]* ) rm docs/temp1.log docs/temp2.log docs/test.log;; \
-		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
-	esac
-
-
+diff:
+	$(eval CPY= $(shell find . -name "*Cpy*" ! -name "*.replace*"))
+	$(eval REPLACE= $(shell find . -name "*.replace*"))
+	@if [ ! -s $(REPLACE) ]; then echo;echo "$(REPLACE) is empty"; fi
+	@echo $(YELLOW) "Diffing $(CPY) with $(REPLACE)" $(E_NC)
+	diff $(CPY) $(REPLACE) || true
 # #-------------------- GIT UTILS ----------------------------#
 dirs:
 	@echo $(DIRS)
@@ -190,7 +210,7 @@ gPush:
 	@echo $(YELLOW) && git push > /dev/null || \
 	if [ $$? -ne 0 ]; then \
 		echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
-		git push --set-upstream origin $(shell git branch --show-current); \
+		git push --set-upstream origin $(shell git branch --SHOW-current); \
 	fi
 
 git:
@@ -217,6 +237,8 @@ cpp:
 	@for file in includes/*.hpp; do \
 		touch src/$$(basename "$${file%.*}").cpp; \
 	done
+gdbgui:
+	@pip install gdbgui
 #--------------------COLORS----------------------------#
 # For print
 CL_BOLD = \e[1m

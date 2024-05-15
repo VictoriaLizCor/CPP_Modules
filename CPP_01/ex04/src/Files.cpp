@@ -1,6 +1,7 @@
 
 #include "Files.hpp"
 
+bool _status = 0;
 /**
  * @brief Sets the color of a message.
  *
@@ -61,6 +62,7 @@ Files::Files(const char* fileName, std::ios_base::openmode mode): _file(fileName
  */
 Files::Files(const char* fileName): _file(), _fileName(fileName)
 {
+	openFile(std::ios::in | std::ios::out);
 	return ;
 }
 
@@ -69,7 +71,7 @@ Files::Files(const char* fileName): _file(), _fileName(fileName)
  * 
  * @param file The Files object to be copied.
  */
-Files::Files(const Files &file): _file(), _fileName(file._fileName + ".replace")
+Files::Files(const Files &file): _file(), _fileName(file._fileName)
 {
 	return ;
 }
@@ -83,8 +85,9 @@ Files::Files(const Files &file): _file(), _fileName(file._fileName + ".replace")
  * @param s1 The first string to search for in the file.
  * @param s2 The second string to replace `s1` with in the file.
  */
-Files::Files(Files& file, const char* s1, const char* s2): _file(), _fileName(file._fileName + ".replace")
+Files::Files(Files& file, const char* s1, const char* s2)
 {
+	_fileName = file._fileName + ".replace";
 	openFile(std::ios::out);
 	replaceInFile(file, s1, s2);
 	return ;
@@ -111,7 +114,16 @@ Files::~Files()
 void Files::closeFile()
 {
 	if (_file.is_open())
+	{
+		if (_status == 1)
+		{
+			std::cout << setColor(_fileName + " successfully written.\n", FGREEN, 0);
+		}
+		else
+			std::cout << setColor("File not written.\n", FRED, 1);
+		_status = 0;
 		_file.close();
+	}
 }
 
 /**
@@ -124,7 +136,9 @@ void Files::closeFile()
 void Files::openFile(std::ios_base::openmode mode)
 {
 	closeFile();
+	std::cout << setColor("Opening file " + _fileName + "\n", FBLUE, 0);
 	_file.open(_fileName.c_str(), mode);
+	_fileMode = mode;
 	fileExists();
 }
 
@@ -136,8 +150,12 @@ void Files::openFile(std::ios_base::openmode mode)
 bool Files::fileExists()
 {
 	if (!_file.is_open())
-		std::cout << setColor("Failed to open the file.\n", FRED, 1);
-	return (1);
+	{
+		std::stringstream ss;
+		ss << setColor("Failed to open the file " + _fileName, FRED, 1);
+		std::cerr << ss.str() << std::endl;
+	}
+	return (0);
 }
 
 /**
@@ -167,6 +185,7 @@ void Files::replaceInFile(Files& in, const std::string &s1, const std::string &s
 		}
 		_file << line << '\n';
 	}
+	_status = 1;
 	closeFile();
 }
 
@@ -187,7 +206,6 @@ void Files::replaceInFile(const std::string &s1, const std::string &s2)
 	std::string			line;
 	std::stringstream	buffer;
 	
-	openFile(std::ios::in);
 	_file.clear();
 	_file.seekg(0);
 	while (std::getline(_file, line))
@@ -200,10 +218,13 @@ void Files::replaceInFile(const std::string &s1, const std::string &s2)
 		}
 		buffer << line << '\n';
 	}
-	closeFile();
-	_fileName.append(".replace2");
-	openFile(std::ios::out | std::ios::trunc);
+	// closeFile();
+	// _fileName.append(".replace2");
+	_file.clear();
+	_file.seekg(0);
+	std::cerr << buffer.str();
 	_file << buffer.str();
+	_status = 1;
 }
 
 /**
@@ -226,8 +247,6 @@ void Files::copyFile(Files& in)
 // std::ofstream ofs("file.txt");
 // std::streambuf* original_cout_buffer = std::cout.rdbuf();  // save original buffer
 // std::cout.rdbuf(ofs.rdbuf());  // redirect cout to file.txt
-
 // std::cout << "This will be written to file.txt";
-
 // std::cout.rdbuf(original_cout_buffer);  // restore original buffer
 

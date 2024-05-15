@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:09:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/13 16:52:07 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/15 15:33:21 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,10 @@ typedef enum eColor
 class Files
 {
 	private:
-		std::fstream	_file;
-		std::string		_fileName;
+		std::fstream			_file;
+		std::string				_fileName;
+		std::ios_base::openmode _fileMode;
+		bool					_status;
 	public:
 		Files();
 		Files(const char* fileName, std::ios_base::openmode mode);
