@@ -92,57 +92,59 @@ re: fclean all
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
 
-cpy:
-	@cp $(files)
-	@echo $(YELLOW) "Copied $(word 1, $(files)) to $(word 2, $(files))" $(E_NC);
 checkCpyFile:
 	@if [ -f "$(TEST_FILE)" ]; then	\
 		FILE_NAME=$(notdir $(basename $(TEST_FILE))); \
 		EXTENSION=$(suffix $(TEST_FILE)); \
-		CPY=Cpy; \
-		$(MAKE) cpy files="$(TEST_FILE) $$FILE_NAME$$CPY$$EXTENSION"; \
-		$(eval CPY=$(shell find . -name "*$(notdir $(TEST_FILE))Cpy*"))\
+		APPEND=Cpy; \
+		NEW=$$FILE_NAME$$APPEND$$EXTENSION; \
+		cp $(TEST_FILE) $$NEW;	\
+		if [ -f $${NEW} ] && [ -z "$(show)" ] && [ "$(show)" = "true" ]; then \
+			echo $(YELLOW) "Copied $(TEST_FILE) to $$NEW" $(E_NC);	\
+		else \
+			echo $$NEW; \
+		fi \
 	else	\
 		echo $(RED) "$(TEST_FILE) does not exist" $(E_NC);	\
 	fi
-#make delete arg=*Cpy*
+
 delete:
-	@if [ ! -z "$(arg)" ]; then \
-		find . -name "$(arg)" -type f -exec rm -f {} \;; \
+	@if [ ! -z "$(to_remove)" ]; then \
+		find . -name "$(to_remove)"  ! -name "*.replace*" -type f -exec rm -f {} \;; \
 	else \
 		find . -name "*.replace*" -type f -exec rm -f {} \;; \
 	fi
-harry:
-#	$(MAKE) delete arg=*Cpy*
-	$(eval TEST_FILE=docs/funny)
-	$(MAKE) checkCpyFile TEST_FILE=$(TEST_FILE);
-#	$(eval CPY=$(shell find . -name "*$(notdir $(TEST_FILE))Cpy*"))
-	$(MAKE) test arg="$(CPY) Ron Harry";
-	$(MAKE) delete arg=*Cpy*
-# @if [ ! -z "$(CPY)" ]; then \
-# 	$(MAKE) test arg="$(CPY) Ron Harry";\
-# else \
-# 	CPY=$(shell find . -name "*$(notdir $(TEST_FILE))Cpy*"); \
-# 	$(MAKE) test arg="$$CPY Ron Harry"; \
-# fi
-#	$(MAKE) delete arg=*Cpy*
+harry:re
+	@$(MAKE) delete to_remove=*Cpy*
+	$(eval TO_COPY=docs/funny)
+	@$(MAKE) checkCpyFile TEST_FILE=$(TO_COPY)
+	@sleep 1
+	@$(MAKE) runTest > /dev/null; \
+	if [ $$? -ne 0 ]; then \
+		echo $(RED) "Command failed" $(E_NC); \
+	else \
+		echo $(GREEN) "Command successful" $(E_NC); \
+	fi
+runTest:
+	$(eval TMP = $(shell find . -name "*$(notdir $(TO_COPY))Cpy*"))
+	$(MAKE) test arg="$(TMP) Ron Harry"
 test:$(NAME)
-	$(eval TEST_ARGS = $(if $(arg), $(arg),$(TEST_FILE) $(TEST_STRING)))
-#	$(MAKE) check_file TEST_FILE=$(word 1, $(TEST_ARGS))
+	$(eval TEST_ARGS = $(if $(arg), $(arg),$(shell $(MAKE) checkCpyFile) $(TEST_STRING)))
 	@echo $(BOLD) $(CYAN) ./$(NAME) $(TEST_ARGS) $(E_NC) "\n"
-# @./$(NAME)  $(TEST_ARGS)
-# @pygmentize -g -O style=material $(word 1, $(TEST_ARGS)) ; echo
-# @pygmentize -g -O style=friendly $(word 1, $(TEST_ARGS)).replace ;echo
-# diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace || true ;echo
-# @if [ -z "$(word 1, $(TEST_ARGS)).replace2" ]; then \
-# 	pygmentize -g -O style=monokai  $(word 1, $(TEST_ARGS)).replace2 ;echo ;\
-# 	diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace2 || true ;echo ;\
-# fi
-# @ls -R --color=auto
-# $(MAKE) delete
-#	@make delete arg=*Cpy*
-# @ls -R --color=auto
-# @echo
+	@./$(NAME) $(TEST_ARGS)
+	@grep --color $(word 2, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)) && echo
+	@if [ -f "$(word 1, $(TEST_ARGS)).replace" ]; then \
+		grep --color $(word 3, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace && echo ; \
+		echo $(BLUE) DIFF $(E_NC); \
+		diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace || true && echo ; \
+	fi
+	@if [ -f "$(word 1, $(TEST_ARGS)).replace2" ]; then \
+		grep --color $(word 3, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace2 && echo  ; \
+		diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace2 || true ;echo ;\
+	fi
+	@$(MAKE) delete to_remove=*Cpy* ;echo
+#	@ls --color=auto
+#pygmentize -g -O style=friendly $(word 1, $(TEST_ARGS)).replace && echo; \
 ############# USE WITH S=0
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)  "\n"
