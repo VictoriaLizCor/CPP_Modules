@@ -89,7 +89,6 @@ Files::Files(Files& file, const char* s1, const char* s2)
 {
 	_fileName = file._fileName + ".replace1";
 	openFile(std::ios::out);
-	std::cout << file._fileName << " " << file._file.fail() << std::endl;
 	replaceInFile(file, s1, s2);
 	return ;
 }
@@ -104,7 +103,6 @@ Files::Files(Files& file, const char* s1, const char* s2)
 Files::~Files()
 {
 	closeFile();
-	std:: cout << _fileName <<" Destructor called" << std::endl;
 }
 
 /**
@@ -118,7 +116,6 @@ void Files::openFile(std::ios_base::openmode mode)
 {
 	_fileMode = mode;
 	closeFile();
-	std::cout << "Opening file " << _fileName << std::endl;
 	_file.open(_fileName.c_str(), mode);
 	fileExists();
 }
@@ -133,9 +130,10 @@ void Files::closeFile()
 {
 	if (this->_file.is_open())
 	{
-		// _file.clear();
+		checkStreamErrors(*this);
+		_file.clear();
 		this->_file.close();
-		if (this->_file.fail())
+		if (!this->_file.good())
 			std::cout << setColor("Failed to close the file " + this->_fileName, FRED, 1) << std::endl;
 		else
 			std::cout << setColor("File " + this->_fileName + " closed successfully.", FDEFAULT, 0) << std::endl;
@@ -144,12 +142,18 @@ void Files::closeFile()
 
 void Files::checkStreamErrors(Files& file)
 {
+	if (DEBUG == 0)
+		return ;
+	if (!file._file.good())
+		std::cout << "-----------" << std::endl;
 	if (file._file.fail())
 		std::cerr << "A non-critical I/O error has occurred in " << file._fileName << std::endl;
 	if (file._file.bad())
 		std::cerr << "A critical I/O error has occurred in " << file._fileName << std::endl;
 	if (file._file.eof())
 		std::cerr << "End of file has been reached in " << file._fileName << std::endl;
+	if (!file._file.good())
+		std::cout << "-----------" << std::endl;
 }
 
 /**
@@ -168,8 +172,9 @@ void Files::replaceInFile(Files& in, const std::string &s1, const std::string &s
 {
 	std::string line;
 
-	while (std::getline(in._file, line))
+	while (in._file.peek() != std::fstream::traits_type::eof())
 	{
+		std::getline(in._file, line);
 		size_t pos = 0;
 		while ((pos = line.find(s1, pos)) != std::string::npos)
 		{
@@ -178,9 +183,7 @@ void Files::replaceInFile(Files& in, const std::string &s1, const std::string &s
 		}
 		_file << line << '\n';
 	}
-	checkStreamErrors(in);
-	checkStreamErrors(*this);
-	// in.closeFile();
+	in.closeFile();
 	// closeFile();
 }
 
@@ -203,8 +206,9 @@ void Files::replaceInFile(const std::string& s1, const std::string& s2)
 	
 	_file.clear();
 	_file.seekg(0);
-	while (std::getline(_file, line))
+	while (_file.peek() != std::fstream::traits_type::eof())
 	{
+		std::getline(_file, line);
 		size_t pos = 0;
 		while ((pos = line.find(s1, pos)) != std::string::npos)
 		{
@@ -214,7 +218,6 @@ void Files::replaceInFile(const std::string& s1, const std::string& s2)
 		buffer << line << '\n';
 	}
 	closeFile();
-	std:: cout << "first close" << std::endl;
 	// _fileName.append(".replace2");
 	// openFile(_fileMode);
 	// // _file.clear();
@@ -269,7 +272,6 @@ bool Files::fileExists()
 			std::cout << setColor(_fileName + " file open to APPEND at the END.\n", FYELLOW, 0);
 		else if (_fileMode & std::ios::binary)
 			std::cout << setColor(_fileName + " file open in BINARY mode.\n", FYELLOW, 0);
-		std::cout << _fileName << " file exist " << _file.fail() << std::endl;
 	}
 	return (0);
 }

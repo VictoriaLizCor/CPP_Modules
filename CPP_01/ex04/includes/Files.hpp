@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:09:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/16 15:48:12 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/16 16:32:34 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include <sstream>
 # include <string>
 
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
 typedef enum eColor
 {
 	DEFAULT			= 0,
