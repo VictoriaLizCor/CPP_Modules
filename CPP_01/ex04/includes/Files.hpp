@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:09:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/16 10:42:15 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/16 15:48:12 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ class Files
 		std::fstream			_file;
 		std::string				_fileName;
 		std::ios_base::openmode _fileMode;
-		bool					_status;
 	public:
 		Files();
 		Files(const char* fileName, std::ios_base::openmode mode);
@@ -66,6 +65,7 @@ class Files
 		void copyFile(Files& in);
 		void replaceInFile(Files& in, const std::string &s1, const std::string &s2);
 		void replaceInFile(const std::string &s1, const std::string &s2);
+		void checkStreamErrors(Files& file);
 };
 
 # endif

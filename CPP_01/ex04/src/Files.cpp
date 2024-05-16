@@ -1,7 +1,7 @@
 
 #include "Files.hpp"
 
-bool _status = 0;
+
 /**
  * @brief Sets the color of a message.
  *
@@ -52,7 +52,6 @@ Files::Files(const char* fileName, std::ios_base::openmode mode): _file(fileName
 {
 	_fileMode = mode;
 	fileExists();
-	return ;
 }
 
 
@@ -90,6 +89,7 @@ Files::Files(Files& file, const char* s1, const char* s2)
 {
 	_fileName = file._fileName + ".replace1";
 	openFile(std::ios::out);
+	std::cout << file._fileName << " " << file._file.fail() << std::endl;
 	replaceInFile(file, s1, s2);
 	return ;
 }
@@ -108,23 +108,6 @@ Files::~Files()
 }
 
 /**
- * @brief Closes the file if it is open.
- * 
- * This function checks if the file is open and closes it if it is. 
- * If the file is not open, this function does nothing.
- */
-void Files::closeFile()
-{
-	if (_file.is_open() && _status != 0)
-	{
-		_file.close();
-		_status = 0;
-		if (_file.fail())
-			std::cerr << setColor("Failed to close the file " + _fileName, FRED, 1) << std::endl;
-	}
-}
-
-/**
  * @brief Opens a file with the specified mode.
  * 
  * This function opens a file with the specified mode. If a file is already open, it will be closed before opening the new file.
@@ -135,33 +118,38 @@ void Files::openFile(std::ios_base::openmode mode)
 {
 	_fileMode = mode;
 	closeFile();
+	std::cout << "Opening file " << _fileName << std::endl;
 	_file.open(_fileName.c_str(), mode);
-	_status = 1;
 	fileExists();
 }
 
 /**
- * Checks if the file is open.
+ * @brief Closes the file if it is open.
  * 
- * @return true if the file is open, false otherwise.
+ * This function checks if the file is open and closes it if it is. 
+ * If the file is not open, this function does nothing.
  */
-bool Files::fileExists()
+void Files::closeFile()
 {
-	if (_file.is_open() == false)
+	if (this->_file.is_open())
 	{
-		std::stringstream ss;
-		ss << setColor("Failed to open the file " + _fileName, FRED, 1);
-		std::cerr << ss.str() << std::endl;
+		// _file.clear();
+		this->_file.close();
+		if (this->_file.fail())
+			std::cout << setColor("Failed to close the file " + this->_fileName, FRED, 1) << std::endl;
+		else
+			std::cout << setColor("File " + this->_fileName + " closed successfully.", FDEFAULT, 0) << std::endl;
 	}
-	else
-	{
-		_status = 1;
-		if (_fileMode & std::ios::out)
-			std::cout << setColor(_fileName + " file open to write.\n", FGREEN, 0);
-		else if (_fileMode & std::ios::in)
-			std::cout << setColor(_fileName + " file open to read.\n", FBLUE, 0);
-	}
-	return (0);
+}
+
+void Files::checkStreamErrors(Files& file)
+{
+	if (file._file.fail())
+		std::cerr << "A non-critical I/O error has occurred in " << file._fileName << std::endl;
+	if (file._file.bad())
+		std::cerr << "A critical I/O error has occurred in " << file._fileName << std::endl;
+	if (file._file.eof())
+		std::cerr << "End of file has been reached in " << file._fileName << std::endl;
 }
 
 /**
@@ -180,7 +168,6 @@ void Files::replaceInFile(Files& in, const std::string &s1, const std::string &s
 {
 	std::string line;
 
-	
 	while (std::getline(in._file, line))
 	{
 		size_t pos = 0;
@@ -191,10 +178,10 @@ void Files::replaceInFile(Files& in, const std::string &s1, const std::string &s
 		}
 		_file << line << '\n';
 	}
-	in.closeFile();
-	_status = 1;
-	closeFile();
-	std:: cout << "first close" << std::endl;
+	checkStreamErrors(in);
+	checkStreamErrors(*this);
+	// in.closeFile();
+	// closeFile();
 }
 
 /**
@@ -253,7 +240,39 @@ void Files::copyFile(Files& in)
 	_file.close();
 }
 
-
+/**
+ * Checks if the file is open.
+ * 
+ * @return true if the file is open, false otherwise.
+ */
+bool Files::fileExists()
+{
+	if (_file.is_open() == false)
+	{
+		std::stringstream ss;
+		ss << setColor("Failed to open the file " + _fileName, FRED, 1);
+		std::cerr << ss.str() << std::endl;
+	}
+	else
+	{
+		if ((_fileMode & std::ios::in) && (_fileMode & std::ios::out))
+			std::cout << setColor(_fileName + " file open to READ and WRITE.\n", FCYAN, 0);
+		else if (_fileMode & std::ios::out)
+			std::cout << setColor(_fileName + " file open to WRITE.\n", FGREEN, 0);
+		else if (_fileMode & std::ios::in)
+			std::cout << setColor(_fileName + " file open to READ.\n", FBLUE, 0);
+		else if (_fileMode & std::ios::trunc)
+			std::cout << setColor(_fileName + " file open to TRUNCATE.\n", FDEFAULT, 0);
+		else if (_fileMode & std::ios::app)
+			std::cout << setColor(_fileName + " file open to APPEND.\n", FYELLOW, 0);
+		else if (_fileMode & std::ios::ate)
+			std::cout << setColor(_fileName + " file open to APPEND at the END.\n", FYELLOW, 0);
+		else if (_fileMode & std::ios::binary)
+			std::cout << setColor(_fileName + " file open in BINARY mode.\n", FYELLOW, 0);
+		std::cout << _fileName << " file exist " << _file.fail() << std::endl;
+	}
+	return (0);
+}
 // std::ofstream ofs("file.txt");
 // std::streambuf* original_cout_buffer = std::cout.rdbuf();  // save original buffer
 // std::cout.rdbuf(ofs.rdbuf());  // redirect cout to file.txt

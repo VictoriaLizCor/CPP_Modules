@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 13:07:44 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/16 10:26:21 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/16 15:17:04 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int main(int ac, char **av)
 			//Creates a Files object
 			Files f1(av[1], std::ios::in);
 			
-			//Reads from Files instances, creates another one 
-			// and writes to another file, adding ".replace" to the name
+			// //Reads from Files instances, creates another one 
+			// // and writes to another file, adding ".replace" to the name
 			Files f2(f1, av[2], av[3]);
 
 		}

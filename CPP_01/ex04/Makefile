@@ -74,8 +74,8 @@ clean:
 	@if [ -d "$(DEBUG_DIR)" ]; then	\
 		rm -rf $(DEBUG_DIR); 		\
 	fi
-	@$(MAKE) delete to_remove=*Cpy*;echo
-	@$(MAKE) delete;echo
+	@$(MAKE) delete to_remove=*Cpy*
+	@$(MAKE) delete
 	@printf  "\n$(P_NC)"
 
 fclean: clean
