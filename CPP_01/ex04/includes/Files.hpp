@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:09:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/15 15:33:21 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/16 10:42:15 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef enum eColor
 	FWHITE			= 97,
 	COLOR_COUNT	 	= 27,
 } t_color;
+
 
 class Files
 {

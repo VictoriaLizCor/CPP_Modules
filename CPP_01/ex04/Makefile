@@ -92,9 +92,12 @@ re: fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
-t:harry
+t1:harry
 	./$(NAME) funnyCpy Ron Harry
 	@$(MAKE) diff
+t2:$(NAME)
+	@echo $(BOLD) $(CYAN) ./$(NAME) funnyCpy Ron Harry $(E_NC) "\n"
+	@./$(NAME) funnyCpy Ron Harry
 checkCpyFile:
 	@if [ -f "$(TEST_FILE)" ]; then	\
 		FILE_NAME=$(notdir $(basename $(TEST_FILE))); \
@@ -117,7 +120,7 @@ delete:
 	else \
 		find . -name "*.replace*" -type f -exec rm -f {} \;; \
 	fi
-harry:re
+harry:
 # @$(MAKE) delete to_remove=*Cpy*
 	$(eval TO_COPY=docs/funny)
 	@$(MAKE) checkCpyFile TEST_FILE=$(TO_COPY) SHOW=true
@@ -170,6 +173,7 @@ endif
 	fi
 	@$(MAKE) delete to_remove=*Cpy* ;echo
 #	@ls --color=auto
+# nm -g /path/to/your/file | grep " T "
 #pygmentize -g -O style=friendly $(word 1, $(TEST_ARGS)).replace && echo; \
 ############# USE WITH S=0
 leaks: $(NAME)
@@ -185,9 +189,12 @@ val: $(NAME)
 diff:
 	$(eval CPY= $(shell find . -name "*Cpy*" ! -name "*.replace*"))
 	$(eval REPLACE= $(shell find . -name "*.replace*"))
-	@if [ ! -s $(REPLACE) ]; then echo;echo "$(REPLACE) is empty"; fi
-	@echo $(YELLOW) "Diffing $(CPY) with $(REPLACE)" $(E_NC)
-	diff $(CPY) $(REPLACE) || true
+	@if [ ! -s $(REPLACE) ]; then \
+		echo;echo "$(REPLACE) is empty"; \
+	else \
+		echo $(YELLOW) "Diffing $(CPY) with $(REPLACE)" $(E_NC); \
+		diff $(CPY) $(REPLACE) || true; \
+	fi
 # #-------------------- GIT UTILS ----------------------------#
 dirs:
 	@echo $(DIRS)

@@ -50,6 +50,7 @@ Files::Files()
  */
 Files::Files(const char* fileName, std::ios_base::openmode mode): _file(fileName, mode), _fileName(fileName)
 {
+	_fileMode = mode;
 	fileExists();
 	return ;
 }
@@ -87,7 +88,7 @@ Files::Files(const Files &file): _file(), _fileName(file._fileName)
  */
 Files::Files(Files& file, const char* s1, const char* s2)
 {
-	_fileName = file._fileName + ".replace";
+	_fileName = file._fileName + ".replace1";
 	openFile(std::ios::out);
 	replaceInFile(file, s1, s2);
 	return ;
@@ -103,6 +104,7 @@ Files::Files(Files& file, const char* s1, const char* s2)
 Files::~Files()
 {
 	closeFile();
+	std:: cout << _fileName <<" Destructor called" << std::endl;
 }
 
 /**
@@ -113,16 +115,12 @@ Files::~Files()
  */
 void Files::closeFile()
 {
-	if (_file.is_open())
+	if (_file.is_open() && _status != 0)
 	{
-		if (_status == 1)
-		{
-			std::cout << setColor(_fileName + " successfully written.\n", FGREEN, 0);
-		}
-		else
-			std::cout << setColor("File not written.\n", FRED, 1);
-		_status = 0;
 		_file.close();
+		_status = 0;
+		if (_file.fail())
+			std::cerr << setColor("Failed to close the file " + _fileName, FRED, 1) << std::endl;
 	}
 }
 
@@ -135,10 +133,10 @@ void Files::closeFile()
  */
 void Files::openFile(std::ios_base::openmode mode)
 {
-	closeFile();
-	std::cout << setColor("Opening file " + _fileName + "\n", FBLUE, 0);
-	_file.open(_fileName.c_str(), mode);
 	_fileMode = mode;
+	closeFile();
+	_file.open(_fileName.c_str(), mode);
+	_status = 1;
 	fileExists();
 }
 
@@ -149,11 +147,19 @@ void Files::openFile(std::ios_base::openmode mode)
  */
 bool Files::fileExists()
 {
-	if (!_file.is_open())
+	if (_file.is_open() == false)
 	{
 		std::stringstream ss;
 		ss << setColor("Failed to open the file " + _fileName, FRED, 1);
 		std::cerr << ss.str() << std::endl;
+	}
+	else
+	{
+		_status = 1;
+		if (_fileMode & std::ios::out)
+			std::cout << setColor(_fileName + " file open to write.\n", FGREEN, 0);
+		else if (_fileMode & std::ios::in)
+			std::cout << setColor(_fileName + " file open to read.\n", FBLUE, 0);
 	}
 	return (0);
 }
@@ -185,8 +191,10 @@ void Files::replaceInFile(Files& in, const std::string &s1, const std::string &s
 		}
 		_file << line << '\n';
 	}
+	in.closeFile();
 	_status = 1;
 	closeFile();
+	std:: cout << "first close" << std::endl;
 }
 
 /**
@@ -201,7 +209,7 @@ void Files::replaceInFile(Files& in, const std::string &s1, const std::string &s
  * name, reopens the file in write mode, and writes the contents of the buffer
  * to the file.
  */
-void Files::replaceInFile(const std::string &s1, const std::string &s2)
+void Files::replaceInFile(const std::string& s1, const std::string& s2)
 {
 	std::string			line;
 	std::stringstream	buffer;
@@ -218,13 +226,15 @@ void Files::replaceInFile(const std::string &s1, const std::string &s2)
 		}
 		buffer << line << '\n';
 	}
-	// closeFile();
+	closeFile();
+	std:: cout << "first close" << std::endl;
 	// _fileName.append(".replace2");
-	_file.clear();
-	_file.seekg(0);
-	std::cerr << buffer.str();
-	_file << buffer.str();
-	_status = 1;
+	// openFile(_fileMode);
+	// // _file.clear();
+	// // _file.seekg(0);
+	// std::cerr << buffer.str();
+	// _file << buffer.str();
+	// _status = OUT;
 }
 
 /**
