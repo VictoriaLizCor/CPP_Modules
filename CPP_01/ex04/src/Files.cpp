@@ -149,7 +149,7 @@ void Files::closeFile()
 {
 	if (this->_file.is_open())
 	{
-		checkStreamErrors(*this);
+		checkStreamFlags(*this);
 		_file.clear();
 		this->_file.close();
 		if (!this->_file.good())
@@ -157,22 +157,6 @@ void Files::closeFile()
 		else
 			std::cout << setColor("File " + this->_fileName + " closed successfully.", FDARKGRAY, 0) << std::endl;
 	}
-}
-
-void Files::checkStreamErrors(Files& file)
-{
-	if (DEBUG == 0)
-		return ;
-	if (!file._file.good())
-		std::cout << "*-----------" << std::endl;
-	if (file._file.fail())
-		std::cerr << "A non-critical I/O error has occurred in " << file._fileName << std::endl;
-	if (file._file.bad())
-		std::cerr << "A critical I/O error has occurred in " << file._fileName << std::endl;
-	if (file._file.eof())
-		std::cerr << "End of file has been reached in " << file._fileName << std::endl;
-	if (!file._file.good())
-		std::cout << "-----------*" << std::endl;
 }
 
 /**
@@ -271,7 +255,8 @@ void Files::replaceInFile(const std::string& fileName, const std::string& s1, co
 	}
 	closeFile();
 	_fileName.append(".replace4");
-	openFile(std::ios::out | std::ios::trunc);
+	openFile(std::ios::in | std::ios::out | std::ios::trunc);
+	_file.seekg(0);
 	_file << buffer.str();
 	if (DEBUG == 1)
 		showContent();
@@ -326,6 +311,24 @@ bool Files::fileIsOpen()
 		std::cout << ss.str() << "." << std::endl;
 	}
 	return (0);
+}
+
+void Files::checkStreamFlags(Files& file)
+{
+	std::stringstream ss;
+	if (DEBUG == 0)
+		return ;
+	if (!file._file.good())
+		std::cout << "*-----checkStreamFLAGS------" << std::endl;
+	if (file._file.fail())
+		ss << setColor("A I/O error has occurred in ", FLRED, 1) << file._fileName << std::endl;
+	if (file._file.bad())
+		ss << setColor("A critical I/O error has occurred in ", FLRED, 1) << file._fileName << std::endl;
+	if (file._file.eof())
+		ss << setColor("End of file has been reached in ", FLGREEN ,0) << file._fileName << std::endl;
+	std::cout << ss.str();
+	if (!file._file.good())
+		std::cout << "-----------*" << std::endl;
 }
 
 void Files::showContent()

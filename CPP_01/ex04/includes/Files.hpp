@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:09:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/17 15:44:04 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/17 16:49:00 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ class Files
 		void replaceInFile(Files& in, const std::string& s1, const std::string& s2);
 		void replaceInFile(const std::string& s1, const std::string& s2);
 		void replaceInFile(const std::string& fileName, const std::string& s1, const std::string& s2);
-		void checkStreamErrors(Files& file);
+		void checkStreamFlags(Files& file);
 		void showContent();
 		static std::string setColor(std::string msg, int color, int err);
 };
