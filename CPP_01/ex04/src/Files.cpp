@@ -42,6 +42,23 @@ Files::Files()
 }
 
 /**
+ * @brief Constructs a new Files object.
+ *
+ * This constructor initializes a `Files` object with the provided parameters.
+ *
+ * @param file The reference to the `Files` object to copy.
+ * @param s1 The first string to search for in the file.
+ * @param s2 The second string to replace `s1` with in the file.
+ */
+Files::Files(Files& file, const char* s1, const char* s2)
+{
+	_fileName = file._fileName + ".replace1";
+	openFile(std::ios::out);
+	replaceInFile(file, s1, s2);
+	return ;
+}
+
+/**
  * @brief Constructs a Files object with the specified file name and open mode.
  *
  * @param fileName The name of the file to be opened.
@@ -51,7 +68,7 @@ Files::Files()
 Files::Files(const char* fileName, std::ios_base::openmode mode): _file(fileName, mode), _fileName(fileName)
 {
 	_fileMode = mode;
-	fileExists();
+	fileIsOpen();
 }
 
 
@@ -71,34 +88,19 @@ Files::Files(const char* fileName): _file(), _fileName(fileName)
  * 
  * @param file The Files object to be copied.
  */
-Files::Files(const Files &file): _file(), _fileName(file._fileName)
+Files::Files(Files& file): _file(), _fileName(file._fileName + ".replace3")
 {
-	return ;
-}
-
-/**
- * @brief Constructs a new Files object.
- *
- * This constructor initializes a `Files` object with the provided parameters.
- *
- * @param file The reference to the `Files` object to copy.
- * @param s1 The first string to search for in the file.
- * @param s2 The second string to replace `s1` with in the file.
- */
-Files::Files(Files& file, const char* s1, const char* s2)
-{
-	_fileName = file._fileName + ".replace1";
-	openFile(std::ios::out);
-	replaceInFile(file, s1, s2);
+	openFile(std::ios::in | std::ios::out | std::ios::trunc);
+	copyFile(file);
 	return ;
 }
 
 
 /**
  * @brief Destructor for the Files class.
- * 
- * This destructor is responsible for closing the file associated with the Files object.
- * It calls the closeFile() function to close the file.
+ *
+ * This destructor is responsible for closing the file associated with the Files
+ * object. It calls the closeFile() function to close the file.
  */
 Files::~Files()
 {
@@ -107,19 +109,36 @@ Files::~Files()
 
 /**
  * @brief Opens a file with the specified mode.
- * 
- * This function opens a file with the specified mode. If a file is already open, it will be closed before opening the new file.
- * 
- * @param mode The mode to open the file in (e.g., std::ios_base::in, std::ios_base::out, std::ios_base::app, etc.).
+ *
+ * This function opens a file with the specified mode. If a file is already
+ * open, it will be closed before opening the new file.
+ *
+ * @param mode The mode to open the file in (e.g., std::ios_base::in,
+ * std::ios_base::out, std::ios_base::app, etc.).
  */
 void Files::openFile(std::ios_base::openmode mode)
 {
 	_fileMode = mode;
 	closeFile();
 	_file.open(_fileName.c_str(), mode);
-	fileExists();
+	fileIsOpen();
 }
 
+void Files::openFile()
+{
+	void closeFile();
+	_file.open(_fileName.c_str(), _fileMode);
+	fileIsOpen();
+}
+
+void Files::openFile(const char* fileName, std::ios_base::openmode mode)
+{
+	_fileName = fileName;
+	_fileMode = mode;
+	closeFile();
+	_file.open(_fileName.c_str(), mode);
+	fileIsOpen();
+}
 /**
  * @brief Closes the file if it is open.
  * 
@@ -136,7 +155,7 @@ void Files::closeFile()
 		if (!this->_file.good())
 			std::cout << setColor("Failed to close the file " + this->_fileName, FRED, 1) << std::endl;
 		else
-			std::cout << setColor("File " + this->_fileName + " closed successfully.", FDEFAULT, 0) << std::endl;
+			std::cout << setColor("File " + this->_fileName + " closed successfully.", FDARKGRAY, 0) << std::endl;
 	}
 }
 
@@ -145,7 +164,7 @@ void Files::checkStreamErrors(Files& file)
 	if (DEBUG == 0)
 		return ;
 	if (!file._file.good())
-		std::cout << "-----------" << std::endl;
+		std::cout << "*-----------" << std::endl;
 	if (file._file.fail())
 		std::cerr << "A non-critical I/O error has occurred in " << file._fileName << std::endl;
 	if (file._file.bad())
@@ -153,7 +172,7 @@ void Files::checkStreamErrors(Files& file)
 	if (file._file.eof())
 		std::cerr << "End of file has been reached in " << file._fileName << std::endl;
 	if (!file._file.good())
-		std::cout << "-----------" << std::endl;
+		std::cout << "-----------*" << std::endl;
 }
 
 /**
@@ -184,7 +203,8 @@ void Files::replaceInFile(Files& in, const std::string &s1, const std::string &s
 		_file << line << '\n';
 	}
 	in.closeFile();
-	// closeFile();
+	if (DEBUG == 1)
+		showContent();
 }
 
 /**
@@ -217,16 +237,45 @@ void Files::replaceInFile(const std::string& s1, const std::string& s2)
 		}
 		buffer << line << '\n';
 	}
-	closeFile();
-	// _fileName.append(".replace2");
-	// openFile(_fileMode);
-	// // _file.clear();
-	// // _file.seekg(0);
-	// std::cerr << buffer.str();
-	// _file << buffer.str();
-	// _status = OUT;
+	if (_fileName.find(".replace") != std::string::npos)
+	{
+		_file.clear();
+		_file.seekg(0);
+	}
+	else
+	{
+		_fileName.append(".replace2");
+		openFile(std::ios::out | std::ios::trunc);
+	}
+	_file << buffer.str();
+	if (DEBUG == 1)
+		showContent();
 }
 
+void Files::replaceInFile(const std::string& fileName, const std::string& s1, const std::string& s2)
+{
+	std::string			line;
+	std::stringstream	buffer;
+	
+	openFile(fileName.c_str(), std::ios::in);
+	while (_file.peek() != std::fstream::traits_type::eof())
+	{
+		std::getline(_file, line);
+		size_t pos = 0;
+		while ((pos = line.find(s1, pos)) != std::string::npos)
+		{
+			line = line.substr(0, pos) + s2 + line.substr(pos + s1.length());
+			pos += s1.length();
+		}
+		buffer << line << '\n';
+	}
+	closeFile();
+	_fileName.append(".replace4");
+	openFile(std::ios::out | std::ios::trunc);
+	_file << buffer.str();
+	if (DEBUG == 1)
+		showContent();
+}
 /**
  * @brief Copies the content of one file to another.
  *
@@ -234,13 +283,15 @@ void Files::replaceInFile(const std::string& s1, const std::string& s2)
  *
  * This function seeks to the beginning of the input file, copies its content
  * to the current file object, and then closes the current file.
- */
+ * The `rdbuf` function is a member function of `std::basic_istream` and
+ *  `std::basic_ostream` classes in C++. It returns a pointer to the internal file
+ *  buffer.
+**/
 void Files::copyFile(Files& in)
 {
-	
-	in._file.seekg(0); // Go to the beginning of the file
-	_file << in._file.rdbuf(); // Copy the content to the new file
-	_file.close();
+	in._file.seekg(0); 
+	_file << in._file.rdbuf();
+	in.closeFile();
 }
 
 /**
@@ -248,36 +299,58 @@ void Files::copyFile(Files& in)
  * 
  * @return true if the file is open, false otherwise.
  */
-bool Files::fileExists()
+bool Files::fileIsOpen()
 {
+	std::stringstream ss;
+
 	if (_file.is_open() == false)
 	{
-		std::stringstream ss;
-		ss << setColor("Failed to open the file " + _fileName, FRED, 1);
-		std::cerr << ss.str() << std::endl;
+		ss << setColor("Failed to open the file " + _fileName, FRED, 1) << std::endl;
+		throw std::runtime_error(ss.str());
 	}
 	else
 	{
-		if ((_fileMode & std::ios::in) && (_fileMode & std::ios::out))
-			std::cout << setColor(_fileName + " file open to READ and WRITE.\n", FCYAN, 0);
-		else if (_fileMode & std::ios::out)
-			std::cout << setColor(_fileName + " file open to WRITE.\n", FGREEN, 0);
-		else if (_fileMode & std::ios::in)
-			std::cout << setColor(_fileName + " file open to READ.\n", FBLUE, 0);
-		else if (_fileMode & std::ios::trunc)
-			std::cout << setColor(_fileName + " file open to TRUNCATE.\n", FDEFAULT, 0);
-		else if (_fileMode & std::ios::app)
-			std::cout << setColor(_fileName + " file open to APPEND.\n", FYELLOW, 0);
-		else if (_fileMode & std::ios::ate)
-			std::cout << setColor(_fileName + " file open to APPEND at the END.\n", FYELLOW, 0);
-		else if (_fileMode & std::ios::binary)
-			std::cout << setColor(_fileName + " file open in BINARY mode.\n", FYELLOW, 0);
+		ss << _fileName << " file open as";
+		if (_fileMode & std::ios::in)
+			ss << setColor( " READ", FBLUE, 0);
+		if (_fileMode & std::ios::out)
+			ss << setColor( " WRITE", FGREEN, 0);
+		if (_fileMode & std::ios::trunc)
+			ss <<  setColor( " TRUNCATE", FMAGENTA, 0);
+		if (_fileMode & std::ios::app)
+			ss <<  setColor( " APPEND", FYELLOW, 0);
+		if (_fileMode & std::ios::ate)
+			ss <<  setColor( " APPEND at the END", FDARKGRAY, 0);
+		if (_fileMode & std::ios::binary)
+			ss <<  setColor(" BINARY", FDEFAULT, 0);
+		std::cout << ss.str() << "." << std::endl;
 	}
 	return (0);
 }
+
+void Files::showContent()
+{
+	std::stringstream ss;
+
+	_file.clear();
+	openFile(std::ios::in);
+	_file.seekg(0); // Go to the beginning of the file
+	ss << _file.rdbuf(); // Copy the content
+	std::cout << ss.str() << std::endl;
+}
+
+
+/**
+ `traits_type` in the context of C++, it's a type
+ * member of various I/O classes in the standard library (like `std::basic_ios`,
+ * `std::basic_streambuf`, `std::basic_istream`, `std::basic_ostream`,
+ * `std::basic_iostream`, `std::fstream`, `std::ifstream`, `std::ofstream`). It
+ * defines the traits of the characters used by these classes, including the
+ * type of the characters themselves, their comparison function, the end-of-file
+ * value, etc.
+*/
 // std::ofstream ofs("file.txt");
 // std::streambuf* original_cout_buffer = std::cout.rdbuf();  // save original buffer
 // std::cout.rdbuf(ofs.rdbuf());  // redirect cout to file.txt
 // std::cout << "This will be written to file.txt";
 // std::cout.rdbuf(original_cout_buffer);  // restore original buffer
-

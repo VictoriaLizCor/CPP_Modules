@@ -19,7 +19,7 @@ S			= 0
 #------ DEBUG UTILS ------#
 CC			:= c++
 MAKEFLAGS	+= --no-print-directory
-VALGRIND	:= valgrind -s --leak-check=yes --SHOW-leak-kinds=all
+VALGRIND	:= valgrind -s --leak-check=yes --show-leak-kinds=all
 HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
 BUILD_DIR	:= .build/
@@ -92,10 +92,12 @@ re: fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
+cat :
+	@find . -name "*.replace*" -exec sh -c 'echo "------"; cat {}' \;
 t1:harry
 	./$(NAME) funnyCpy Ron Harry
 	@$(MAKE) diff
-t2:$(NAME)
+t2:
 	@echo $(BOLD) $(CYAN) ./$(NAME) funnyCpy Ron Harry $(E_NC) "\n"
 	@./$(NAME) funnyCpy Ron Harry
 checkCpyFile:
@@ -182,8 +184,8 @@ leaks: $(NAME)
 	@echo "\n"
 
 val: $(NAME)
-	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC) "\n"
-	@$(VALGRIND) ./$(NAME)
+	@echo $(RED) $(VALGRIND) ./$(NAME) $(ARGS) $(E_NC) "\n"
+	@$(VALGRIND) ./$(NAME) $(ARGS)
 	@echo "\n"
 ## Diff with intra
 diff:

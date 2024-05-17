@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:09:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/16 16:32:34 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/17 15:44:04 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,21 @@ class Files
 		Files();
 		Files(const char* fileName, std::ios_base::openmode mode);
 		Files(const char* fileName);
-		Files(const Files& file);
+		Files(Files& file);
 		Files(Files& file, const char* s1, const char* s2);
 		~Files();
-		static std::string setColor(std::string msg, int color, int err);
-		bool fileExists();
+		bool fileIsOpen();
+		void openFile();
 		void openFile(std::ios_base::openmode mode);
+		void openFile(const char* fileName, std::ios_base::openmode mode);
 		void closeFile();
 		void copyFile(Files& in);
-		void replaceInFile(Files& in, const std::string &s1, const std::string &s2);
-		void replaceInFile(const std::string &s1, const std::string &s2);
+		void replaceInFile(Files& in, const std::string& s1, const std::string& s2);
+		void replaceInFile(const std::string& s1, const std::string& s2);
+		void replaceInFile(const std::string& fileName, const std::string& s1, const std::string& s2);
 		void checkStreamErrors(Files& file);
+		void showContent();
+		static std::string setColor(std::string msg, int color, int err);
 };
 
 # endif
