@@ -92,6 +92,22 @@ re: fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
+modr:
+	chmod 0000 funnyCpy
+	ls -la funnyCpy
+	./$(NAME) funnyCpy Ron Harry
+modr:
+	chmod 0444 funnyCpy
+	ls -la funnyCpy
+	./$(NAME) funnyCpy Ron Harry
+modw:
+	chmod 0222 funnyCpy
+	ls -la funnyCpy
+	./$(NAME) funnyCpy Ron Harry
+modrw:
+	chmod 0666 funnyCpy
+	ls -la funnyCpy
+	./$(NAME) funnyCpy Ron Harry
 cat :
 	@find . -name "*.replace*" -exec sh -c 'echo "------"; cat {}' \;
 t1:harry
