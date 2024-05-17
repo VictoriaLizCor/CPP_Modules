@@ -99,7 +99,7 @@ t1:harry
 	@$(MAKE) diff
 t2:
 	@echo $(BOLD) $(CYAN) ./$(NAME) funnyCpy Ron Harry $(E_NC) "\n"
-	@./$(NAME) funnyCpy Ron Harry
+	@./$(NAME) funnyCpy Ron Harry > /dev/null
 checkCpyFile:
 	@if [ -f "$(TEST_FILE)" ]; then	\
 		FILE_NAME=$(notdir $(basename $(TEST_FILE))); \

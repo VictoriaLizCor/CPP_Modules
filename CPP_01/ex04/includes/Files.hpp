@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:09:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/17 16:49:00 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/17 17:36:38 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fstream>
 # include <sstream>
 # include <string>
+# include <sys/stat.h>
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -61,7 +62,7 @@ class Files
 		Files(Files& file);
 		Files(Files& file, const char* s1, const char* s2);
 		~Files();
-		bool fileIsOpen();
+		void fileIsOpen();
 		void openFile();
 		void openFile(std::ios_base::openmode mode);
 		void openFile(const char* fileName, std::ios_base::openmode mode);

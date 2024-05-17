@@ -175,6 +175,8 @@ void Files::replaceInFile(Files& in, const std::string &s1, const std::string &s
 {
 	std::string line;
 
+	if (s2.find(s1) != std::string::npos)
+		throw std::runtime_error(setColor("S1 and S2 must not be the same.", FRED, 1));
 	while (in._file.peek() != std::fstream::traits_type::eof())
 	{
 		std::getline(in._file, line);
@@ -208,6 +210,8 @@ void Files::replaceInFile(const std::string& s1, const std::string& s2)
 	std::string			line;
 	std::stringstream	buffer;
 	
+	if (s2.find(s1) != std::string::npos)
+		throw std::runtime_error(setColor("S1 and S2 must not be the same.", FRED, 1));
 	_file.clear();
 	_file.seekg(0);
 	while (_file.peek() != std::fstream::traits_type::eof())
@@ -217,7 +221,7 @@ void Files::replaceInFile(const std::string& s1, const std::string& s2)
 		while ((pos = line.find(s1, pos)) != std::string::npos)
 		{
 			line = line.substr(0, pos) + s2 + line.substr(pos + s1.length());
-			pos += s1.length();
+			pos += s2.length();
 		}
 		buffer << line << '\n';
 	}
@@ -241,6 +245,8 @@ void Files::replaceInFile(const std::string& fileName, const std::string& s1, co
 	std::string			line;
 	std::stringstream	buffer;
 	
+	if (s2.find(s1) != std::string::npos)
+		throw std::runtime_error(setColor("S1 and S2 must not be the same.", FRED, 1));
 	openFile(fileName.c_str(), std::ios::in);
 	while (_file.peek() != std::fstream::traits_type::eof())
 	{
@@ -249,7 +255,7 @@ void Files::replaceInFile(const std::string& fileName, const std::string& s1, co
 		while ((pos = line.find(s1, pos)) != std::string::npos)
 		{
 			line = line.substr(0, pos) + s2 + line.substr(pos + s1.length());
-			pos += s1.length();
+			pos += s2.length();
 		}
 		buffer << line << '\n';
 	}
@@ -284,10 +290,16 @@ void Files::copyFile(Files& in)
  * 
  * @return true if the file is open, false otherwise.
  */
-bool Files::fileIsOpen()
+void Files::fileIsOpen()
 {
 	std::stringstream ss;
+	struct stat buffer;
 
+	if (stat (_fileName.c_str(), &buffer) != 0)
+	{
+		ss << setColor("File does not exist: " + _fileName, FRED, 1) << std::endl;
+		throw std::runtime_error(ss.str());
+	}
 	if (_file.is_open() == false)
 	{
 		ss << setColor("Failed to open the file " + _fileName, FRED, 1) << std::endl;
@@ -310,7 +322,6 @@ bool Files::fileIsOpen()
 			ss <<  setColor(" BINARY", FDEFAULT, 0);
 		std::cout << ss.str() << "." << std::endl;
 	}
-	return (0);
 }
 
 void Files::checkStreamFlags(Files& file)
