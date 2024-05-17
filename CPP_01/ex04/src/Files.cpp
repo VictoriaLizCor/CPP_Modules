@@ -211,7 +211,7 @@ void Files::replaceInFile(const std::string& s1, const std::string& s2)
 	std::stringstream	buffer;
 	
 	if (s2.find(s1) != std::string::npos)
-		throw std::runtime_error(setColor("S1 and S2 must not be the same.", FRED, 1));
+		throw std::runtime_error(setColor("s1 is a substring of s2.", FRED, 1));
 	_file.clear();
 	_file.seekg(0);
 	while (_file.peek() != std::fstream::traits_type::eof())
