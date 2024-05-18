@@ -10,8 +10,8 @@ PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir ${shell find $(PROJECT_ROOT) -name Makefile}))
 CURRENT		:= $(shell basename $$PWD)
-TEST_FILE	:= docs/test.txt
-TEST_STRING	:= replace change
+FILE		:= docs/test.txt
+S1S2	:= replace change
 #------ DEBUG ------#
 D			= 0
 #------ Sanitizer ------#
@@ -92,24 +92,34 @@ re: fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
-modr:
+long:
+	$(eval TO_COPY=docs/longText)
+	@$(MAKE) checkCpyFile FILE=$(TO_COPY) SHOW=true
+	@sleep 1
+# @$(MAKE) runTest arg="rabbit 'brave little rabbit'"
+	@./$(NAME) $(TO_COPY) rabbit 'brave little rabbit'
+empty:
+	touch emptyFile
+	ls -la emptyFile
+	./$(NAME) emptyFile Harry Ha
+modn: harry
 	chmod 0000 funnyCpy
 	ls -la funnyCpy
 	./$(NAME) funnyCpy Ron Harry
-modr:
+modr: harry
 	chmod 0444 funnyCpy
 	ls -la funnyCpy
 	./$(NAME) funnyCpy Ron Harry
-modw:
+modw: harry
 	chmod 0222 funnyCpy
 	ls -la funnyCpy
 	./$(NAME) funnyCpy Ron Harry
-modrw:
+modrw: harry
 	chmod 0666 funnyCpy
 	ls -la funnyCpy
 	./$(NAME) funnyCpy Ron Harry
 cat :
-	@find . -name "*.replace*" -exec sh -c 'echo "------"; cat {}' \;
+	@find . -name "*.replace*" -exec sh -c 'echo "\n---" {} "---"; cat {}' \;
 t1:harry
 	./$(NAME) funnyCpy Ron Harry
 	@$(MAKE) diff
@@ -117,21 +127,20 @@ t2:
 	@echo $(BOLD) $(CYAN) ./$(NAME) funnyCpy Ron Harry $(E_NC) "\n"
 	@./$(NAME) funnyCpy Ron Harry > /dev/null
 checkCpyFile:
-	@if [ -f "$(TEST_FILE)" ]; then	\
-		FILE_NAME=$(notdir $(basename $(TEST_FILE))); \
-		EXTENSION=$(suffix $(TEST_FILE)); \
+	@if [ -f "$(FILE)" ]; then	\
+		FILE_NAME=$(notdir $(basename $(FILE))); \
+		EXTENSION=$(suffix $(FILE)); \
 		APPEND=Cpy; \
 		NEW=$$FILE_NAME$$APPEND$$EXTENSION; \
-		cp $(TEST_FILE) $$NEW;	\
+		cp $(FILE) $$NEW;	\
 		if [ -f $${NEW} ] && [ ! -z "$(SHOW)" ] || [ "$(SHOW)" = "false" ]; then \
-			echo $(YELLOW) "Copied $(TEST_FILE) to $$NEW" $(E_NC);	\
+			echo $(YELLOW) "Copied $(FILE) to $$NEW \n" $(E_NC);	\
 		else \
 			echo $$NEW; \
 		fi \
 	else	\
-		echo $(RED) "$(TEST_FILE) does not exist" $(E_NC);	\
+		echo $(RED) "$(FILE) does not exist" $(E_NC);	\
 	fi
-
 delete:
 	@if [ ! -z "$(to_remove)" ]; then \
 		find . -name "$(to_remove)" ! -name "*.replace*" -type f -exec rm -f {} \;; \
@@ -139,9 +148,8 @@ delete:
 		find . -name "*.replace*" -type f -exec rm -f {} \;; \
 	fi
 harry:
-# @$(MAKE) delete to_remove=*Cpy*
 	$(eval TO_COPY=docs/funny)
-	@$(MAKE) checkCpyFile TEST_FILE=$(TO_COPY) SHOW=true
+	@$(MAKE) checkCpyFile FILE=$(TO_COPY) SHOW=true
 #	@sleep 1
 #	@$(MAKE) runTest arg='Harry Ron'
 # @$(MAKE) runTest > /dev/null; \
@@ -152,9 +160,9 @@ harry:
 # fi
 file: clean
 	$(eval TO_COPY=docs/test.txt)
-	@$(MAKE) checkCpyFile TEST_FILE=$(TO_COPY) SHOW=true
+	@$(MAKE) checkCpyFile FILE=$(TO_COPY) SHOW=true
 	@sleep 1
-	@$(MAKE) runTest arg='$(TEST_STRING)'
+	@$(MAKE) runTest arg='$(S1S2)'
 # @$(MAKE) runTest > /dev/null | cat; \
 # if [ $$? -ne 0 ]; then \
 # 	echo $(RED) "Command runTest failed" $(E_NC); \
@@ -163,34 +171,38 @@ file: clean
 # fi
 runTest:
 	$(eval TMP = $(shell find . -name "*$(notdir $(TO_COPY))Cpy*" ! -name "*.replace*"))
-	@echo $(TMP)
 	$(MAKE) test arg="$(TMP) $(arg)"
-test:re
-	$(eval TEST_ARGS = $(if $(arg), $(arg),$(shell $(MAKE) checkCpyFile) $(TEST_STRING)))
+test:
+	$(eval TEST_ARGS = $(if $(arg), $(arg),$(shell $(MAKE) checkCpyFile) $(S1S2)))
 ifeq ($(D), 2)
-	@echo $(BOLD) $(CYAN) Run in gdbgui dashboard:"\n" ./$(NAME) $(TEST_ARGS) $(E_NC) "\n"
+	@echo $(BOLD) $(CYAN) Run in gdbgui dashboard:"\n" ./$(NAME) "$(TEST_ARGS)" $(E_NC) "\n"
 	@gdbgui ./$(NAME)
 else
 ifeq ($(D), 1)
-	@echo $(BOLD) $(CYAN) ./$(NAME) $(TEST_ARGS) $(E_NC) "\n"
+	@echo $(BOLD) $(CYAN) ./$(NAME) "$(TEST_ARGS)" $(E_NC) "\n"
 	@./$(NAME) $(TEST_ARGS)
 else
-	@echo $(BOLD) $(CYAN) ./$(NAME) $(TEST_ARGS) $(E_NC) "\n"
+	@echo $(BOLD) $(CYAN) ./$(NAME) "$(TEST_ARGS)" $(E_NC) "\n"
 	@./$(NAME) $(TEST_ARGS)
 endif
 endif
-	grep --color $(word 2, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)) && echo
+#	@$(MAKE) grep TEST_ARGS="$(TEST_ARGS)"
+grep:
+	@echo "------------------------------------------------"
+	@grep --color $(word 2, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)) && echo
 	@if [ -f "$(word 1, $(TEST_ARGS)).replace" ]; then \
-		grep --color $(word 3, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace && echo ; \
+		grep --color '$(word 3, $(TEST_ARGS))' $(word 1, $(TEST_ARGS)).replace && echo ; \
 		echo $(BLUE) DIFF $(E_NC); \
 		diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace || true && echo ; \
 	fi
 	@if [ -f "$(word 1, $(TEST_ARGS)).replace2" ]; then \
-		grep --color $(word 3, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace2 && echo  ; \
+		grep --color "$(word 3, $(TEST_ARGS))" $(word 1, $(TEST_ARGS)).replace2 && echo  ; \
 		diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace2 || true ;echo ;\
 	fi
-	@$(MAKE) delete to_remove=*Cpy* ;echo
+#----
+# @$(MAKE) delete to_remove=*Cpy* ;echo
 #	@ls --color=auto
+# testing functions used 
 # nm -g /path/to/your/file | grep " T "
 #pygmentize -g -O style=friendly $(word 1, $(TEST_ARGS)).replace && echo; \
 ############# USE WITH S=0

@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:09:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/17 17:36:38 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/18 15:37:05 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@
 # include <sstream>
 # include <string>
 # include <sys/stat.h>
+# include <unistd.h>
 
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
+
 typedef enum eColor
 {
 	DEFAULT			= 0,
@@ -73,6 +75,7 @@ class Files
 		void replaceInFile(const std::string& fileName, const std::string& s1, const std::string& s2);
 		void checkStreamFlags(Files& file);
 		void showContent();
+		void checkFileStatus(std::stringstream& ss);
 		static std::string setColor(std::string msg, int color, int err);
 };
 

@@ -6,15 +6,26 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/17 16:12:14 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/17 17:14:45 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/18 15:18:21 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Files.hpp"
 
+static void checkStrings(std::string s1, std::string s2)
+{
+	std::stringstream ss;
+	if (s2.find(s1) != std::string::npos)
+	{
+		ss << Files::setColor("Warning: S2 '" + s2 + "' contains S1'" + s1 + "'\n", FLYELLOW, 0);
+		std::cout << ss.str();
+		ss.clear();
+	}
+}
+
 int main(int ac, char **av)
 {
-	int exceptionCount = 0;
+	bool eFlag = 0;
 
 	if (ac != 4)
 		std::cerr << Files::setColor("Usage: ./replace filename s1 s2\n", FRED, 1);
@@ -22,6 +33,7 @@ int main(int ac, char **av)
 		std::cerr << Files::setColor("s1 and s2 must not be empty.\n", FRED, 1);
 	else
 	{
+		checkStrings(av[2], av[3]);
 		try
 		{
 			std::cout << "-------Ex 1--------------" << std::endl;
@@ -30,8 +42,8 @@ int main(int ac, char **av)
 		}
 		catch (const std::runtime_error& e)
 		{
-			std::cerr << "Exception in block 1: " << e.what() << std::endl;
-			exceptionCount++;
+			std::cerr << e.what() << std::endl;
+			eFlag = 1;
 		}
 
 		try 
@@ -42,8 +54,8 @@ int main(int ac, char **av)
 		}
 		catch (const std::runtime_error& e)
 		{
-			std::cerr << "Exception in block 2: " << e.what() << std::endl;
-			exceptionCount++;
+			std::cerr << e.what() << std::endl;
+			eFlag = 1;
 		}
 
 		try 
@@ -55,8 +67,8 @@ int main(int ac, char **av)
 		}
 		catch (const std::runtime_error& e)
 		{
-			std::cerr << "Exception in block 3: " << e.what() << std::endl;
-			exceptionCount++;
+			std::cerr << e.what() << std::endl;
+			eFlag = 1;
 		}
 
 		try 
@@ -67,11 +79,13 @@ int main(int ac, char **av)
 		}
 		catch (const std::runtime_error& e)
 		{
-			std::cerr << "Exception in block 4: " << e.what() << std::endl;
-			exceptionCount++;
+			std::cerr << e.what() << std::endl;
+			eFlag = 1;
 		}
-		return (exceptionCount > 0 ? \
-		(std::cerr << Files::setColor("No Files object created\n", FRED, 1), 1) : 0);
+		if (eFlag)
+			std::cerr << "\n" <<Files::setColor("A problem happened during Object creation\n", FLRED, 1);
+		return (eFlag ?  1 : 0);
 	}
+	return (1);
 }
 

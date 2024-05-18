@@ -124,13 +124,28 @@ void Files::openFile(std::ios_base::openmode mode)
 	fileIsOpen();
 }
 
+/**
+ * @brief Opens a file with the specified file name and mode.
+ *
+ * This function first closes any previously opened file, then attempts to open
+ * a new file with the name and mode stored in the _fileName and _fileMode
+ * member variables, respectively. After opening the file, it checks if the file
+ * is successfully opened.
+ */
 void Files::openFile()
 {
 	void closeFile();
 	_file.open(_fileName.c_str(), _fileMode);
 	fileIsOpen();
 }
-
+/**
+ * @brief Opens a file with the specified file name and mode.
+ *
+ * This function first closes any previously opened file, then attempts to open
+ * a new file with the name and mode stored in the _fileName and _fileMode
+ * member variables, respectively. After opening the file, it checks if the file
+ * is successfully opened.
+ */
 void Files::openFile(const char* fileName, std::ios_base::openmode mode)
 {
 	_fileName = fileName;
@@ -175,8 +190,6 @@ void Files::replaceInFile(Files& in, const std::string &s1, const std::string &s
 {
 	std::string line;
 
-	if (s2.find(s1) != std::string::npos)
-		throw std::runtime_error(setColor("S1 and S2 must not be the same.", FRED, 1));
 	while (in._file.peek() != std::fstream::traits_type::eof())
 	{
 		std::getline(in._file, line);
@@ -210,8 +223,6 @@ void Files::replaceInFile(const std::string& s1, const std::string& s2)
 	std::string			line;
 	std::stringstream	buffer;
 	
-	if (s2.find(s1) != std::string::npos)
-		throw std::runtime_error(setColor("s1 is a substring of s2.", FRED, 1));
 	_file.clear();
 	_file.seekg(0);
 	while (_file.peek() != std::fstream::traits_type::eof())
@@ -240,13 +251,25 @@ void Files::replaceInFile(const std::string& s1, const std::string& s2)
 		showContent();
 }
 
+/**
+ * @brief Replaces all occurrences of a string in a file with another string.
+ *
+ * @param fileName The name of the file to modify.
+ * @param s1 The string to be replaced.
+ * @param s2 The string to replace s1 with.
+ *
+ * This function opens the specified file and reads it line by line. For each
+ * line, it replaces all occurrences of s1 with s2. The modified content is then
+ * written to a new file with the same name as the original file, but with
+ * ".replace4" appended to the name.
+ *
+ * If s1 is a substring of s2, the function throws a runtime error.
+ */
 void Files::replaceInFile(const std::string& fileName, const std::string& s1, const std::string& s2)
 {
 	std::string			line;
 	std::stringstream	buffer;
 	
-	if (s2.find(s1) != std::string::npos)
-		throw std::runtime_error(setColor("S1 and S2 must not be the same.", FRED, 1));
 	openFile(fileName.c_str(), std::ios::in);
 	while (_file.peek() != std::fstream::traits_type::eof())
 	{
@@ -267,6 +290,7 @@ void Files::replaceInFile(const std::string& fileName, const std::string& s1, co
 	if (DEBUG == 1)
 		showContent();
 }
+
 /**
  * @brief Copies the content of one file to another.
  *
@@ -286,30 +310,41 @@ void Files::copyFile(Files& in)
 }
 
 /**
- * Checks if the file is open.
- * 
- * @return true if the file is open, false otherwise.
+ * @brief Checks if a file is open and reports the file mode.
+ *
+ * This function checks if the file specified by the _fileName member variable
+ * is open. If the file is not open, it throws a runtime error with a message
+ * indicating the failure. If the file is open, it reports the mode in which the
+ * file is open (read, write, truncate, append, append at the end, binary) by
+ * checking the _fileMode member variable.
+ *
+ * The function uses the setColor function to colorize the output based on the
+ * file mode.
  */
 void Files::fileIsOpen()
 {
 	std::stringstream ss;
-	struct stat buffer;
 
-	if (stat (_fileName.c_str(), &buffer) != 0)
-	{
-		ss << setColor("File does not exist: " + _fileName, FRED, 1) << std::endl;
-		throw std::runtime_error(ss.str());
-	}
 	if (_file.is_open() == false)
 	{
 		ss << setColor("Failed to open the file " + _fileName, FRED, 1) << std::endl;
+		checkFileStatus(ss);
 		throw std::runtime_error(ss.str());
 	}
 	else
 	{
-		ss << _fileName << " file open as";
+		ss << _fileName << " file open as:";
 		if (_fileMode & std::ios::in)
+		{
+			if (!(_fileName.find(".replace") != std::string::npos) && _file.peek() == std::fstream::traits_type::eof())
+			{
+				ss.str("");
+				ss << setColor("File " + _fileName + " is empty", FRED, 1) << std::endl;
+				throw std::runtime_error(ss.str());
+			}
 			ss << setColor( " READ", FBLUE, 0);
+
+		}
 		if (_fileMode & std::ios::out)
 			ss << setColor( " WRITE", FGREEN, 0);
 		if (_fileMode & std::ios::trunc)
@@ -324,9 +359,25 @@ void Files::fileIsOpen()
 	}
 }
 
+/**
+ * @brief Checks the status flags of a file stream.
+ *
+ * @param file The Files object containing the file stream to check.
+ *
+ * This function checks the status flags (good, fail, bad, eof) of the file
+ * stream in the provided Files object. If any of the flags are set, it prints
+ * an appropriate message to the standard output.
+ *
+ * The function uses the setColor function to colorize the output based on the
+ * status of the file stream.
+ *
+ * If the DEBUG constant is set to 0, the function returns immediately without
+ * checking the status flags.
+ */
 void Files::checkStreamFlags(Files& file)
 {
 	std::stringstream ss;
+
 	if (DEBUG == 0)
 		return ;
 	if (!file._file.good())
@@ -342,6 +393,21 @@ void Files::checkStreamFlags(Files& file)
 		std::cout << "-----------*" << std::endl;
 }
 
+/**
+ * @brief Checks the status flags of a file stream.
+ *
+ * @param file The Files object containing the file stream to check.
+ *
+ * This function checks the status flags (good, fail, bad, eof) of the file
+ * stream in the provided Files object. If any of the flags are set, it prints
+ * an appropriate message to the standard output.
+ *
+ * The function uses the setColor function to colorize the output based on the
+ * status of the file stream.
+ *
+ * If the DEBUG constant is set to 0, the function returns immediately without
+ * checking the status flags.
+ */
 void Files::showContent()
 {
 	std::stringstream ss;
@@ -353,7 +419,18 @@ void Files::showContent()
 	std::cout << ss.str() << std::endl;
 }
 
+void Files::checkFileStatus(std::stringstream& ss)
+{
+	struct stat st;
 
+	if(stat(_fileName.c_str(), &st) == 0)
+	{
+		access(_fileName.c_str(), R_OK) == -1 ? ss << setColor("No read permissions\n", FLRED, 0) : ss<< "";
+		access(_fileName.c_str(), W_OK) == -1 ? ss << setColor("No write permissions\n", FLRED, 0) : ss<< "";
+	}
+	else
+		ss << setColor("File does not exist\n", FRED, 0);
+}
 /**
  `traits_type` in the context of C++, it's a type
  * member of various I/O classes in the standard library (like `std::basic_ios`,
@@ -368,3 +445,7 @@ void Files::showContent()
 // std::cout.rdbuf(ofs.rdbuf());  // redirect cout to file.txt
 // std::cout << "This will be written to file.txt";
 // std::cout.rdbuf(original_cout_buffer);  // restore original buffer
+
+// std::cout << "Read permissions: " << ((st.st_mode & S_IRUSR) ? "Yes" : "No") << std::endl;
+// 		std::cout << "Write permissions: " << ((st.st_mode & S_IWUSR) ? "Yes" : "No") << std::endl;
+// 		std::cout << "Execute permissions: " << ((st.st_mode & S_IXUSR) ? "Yes" : "No") << std::endl;
