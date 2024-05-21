@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 13:32:02 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/21 16:19:59 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/21 16:33:40 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void	Harl::complain(std::string level)
 
 	for (; type < N_TYPE && types[type] != level; ++type);
 
-	if (type < 0 || type < N_TYPE)
+	if (type < N_TYPE)
 	{
 		std:: cout << setColor("[" + types[type] + "]", color[type]) <<std::endl;
 		(this->*_ptr[type])();

@@ -108,7 +108,11 @@ git push origin new-branch-name
 # Commit : Amend previous message
 
 The `git commit --amend` command is used to modify the most recent commit. It doesn't work for commits that are not the latest. If you want to modify a commit that is not the latest, you can use an interactive rebase.
+<!--git commit --amend --no-edit -->
 
+```bash
+git push origin --force-with-lease $(git branch --show-current)
+```
 Here's how you can do it:
 
 ```bash
