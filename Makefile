@@ -80,7 +80,9 @@ soft:
 	@$(MAKE) plog && echo 
 	@read -p "Do you want to reset the last commit? (y/n) " yn; \
 	case $$yn in \
-		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \
+		[Yy]* ) git reset --soft HEAD~1;\
+		git push origin --force-with-lease $(shell git branch --show-current) ;\
+		echo $(RED) "Last commit reset" $(E_NC) ;; \
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
 amend:
@@ -109,6 +111,8 @@ rgb:
 			done \
 		done \
 	done
+lorigin:
+	@git log origin $(git branch --show-current) -3
 # cpp:
 # 	@for file in includes/*.hpp; do \
 # 		touch src/$$(basename "$${file%.*}").cpp; \
