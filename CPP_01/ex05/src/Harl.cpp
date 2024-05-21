@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 13:32:02 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/21 15:25:32 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/21 16:19:59 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 
 Harl::Harl()
 {
+	_ptr[DEBUG] = &Harl::_debug;
+	_ptr[INFO] = &Harl::_info;
+	_ptr[WARNING] = &Harl::_warning;
+	_ptr[ERROR] = &Harl::_error;
 }
 
 Harl::~Harl()
@@ -77,11 +81,6 @@ static std::string setColor(std::string msg, int color)
 	return (strColor.str());
 }
 
-static void (Harl::*ptr(int i))()
-{
-	void (Harl::*ptr[N_TYPE])() ={&Harl::_debug, &Harl::_info, &Harl::_warning, &Harl::_error};
-	return (ptr);
-}
 
 /**
  * @brief This function handles complaints based on the provided level.
@@ -93,14 +92,14 @@ void	Harl::complain(std::string level)
 {
 	std::string	types[N_TYPE] = {"DEBUG", "INFO", "WARNING", "ERROR"};
 	int color[N_TYPE] = {FGREEN, FBLUE, FYELLOW, FRED};
-
 	int type = 0;
-	while (type < 4 && types[type].compare(level) != 0)
-		type++;
+
+	for (; type < N_TYPE && types[type] != level; ++type);
+
 	if (type < 0 || type < N_TYPE)
 	{
 		std:: cout << setColor("[" + types[type] + "]", color[type]) <<std::endl;
-		(this->*ptr[type])();
+		(this->*_ptr[type])();
 	}
 	else
 	{
