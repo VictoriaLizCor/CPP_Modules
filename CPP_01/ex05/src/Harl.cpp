@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 13:32:02 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/21 13:32:56 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/21 15:25:32 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,18 +77,22 @@ static std::string setColor(std::string msg, int color)
 	return (strColor.str());
 }
 
+static void (Harl::*ptr(int i))()
+{
+	void (Harl::*ptr[N_TYPE])() ={&Harl::_debug, &Harl::_info, &Harl::_warning, &Harl::_error};
+	return (ptr);
+}
+
 /**
  * @brief This function handles complaints based on the provided level.
  * 
  * @param level The level of complaint. It can be "DEBUG", "INFO", 
  * "WARNING", or "ERROR".
  */
-void	Harl::complain( std::string level)
+void	Harl::complain(std::string level)
 {
 	std::string	types[N_TYPE] = {"DEBUG", "INFO", "WARNING", "ERROR"};
 	int color[N_TYPE] = {FGREEN, FBLUE, FYELLOW, FRED};
-	void (Harl::*ptr[4])() ={&Harl::_debug, &Harl::_info, &Harl::_warning, &Harl::_error};
-
 
 	int type = 0;
 	while (type < 4 && types[type].compare(level) != 0)
