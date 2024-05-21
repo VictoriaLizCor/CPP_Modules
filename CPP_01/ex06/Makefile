@@ -1,5 +1,5 @@
 #------ TARGET ------#
-NAME		:= replace
+NAME		:= harl
 #------ WFLAGS ------#
 D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 INCLUDES	+= -I includes/
@@ -10,8 +10,6 @@ PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir ${shell find $(PROJECT_ROOT) -name Makefile}))
 CURRENT		:= $(shell basename $$PWD)
-FILE		:= docs/test.txt
-S1S2	:= replace change
 #------ DEBUG ------#
 D			= 0
 #------ Sanitizer ------#
@@ -27,7 +25,7 @@ DEBUG_DIR	:= $(NAME).dSYM
 
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
-CC			= g++ -g
+CC			= g++
 D_FLAGS		+= -DDEBUG=$(D)
 endif
 ifeq ($(S), 0)
@@ -74,8 +72,6 @@ clean:
 	@if [ -d "$(DEBUG_DIR)" ]; then	\
 		rm -rf $(DEBUG_DIR); 		\
 	fi
-	@$(MAKE) delete to_remove=*Cpy*
-	@$(MAKE) delete
 	@printf  "\n$(P_NC)"
 
 fclean: clean
@@ -92,120 +88,10 @@ re: fclean all
 
 .PHONY: all clean fclean re
 #------------- TEST UTILS -----------------------------------#
-long:
-	$(eval TO_COPY=docs/longText)
-	@$(MAKE) checkCpyFile FILE=$(TO_COPY) SHOW=true
-	@sleep 1
-# @$(MAKE) runTest arg="rabbit 'brave little rabbit'"
-	@./$(NAME) $(TO_COPY) rabbit 'brave little rabbit'
-empty:
-	touch emptyFile
-	ls -la emptyFile
-	./$(NAME) emptyFile Harry Ha
-modn: harry
-	chmod 0000 funnyCpy
-	ls -la funnyCpy
-	./$(NAME) funnyCpy Ron Harry
-modr: harry
-	chmod 0444 funnyCpy
-	ls -la funnyCpy
-	./$(NAME) funnyCpy Ron Harry
-modw: harry
-	chmod 0222 funnyCpy
-	ls -la funnyCpy
-	./$(NAME) funnyCpy Ron Harry
-modrw: harry
-	chmod 0666 funnyCpy
-	ls -la funnyCpy
-	./$(NAME) funnyCpy Ron Harry
-cat :
-	@find . -name "*Cpy*" ! -name "*.replace*" -exec sh -c 'echo "\n---" {} "---"; cat {}' \;
-	@find . -name "*.replace*" -exec sh -c 'echo "\n---" {} "---"; cat {}' \;
-t1:harry
-	./$(NAME) funnyCpy Ron Harry
-	@$(MAKE) diff
-t2:
-	@echo $(BOLD) $(CYAN) ./$(NAME) funnyCpy Ron Harry $(E_NC) "\n"
-	@./$(NAME) funnyCpy Ron Harry > /dev/null
-checkCpyFile:
-	@if [ -f "$(FILE)" ]; then	\
-		FILE_NAME=$(notdir $(basename $(FILE))); \
-		EXTENSION=$(suffix $(FILE)); \
-		APPEND=Cpy; \
-		NEW=$$FILE_NAME$$APPEND$$EXTENSION; \
-		cp $(FILE) $$NEW;	\
-		if [ -f $${NEW} ] && [ ! -z "$(SHOW)" ] || [ "$(SHOW)" = "false" ]; then \
-			echo $(YELLOW) "Copied $(FILE) to $$NEW \n" $(E_NC);	\
-		else \
-			echo $$NEW; \
-		fi \
-	else	\
-		echo $(RED) "$(FILE) does not exist" $(E_NC);	\
-	fi
-delete:
-	@if [ ! -z "$(to_remove)" ]; then \
-		find . -name "$(to_remove)" ! -name "*.replace*" -type f -exec rm -f {} \;; \
-	else \
-		find . -name "*.replace*" -type f -exec rm -f {} \;; \
-	fi
-harry:
-	$(eval TO_COPY=docs/funny)
-	@$(MAKE) checkCpyFile FILE=$(TO_COPY) SHOW=true
-#	@sleep 1
-#	@$(MAKE) runTest arg='Harry Ron'
-# @$(MAKE) runTest > /dev/null; \
-# if [ $$? -ne 0 ]; then \
-# 	echo $(RED) "Command runTest failed" $(E_NC); \
-# else \
-# 	echo $(GREEN) "Command runTest successful" $(E_NC); \
-# fi
-file: clean
-	$(eval TO_COPY=docs/test.txt)
-	@$(MAKE) checkCpyFile FILE=$(TO_COPY) SHOW=true
-	@sleep 1
-	@$(MAKE) runTest arg='$(S1S2)'
-# @$(MAKE) runTest > /dev/null | cat; \
-# if [ $$? -ne 0 ]; then \
-# 	echo $(RED) "Command runTest failed" $(E_NC); \
-# else \
-# 	echo $(GREEN) "Command runTest successful" $(E_NC); \
-# fi
-runTest:
-	$(eval TMP = $(shell find . -name "*$(notdir $(TO_COPY))Cpy*" ! -name "*.replace*"))
-	$(MAKE) test arg="$(TMP) $(arg)"
-test:
-	$(eval TEST_ARGS = $(if $(arg), $(arg),$(shell $(MAKE) checkCpyFile) $(S1S2)))
-ifeq ($(D), 2)
-	@echo $(BOLD) $(CYAN) Run in gdbgui dashboard:"\n" ./$(NAME) "$(TEST_ARGS)" $(E_NC) "\n"
-	@gdbgui ./$(NAME)
-else
-ifeq ($(D), 1)
-	@echo $(BOLD) $(CYAN) ./$(NAME) "$(TEST_ARGS)" $(E_NC) "\n"
-	@./$(NAME) $(TEST_ARGS)
-else
-	@echo $(BOLD) $(CYAN) ./$(NAME) "$(TEST_ARGS)" $(E_NC) "\n"
-	@./$(NAME) $(TEST_ARGS)
-endif
-endif
-#	@$(MAKE) grep TEST_ARGS="$(TEST_ARGS)"
-grep:
-	@echo "------------------------------------------------"
-	@grep --color $(word 2, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)) && echo
-	@if [ -f "$(word 1, $(TEST_ARGS)).replace" ]; then \
-		grep --color '$(word 3, $(TEST_ARGS))' $(word 1, $(TEST_ARGS)).replace && echo ; \
-		echo $(BLUE) DIFF $(E_NC); \
-		diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace || true && echo ; \
-	fi
-	@if [ -f "$(word 1, $(TEST_ARGS)).replace2" ]; then \
-		grep --color "$(word 3, $(TEST_ARGS))" $(word 1, $(TEST_ARGS)).replace2 && echo  ; \
-		diff $(word 1, $(TEST_ARGS)) $(word 1, $(TEST_ARGS)).replace2 || true ;echo ;\
-	fi
-#----
-# @$(MAKE) delete to_remove=*Cpy* ;echo
-#	@ls --color=auto
-# testing functions used 
-# nm -g /path/to/your/file | grep " T "
-#pygmentize -g -O style=friendly $(word 1, $(TEST_ARGS)).replace && echo; \
+test:$(NAME)
+	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
+	@./$(NAME)
+#	@echo "-----\n"
 ############# USE WITH S=0
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)  "\n"
@@ -213,19 +99,22 @@ leaks: $(NAME)
 	@echo "\n"
 
 val: $(NAME)
-	@echo $(RED) $(VALGRIND) ./$(NAME) $(ARGS) $(E_NC) "\n"
-	@$(VALGRIND) ./$(NAME) $(ARGS)
+	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC) "\n"
+	@$(VALGRIND) ./$(NAME)
 	@echo "\n"
 ## Diff with intra
-diff:
-	$(eval CPY= $(shell find . -name "*Cpy*" ! -name "*.replace*"))
-	$(eval REPLACE= $(shell find . -name "*.replace*"))
-	@if [ ! -s $(REPLACE) ]; then \
-		echo;echo "$(REPLACE) is empty"; \
-	else \
-		echo $(YELLOW) "Diffing $(CPY) with $(REPLACE)" $(E_NC); \
-		diff $(CPY) $(REPLACE) || true; \
-	fi
+diff:$(NAME)
+	@./$(NAME) > docs/test.log
+	@sed 's/\[[^]]*\]//g' docs/test.log > docs/temp1.log
+	@sed 's/\[[^]]*\]//g' docs/intra.log > docs/temp2.log
+	@diff docs/temp1.log docs/temp2.log > /dev/null && echo $(GREEN)"Same output"$(E_NC) || echo $(RED)"different output"$(E_NC)
+	@read -p "Remove files? (y/n) " yn; \
+	case $$yn in \
+		[Yy]* ) rm docs/temp1.log docs/temp2.log docs/test.log;; \
+		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
+	esac
+
+
 # #-------------------- GIT UTILS ----------------------------#
 dirs:
 	@echo $(DIRS)
@@ -248,7 +137,7 @@ gPush:
 	@echo $(YELLOW) && git push > /dev/null || \
 	if [ $$? -ne 0 ]; then \
 		echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
-		git push --set-upstream origin $(shell git branch --SHOW-current); \
+		git push --set-upstream origin $(shell git branch --show-current); \
 	fi
 
 git:
@@ -264,19 +153,14 @@ quick:
 	@echo $(YELLOW) && git push
 
 soft:
-	@echo $(GREEN) "Last two commits:" $(E_NC)
-	@git log -2
-	@read -p "Do you want to reset the last commit? (y/n) " yn; \
-	case $$yn in \
-		[Yy]* ) git reset --soft HEAD~1; echo $(RED) "Last commit reset" $(E_NC) ;; \
-		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
-	esac
-cpp:
+	$(MAKE) -C $(GIT_REPO) soft
+cpp: # Usage: make cpp f=filename
+	mkdir src includes
+	touch src/main.cpp
+	touch includes/$(f).hpp
 	@for file in includes/*.hpp; do \
 		touch src/$$(basename "$${file%.*}").cpp; \
 	done
-gdbgui:
-	@pip install gdbgui
 #--------------------COLORS----------------------------#
 # For print
 CL_BOLD = \e[1m

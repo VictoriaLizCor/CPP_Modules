@@ -111,8 +111,8 @@ rgb:
 			done \
 		done \
 	done
-lorigin:
-	@git log origin $(git branch --show-current) -3
+colog:
+	@git log origin $(shell git branch --show-current) -3
 # cpp:
 # 	@for file in includes/*.hpp; do \
 # 		touch src/$$(basename "$${file%.*}").cpp; \
