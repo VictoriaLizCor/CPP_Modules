@@ -6,12 +6,15 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:09:01 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/18 15:58:32 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/21 09:22:35 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "HumanB.hpp"
 
+HumanB::HumanB(std::string name): _name(name), _weapon(0)
+{
+}
 /**
  * @brief Destructor for the HumanB class.
  * 

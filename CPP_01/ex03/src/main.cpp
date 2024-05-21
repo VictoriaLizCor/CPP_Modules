@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 13:07:44 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/10 14:47:29 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/21 09:17:31 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ static std::string	setColor(std::string msg, int color)
 	fmt = "\033[";
 	if (msg.empty())
 	{
-		strColor << fmt << color << "m";
-		return (strColor.str());
+		color = FDEFAULT;
+		msg = "Unknown";
 	}
 	if (color >= FDEFAULT)
 		fmt = fmt + "1;";

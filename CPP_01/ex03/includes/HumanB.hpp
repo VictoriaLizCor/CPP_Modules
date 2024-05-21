@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 16:32:54 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/18 15:58:50 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/21 09:02:24 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ class HumanB
 		Weapon		*_weapon;
 
 	public:
-		HumanB(std::string name):_name(name), _weapon(0){};
+		HumanB(std::string name);
 		~HumanB();
 		void	setWeapon(Weapon &weapon);
 		void	attack();
