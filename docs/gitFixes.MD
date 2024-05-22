@@ -137,3 +137,59 @@ Please note that this will rewrite the commit history, which can cause problems 
 ```bash
 git config --local commit.template {path-to-commit-template}
 ```
+# Adding SUBMODULES:
+
+GitHub Copilot: To add a submodule to a Git project, you can use the `git submodule add` command. Here's how you can do it:
+
+1. Navigate to your project directory in the terminal.
+
+```bash
+cd /path/to/your/project
+```
+
+2. Add the submodule. Replace `https://github.com/username/repo.git` with the URL of the repository you want to add as a submodule.
+
+```bash
+git submodule add https://github.com/username/repo.git
+```
+
+By default, the submodule will be added in a directory named after the repository. If you want to add it in a different directory, you can specify the path as a second argument:
+
+```bash
+git submodule add https://github.com/username/repo.git path/to/submodule
+```
+
+3. Commit and push the changes.
+
+```bash
+git commit -m "Added submodule"
+git push
+```
+
+Now, the submodule is added to your project. When you clone the project, use the `--recursive` option to also clone all submodules:
+
+```bash
+git clone --recursive https://github.com/yourusername/yourproject.git
+```
+
+If you've already cloned the project and want to fetch the submodules, you can use the `git submodule update` command:
+
+```bash
+git submodule update --init --recursive
+```
+
+VictoriaLizCor: clear history
+
+GitHub Copilot: To clear the history in a Linux terminal, you can use the `history` command with the `-c` option:
+
+```bash
+history -c
+```
+
+This command will clear the history list for the current session. If you want to delete the history file as well, you can use the `rm` command:
+
+```bash
+rm ~/.bash_history
+```
+
+This will delete the `.bash_history` file, which stores the command history for your user. Note that the exact location and
