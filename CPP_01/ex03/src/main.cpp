@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 13:07:44 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/21 09:17:31 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:11:40 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,11 @@ int main()
 		jim.setWeapon(club);
 		jim.attack();
 		club.setType(weapon2);
+		//club.setType("");
+		jim.attack();
+		jim.setWeapon(&club);
+		jim.attack();
+		jim.setWeapon(0);
 		jim.attack();
 	}
 	return (0);

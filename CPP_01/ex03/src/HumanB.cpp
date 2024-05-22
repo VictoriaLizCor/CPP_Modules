@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 14:09:01 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/21 09:22:35 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/22 15:20:39 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,12 @@ void	HumanB::attack()
  */
 void	HumanB::setWeapon(Weapon &weapon)
 {
+	std::cout << "Weapon set as Reference" << std::endl;
 	_weapon = &weapon;
+}
+
+void	HumanB::setWeapon(Weapon *weapon)
+{
+	std::cout << "Weapon set as Pointer" << std::endl;
+	_weapon = weapon;
 }
