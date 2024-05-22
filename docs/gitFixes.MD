@@ -195,3 +195,4 @@ git checkout origin/<branch-name> -- <folder-path>
 This will update the specified folder in your current branch with the version from the remote branch.
 
 Please note that this operation will overwrite the specified folder in your current branch. If you have any local changes in this folder that you want to keep, you should commit or stash them before running these commands.
+
