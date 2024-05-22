@@ -177,3 +177,21 @@ If you've already cloned the project and want to fetch the submodules, you can u
 ```bash
 git submodule update --init --recursive
 ```
+# Fetch specific files from remote branch
+To restore a specific folder from a remote branch in Git, you can use a combination of `fetch` and `checkout`. Here's how you can do it:
+
+1. First, fetch the remote branch:
+
+```bash
+git fetch origin <branch-name>
+```
+
+2. Then, checkout the specific folder you want to restore:
+
+```bash
+git checkout origin/<branch-name> -- <folder-path>
+```
+
+This will update the specified folder in your current branch with the version from the remote branch.
+
+Please note that this operation will overwrite the specified folder in your current branch. If you have any local changes in this folder that you want to keep, you should commit or stash them before running these commands.
