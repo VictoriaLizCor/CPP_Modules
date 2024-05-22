@@ -240,3 +240,44 @@ rm -rf path_to_submodule
 ```
 
 Remember to replace `SubmoduleName`, `SubmodulePath`, and `path_to_submodule` with the name and path of your specific submodule.
+
+# change Submodule path 
+To change the path of a submodule in Git, you need to:
+
+1. Open the `.gitmodules` file in the root of your repository.
+
+2. Find the section for the submodule you want to change. It will look something like this:
+
+```ini
+[submodule "SubmoduleName"]
+    path = old/path/to/submodule
+    url = git://github.com/username/repo.git
+```
+
+3. Change the `path` to the new path you want:
+
+```ini
+[submodule "SubmoduleName"]
+    path = new/path/to/submodule
+    url = git://github.com/username/repo.git
+```
+
+4. Stage the `.gitmodules` changes:
+
+```bash
+git add .gitmodules
+```
+
+5. Now, you need to reflect this change in the Git index:
+
+```bash
+git mv old/path/to/submodule new/path/to/submodule
+```
+
+6. Commit the changes:
+
+```bash
+git commit -m "Moved submodule"
+```
+
+Remember to replace `SubmoduleName`, `old/path/to/submodule`, and `new/path/to/submodule` with the name and paths of your specific submodule.
