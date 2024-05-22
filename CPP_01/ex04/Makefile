@@ -167,7 +167,7 @@ file: clean
 # @$(MAKE) runTest > /dev/null | cat; \
 # if [ $$? -ne 0 ]; then \
 # 	echo $(RED) "Command runTest failed" $(E_NC); \
-# else \
+# else \git submodule deinit -f eval_repo
 # 	echo $(GREEN) "Command runTest successful" $(E_NC); \
 # fi
 runTest:
