@@ -90,7 +90,11 @@ re: fclean all
 #------------- TEST UTILS -----------------------------------#
 test:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
-	@./$(NAME)
+	@./$(NAME) | cat
+	@echo $(BOLD) $(CYAN) ./$(NAME) '"INFO"' $(E_NC) "\n"
+	@./$(NAME) "INFO"
+	@echo $(BOLD) $(CYAN) ./$(NAME) '"This is a test"' $(E_NC) "\n"
+	@./$(NAME) '"This is a test"'
 #	@echo "-----\n"
 ############# USE WITH S=0
 leaks: $(NAME)
