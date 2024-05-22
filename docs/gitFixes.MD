@@ -196,3 +196,47 @@ This will update the specified folder in your current branch with the version fr
 
 Please note that this operation will overwrite the specified folder in your current branch. If you have any local changes in this folder that you want to keep, you should commit or stash them before running these commands.
 
+# delete submodule
+To delete a Git submodule, you need to:
+
+1. Delete the relevant section from the `.gitmodules` file. The section would look something like this:
+
+```ini
+[submodule "SubmoduleName"]
+    path = SubmodulePath
+    url = git://github.com/username/repo.git
+```
+
+2. Stage the `.gitmodules` changes via Git:
+
+```bash
+git add .gitmodules
+```
+
+3. Delete the relevant section from `.git/config`, which looks like the section in `.gitmodules`.
+
+4. Run `git rm --cached path_to_submodule` (no trailing slash).
+
+```bash
+git rm --cached path_to_submodule
+```
+
+5. Run `rm -rf .git/modules/path_to_submodule` (no trailing slash).
+
+```bash
+rm -rf .git/modules/path_to_submodule
+```
+
+6. Commit the changes:
+
+```bash
+git commit -m "Removed submodule "
+```
+
+7. Delete the now untracked submodule files:
+
+```bash
+rm -rf path_to_submodule
+```
+
+Remember to replace `SubmoduleName`, `SubmodulePath`, and `path_to_submodule` with the name and path of your specific submodule.

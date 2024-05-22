@@ -56,5 +56,5 @@ dkms.conf
 obj*/
 #.vscode*/
 msg_template
-evals/
+#evals/
 *.DS_Store
