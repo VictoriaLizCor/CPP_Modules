@@ -177,19 +177,3 @@ If you've already cloned the project and want to fetch the submodules, you can u
 ```bash
 git submodule update --init --recursive
 ```
-
-VictoriaLizCor: clear history
-
-GitHub Copilot: To clear the history in a Linux terminal, you can use the `history` command with the `-c` option:
-
-```bash
-history -c
-```
-
-This command will clear the history list for the current session. If you want to delete the history file as well, you can use the `rm` command:
-
-```bash
-rm ~/.bash_history
-```
-
-This will delete the `.bash_history` file, which stores the command history for your user. Note that the exact location and

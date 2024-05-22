@@ -125,7 +125,10 @@ dirs:
 	@echo PROJECT_ROOT: $(CYAN) $(PROJECT_ROOT) $(E_NC)
 	@echo GIT_REPO:  $(CYAN) $(GIT_REPO) $(E_NC)
 	@echo $(CURRENT)
-
+testAll:
+	@for dir in $(DIRS); do \
+		$(MAKE) -C $$dir test; \
+	done
 cleanAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir fclean; \
