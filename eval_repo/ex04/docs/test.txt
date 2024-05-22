@@ -1,5 +1,0 @@
-This is a test file:
-
-Hello, world!
-We will replace some words in this file.
-For example, we will replace the word "replace" with another word.
