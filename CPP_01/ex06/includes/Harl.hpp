@@ -11,6 +11,7 @@ typedef enum color
 	FGREEN		= 92,
 	FYELLOW		= 93,
 	FBLUE		= 94,
+	FWHITE		= 97,
 }t_color;
 
 class Harl
@@ -27,6 +28,7 @@ class Harl
 		Harl();
 		~Harl();
 		void	complain( std::string level );
+		std::string	checkType(int type);
 	private:
 		typedef void (Harl::*funcPtr)(void);
 		funcPtr		_ptr[N_TYPE];

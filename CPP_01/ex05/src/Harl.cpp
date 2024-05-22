@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 13:32:02 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/21 16:45:49 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/22 09:22:41 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,11 @@ static std::string setColor(std::string msg, int color)
 	return (strColor.str());
 }
 
-
+std::string	Harl::checkType(int type)
+{
+	std::string	types[N_TYPE] = {"DEBUG", "INFO", "WARNING", "ERROR"};
+	return (types[type]);
+}
 /**
  * @brief This function handles complaints based on the provided level.
  * 
@@ -90,15 +94,14 @@ static std::string setColor(std::string msg, int color)
  */
 void	Harl::complain(std::string level)
 {
-	std::string	types[N_TYPE] = {"DEBUG", "INFO", "WARNING", "ERROR"};
 	int color[N_TYPE] = {FGREEN, FBLUE, FYELLOW, FRED};
 	int type = 0;
 
-	for (; type < N_TYPE && types[type] != level; ++type);
+	for (; type < N_TYPE && checkType(type) != level; ++type);
 
 	if (type < N_TYPE)
 	{
-		std:: cout << setColor("[" + types[type] + "]", color[type]) <<std::endl;
+		std:: cout << setColor("[" + checkType(type) + "]", color[type]) <<std::endl;
 		(this->*_ptr[type])();
 	}
 	else

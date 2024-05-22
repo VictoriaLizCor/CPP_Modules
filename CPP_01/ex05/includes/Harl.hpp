@@ -26,6 +26,7 @@ class Harl
 		};
 		Harl();
 		~Harl();
+		std::string	checkType(int type);
 		void	complain( std::string level );
 	private:
 		typedef void (Harl::*funcPtr)(void);
