@@ -35,11 +35,12 @@ gtest:
 gPush:
 	@echo $(YELLOW) && git push > /dev/null || \
 	if [ $$? -ne 0 ]; then \
-		echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
+		echo $(RED) "git push failed, setting upstream branch\n" $(YELLOW) && \
 		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \
-			echo $(RED) "git push --set-upstream failed with error" $(E_NC); \
+			echo $(RED) "git push --set-upstream failed with error"; \
 		fi \
+		echo $(E_NC); \
 	fi
 # @echo $(YELLOW) && git push > /dev/null || \
 # (echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
@@ -48,7 +49,6 @@ cleanAll:
 	@for mod in $(DIRS); do \
 		echo "\n"$(BLUE)*******************$$(basename $$mod)*******************$(E_NC) ; \
 		for subdir in $$(find $$mod -type d -name "ex0*" -exec test -e '{}/Makefile' ';' -print); do \
-			echo $$subdir; \
 			$(MAKE) -C $$subdir fclean; \
 		done; \
 	done
