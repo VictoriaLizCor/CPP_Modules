@@ -1,5 +1,5 @@
 #------ TARGET ------#
-NAME		:= NAME    = $(notdir $(CURDIR))
+NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
 D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 INCLUDES	+= -I includes/
@@ -96,7 +96,7 @@ test:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) '"This is a test"' $(E_NC) "\n"
 	@./$(NAME) '"This is a test"'
 #	@echo "-----\n"
-############# USE WITH S=0
+# !!!!!!!!!!!!!!  USE WITH S=0 !!!!!!!!!!!!1111
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)  "\n"
 	@$(MAC_LEAKS) ./$(NAME)
@@ -106,18 +106,6 @@ val: $(NAME)
 	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC) "\n"
 	@$(VALGRIND) ./$(NAME)
 	@echo "\n"
-## Diff with intra
-diff:$(NAME)
-	@./$(NAME) > docs/test.log
-	@sed 's/\[[^]]*\]//g' docs/test.log > docs/temp1.log
-	@sed 's/\[[^]]*\]//g' docs/intra.log > docs/temp2.log
-	@diff docs/temp1.log docs/temp2.log > /dev/null && echo $(GREEN)"Same output"$(E_NC) || echo $(RED)"different output"$(E_NC)
-	@read -p "Remove files? (y/n) " yn; \
-	case $$yn in \
-		[Yy]* ) rm docs/temp1.log docs/temp2.log docs/test.log;; \
-		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
-	esac
-
 
 # #-------------------- GIT UTILS ----------------------------#
 dirs:
@@ -133,34 +121,36 @@ cleanAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir fclean; \
 	done
-
 gAdd:
 	@echo $(CYAN) && git add $(PROJECT_ROOT)
-
 gCommit:
 	@echo $(GREEN) && git commit -e
-
 gPush:
 	@echo $(YELLOW) && git push > /dev/null || \
 	if [ $$? -ne 0 ]; then \
 		echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
-		git push --set-upstream origin $(shell git branch --show-current); \
+		git push --set-upstream origin $(shell git branch --show-current);  || \
+		if [ $$? -ne 0 ]; then \
+			echo $(RED) "git push --set-upstream failed with error" $(E_NC); \
+		fi \
 	fi
-
 git:
 	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
 		$(MAKE) -C $(GIT_REPO) cleanAll gAdd gCommit gPush;		\
 	else									\
 		$(MAKE) -C $(PROJECT_ROOT)/$(CURRENT) cleanAll gAdd gCommit gPush;	\
 	fi
-
 quick:
 	@echo $(GREEN) && \
-	git commit -am "update in files: '$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
+	git commit -am "update in files: \
+	'$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
 	@echo $(YELLOW) && git push
 
 soft:
-	$(MAKE) -C $(GIT_REPO) soft
+	$(MAKE) -C $(GIT_REPO) soft || \
+	if [ $$? -ne 0 ]; then \
+		echo $(RED) GIT_REPO not found $(E_NC); \
+	fi
 cpp: # Usage: make cpp f=filename
 	mkdir src includes
 	touch src/main.cpp
