@@ -48,7 +48,7 @@ cleanAll:
 	@for mod in $(DIRS); do \
 		echo "\n"$(BLUE)*******************$$(basename $$mod)*******************$(E_NC) ; \
 		for subdir in $$(find $$mod -type d -name "ex0*"); do \
-			echo subdir; \
+			echo $$subdir; \
 			$(MAKE) -C $$subdir fclean; \
 		done; \
 	done
