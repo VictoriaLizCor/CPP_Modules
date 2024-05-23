@@ -1,27 +1,4 @@
 
-# Divergent branches 
-<!--
- Safest option:
-	hint:   git config pull.rebase false  # merge (the default strategy)
-#hint:   git config pull.rebase true   # rebase
-#hint:   git config pull.ff only       # fast-forward only
--->
-The `git pull` command options `--rebase`, `--no-rebase`, and `--ff-only` affect
-how Git handles divergent branches:
-
-1. `git pull --rebase`: Replays your local commits on top of remote changes.
-   This creates a linear commit history but modifies the existing history.
-	(*NOTE: Primarily use when changes are in local repo)
-2. `git pull --no-rebase`: Merges remote changes into your local branch,
-   creating a new merge commit. This maintains the exact commit history but can
-   lead to a non-linear history.
-
-3. `git pull --ff-only`: Only allows fast-forward merges. Git moves the branch
-   pointer forward to catch up with the remote branch. If a fast-forward merge
-   is not possible, the pull operation fails. This maintains a linear commit
-   history and doesn't modify the existing history, but doesn't allow divergence
-   between local and remote branches.
-
 # Creating new branches
 To create a new branch from another branch in Git, you first need to switch to
 the branch you want to base your new branch on using the `git checkout` command.
@@ -293,4 +270,29 @@ git mv old/path/to/submodule new/path/to/submodule
 git commit -m "Moved submodule"
 ```
 
+7. Change .git/modules/path/to/submodule
+
 Remember to replace `SubmoduleName`, `old/path/to/submodule`, and `new/path/to/submodule` with the name and paths of your specific submodule.
+
+# Divergent branches 
+<!--
+ Safest option:
+	hint:   git config pull.rebase false  # merge (the default strategy)
+#hint:   git config pull.rebase true   # rebase
+#hint:   git config pull.ff only       # fast-forward only
+-->
+The `git pull` command options `--rebase`, `--no-rebase`, and `--ff-only` affect
+how Git handles divergent branches:
+
+1. `git pull --rebase`: Replays your local commits on top of remote changes.
+   This creates a linear commit history but modifies the existing history.
+	(*NOTE: Primarily use when changes are in local repo)
+2. `git pull --no-rebase`: Merges remote changes into your local branch,
+   creating a new merge commit. This maintains the exact commit history but can
+   lead to a non-linear history.
+
+3. `git pull --ff-only`: Only allows fast-forward merges. Git moves the branch
+   pointer forward to catch up with the remote branch. If a fast-forward merge
+   is not possible, the pull operation fails. This maintains a linear commit
+   history and doesn't modify the existing history, but doesn't allow divergence
+   between local and remote branches.
