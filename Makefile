@@ -45,6 +45,7 @@ gPush:
 # @echo $(YELLOW) && git push > /dev/null || \
 # (echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
 # git push --set-upstream origin $(shell git branch --show-current))
+#make DIRS=$CPP/CPP_0* cleanAll
 cleanAll:
 	@for mod in $(DIRS); do \
 		echo "\n"$(BLUE)*******************$$(basename $$mod)*******************$(E_NC) ; \
