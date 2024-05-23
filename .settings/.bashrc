@@ -1,13 +1,17 @@
 #alias ls='ls -CFGA' # for macOS
+# Makes shell as default in bash
 export SHELL=/usr/bin/bash
+#able to use colors in terminal
 export TERM=screen-256color
+## Adding python to bash path to use pip
+export PATH="$(python -m site --user-base)/bin:$PATH"
 alias ls='ls --color=auto'
 alias lpyg='pygmentize -L styles'
 #alias pig='pygmentize -g -O style=rainbow_dash'
 #alias subl='/opt/sublime_text/sublime_text'
 alias pyg='pygmentize -g -O style=material'
 alias glog='git log --abbrev-commit --no-color'
-alias log='git log -4 --abbrev-commit --no-color | pygmentize -g -O style=monokai'
+alias log='git log -3 --abbrev-commit --no-color | pygmentize -g -O style=material'
 alias flog="git log -10 --pretty=format:'(%h)%m %s #%cd' --date=format:'%Y-%m-%d %H:%M'"
 alias plog='flog | awk "
 {
@@ -58,21 +62,17 @@ PS1+='\[\e[32m\]]'     # ] in green
 PS1+='\[\e[m\]'        # reset color
 PS1+='\[\e[32m\]\\$ '  # $ in green
 PS1+='\[\e[m\]'        # reset color
+#The command `export PROMPT_DIRTRIM=2` is a bash shell command that trims the directory path in the shell prompt to the last 2 directories when the path is too long to fit on one line.
+export PROMPT_DIRTRIM=2 
 #PS1="\e[0;31m[\u@\h \W]\$ \e[m"
 #source /Users/lilizarr/.docker/init-bash.sh || true # Added by Docker Desktop
 #export PATH=$HOME/.brew/bin:$PATH
 #export PATH=/Users/lilizarr/.brew/bin:$PATH
 export CURSUS="$HOME/42_Cursus"
-export EVAL="$HOME/42_Cursus/Eval"
-export PROMPT_DIRTRIM=2 
-#    pygmentize -g -O style=${!#}
-#material
-#dracula
-#zenburn
-#vim
-#monokai
-
+export ECPP="$CURSUS/CPP_Modules/"
+export EVAL="$CURSUS/Eval"
+export ECPP="$EVAL/CPP_modules/"
+# use -> cat file | cpyg style_name
 cpyg() {
 	pygmentize -g -O style=${!#}
-
 }
