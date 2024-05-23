@@ -68,6 +68,19 @@ git branch -d branch-to-merge
 ```bash
 git push origin --delete branch-to-merge
 ```
+# Edit merge message
+
+To merge a branch and then edit the merge commit message. Here's how you can do it:
+
+```bash
+# Step 1: Merge the branch. Replace 'branch_name' with the name of your branch.
+git merge branch_name --no-commit --no-ff
+
+# Step 2: If there are no conflicts, you can commit with a custom message.
+git commit -m "Your custom merge message"
+```
+
+Please replace `'branch_name'` with the name of the branch you want to merge and replace `'Your custom merge message'` with your desired commit message.
 # Rename branch
 
 To rename a branch in Git, you can use the following commands:
