@@ -36,7 +36,7 @@ gPush:
 	@echo $(YELLOW) && git push > /dev/null || \
 	if [ $$? -ne 0 ]; then \
 		echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
-		git push --set-upstream origin $(shell git branch --show-current);  || \
+		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \
 			echo $(RED) "git push --set-upstream failed with error" $(E_NC); \
 		fi \
