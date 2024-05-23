@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 09:49:47 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/23 12:58:39 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/23 13:58:12 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int main(void)
 {
-#if (DEFAULT == 0)
+#if (DEBUG == 0)
 {
 	Fixed a;
 	Fixed b( a );
@@ -26,6 +26,8 @@ int main(void)
 	std::cout << a.getRawBits() << std::endl;
 	std::cout << b.getRawBits() << std::endl;
 	std::cout << c.getRawBits() << std::endl;
+	
+	return (0);
 }
 #else
 {
@@ -44,7 +46,7 @@ int main(void)
 	println("-----------");
 	std::cout << "b " <<b.getRawBits() << std::endl;
 	std::cout << "c " <<c.getRawBits() << std::endl;
+	return (0);
 }
 #endif
-	return (0);
 }

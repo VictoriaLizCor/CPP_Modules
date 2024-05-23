@@ -1,7 +1,7 @@
 MAKEFLAGS			+= --no-print-directory
 CURRENT				:= $(shell basename $$PWD)
 ROOT_CPP_MODULES	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/)
-DIRS				:= $(abspath $(dir ${shell find ./*/ -type d -name "CPP_01*"}))
+DIRS				:= $(abspath $(dir ${shell find ./*/ -type d -name "CPP_02*"}))
 #------ DEBUG ------#
 D			= 0
 #------ Sanitizer ------#+

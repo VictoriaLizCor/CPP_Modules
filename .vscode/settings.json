@@ -77,7 +77,8 @@
 		"typeinfo": "cpp",
 		"ctime": "cpp",
 		"iomanip": "cpp",
-		"sstream": "cpp"
+		"sstream": "cpp",
+		"fstream": "cpp"
 	},
 	"accessibility.signals.sounds.volume": 0,
 	"C_Cpp.dimInactiveRegions": true,

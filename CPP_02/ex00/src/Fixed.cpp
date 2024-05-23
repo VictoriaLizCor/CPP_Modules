@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:38 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/23 12:47:34 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/23 14:01:01 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,20 @@ Fixed::~Fixed(void)
 	return ;
 }
 
-// rhs = right hand side
+/**
+ * @brief Overloaded assignment operator for the Fixed class.
+ *
+ * This operator is called when an existing Fixed object is assigned the values
+ * of another Fixed object. It prints a message to indicate that the assignment
+ * operator has been called and then checks if the source object is not the same
+ * as the target object. If they are different, it copies the values from the
+ * source object.
+ *
+ * @param rhs The Fixed object to assign from.
+ * Where rhs stands for 'right hand side'
+ * @return A reference to the current object.
+ */
+
 Fixed& Fixed::operator=(Fixed const& rhs)
 {
 	println(sColor("Copy assigment operator called", FGRAY, 0));
@@ -35,6 +48,16 @@ Fixed& Fixed::operator=(Fixed const& rhs)
 	return (*this);
 }
 
+/**
+ * @brief Copy constructor for the Fixed class.
+ * 
+ * This constructor is called when a new object is created as a copy of an 
+ * existing Fixed object. It prints a message to indicate that the copy 
+ * constructor has been called and then uses the assignment operator to copy 
+ * the values from the source object.
+ * 
+ * @param source The Fixed object to copy from.
+ */
 Fixed:: Fixed(Fixed const& source)
 {
 	println(sColor("Copy constructor called", FGRAY, 0));
