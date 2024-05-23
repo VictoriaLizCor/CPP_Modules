@@ -36,12 +36,14 @@ gPush:
 	@echo $(YELLOW) && git push > /dev/null || \
 	if [ $$? -ne 0 ]; then \
 		echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
-		git push --set-upstream origin $(shell git branch --show-current); \
+		git push --set-upstream origin $(shell git branch --show-current);  || \
+		if [ $$? -ne 0 ]; then \
+			echo $(RED) "git push --set-upstream failed with error" $(E_NC); \
+		fi \
 	fi
 # @echo $(YELLOW) && git push > /dev/null || \
 # (echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
 # git push --set-upstream origin $(shell git branch --show-current))
-
 cleanAll:
 	@for mod in $(DIRS); do \
 		echo "\n"$(BLUE)*******************$$(basename $$mod)*******************$(E_NC) ; \
@@ -49,13 +51,11 @@ cleanAll:
 			$(MAKE) -C $$subdir fclean; \
 		done; \
 	done
-
 git: cleanAll gAdd gCommit gPush
 # make log m=style
 mlog:
 	@git log -5 --pretty=format:"'%h'%m%s {%cd}" --date=format:'%Y-%m-%d %H:%M' | \
 	pygmentize -g -O  style=$$m | cut -d'|' -f1
-
 plog:
 	@git log -10 --pretty=format:"'%h'%m %s {%cd}" --date=format:'%Y-%m-%d %H:%M' |\
 	pygmentize -g -O  style=material | cut -d'|' -f1
@@ -71,7 +71,8 @@ plog:
 
 quick: cleanAll
 	@echo $(GREEN) && \
-	git commit -am "📝 update in files: '$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
+	git commit -am "📝 update in files: ' \
+	$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
 	@echo $(YELLOW) && git push
 # commit correction git commit --amend
 # //avoid last commit message
@@ -123,20 +124,21 @@ colog:
 # the commit message.
 .PHONY: gAdd gCommit gPush git gQuick fclean log norm test
 #--------------------COLORS---------------------------#
+# For print
 CL_BOLD = \e[1m
 RAN = \033[48;5;237m\033[38;5;255m
 NC = \033[m
-
 P_RED = \e[1;91m
 P_GREEN = \e[1;32m
-P_BLUE = \e[0;34m
+P_BLUE = \e[0;36m
 P_YELLOW = \e[1;33m
 P_CCYN = \e[0;1;36m
 P_NC = \e[0m
 LF = \e[1K\r$(P_NC)
 FG_TEXT = $(P_NC)\e[38;2;189;147;249m
-
+# For bash echo
 CLEAR = "\033c"
+BOLD = "\033[1m"
 CROSS = "\033[8m"
 RED = "\033[1;91m"
 GREEN = "\033[1;32m"
@@ -144,9 +146,8 @@ BLUE = "\033[1;34m"
 YELLOW = "\033[1;33m"
 E_NC	= "\033[m"
 CYAN = "\033[0;1;36m"
-PHILO_BANNER = "$$PHILO"
+BANNER = "$$CPP"
 TRASH_BANNER = "$$TRASH"
-
 #------------- TEST UTILS -----------------------------------#
 list:
 	@ls -la ./*/*

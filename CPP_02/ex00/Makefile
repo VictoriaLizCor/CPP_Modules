@@ -91,10 +91,6 @@ re: fclean all
 test:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
 	@./$(NAME) | cat
-	@echo $(BOLD) $(CYAN) ./$(NAME) '"INFO"' $(E_NC) "\n"
-	@./$(NAME) "INFO"
-	@echo $(BOLD) $(CYAN) ./$(NAME) '"This is a test"' $(E_NC) "\n"
-	@./$(NAME) '"This is a test"'
 #	@echo "-----\n"
 # !!!!!!!!!!!!!!  USE WITH S=0 !!!!!!!!!!!!1111
 leaks: $(NAME)
@@ -145,7 +141,6 @@ quick:
 	git commit -am "update in files: \
 	'$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
 	@echo $(YELLOW) && git push
-
 soft:
 	$(MAKE) -C $(GIT_REPO) soft || \
 	if [ $$? -ne 0 ]; then \
@@ -171,7 +166,7 @@ P_CCYN = \e[0;1;36m
 P_NC = \e[0m
 LF = \e[1K\r$(P_NC)
 FG_TEXT = $(P_NC)\e[38;2;189;147;249m
-# For bash
+# For bash echo
 CLEAR = "\033c"
 BOLD = "\033[1m"
 CROSS = "\033[8m"
