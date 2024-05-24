@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 09:49:47 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/24 15:56:08 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:35:47 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,44 +82,59 @@ static void moveBits(int num, int bits)
 */
 int main(void)
 {
+	float f = 1234.4321f;
+
+	std::cout.precision(9);
 	{
-		std::cout.precision(9);
-		{
-			Fixed a = Fixed( 1234.4321f );
-			std::cout << "Raw a is ->" << a.getRawBits() << std::endl;
-			std::cout << "Int a is ->" << a.toInt() << std::endl;
-		}
-		{
-			float f = 1234.4321f;
-			int i;
-
-			std::cout << "Binary of f  " << f << "\t| "<< fBinary(f) << std::endl;
-			i = static_cast<int> (roundf(f * (1 << 8)));
-			std::cout << "\nf * (1 << 8) =\t" << static_cast<float> (f * (1 << 8)) << std::endl;
-			std::cout << "roundf (f * (1 << 8)) =\t" << roundf(f * (1 << 8)) << std::endl;
-			std::cout << "------------------------"<< std::endl;
-			std::cout << "\ni = " << i << std::endl;
-			moveBits(i, 8);
-			std::cout << "------------------------"<< std::endl;
-		}
+		Fixed a = Fixed( f );
+		std::cout << "f value is -> " << f << std::endl;
+		std::cout << "Raw a is ->" << a.getRawBits() << std::endl;
+		std::cout << "Int a is ->" << a.toInt() << std::endl;
+		std::cout << "Float a is ->" << a.toFloat() << std::endl;
 	}
+	std::cout << "------------------------"<< std::endl;\
 	{
-		Fixed e(-5.5f);
-		Fixed f(0.0f);
-		Fixed g(100.1234f);
-		Fixed h(e);
+		int i;
 
-		std::cout << "e is " << e << std::endl;
-		std::cout << "f is " << f << std::endl;
-		std::cout << "g is " << g << std::endl;
-		std::cout << "h is " << h << std::endl;
-		std::cout << "e is " << e.toInt() << " as integer" << std::endl;
-		std::cout << "f is " << f.toInt() << " as integer" << std::endl;
-		std::cout << "g is " << g.toInt() << " as integer" << std::endl;
-		std::cout << "h is " << h.toInt() << " as integer" << std::endl;
-
-		return (0);
+		std::cout << "Binary of f  " << f << "\t| "<< fBinary(f) << std::endl;
+		i = static_cast<int> (roundf(f * (1 << 8)));
+		std::cout << "\nf * (1 << 8) =\t" << static_cast<float> (f * (1 << 8)) << std::endl;
+		std::cout << "roundf (f * (1 << 8)) =\t" << roundf(f * (1 << 8)) << std::endl;
+		std::cout << "------------------------"<< std::endl;
+		std::cout << "\ni = " << i << std::endl;
+		moveBits(i, 8);
 	}
+	std::cout << "------------------------"<< std::endl;
+	// {
+	// 	Fixed e(5.49f);
+	// 	Fixed f(0.51f);
+	// 	Fixed g(-0.51f);
+	// 	Fixed h(-5.49f);
+	// 	Fixed j(-0.49f);
+	// 	Fixed k(0.51f);
+		
+	// 	std::cout << "e is " << e << std::endl;
+	// 	std::cout << "f is " << f << std::endl;
+	// 	std::cout << "g is " << g << std::endl;
+	// 	std::cout << "h is " << h << std::endl;
+	// 	std::cout << "j is " << j << std::endl;
+	// 	std::cout << "k is " << k << std::endl;
+	// 	std::cout << "------------------------"<< std::endl;
+	// 	std::cout << "e is " << e.toInt() << " as integer" << std::endl;
+	// 	std::cout << "f is " << f.toInt() << " as integer" << std::endl;
+	// 	std::cout << "g is " << g.toInt() << " as integer" << std::endl;
+	// 	std::cout << "h is " << h.toInt() << " as integer" << std::endl;
+	// 	std::cout << "j is " << j.toInt() << " as integer" << std::endl;
+	// 	std::cout << "k is " << k.toInt() << " as integer" << std::endl;
+	// 	std::cout << "------------------------"<< std::endl;
+	// 	std::cout << "e is " << e.toFloat() << " as integer" << std::endl;
+	// 	std::cout << "f is " << f.toFloat() << " as integer" << std::endl;
+	// 	std::cout << "g is " << g.toFloat() << " as integer" << std::endl;
+	// 	std::cout << "h is " << h.toFloat() << " as integer" << std::endl;
+	// 	std::cout << "j is " << j.toFloat() << " as integer" << std::endl;
+	// 	std::cout << "k is " << k.toFloat() << " as integer" << std::endl;
+	// }
+	return (0);
 }
 #endif
 /*

@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:38 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/24 14:13:57 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/24 16:39:02 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ Fixed::Fixed(int const& number): _number(number << _fractionalBits)
  */
 Fixed::Fixed(float const& number)
 {
-	_number = static_cast<int>(roundf(number * ( 1 << _fractionalBits)));
+	setRawBits(static_cast<int>(roundf(number * ( 1 << _fractionalBits))));
 	println(sColor("Float constructor called", FGRAY, 0));
 	return ;
 }
@@ -163,7 +163,12 @@ float Fixed::toFloat(void) const
  */
 int Fixed::toInt(void) const
 {
-	return (_number >> _fractionalBits);
+	float f = toFloat();
+	float res = f - static_cast<int>(f);
+
+	if (res > 0.5f)
+		return ((_number >> _fractionalBits) + 1);
+	return (static_cast<int>(f));
 }
 
 /**
