@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 09:49:47 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/24 15:34:41 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/24 15:56:08 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,23 @@ int main(void)
 			moveBits(i, 8);
 			std::cout << "------------------------"<< std::endl;
 		}
+	}
+	{
+		Fixed e(-5.5f);
+		Fixed f(0.0f);
+		Fixed g(100.1234f);
+		Fixed h(e);
+
+		std::cout << "e is " << e << std::endl;
+		std::cout << "f is " << f << std::endl;
+		std::cout << "g is " << g << std::endl;
+		std::cout << "h is " << h << std::endl;
+		std::cout << "e is " << e.toInt() << " as integer" << std::endl;
+		std::cout << "f is " << f.toInt() << " as integer" << std::endl;
+		std::cout << "g is " << g.toInt() << " as integer" << std::endl;
+		std::cout << "h is " << h.toInt() << " as integer" << std::endl;
+
+		return (0);
 	}
 }
 #endif
