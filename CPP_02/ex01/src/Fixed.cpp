@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:38 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/23 17:56:58 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/24 14:13:57 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ Fixed::~Fixed(void)
  * Where rhs stands for 'right hand side'
  * @return A reference to the current object.
  */
-
 Fixed& Fixed::operator=(Fixed const& rhs)
 {
 	println(sColor("Copy assigment operator called", FGRAY, 0));
@@ -112,8 +111,6 @@ Fixed:: Fixed(Fixed const& source)
  */
 int	Fixed::getRawBits(void) const
 {
-	std::cout << sColor(std::string(__func__), FWHITE, 0)
-	<< sColor(" member function called", FGRAY, 0) << std::endl;
 	return (_number);
 }
 
@@ -131,13 +128,18 @@ int	Fixed::getRawBits(void) const
  */
 void Fixed::setRawBits(int const raw)
 {
-	std::cout << sColor(std::string(__func__), FWHITE, 0)
-	<< sColor(" member function called", FGRAY, 0) << std::endl;
 	_number = raw;
 	return ;
 }
 
 /**
+ * @brief Converts the fixed point number to a floating point number.
+ * 
+ * This function divides the fixed point number by the number of fractional bits
+ * shifted to the left by 1, effectively converting the fixed point number to a 
+ * floating point number.
+ * 
+ * @return float The converted floating point number.
  * `1 << _fractionalBits`: This is a bitwise left shift operation. It shifts
  * the binary representation of `1` to the left by `_fractionalBits` places.
  * This is equivalent to calculating `2^_fractionalBits`. The result of this
@@ -151,10 +153,19 @@ float Fixed::toFloat(void) const
 	return (f);
 }
 
+/**
+ * @brief Converts the fixed point number to an integer by shifting the bits.
+ * 
+ * This function shifts the bits of the number to the right by the number of 
+ * fractional bits, effectively converting the fixed point number to an integer.
+ * 
+ * @return int The converted integer.
+ */
 int Fixed::toInt(void) const
 {
 	return (_number >> _fractionalBits);
 }
+
 /**
  * @brief 
  * 

@@ -3,7 +3,7 @@
 	// "[osx]":
 	// "editor.fontSize": 13.5,
 	// "[linux]":
-	"editor.fontSize": 13.5,
+	"editor.fontSize": 13.7,
 	"window.zoomLevel": 0.3,
 	/*FOR BOTH*/
 	"workbench.startupEditor": "none",
@@ -86,6 +86,7 @@
 	"files.exclude":
 	{
 		"**/CPP_00": true,
-		"**/CPP_01": true
+		"**/CPP_01": true,
+		// "**/CPP_02": true,
 	}
 }
