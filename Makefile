@@ -39,7 +39,7 @@ gPush:
 		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \
 			echo $(RED) "git push --set-upstream failed with error"; \
-		fi \
+		fi; \
 		echo $(E_NC); \
 	fi
 # @echo $(YELLOW) && git push > /dev/null || \
