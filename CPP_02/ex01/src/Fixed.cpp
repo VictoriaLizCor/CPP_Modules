@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:38 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/24 16:40:55 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/24 17:18:03 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,10 @@ int Fixed::toInt(void) const
 }
 
 /**
- * @brief 
+ * @brief Overload the << operator for output streams.
+ * @param os The output stream.
+ * @param source The Fixed object to output.
+ * @return The output stream.
  * 
  * The `friend` keyword is not specific to any version of C++, it has been part
  * of the language since the beginning. It is used to grant a non-member function
@@ -188,7 +191,6 @@ int Fixed::toInt(void) const
  * However, this non-member function still needs to access the private data of
  * custom class to do its job. By declaring this function as a `friend` of custom
  * class, it's granting the necessary access.
-
 */
 std::ostream& operator << (std::ostream & os, Fixed const& source)
 {
