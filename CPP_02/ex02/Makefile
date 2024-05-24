@@ -36,7 +36,7 @@ OBJS		:= $(SRC)
 else
 #------ CODE FOR OBJECT FILES ------#
 # OBJS		:= $(SRC:%.cpp=$(BUILD_DIR)%.o)
-OBJS := $(addprefix $(BUILD_DIR)/, $(notdir $(SRCS:%.cpp=%.o)))
+OBJS := $(addprefix $(BUILD_DIR)/, $(notdir $(SRC:%.cpp=%.o)))
 DEPS		:= $(OBJS:.o=.d)
 #------ INCLUDE SANATIZER FLAGS ------#
 D_FLAGS		+= -O0 -g3
