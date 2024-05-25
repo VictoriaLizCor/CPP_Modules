@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:42 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/25 13:13:26 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/25 14:59:19 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,17 @@ class Fixed
  * a fixed-point number. Conversely, by dividing a fixed-point number by the number
  * of fractional units that make up `1`, you can convert the fixed-point number to
  * a floating-point number.
+ * 
+ * The `float` type in C++ is typically implemented using IEEE 754 single-precision
+ * floating-point format, which uses 23 bits for the fraction (also known as the
+ * significand or mantissa), 8 bits for the exponent, and 1 bit for the sign. This
+ * allows it to represent very small values like `FLT_MIN`.
+ * 
+ * However, a fixed-point number with 23 fractional bits can only represent values
+ * down to 1 / 2^23 (approximately 1.1920929e-7) with a precision of 1 / 2^23. This
+ * is much larger than `FLT_MIN`, so when you try to convert `FLT_MIN` to a
+ * fixed-point number, it gets rounded down to zero.
+ * 
  * 
  * NOTES: Static member functions in a class have several uses
  * 
