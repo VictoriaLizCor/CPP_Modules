@@ -35,8 +35,9 @@ ifeq ($(S), 0)
 OBJS		:= $(SRC)
 else
 #------ CODE FOR OBJECT FILES ------#
-# OBJS		:= $(SRC:%.cpp=$(BUILD_DIR)%.o)
-OBJS := $(addprefix $(BUILD_DIR)/, $(notdir $(SRC:%.cpp=%.o)))
+OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
+vpath %.cpp $(sort $(dir $(SRC)))
+# OBJS := $(patsubst $(SRC_DIR)%.cpp,$(nodir ($(BUILD_DIR)%.o)),$(SRC))
 DEPS		:= $(OBJS:.o=.d)
 #------ INCLUDE SANATIZER FLAGS ------#
 D_FLAGS		+= -O0 -g3
@@ -58,7 +59,7 @@ endif
 	@echo $(BANNER)
 
 ifneq ($(S), 0)
-$(OBJS): $(BUILD_DIR)%.o : $(SRC)%.cpp | $(BUILD_DIR)
+$(OBJS): $(BUILD_DIR)%.o : %.cpp | $(BUILD_DIR)
 	@$(CC) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 	@printf "$(LF)🚧 $(P_BLUE)Creating $(P_YELLOW)$@ $(P_BLUE)from $(P_YELLOW) $< $(FG_TEXT)"
 

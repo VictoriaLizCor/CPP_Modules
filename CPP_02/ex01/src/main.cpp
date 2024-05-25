@@ -6,15 +6,13 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 09:49:47 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/24 16:35:47 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/25 10:18:50 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "Fixed.hpp"
 #include <iostream>
-#include <bitset>
-#include <iomanip>
 
 #if (DEBUG == 0)
 int main(void)
@@ -37,6 +35,9 @@ int main(void)
 	return (0);
 }
 #else
+#include <bitset>
+#include <iomanip>
+#include <cfloat>
 static std::bitset<32> iBinary(int num)
 {
 	std::bitset<32> binary(num);
@@ -84,7 +85,12 @@ int main(void)
 {
 	float f = 1234.4321f;
 
-	std::cout.precision(9);
+	std::cout.precision(8);
+	std::cout << "Max float value: " << FLT_MAX << std::endl;
+	std::cout << "Binary of FLT_MAX:" << "\t| "<< fBinary(FLT_MAX) << std::endl;
+	std::cout << "MIN float value: " << FLT_MIN << std::endl;
+	std::cout << "Binary of FLT_MIN:" << "\t| "<< fBinary(FLT_MIN) << std::endl;
+	std::cout << "------------------------"<< std::endl;
 	{
 		Fixed a = Fixed( f );
 		std::cout << "f value is -> " << f << std::endl;
@@ -92,7 +98,7 @@ int main(void)
 		std::cout << "Int a is ->" << a.toInt() << std::endl;
 		std::cout << "Float a is ->" << a.toFloat() << std::endl;
 	}
-	std::cout << "------------------------"<< std::endl;\
+	std::cout << "------------------------"<< std::endl;
 	{
 		int i;
 
@@ -105,35 +111,35 @@ int main(void)
 		moveBits(i, 8);
 	}
 	std::cout << "------------------------"<< std::endl;
-	// {
-	// 	Fixed e(5.49f);
-	// 	Fixed f(0.51f);
-	// 	Fixed g(-0.51f);
-	// 	Fixed h(-5.49f);
-	// 	Fixed j(-0.49f);
-	// 	Fixed k(0.51f);
+	{
+		Fixed e(5.49f);
+		Fixed f(0.51f);
+		Fixed g(-0.51f);
+		Fixed h(-5.49f);
+		Fixed j(-0.49f);
+		Fixed k(0.51f);
 		
-	// 	std::cout << "e is " << e << std::endl;
-	// 	std::cout << "f is " << f << std::endl;
-	// 	std::cout << "g is " << g << std::endl;
-	// 	std::cout << "h is " << h << std::endl;
-	// 	std::cout << "j is " << j << std::endl;
-	// 	std::cout << "k is " << k << std::endl;
-	// 	std::cout << "------------------------"<< std::endl;
-	// 	std::cout << "e is " << e.toInt() << " as integer" << std::endl;
-	// 	std::cout << "f is " << f.toInt() << " as integer" << std::endl;
-	// 	std::cout << "g is " << g.toInt() << " as integer" << std::endl;
-	// 	std::cout << "h is " << h.toInt() << " as integer" << std::endl;
-	// 	std::cout << "j is " << j.toInt() << " as integer" << std::endl;
-	// 	std::cout << "k is " << k.toInt() << " as integer" << std::endl;
-	// 	std::cout << "------------------------"<< std::endl;
-	// 	std::cout << "e is " << e.toFloat() << " as integer" << std::endl;
-	// 	std::cout << "f is " << f.toFloat() << " as integer" << std::endl;
-	// 	std::cout << "g is " << g.toFloat() << " as integer" << std::endl;
-	// 	std::cout << "h is " << h.toFloat() << " as integer" << std::endl;
-	// 	std::cout << "j is " << j.toFloat() << " as integer" << std::endl;
-	// 	std::cout << "k is " << k.toFloat() << " as integer" << std::endl;
-	// }
+		std::cout << "e is " << e << std::endl;
+		std::cout << "f is " << f << std::endl;
+		std::cout << "g is " << g << std::endl;
+		std::cout << "h is " << h << std::endl;
+		std::cout << "j is " << j << std::endl;
+		std::cout << "k is " << k << std::endl;
+		std::cout << "------------------------"<< std::endl;
+		std::cout << "e is " << e.toInt() << " as integer" << std::endl;
+		std::cout << "f is " << f.toInt() << " as integer" << std::endl;
+		std::cout << "g is " << g.toInt() << " as integer" << std::endl;
+		std::cout << "h is " << h.toInt() << " as integer" << std::endl;
+		std::cout << "j is " << j.toInt() << " as integer" << std::endl;
+		std::cout << "k is " << k.toInt() << " as integer" << std::endl;
+		std::cout << "------------------------"<< std::endl;
+		std::cout << "e is " << e.toFloat() << " as float" << std::endl;
+		std::cout << "f is " << f.toFloat() << " as float" << std::endl;
+		std::cout << "g is " << g.toFloat() << " as float" << std::endl;
+		std::cout << "h is " << h.toFloat() << " as float" << std::endl;
+		std::cout << "j is " << j.toFloat() << " as float" << std::endl;
+		std::cout << "k is " << k.toFloat() << " as float" << std::endl;
+	}
 	return (0);
 }
 #endif
