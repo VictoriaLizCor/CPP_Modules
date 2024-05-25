@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:38 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/24 17:18:03 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/25 11:20:27 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 const int Fixed::_fractionalBits = 8;
 
-Fixed::Fixed(void):_number(0)
+Fixed::Fixed(void):_intValue(0)
 {
 	println(sColor("Default constructor called", FGRAY, 0));
 	return ;
@@ -33,7 +33,7 @@ Fixed::Fixed(void):_number(0)
  * This is equivalent to multiplying the number by 2 raised to the power of the
  * number of places shifted.
  */
-Fixed::Fixed(int const& number): _number(number << _fractionalBits)
+Fixed::Fixed(int const& number): _intValue(number << _fractionalBits)
 {
 	println(sColor("Int constructor called", FGRAY, 0));
 	return ;
@@ -78,7 +78,7 @@ Fixed& Fixed::operator=(Fixed const& rhs)
 {
 	println(sColor("Copy assigment operator called", FGRAY, 0));
 	if (this != &rhs)
-		_number = rhs.getRawBits();
+		_intValue = rhs.getRawBits();
 	return (*this);
 }
 
@@ -111,7 +111,7 @@ Fixed:: Fixed(Fixed const& source)
  */
 int	Fixed::getRawBits(void) const
 {
-	return (_number);
+	return (_intValue);
 }
 
 /**
@@ -128,7 +128,7 @@ int	Fixed::getRawBits(void) const
  */
 void Fixed::setRawBits(int const raw)
 {
-	_number = raw;
+	_intValue = raw;
 	return ;
 }
 
@@ -149,7 +149,7 @@ void Fixed::setRawBits(int const raw)
 float Fixed::toFloat(void) const
 {
 	float f;
-	f = static_cast<float>(_number) / static_cast<float>(1 << _fractionalBits);
+	f = static_cast<float>(_intValue) / static_cast<float>(1 << _fractionalBits);
 	return (f);
 }
 
@@ -167,7 +167,7 @@ int Fixed::toInt(void) const
 	float res = f - static_cast<int>(f);
 
 	if (res > 0.5f)
-		return ((_number >> _fractionalBits) + 1);
+		return ((_intValue >> _fractionalBits) + 1);
 	return (static_cast<int>(f));
 }
 

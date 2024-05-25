@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:42 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/23 12:53:51 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/25 11:20:27 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 class Fixed
 {
 	private:
-		int					_number;
+		int					_intValue;
 		static const int	_bits;
 	public:
 		Fixed(void);

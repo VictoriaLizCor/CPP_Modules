@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:38 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/23 14:01:01 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/25 11:20:27 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 const int _bits = 8;
 
-Fixed::Fixed(void):_number(0)
+Fixed::Fixed(void):_intValue(0)
 {
 	println(sColor("Default constructor called", FGRAY, 0));
 	return ;
@@ -44,7 +44,7 @@ Fixed& Fixed::operator=(Fixed const& rhs)
 {
 	println(sColor("Copy assigment operator called", FGRAY, 0));
 	if (this != &rhs)
-		_number = rhs.getRawBits();
+		_intValue = rhs.getRawBits();
 	return (*this);
 }
 
@@ -79,7 +79,7 @@ int	Fixed::getRawBits(void) const
 {
 	std::cout << sColor(std::string(__func__), FWHITE, 0)
 	<< sColor(" member function called", FGRAY, 0) << std::endl;
-	return (_number);
+	return (_intValue);
 }
 
 /**
@@ -98,6 +98,6 @@ void Fixed::setRawBits(int const raw)
 {
 	std::cout << sColor(std::string(__func__), FWHITE, 0)
 	<< sColor(" member function called", FGRAY, 0) << std::endl;
-	_number = raw;
+	_intValue = raw;
 	return ;
 }

@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:13:36 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/23 11:49:49 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/25 12:41:51 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@
 
 # define C_FMT "\033["
 # define C_DEFAULT "\033[0m"
+
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
 
 /*
 	FL is light foreground color

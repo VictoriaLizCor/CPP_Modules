@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/23 11:48:33 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/25 12:42:14 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
  */
 void	println(std::string str)
 {
+	if (DEBUG == 0)
+		return ;
 	std::cout << str << std::endl;
 }
 

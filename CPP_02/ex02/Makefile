@@ -36,6 +36,8 @@ OBJS		:= $(SRC)
 else
 #------ CODE FOR OBJECT FILES ------#
 OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
+# The `vpath` directive in a Makefile is used to specify a list of directories
+# that `make` should search when it's looking for prerequisites.
 vpath %.cpp $(sort $(dir $(SRC)))
 # OBJS := $(patsubst $(SRC_DIR)%.cpp,$(nodir ($(BUILD_DIR)%.o)),$(SRC))
 DEPS		:= $(OBJS:.o=.d)
