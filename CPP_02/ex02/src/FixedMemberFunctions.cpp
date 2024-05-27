@@ -129,3 +129,22 @@ Fixed Fixed::min(Fixed const& obj1, Fixed const& obj2)
 		return (obj1);
 	return (obj2);
 }
+
+#if (DEBUG == 1)
+float	Fixed::MinValue(void) const
+{
+	float f = 1.0 / (1 << _fractionalBits);
+	return (f);
+}
+
+int Fixed::getFractionalBits(void) const
+{
+	return (_fractionalBits);
+}
+
+float	Fixed::MaxValue(void) const
+{
+	float f = (1 << (32 - _fractionalBits - 1)) - 1 + MinValue() * 255;
+	return (f);
+}
+#endif

@@ -7,8 +7,8 @@ export TERM=screen-256color
 export PATH="$(python -m site --user-base)/bin:$PATH"
 alias ls='ls --color=auto'
 alias lpyg='pygmentize -L styles'
+alias gs='git status'
 #alias pig='pygmentize -g -O style=rainbow_dash'
-#alias subl='/opt/sublime_text/sublime_text'
 alias pyg='pygmentize -g -O style=material'
 alias glog='git log --abbrev-commit --no-color'
 alias log='git log -3 --abbrev-commit --no-color | pygmentize -g -O style=material'
@@ -33,7 +33,7 @@ BEGIN {
     BDEFAULT=\"\033[1;39m\"
 }
 {
-    gsub(/~[^~]*~/, \" \")
+    gsub(/~[^~]*~/, \"\")
     gsub(/\[[^\]]+\]/, BDEFAULT \"&\n\" NO_COLOR)
     gsub(/📝[^:]+: /, LGREEN \"&\" NO_COLOR) 
     gsub(/\([a-f0-9]+\)/, YELLOW \"&\" NO_COLOR)
@@ -41,12 +41,31 @@ BEGIN {
     print
 }"'
 
-#alias clog='glg'
+alias llog='git log -4 --pretty=format:"#%cd (%h)%m %B " --date=format:"%Y-%m-%d %H:%M"| awk "
+BEGIN {
+    RED=\"\033[0;31m\"
+    YELLOW=\"\033[038;5;221m\"
+    GREEN=\"\033[0;32m\"
+    NO_COLOR=\"\033[0m\"
+    LGREEN=\"\033[0;38;5;84m\"
+    LBLUE=\"\033[0;38;5;103m\"
+    BDEFAULT=\"\033[1;39m\"
+    RETURN=\"\033[1A\r\"
+}
+{
+    gsub(/~[^~]*~/, RETURN \"\")
+    gsub(/\[[^\]]+\]/, BDEFAULT \"&\" NO_COLOR)
+    gsub(/\([a-f0-9]+\)/, YELLOW \"-----&-----\" NO_COLOR)
+    gsub(/#[0-9\- :]+/, LBLUE \"&\" NO_COLOR)
+    gsub(/📝[^:]+: /, LGREEN \"\n&\" NO_COLOR) 
+    sub(/\\n$/, \"\")
+    print
+}"'
 alias vs='open ~/.config/Code/User/settings.json'
 alias bs='open ~/.bashrc' 
 alias sb='source ~/.bashrc'
 alias st='open ~/.config/terminator/config'
-
+alias subl='$(find /var/lib/flatpak/app/com.sublimetext.three/x86_64/stable/ -name sublime_text -type f 2>/dev/null | head -n 1)'
 PS1='\[\e[32m\]'       # start green color
 PS1+='['               # add [
 PS1+='\[\e[m\]'        # reset color
@@ -69,7 +88,7 @@ export PROMPT_DIRTRIM=2
 #export PATH=$HOME/.brew/bin:$PATH
 #export PATH=/Users/lilizarr/.brew/bin:$PATH
 export CURSUS="$HOME/42_Cursus"
-export ECPP="$CURSUS/CPP_Modules/"
+export CPP="$CURSUS/CPP_Modules/"
 export EVAL="$CURSUS/Eval"
 export ECPP="$EVAL/CPP_modules/"
 # use -> cat file | cpyg style_name

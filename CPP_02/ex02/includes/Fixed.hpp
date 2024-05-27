@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:42 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/25 14:59:19 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/05/27 16:43:17 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <cmath>
 
 # ifndef DEBUG
-#  define DEBUG 0
+#  define DEBUG 1
 # endif
 
 /**
@@ -68,11 +68,22 @@ class Fixed
 		static Fixed min(Fixed const& obj1, Fixed const& obj2);
 		// Overload of the insertion («) operator
 		friend std::ostream& operator << (std::ostream & os, Fixed const& src);
+		#if (DEBUG == 1)
+		float	MaxValue(void) const;
+		float	MinValue(void) const;
+		int 	getFractionalBits(void) const;
+		#endif
 };
 #endif
 /**
  * NOTES: Fixed-points
  * 
+ * Max number depends on the number of bits used to represent the number.
+ * (sizeof(int) * 8) - _fractionalBits = 32 - 8 = 24
+ * Max. value with 24 bit signed integer is
+ * ((2^23) - 1) + 255/256 = 
+ * 8388607 + 255/256 = 
+ * 8388607.99609375
  * In fixed-point representation, a number is represented as an integer and a
  * fractional part. The number of fractional units that make up `1` in the
  * fixed-point representation refers to how many fractional units are equivalent

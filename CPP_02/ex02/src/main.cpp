@@ -19,12 +19,14 @@ int main(void)
 #include <iomanip>
 # include "stringUtils.hpp"
 #include <cfloat>
+#include <climits>
+#include <cmath>
 
-// static std::bitset<32> iBinary(int num)
-// {
-// 	std::bitset<32> binary(num);
-// 	return (binary);
-// }
+static std::bitset<32> iBinary(int num)
+{
+	std::bitset<32> binary(num);
+	return (binary);
+}
 
 /**
  * `reinterpret_cast<int*>(&num)` is used to get a pointer to the float `num` as
@@ -32,12 +34,21 @@ int main(void)
  * representation of the integer. This binary representation is then printed to
  * the console.
 */
-static std::bitset<32> fBinary(float num)
-{
-	int* intPtr = reinterpret_cast<int*>(&num);
-	std::bitset<32> bits(*intPtr);
-	return (bits);
-}
+// static std::bitset<32> fBinary(float num)
+// {
+// 	int* intPtr = reinterpret_cast<int*>(&num);
+// 	std::bitset<32> bits(*intPtr);
+// 	return (bits);
+// }
+
+// static float fDecimal(std::bitset<32> bits)
+// {
+// 	int intVal = bits.to_ulong();
+// 	std::cout << "intVal: \t" << intVal << std::endl;
+// 	std::cout << "intVal iBinary: " << iBinary(intVal) << std::endl;
+// 	float* floatPtr = reinterpret_cast<float*>(&intVal);
+// 	return (*floatPtr);
+// }
 
 // static void moveBits(int num, int bits)
 // {
@@ -49,56 +60,86 @@ static std::bitset<32> fBinary(float num)
 // 		num >>= 1;
 // 	}
 // }
-
+/**
+ *  Smalles representable 1.401298464e-45/.
+ * The minimum representable value is then `1 / (2^_fractionalBits)`.
+ *  This is the smallest positive number that can be
+ * represented, corresponding to a `_intValue` of `1`.
+*/
+static void getData(Fixed const& f)
+{
+	std::cout.precision(10);
+	std::cout << "RawBinary Value is:\t" << iBinary(f.getRawBits()) << std::endl;
+	std::cout << "RawDecimal Value is:\t" << iBinary(f.getRawBits()).to_ulong() << std::endl;
+	std::cout << "Int  Value is:\t" << f.toInt() << std::endl;
+	std::cout << "Float Value is:\t" << f.toFloat() << std::endl;
+	std::cout << "\nFractional Bits:\t" << f.getFractionalBits() << std::endl;
+	std::cout << "Max Value is:\t" << f.MaxValue() << std::endl;
+	std::cout << "Min Value is:\t" << f.MinValue() << std::endl;
+	std::cout << "------------------------"<< std::endl;
+	
+}
 int main(void)
 {
-	std::cout.precision(30);
-	Fixed a;
-	Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
-
-	std::cout << "a         " << a << std::endl;
-	std::cout << "b         " << b << std::endl;
-	std::cout << "++a       " << ++a << std::endl;
-	std::cout << " fixed point number    is " << a.getRawBits() << std::endl;
-	std::cout << " float representation  is " << a << std::endl;
-	std::cout << "a         " << a << std::endl;
-	std::cout << "a++       " << a++ << std::endl;
-	std::cout << "a         " << a << std::endl;
-	std::cout << "b         " << b << std::endl;
-	std::cout << "max(a, b) " << Fixed::max( a, b ) << std::endl;
-	std::cout << "==================" << std::endl;
-	std::cout << "--a       " << --a << std::endl;
-	std::cout << "b         " << b << std::endl;
-	std::cout << "b <  a    " <<  (b < a) << std::endl;
-	std::cout << "b >  a    " <<  (b > a) << std::endl;
-	std::cout << "b == a    " <<  (b == a) << std::endl;
-	std::cout << "b <= a    " <<  (b <= a) << std::endl;
-	std::cout << "b >= a    " <<  (b >= a) << std::endl;
-	std::cout << "b != a    " <<  (b != a) << std::endl;
-	std::cout << "==================" << std::endl;
+	std::cout.precision(10);
 	{
-		Fixed min( FLT_MIN );
 		std::cout << std::endl;
-		std::cout << "min;" << std::endl;
-		std::cout << "MIN float value: " << FLT_MIN << std::endl;
-		std::cout << "Binary   " << "\t| "<< fBinary(FLT_MIN) << std::endl;
-		std::cout <<  " fixed point number    is " << min.getRawBits() << std::endl;
-		std::cout << " float representation  is " << min << std::endl;
-		std::cout << "Binary   " << "\t| "<< fBinary(min.toFloat()) << std::endl;
-
-		Fixed foo;
-		std::cout << std::endl;
-		std::cout << "foo;" << std::endl;
-		std::cout << " fixed point number    is " << foo.getRawBits() << std::endl;
-		std::cout << " float representation  is " << foo << std::endl;
-		std::cout << std::endl;
-		std::cout << std::endl;
-		foo++;
-		std::cout << "foo++;" << std::endl;
-		std::cout << " fixed point number    is " << foo.getRawBits() << std::endl;
-		std::cout << " float representation  is " << foo << std::endl;
-		std::cout << std::endl;
+		std::cout << "INTMAX       \t" << INT_MAX << std::endl;
+		std::cout << "INTMAX iBINARY\t" << iBinary(INT_MAX) << std::endl;
+		std::cout << "------------------------"<< std::endl;
+		std::cout << "INTMIN       \t" << INT_MIN << std::endl;
+		std::cout << "INTMIN iBINARY\t" << iBinary(INT_MIN) << std::endl;
+		std::cout << "------------------------"<< std::endl;
+		// 00000000100000000000000000000000
+		// std::cout << std::ceil(std::log(1.0 / f) / std::log(2.0)) << std::endl;
+		float f = 0.00390625;
+		{
+			Fixed min( f );
+			std::cout << "min (float): " << f << std::endl;
+			getData(min);
+		}
+		{
+			int i = 1;
+			Fixed min( i );
+			std::cout << "min (float): " << i << std::endl;
+			getData(min);
+		}
 	}
+	// Fixed a;
+	// Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
+
+	// std::cout << "a         " << a << std::endl;
+	// std::cout << "b         " << b << std::endl;
+	// std::cout << "++a       " << ++a << std::endl;
+	// std::cout << " fixed point number    is " << a.getRawBits() << std::endl;
+	// std::cout << " float representation  is " << a << std::endl;
+	// std::cout << "a         " << a << std::endl;
+	// std::cout << "a++       " << a++ << std::endl;
+	// std::cout << "a         " << a << std::endl;
+	// std::cout << "b         " << b << std::endl;
+	// std::cout << "max(a, b) " << Fixed::max( a, b ) << std::endl;
+	// std::cout << "==================" << std::endl;
+	// std::cout << "--a       " << --a << std::endl;
+	// std::cout << "b         " << b << std::endl;
+	// std::cout << "b <  a    " <<  (b < a) << std::endl;
+	// std::cout << "b >  a    " <<  (b > a) << std::endl;
+	// std::cout << "b == a    " <<  (b == a) << std::endl;
+	// std::cout << "b <= a    " <<  (b <= a) << std::endl;
+	// std::cout << "b >= a    " <<  (b >= a) << std::endl;
+	// std::cout << "b != a    " <<  (b != a) << std::endl;
+	// std::cout << "==================" << std::endl;
+	// Fixed foo;
+	// std::cout << std::endl;
+	// std::cout << "foo;" << std::endl;
+	// std::cout << " fixed point number    is " << foo.getRawBits() << std::endl;
+	// std::cout << " float representation  is " << foo << std::endl;
+	// std::cout << std::endl;
+	// std::cout << std::endl;
+	// foo++;
+	// std::cout << "foo++;" << std::endl;
+	// std::cout << " fixed point number    is " << foo.getRawBits() << std::endl;
+	// std::cout << " float representation  is " << foo << std::endl;
+	// std::cout << std::endl;
 	// Fixed foo( .5f );
 	// std::cout << std::endl;
 	// std::cout << "foo;" << std::endl;
