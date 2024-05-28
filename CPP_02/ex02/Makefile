@@ -1,19 +1,18 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
+D_FLAGS		= -Wall -Wextra -std=c++98 #-Werror
 INCLUDES	+= -I includes/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR	:= src/
-# SRC			:= $(shell ls -R $(SRC_DIR) | grep .cpp$)
-SRC			:=  $(shell find $(SRC_DIR) -name '*.cpp')
+SRC			:=  $(shell find $(SRC_DIR) -name '*.cpp' ! -name 'main.cpp')
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir ${shell find $(PROJECT_ROOT) -name Makefile}))
 CURRENT		:= $(shell basename $$PWD)
-#------ DEBUG ------#
-D			= 0
-#------ Sanitizer ------#
+#------ DEBUG FLAG ------#
+D			= 1
+#------ Sanitizer Flag ------#
 S			= 0
 #------ DEBUG UTILS ------#
 CC			:= c++
@@ -27,11 +26,13 @@ DEBUG_DIR	:= $(NAME).dSYM
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 CC			= g++
+SRC			+= $(SRC_DIR)/debug/main.cpp
 D_FLAGS		+= -DDEBUG=$(D)
+else
+SRC			+= $(SRC_DIR)main.cpp
 endif
 ifeq ($(S), 0)
 #MAKEFLAGS	+= --debug
-# OBJS		:= $(addprefix $(SRC_DIR), $(SRC))
 OBJS		:= $(SRC)
 else
 #------ CODE FOR OBJECT FILES ------#

@@ -9,9 +9,9 @@
  * @return The raw integer value of the fixed point number.
  * *`const`: This keyword means that the function does not modify any member
  * variables of the `Fixed` class. It's a promise that calling this function will
- * 
+ *
  */
-int	Fixed::getRawBits(void) const
+int Fixed::getRawBits(void) const
 {
 	return (_intValue);
 }
@@ -26,28 +26,28 @@ int	Fixed::getRawBits(void) const
  * @param raw The raw integer value to set the fixed point number to.
  * `const`declaration can be (int const | const int) but for string is
  * always use const std::string
- * 
+ *
  */
 void Fixed::setRawBits(int const raw)
 {
 	_intValue = raw;
-	return ;
+	return;
 }
 
 /**
  * @brief Converts the fixed point number to a floating point number.
- * 
+ *
  * This function divides the fixed point number by the number of fractional bits
- * shifted to the left by 1, effectively converting the fixed point number to a 
+ * shifted to the left by 1, effectively converting the fixed point number to a
  * floating point number.
- * 
+ *
  * @return float The converted floating point number.
  * `1 << _fractionalBits`: This is a bitwise left shift operation. It shifts
  * the binary representation of `1` to the left by `_fractionalBits` places.
  * This is equivalent to calculating `2^_fractionalBits`. The result of this
  * operation is the number of fractional units that make up `1` in the
  * fixed-point representation.
-*/
+ */
 float Fixed::toFloat(void) const
 {
 	float f;
@@ -57,10 +57,10 @@ float Fixed::toFloat(void) const
 
 /**
  * @brief Converts the fixed point number to an integer by shifting the bits.
- * 
- * This function shifts the bits of the number to the right by the number of 
+ *
+ * This function shifts the bits of the number to the right by the number of
  * fractional bits, effectively converting the fixed point number to an integer.
- * 
+ *
  * @return int The converted integer.
  */
 int Fixed::toInt(void) const
@@ -75,27 +75,26 @@ int Fixed::toInt(void) const
 
 /**
  * @brief Returns the maximum of two Fixed objects.
- * 
+ *
  * @param obj1 The first Fixed object.
  * @param obj2 The second Fixed object.
  * @return Fixed The maximum of obj1 and obj2.
  */
-Fixed Fixed::max(Fixed& obj1, Fixed& obj2)
+Fixed Fixed::max(Fixed &obj1, Fixed &obj2)
 {
 	if (obj1 > obj2)
 		return (obj1);
 	return (obj2);
 }
 
-
 /**
  * @brief Returns the maximum of two const Fixed objects.
- * 
+ *
  * @param obj1 The first const Fixed object.
  * @param obj2 The second const Fixed object.
  * @return Fixed The maximum of obj1 and obj2.
  */
-Fixed Fixed::max(Fixed const& obj1, Fixed const& obj2)
+Fixed Fixed::max(Fixed const &obj1, Fixed const &obj2)
 {
 	if (obj1 > obj2)
 		return (obj1);
@@ -104,12 +103,12 @@ Fixed Fixed::max(Fixed const& obj1, Fixed const& obj2)
 
 /**
  * @brief Returns the minimum of two Fixed objects.
- * 
+ *
  * @param obj1 The first Fixed object.
  * @param obj2 The second Fixed object.
  * @return Fixed The minimum of obj1 and obj2.
  */
-Fixed Fixed::min(Fixed& obj1, Fixed& obj2)
+Fixed Fixed::min(Fixed &obj1, Fixed &obj2)
 {
 	if (obj1 < obj2)
 		return (obj1);
@@ -118,12 +117,12 @@ Fixed Fixed::min(Fixed& obj1, Fixed& obj2)
 
 /**
  * @brief Returns the minimum of two const Fixed objects.
- * 
+ *
  * @param obj1 The first const Fixed object.
  * @param obj2 The second const Fixed object.
  * @return Fixed The minimum of obj1 and obj2.
  */
-Fixed Fixed::min(Fixed const& obj1, Fixed const& obj2)
+Fixed Fixed::min(Fixed const &obj1, Fixed const &obj2)
 {
 	if (obj1 < obj2)
 		return (obj1);
@@ -131,7 +130,7 @@ Fixed Fixed::min(Fixed const& obj1, Fixed const& obj2)
 }
 
 #if (DEBUG == 1)
-float	Fixed::MinValue(void) const
+float Fixed::MinValue(void) const
 {
 	float f = 1.0 / (1 << _fractionalBits);
 	return (f);
@@ -142,9 +141,26 @@ int Fixed::getFractionalBits(void) const
 	return (_fractionalBits);
 }
 
-float	Fixed::MaxValue(void) const
+static float power2(int n)
 {
-	float f = (1 << (32 - _fractionalBits - 1)) - 1 + MinValue() * 255;
-	return (f);
+	int i = 0;
+	int res = 1;
+
+	while (i++ < n)
+		res *= 2;
+	return (res);
+}
+
+float Fixed::MaxValue(void) const
+{
+	int intBits = sizeof(int) * 8;
+	int signBit = 1;
+	int power2Exponent = intBits - _fractionalBits - signBit;
+	int power2 = (1 << power2Exponent) - 1;
+	int power2Fractional = (1 << _fractionalBits);
+
+	float max;
+	max = (static_cast<float>(power2Fractional - 1) / static_cast<float>(power2Fractional));
+	return (max);
 }
 #endif
