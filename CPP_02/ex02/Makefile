@@ -145,10 +145,10 @@ git:
 	else									\
 		$(MAKE) -C $(PROJECT_ROOT)/$(CURRENT) cleanAll gAdd gCommit gPush;	\
 	fi
-quick:
+quick: cleanAll
 	@echo $(GREEN) && \
-	git commit -am "update in files: \
-	'$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
+	git commit -am "\n* Update in files: ' \
+	$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
 	@echo $(YELLOW) && git push
 soft:
 	$(MAKE) -C $(GIT_REPO) soft || \
