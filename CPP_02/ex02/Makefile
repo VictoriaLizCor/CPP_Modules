@@ -147,7 +147,7 @@ git:
 	fi
 quick: cleanAll
 	@echo $(GREEN) && \
-	git commit -am "\n* Update in files: ' \
+	git commit -am "\\n* Update in files: ' \
 	$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
 	@echo $(YELLOW) && git push
 soft:
