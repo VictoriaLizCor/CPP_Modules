@@ -35,9 +35,11 @@ BEGIN {
 {
     gsub(/~[^~]*~/, \"\")
     gsub(/\[[^\]]+\]/, BDEFAULT \"&\n\" NO_COLOR)
-    gsub(/📝[^:]+: /, LGREEN \"&\" NO_COLOR) 
     gsub(/\([a-f0-9]+\)/, YELLOW \"&\" NO_COLOR)
     gsub(/#[0-9\- :]+/, LBLUE \"\n\t\t\t\t\t&\" NO_COLOR)
+	gsub(/📝[^:]+: /, LGREEN \"&\" NO_COLOR)
+    gsub(/* [^:]+: /, LGREEN \"&\" NO_COLOR)
+    gsub(/\] [^:]+: /, LGREEN \"&\" NO_COLOR) 
     print
 }"'
 
@@ -54,10 +56,12 @@ BEGIN {
 }
 {
     gsub(/~[^~]*~/, RETURN \"\")
-    gsub(/\[[^\]]+\]/, BDEFAULT \"&\" NO_COLOR)
+    gsub(/\[[^\]]+\]/, BDEFAULT \"&\n\" NO_COLOR)
     gsub(/\([a-f0-9]+\)/, YELLOW \"-----&-----\" NO_COLOR)
     gsub(/#[0-9\- :]+/, LBLUE \"&\" NO_COLOR)
-    gsub(/📝[^:]+: /, LGREEN \"\n&\" NO_COLOR) 
+    gsub(/📝[^:]+: /, LGREEN \"&\" NO_COLOR)
+    gsub(/* [^:]+: /, LGREEN \"&\" NO_COLOR)
+    gsub(/\] [^:]+: /, LGREEN \"&\" NO_COLOR) 
     sub(/\\n$/, \"\")
     print
 }"'
