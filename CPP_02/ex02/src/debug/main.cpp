@@ -148,11 +148,11 @@ int main(void)
 		// }
 		// 00000000100000000000000000000000
 		// std::cout << std::ceil(std::log(1.0 / f) / std::log(2.0)) << std::endl;
-		// float f = 0.00390625;
-		// {
-		// 	Fixed min( f );
-		// 	getData(f, min);
-		// }
+		float f = 0.00390625;
+		{
+			Fixed min( f );
+			getData(f, min);
+		}
 		// f = 0.99609375;
 		// {
 		// 	Fixed min( f );
@@ -174,7 +174,7 @@ int main(void)
 			float f =  std::numeric_limits<float>::epsilon();
 			std::cout << "f: " << f << std::endl;
 			std::cout << "f binary: " << fBinary(f) << std::endl;
-			std::cout << "f decimal: " << fDecimal(fBinary(f)) << std::endl;
+			std::cout << "f " << fDecimal(fBinary(f)) << std::endl;
 			floatBitsConversion(f);
 			printBinary(f);
 			std::cout << "------------------------"<< std::endl;

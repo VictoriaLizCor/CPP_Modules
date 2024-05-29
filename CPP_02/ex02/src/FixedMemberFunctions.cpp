@@ -151,6 +151,7 @@ static float power2(int n)
 	return (res);
 }
 
+
 float Fixed::MaxValue(void) const
 {
 	int intBits = sizeof(int) * 8;
@@ -163,4 +164,11 @@ float Fixed::MaxValue(void) const
 	max = (static_cast<float>(power2Fractional - 1) / static_cast<float>(power2Fractional));
 	return (max);
 }
+/**
+ * (sizeof(int) * 8) - _fractionalBits = 
+ * 32 - 8 = 24
+ * signed integer is 
+ * ((2^23) - 1) + 255/256 =
+ *  8388607 + 255/256 =
+*/
 #endif
