@@ -2,6 +2,9 @@
 #include <bitset>
 #include "../../CPP_02/ex02/includes/Fixed.hpp"
 
+/*// COMPILE
+g++ -Wall -Wextra -Werror -std=c++98 -fsanitize=address -I../../CPP_02/ex02/includes floatPoint.cpp ../../CPP_02/ex02/src/*.cpp
+*/
 void compareFloatAndFixed(float number, Fixed fixedNumber) {
 	// Assuming that float is 4 bytes
 	if(sizeof(float) != 4) {

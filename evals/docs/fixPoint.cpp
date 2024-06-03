@@ -2,7 +2,7 @@
 #include <cmath>
 #include <cstdio>
 #include <iostream>
-
+#include "../../CPP_02/ex02/includes/Fixed.hpp"
 
 #define EPSILON 1.0e-7
 #define LOG2_10 3.321928095

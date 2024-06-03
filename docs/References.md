@@ -8,4 +8,6 @@
 ## Git Branching model
 * https://nvie.com/posts/a-successful-git-branching-model/
 
+## Microsoft Explanation!
+* https://learn.microsoft.com/en-us/cpp/build/ieee-floating-point-representation?view=msvc-170
 <!-- CVb3d2023-->

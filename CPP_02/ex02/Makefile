@@ -8,7 +8,7 @@ SRC_DIR	:= src/
 SRC			:=  $(shell find $(SRC_DIR) -name '*.cpp' ! -name 'main.cpp')
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
-DIRS		:= $(abspath $(dir ${shell find $(PROJECT_ROOT) -name Makefile}))
+DIRS		:= $(abspath $(dir $(shell find $(PROJECT_ROOT) -name Makefile | sort)))
 CURRENT		:= $(shell basename $$PWD)
 #------ DEBUG FLAG ------#
 D			= 1
@@ -26,7 +26,7 @@ DEBUG_DIR	:= $(NAME).dSYM
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 CC			= g++
-SRC			+= $(SRC_DIR)/debug/main.cpp
+SRC			+= $(SRC_DIR)debug/main.cpp
 D_FLAGS		+= -DDEBUG=$(D)
 else
 SRC			+= $(SRC_DIR)main.cpp
@@ -112,12 +112,12 @@ val: $(NAME)
 
 # #-------------------- GIT UTILS ----------------------------#
 dirs:
-	@echo $(SRC)
-	@echo $(OBJS)
-# @echo $(DIRS)
-# @echo PROJECT_ROOT: $(CYAN) $(PROJECT_ROOT) $(E_NC)
-# @echo GIT_REPO:  $(CYAN) $(GIT_REPO) $(E_NC)
-# @echo $(CURRENT)
+	@echo GIT_REPO:  $(CYAN) $(GIT_REPO) $(E_NC)
+	@echo PROJECT_ROOT: $(CYAN) $(PROJECT_ROOT) $(E_NC)
+	@echo DIRS: $(BOLD) $(DIRS) "\n" $(E_NC)
+	@echo CURRENT: $(GREEN) $(CURRENT) $(E_NC)
+	@echo SRC: $(YELLOW) $(SRC) $(E_NC)
+	@echo OBJS: $(GRAY) $(OBJS) $(E_NC)
 testAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir test; \
@@ -185,6 +185,7 @@ BLUE = "\033[1;34m"
 YELLOW = "\033[1;33m"
 E_NC	= "\033[m"
 CYAN = "\033[0;1;36m"
+GRAY = "\033[0;1;90m"
 BANNER = "$$CPP"
 TRASH_BANNER = "$$TRASH"
 

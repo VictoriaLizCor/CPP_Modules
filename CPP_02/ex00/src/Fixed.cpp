@@ -6,13 +6,13 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:38 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/25 11:20:27 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/03 13:17:16 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Fixed.hpp"
 
-const int _bits = 8;
+const int Fixed::_bits = 8;
 
 Fixed::Fixed(void):_intValue(0)
 {

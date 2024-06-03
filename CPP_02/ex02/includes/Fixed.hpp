@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:42 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/29 14:27:16 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/03 17:51:21 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,4 +150,13 @@ class Fixed
  * 126 - 127 = -1 
  * 104 - 127 = -23
  * V = (-1)^0 * ( * 2^-23)
+ * The exponents are biased by half of their possible value. 
+ * It means you subtract this bias from the stored exponent to get 
+ * the actual exponent. If the stored exponent is less than the bias, 
+ * it's actually a negative exponent.
+ * they're powers of two. That is, 8-bit stored exponents can range 
+ * from -127 to 127, stored as 0 to 254. The value 2127 is roughly 
+ * equivalent to 1038, which is the actual limit of single-precision.
+ * Positive infinity binary: 01111111100000000000000000000000
+ * Negative infinity binary: 11111111100000000000000000000000
 */

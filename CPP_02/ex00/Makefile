@@ -176,6 +176,7 @@ BLUE = "\033[1;34m"
 YELLOW = "\033[1;33m"
 E_NC	= "\033[m"
 CYAN = "\033[0;1;36m"
+GRAY = "\033[0;1;90m"
 BANNER = "$$CPP"
 TRASH_BANNER = "$$TRASH"
 

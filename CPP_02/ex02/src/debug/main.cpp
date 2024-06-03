@@ -19,14 +19,46 @@ float power2(int n)
 	return (res);
 }
 
-float getMantissa(int n, std::bitset<32> bits)
+void getMantissaAndExponent(float n)
 {
-	int i = 0;
+	int exponent = 0;
+	float mantissa = n;
+	if (n == std::numeric_limits<float>::infinity())
+	{
+		std::cout << "Mantissa and Exponent = (1 * 2^128)\n";
+		return;
+	}
+	else if (n == -std::numeric_limits<float>::infinity())
+	{
+		std::cout << "Mantissa and Exponent = (-1 * 2^128)\n";
+		return;
+	}
+	else if (std::isnan(n))
+	{
+		std::cout << "Mantissa and Exponent = (NaN)\n";
+		return;
+	}
+	if (mantissa < 0 )
+		mantissa = -mantissa;
+	while (mantissa >= 2.0)
+	{
+		mantissa /= 2.0;
+		exponent++;
+	}
+	std::cout << "Mantissa and Exponent = (" << mantissa << " * 2^" << exponent << ")\n";
+}
+
+std::bitset<23> getMantissaBinary(int n, std::bitset<32> bits)
+{
+	std::bitset<23> mantissa;
+	int i = 1;
 	float res = 0;
 
 	while (i < n)
 	{
-		res += 1 / (bits[i] * power2(i));
+		res += 1 / (bits[n - i] * power2(i));
+		std::cout << i << ": "<< bits[i] << " "<< (bits[n - i] * power2(i))
+		<< res << std::endl;
 		i++;
 	}
 	return (res);
@@ -48,20 +80,27 @@ void floatBitsConversion(float number) {
 
 	// Cast float to unsigned int
 	unsigned int binary = *(unsigned int*)&number;
-	std::cout << " binary            : "<< (binary) << "\t" << iBinary(binary) << std::endl;
-	std::cout << "23 right Bits shift: "<< (binary >> 23) << "\t" << iBinary(binary >> 23) << std::endl;
-	std::cout <<"Exponent           : " << (0xFF) << "\t" << iBinary(0xFF) << std::endl;
-	std::cout <<"And operation      : " << ((binary >> 23) & 0xFF) << "\t" << iBinary((binary >> 23) & 0xFF) << std::endl;
-	// Print sign bit
-	std::cout << "\nsign|exponen|franction\t" <<((binary >> 31) ? "1|" : "0|");
 
+	// Print sign bit
+	std::cout << "\nsign|exponen|franction\t" <<((binary >> 31) ? "1 " : "0 ");
+	
+	// Check for infinity
+	if (number == std::numeric_limits<float>::infinity() || number == -std::numeric_limits<float>::infinity())
+	{
+		std::cout << " 11111111 00000000000000000000000\n";
+		return;
+	}
 	// Print exponent bits
 	std::bitset<8> exponentBits((binary >> 23) & 0xFF);
-	std::cout << exponentBits << "|";
+	std::cout << exponentBits << " ";
 
 	// Print fraction bits
 	std::bitset<23> fractionBits(binary & 0x7FFFFF);
 	std::cout << fractionBits << std::endl;
+	std::cout << "Binary             : "<< (binary) << "\t" << iBinary(binary) << std::endl;
+	std::cout << "23 right Bits shift: "<< (binary >> 23) << "\t" << iBinary(binary >> 23) << std::endl;
+	std::cout << "Exponent           : " << (0xFF) << "\t" << iBinary(0xFF) << std::endl;
+	std::cout << "And operation      : " << ((binary >> 23) & 255) << "\t" << iBinary((binary >> 23) & 0xFF) << std::endl;
 }
 
 
@@ -138,6 +177,10 @@ int main(void)
 	std::cout.precision(15);
 	{
 		// {
+		// 	std::cout << iBinary(0xFF) << std::endl;
+		// 	std::cout << getMantissa(23, iBinary(0xFF)) << std::endl;
+		// }
+		// {
 		// 	std::cout << std::endl;
 		// 	std::cout << "INTMAX       \t\t" << INT_MAX << std::endl;
 		// 	std::cout << "INTMAX iBINARY\t\t" << iBinary(INT_MAX) << std::endl;
@@ -148,11 +191,11 @@ int main(void)
 		// }
 		// 00000000100000000000000000000000
 		// std::cout << std::ceil(std::log(1.0 / f) / std::log(2.0)) << std::endl;
-		float f = 0.00390625;
-		{
-			Fixed min( f );
-			getData(f, min);
-		}
+		// float f = 0.00390625;
+		// {
+		// 	Fixed min( f );
+		// 	getData(f, min);
+		// }
 		// f = 0.99609375;
 		// {
 		// 	Fixed min( f );
@@ -173,21 +216,51 @@ int main(void)
 		{
 			float f =  std::numeric_limits<float>::epsilon();
 			std::cout << "f: " << f << std::endl;
+			getMantissaAndExponent(f);
 			std::cout << "f binary: " << fBinary(f) << std::endl;
-			std::cout << "f " << fDecimal(fBinary(f)) << std::endl;
 			floatBitsConversion(f);
-			printBinary(f);
 			std::cout << "------------------------"<< std::endl;
 		}
-		// {
-		// 	float f = std::numeric_limits<float>::max();
-		// 	std::cout << "f: " << f << std::endl;
-		// 	floatBitsConversion(f);
-		// }
-		// float f = 2;
-		// std::cout << "f: " << f << std::endl;
-		// std::cout << "f binary: " << fBinary(f) << std::endl;
-		// floatBitsConversion(f);
+		{
+			float f = std::numeric_limits<float>::max();
+			std::cout << "f: " << f << std::endl;
+			std::cout << "f binary: " << fBinary(f) << std::endl;
+			getMantissaAndExponent(f);
+			floatBitsConversion(f);
+			std::cout << "------------------------"<< std::endl;
+		}
+		{
+			float f = 6;
+			std::cout << "f: " << f << std::endl;
+			getMantissaAndExponent(f);
+			std::cout << "f binary: " << fBinary(f) << std::endl;
+			floatBitsConversion(f);
+			std::cout << "------------------------"<< std::endl;
+		}
+		{
+			float f = 0.0/0.0; //NAN
+			std::cout << "f: " << f << std::endl;
+			getMantissaAndExponent(f);
+			std::cout << "f binary: " << fBinary(f) << std::endl;
+			floatBitsConversion(f);
+			std::cout << "------------------------"<< std::endl;
+		}
+		{
+			float f = NAN;
+			std::cout << "f: " << f << std::endl;
+			getMantissaAndExponent(f);
+			std::cout << "f binary: " << fBinary(f) << std::endl;
+			floatBitsConversion(f);
+			std::cout << "------------------------"<< std::endl;
+		}
+		{
+			float f = -std::numeric_limits<float>::infinity();
+			std::cout << "f: " << f << std::endl;
+			getMantissaAndExponent(f);
+			std::cout << "f binary: " << fBinary(f) << std::endl;
+			floatBitsConversion(f);
+			std::cout << "------------------------"<< std::endl;
+		}
 		// f = -2;
 		// std::cout << "f: " << f << std::endl;
 		// std::cout << "f binary: " << fBinary(f) << std::endl;
