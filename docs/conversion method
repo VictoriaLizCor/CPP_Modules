@@ -1,0 +1,55 @@
+float = -0.005
+
+* taking fractional part
+
+2*(0.05) >= 1 ? 1: 0 
+2*(0.1) >= 1  ? 1: 0
+2*(0.2) >= 1  ? 1: 0
+2*(0.4) >= 1  ? 1: 0
+2*(0.8) >= 1  ? 1: 0
+2*(0.6) >= 1  ? 1: 0
+2*(0.2) >= 1  ? 1: 0
+
+result =  0.000011 -> to binary is 1.10011x(2^(-5))
+sign = 1
+* Getting bias exponent shifting exponent
+(-5) + 127 = 122
+* 122 = 01111010 in binary
+
+* getting matissa
+1.100111001100110011001101
+* getting 42 bits representation
+1 01111010 100111001100110011001101
+
+---------
+float = -45.4
+taking 
+45/2 >= 0  ? 1 : 0
+22/2 >= 0  ? 1 : 0
+11/2 >= 0  ? 1 : 0
+5/2 >= 0  ? 1 : 0
+2/2 >= 0  ? 1 : 0
+1/2 >= 0  ? 1 : 0
+
+*getting integer
+result =  101101
+
+*getting fractional part 
+2*(0.4) >= 1  ? 1: 0
+2*(0.8) >= 1  ? 1: 0
+2*(0.6) >= 1  ? 1: 0
+2*(0.2) >= 1  ? 1: 0
+
+*getting binary representation 
+
+
+ to binary is 1.10011x(2^(-5))
+sign = 1
+* Getting bias exponent shifting exponent
+(-5) + 127 = 122
+* 122 = 01111010 in binary
+
+* getting matissa
+1.100111001100110011001101
+* getting 42 bits representation
+1 01111010 100111001100110011001101

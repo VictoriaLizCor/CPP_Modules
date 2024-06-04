@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:42 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/03 17:51:21 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/04 13:29:39 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ class Fixed
 #endif
 /**
  * NOTES: Fixed-points
- *
+ * (-1)*ŝign * 1.mantissa * 2^(exponent - bias(=127))
  * Max number depends on the number of bits used to represent the number.
  * (sizeof(int) * 8) - _fractionalBits = 32 - 8 = 24 Max. value with 24 bit
  * signed integer is ((2^23) - 1) + 255/256 = 8388607 + 255/256 =
@@ -153,10 +153,35 @@ class Fixed
  * The exponents are biased by half of their possible value. 
  * It means you subtract this bias from the stored exponent to get 
  * the actual exponent. If the stored exponent is less than the bias, 
- * it's actually a negative exponent.
- * they're powers of two. That is, 8-bit stored exponents can range 
+ * it's actually a negative exponent. 
+ * Use"excess-127" notation,that is, 8-bit stored exponents can range 
  * from -127 to 127, stored as 0 to 254. The value 2127 is roughly 
  * equivalent to 1038, which is the actual limit of single-precision.
  * Positive infinity binary: 01111111100000000000000000000000
  * Negative infinity binary: 11111111100000000000000000000000
+ * 
+ * The float value you're looking at is represented in IEEE 754 floating-point
+ *   standard. This standard represents floating-point numbers in binary format
+ *   with three components: the sign bit, the exponent, and the fraction (also
+ *   known as the mantissa).
+ * 
+ * In your case, the float value
+ * `340282346638528859811704183484516925440.000000000000000` is represented as
+ * `(1.999999880790710 * 2^127)`. 
+ * 
+ * The binary representation is `0 11111110 11111111111111111111111`, where:
+ * 
+ * - `0` is the sign bit, indicating a positive number.
+ * - `11111110` is the exponent, which is 254 in decimal. However, the exponent is
+ *   stored as an "excess-127" value, meaning that 127 is subtracted from the
+ *   actual exponent to get the stored exponent. So, the actual exponent is `254 -
+ *   127 = 127`.
+ * - `11111111111111111111111` is the fraction (mantissa). This represents the
+ *   number `1.999999880790710` in binary. The leading 1 (for numbers not close to
+ *   zero) is not stored, and the fraction represents the part after the decimal
+ *   point.
+ * 
+ * So, to get the exponent bytes `11111110`, you need to add 127 to your actual
+ * exponent (in this case, 127), which gives you 254, and then convert that to
+ * binary, which gives you `11111110`.
 */
