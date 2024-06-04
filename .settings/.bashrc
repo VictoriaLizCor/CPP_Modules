@@ -37,13 +37,13 @@ BEGIN {
     gsub(/\[[^\]]+\]/, BDEFAULT \"&\n\" NO_COLOR)
     gsub(/\([a-f0-9]+\)/, YELLOW \"&\" NO_COLOR)
     gsub(/#[0-9\- :]+/, LBLUE \"\n\t\t\t\t\t&\" NO_COLOR)
-	gsub(/📝[^:]+: /, LGREEN \"&\" NO_COLOR)
+    gsub(/📝[^:]+: /, LGREEN \"&\" NO_COLOR)
     gsub(/* [^:]+: /, LGREEN \"&\" NO_COLOR)
     gsub(/\] [^:]+: /, LGREEN \"&\" NO_COLOR) 
     print
 }"'
 
-alias llog='git log -4 --pretty=format:"#%cd (%h)%m %B " --date=format:"%Y-%m-%d %H:%M"| awk "
+alias llog='git log -4 --pretty=format:"#%cd (%h) %B " --date=format:"%Y-%m-%d %H:%M"| awk "
 BEGIN {
     RED=\"\033[0;31m\"
     YELLOW=\"\033[038;5;221m\"
@@ -56,8 +56,8 @@ BEGIN {
 }
 {
     gsub(/~[^~]*~/, RETURN \"\")
-    gsub(/\[[^\]]+\]/, BDEFAULT \"&\n\" NO_COLOR)
-    gsub(/\([a-f0-9]+\)/, YELLOW \"-----&-----\" NO_COLOR)
+    gsub(/\[[^\]]+\]/, BDEFAULT \"&\" NO_COLOR)
+    gsub(/\([a-f0-9]+\)/, YELLOW \"-----&----->\" NO_COLOR)
     gsub(/#[0-9\- :]+/, LBLUE \"&\" NO_COLOR)
     gsub(/📝[^:]+: /, LGREEN \"&\" NO_COLOR)
     gsub(/* [^:]+: /, LGREEN \"&\" NO_COLOR)

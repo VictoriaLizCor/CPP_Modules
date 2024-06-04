@@ -19,7 +19,7 @@ all:
 cleanAll:
 	@for mod in $(DIRS); do \
 		echo "\n"$(BLUE)*******************$$(basename $$mod)*******************$(E_NC) ; \
-		for subdir in $$(find $$mod -type d -name "ex0*" -exec test -e '{}/Makefile' ';' -print); do \
+		for subdir in $$(find $$mod -type d -name "ex0*" -exec test -e '{}/Makefile' ';' -print | sort); do \
 			$(MAKE) -C $$subdir fclean; \
 		done; \
 	done
@@ -31,7 +31,6 @@ dirs:
 	@for subdir in $$(find $(DIRS) -type d -name "ex0*" | sort); do \
 		echo "\t"$(GRAY) $$subdir $(E_NC); \
 	done; \
-
 gAdd:
 	@echo $(CYAN) && git add $(ROOT_CPP_MODULES)
 
