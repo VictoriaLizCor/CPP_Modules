@@ -27,7 +27,7 @@ fi
 # Check if the commit message file has only one line
 if [ "${#LINES[@]}" -eq 1 ]; then
 	# If the commit message file has only one line, prepend the ticketID to the commit message
-	echo "$ticketID\n ${LINES[0]}" > "$COMMIT_MSG_FILE"
+	echo -e "$ticketID\n ${LINES[0]}" > "$COMMIT_MSG_FILE"
 	echo "~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~" >> "$COMMIT_MSG_FILE"
 else
 	# If the commit message file has more than one line, keep the original commit message
