@@ -1,5 +1,5 @@
 #include "Fixed.hpp"
-#if (DEBUG == 1)
+#if (DEBUG != 0)
 # include <iostream>
 # include <bitset>
 # include <iomanip>
@@ -25,87 +25,69 @@ float power2(int n)
 	return (res);
 }
 
-void ExponentMantissa(float number, int expBits, int fractionBits)
+void floatPoint(float number, int expBits, int fractionBits)
 {
-	std::cout << std::endl;
 	// Step 1: Check if the number is negative
 	int sign = (number < 0) ? 1 : 0;
-	if (sign) number = -number;
+	if (sign)
+		number = -number;
 	// Step 2: Convert the number to scientific notation in base 2
 	int exponent = 0;
-	std::cout << exponent << " number: " << number << std::endl;
+	if (DEBUG == 2)
+		std::cout << exponent << " number: " << number << std::endl;
 	while (number >= 2.0f)
 	{
 		number /= 2.0f;
 		exponent++;
-		// std::cout << exponent << " number: " << number << std::endl;
+		if (DEBUG == 2)
+			std::cout << "\t\t" << exponent << " number: " << number << std::endl;
+		if (exponent == 255)
+			break;
 	}
 	// in case of negative exponent
 	while (number < 1.0f)
 	{
 		number *= 2.0f;
 		exponent--;
-		// std::cout << exponent << " number: " << number << std::endl;
+		if (DEBUG == 2)
+			std::cout << "\t\t"<< exponent << " number: " << number << std::endl;
+		if (exponent == 255)
+			break;
 	}
 	// Step 3: Add 127 to the real exponent value and convert it to binary
 	std::bitset<32> exponentBits(exponent + power2(expBits - 1) - 1);
 	// Step 4: Get the mantissa
 	number -= 1.0f; // remove the leading 1
 	std::bitset<32> mantissaBits;
-	for (int i = fractionBits - 1; i >= 0; i--) {
+	for (int i = fractionBits - 1; i >= 0; i--)
+	{
 		number *= 2.0f;
 		int integralPart = (int)number;
-		if (integralPart == 1) {
+		if (integralPart == 1)
+		{
 			number -= 1.0f;
 			mantissaBits.set(i);
 		}
 	}
-	// Step 5: Combine the sign, exponent and mantissa
-	std::cout << "ExponentMantissa : \t" << sign << " ";
+	if (exponent == 255)
+	{
+		exponentBits = std::bitset<32> (exponent);
+		mantissaBits.set();
+	}
+	// Step 5: Combine the sign, exponent and mantissa to print
+	std::cout << "sign|exponen|franction : \t" << sign << " ";
 	for (int i = expBits - 1; i >= 0; --i)
 		std::cout << exponentBits[i];
 	std::cout << " ";
 	for (int i = fractionBits - 1; i >= 0; --i)
 		std::cout << mantissaBits[i];
 	std::cout << std::endl;
-// Print the number in the desired format
-    std::cout << "Representation:\t(-1)^" << sign << " * 2^" << exponent << " * 1.";
+	// Print the number in the desired format
+	std::cout << "Representation :\t\t(-1)^" << sign << " * 2^" << exponent << " * 1.";
 	for (int i = fractionBits - 1; i >= 0; --i)
 		std::cout << mantissaBits[i];
-    std::cout << std::endl;
-}
-
-void floatBitsConversion(float number) {
-	// Assuming that float is 4 bytes
-	if(sizeof(float) != 4)
-	{
-		std::cout << "Unsupported float size for IEEE 754 representation" << std::endl;
-		return;
-	}
-
-	// Cast float to unsigned int
-	unsigned int binary = *(unsigned int*)&number;
-
-	// Print sign bit
-	std::cout << "\nsign|exponen|franction :\t" <<((binary >> 31) ? "1 " : "0 ");
-	
-	// Check for infinity
-	if (number == std::numeric_limits<float>::infinity() || number == -std::numeric_limits<float>::infinity())
-	{
-		std::cout << " 11111111 00000000000000000000000\n";
-		return;
-	}
-	// Print exponent bits
-	std::bitset<8> exponentBits((binary >> 23) & 0xFF);
-	std::cout << exponentBits << " ";
-
-	// Print fraction bits
-	std::bitset<23> fractionBits(binary & 0x7FFFFF);
-	std::cout << fractionBits << std::endl;
-	std::cout << "Binary			 : "<< (binary) << "\t" << iBinary(binary) << std::endl;
-	std::cout << "23 right Bits shift: "<< (binary >> 23) << "\t" << iBinary(binary >> 23) << std::endl;
-	std::cout << "Exponent		   : " << (0xFF) << "\t" << iBinary(0xFF) << std::endl;
-	std::cout << "And operation	  : " << ((binary >> 23) & 255) << "\t" << iBinary((binary >> 23) & 0xFF) << std::endl;
+	std::cout << std::endl;
+	std::cout << "------------------------------------------------"<< std::endl;
 }
 
 /**
@@ -127,6 +109,7 @@ static std::bitset<32> fBinary(float num)
  *  This is the smallest positive number that can be
  * represented, corresponding to a `_intValue` of `1`.
 */
+
 static void getData(float number, Fixed const& f)
 {
 	std::cout.precision(10);
@@ -134,190 +117,170 @@ static void getData(float number, Fixed const& f)
 	std::cout << "\nFractional Bits:\t" << f.getFractionalBits() << std::endl;
 	std::cout << "Int  Value:\t\t" << f.toInt() << std::endl;
 	std::cout << "Float Value:\t\t" << f.toFloat() << std::endl;
-	std::cout << "Max Value:\t\t" << f.MaxValue() << std::endl;
-	std::cout << "Min Value:\t\t" << f.MinValue() << std::endl;
+	// std::cout << "Max Value:\t\t" << f.MaxValue() << std::endl;
+	// std::cout << "Min Value:\t\t" << f.MinValue() << std::endl;
 	std::cout << "------------------------"<< std::endl;
 	std::cout << "RawDecimal Value:\t" << iBinary(f.getRawBits()).to_ulong() << std::endl;
 	std::cout << "RawBinary Value:\t" << iBinary(f.getRawBits()) << std::endl;
 	std::cout << "fBinary :\t\t" << fBinary(number) << std::endl;
-	floatBitsConversion(number);
+	floatPoint(number, 8, 23);
 	std::cout << "------------------------------------------------"<< std::endl;
 }
-
 
 
 int main(void)
 {
 	std::cout << std::fixed;
 	std::cout.precision(15);
+	if (DEBUG == 4)
 	{
-		// {
-		// 	std::cout << std::endl;
-		// 	std::cout << "INTMAX	   \t\t" << INT_MAX << std::endl;
-		// 	std::cout << "INTMAX iBINARY\t\t" << iBinary(INT_MAX) << std::endl;
-		// 	std::cout << "------------------------"<< std::endl;
-		// 	std::cout << "INTMIN	   \t\t" << INT_MIN << std::endl;
-		// 	std::cout << "INTMIN iBINARY\t\t" << iBinary(INT_MIN) << std::endl;
-		// 	std::cout << "------------------------"<< std::endl;
-		// }
-		// float f = 0.00390625;
-		// {
-		// 	Fixed min( f );
-		// 	getData(f, min);
-		// }
-		// f = 0.99609375;
-		// {
-		// 	Fixed min( f );
-		// 	getData(f, min);
-		// }
-		// {
-		// 	int i = -1;
-		// 	Fixed min( i );
-		// 	std::cout << "min (float):\t\t" << i << std::endl;
-		// 	getData(i, min);
-		// }
-		// {
-		// 	float i = 0.99609375;
-		// 	Fixed min( i );
-		// 	std::cout << "min (float):\t\t" << i << std::endl;
-		// 	getData(i, min);
-		// }
+		std::cout.precision(8);
+		int i = 1;
+		// float f = 8388608.0f;
+		int f = 0;
+		Fixed a(f);
+		std::cout << "Max Value:\t\t" << a.MaxValue() << std::endl;
+		while (i < 10)
+		{
+			std::cout << i << " f: " << a << " " << " i: " << a.getRawBits()
+			<< " " << iBinary(a.getRawBits())<< std::endl;
+			a++;
+			i++;
+		}
+		f = power2(23);
+		a = f;
+		i = 0;
+		while (i < 100000)
+		{
+			std::cout << i << " f: " << a << " " << " i: " << a.getRawBits()
+			<< " " << iBinary(a.getRawBits())<< std::endl;
+			a--;
+			i++;
+		}
+		std::cout << i << " f: " << a << " " << " i: " << a.getRawBits()
+		<< " " << iBinary(a.getRawBits())<< std::endl;
+		return (0);
+	}
+	if (DEBUG < 3)
+	{
 		{
 			float f =  std::numeric_limits<float>::epsilon();
-			std::cout << "float Decimal Value :\t" << f << std::endl;
-			ExponentMantissa(f, 8, 23);
-			floatBitsConversion(f);
-			std::cout << "------------------------"<< std::endl;
+			std::cout << "float Decimal Value    :\t" << f << std::endl;
+			floatPoint(f, 8, 23);
 		}
 		{
 			float f = std::numeric_limits<float>::max();
-			std::cout << "float Decimal Value :\t" << f << std::endl;
-			ExponentMantissa(f, 8, 23);
-			floatBitsConversion(f);
-			std::cout << "------------------------"<< std::endl;
+			std::cout << "float Decimal Value    :\t" << f << std::endl;
+			floatPoint(f, 8, 23);
 		}
 		{
 			float f = -45.4;
-			std::cout << "float Decimal Value :\t" << f << std::endl;
-			ExponentMantissa(f, 8, 23);
-			floatBitsConversion(f);
-			std::cout << "------------------------"<< std::endl;
+			std::cout << "float Decimal Value    :\t" << f << std::endl;
+			floatPoint(f, 8, 23);
 		}
 		{
-			float f = (float)INT_MAX - 1;
-			std::cout << "float Decimal Value :\t" << f << std::endl;
-			ExponentMantissa(f, 8, 23);
-			floatBitsConversion(f);
-			std::cout << "------------------------"<< std::endl;
+			float f = (float)INT_MAX;
+			std::cout << "float Decimal Value    :\t" << f << std::endl;
+			floatPoint(f, 8, 23);
 		}
-		// {
-		// 	float f = 0.0/0.0; //NAN
-		// 	std::cout << "float Decimal Value :\t" << f << std::endl;
-		// 	floatBitsConversion(f);
-		// 	std::cout << "------------------------"<< std::endl;
-		// }
-		// {
-		// 	float f = NAN;
-		// 	std::cout << "float Decimal Value :\t" << f << std::endl;
-		// 	floatBitsConversion(f);
-		// 	std::cout << "------------------------"<< std::endl;
-		// }
-		// {
-		// 	float f = -std::numeric_limits<float>::infinity();
-		// 	std::cout << "float Decimal Value :\t" << f << std::endl;
-		// 	floatBitsConversion(f);
-		// 	std::cout << "------------------------"<< std::endl;
-		// }
-		// f = -2;
-		// std::cout << "float Decimal Value :\t" << f << std::endl;
-		// std::cout << "f binary: " << fBinary(f) << std::endl;
-		// floatBitsConversion(f);
-		// std::cout << "(2^19): " << power2(23) << std::endl;
-		// std::cout << (1/(power2(23))) << std::endl;
-		// std::cout << "------------------------"<< std::endl;
+		{
+			float f = 0.0/0.0; //NAN
+			std::cout << "float Decimal Value    :\t" << f << std::endl;
+			floatPoint(f, 8, 23);
+		}
+		{
+			float f = -std::numeric_limits<float>::infinity();
+			std::cout << "float Decimal Value    :\t" << f << std::endl;
+			floatPoint(f, 8, 23);
+		}
+		{
+			float f = 8388607.992187500000000;
+			Fixed a(f);
+			std::cout << "float Decimal Value    :\t" << f << std::endl;
+			getData(f, a);
+			
+		}
+		std::cout << "------------------------"<< std::endl;
 	}
-/* 	{
+	else
+ 	{
+		std::cout << "===================================" << std::endl;
 		Fixed a;
 		Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
+		std::cout << "\ta         " << a << std::endl;
+		std::cout << "\tb         " << b << std::endl;
+		std::cout << "\t++a       " << ++a << std::endl;
+		std::cout << "\tfixed point number	is " << a.getRawBits() << std::endl;
+		std::cout << "\tfloat representation  is " << a << std::endl;
+		std::cout << "\ta         " << a << std::endl;
+		std::cout << "\ta++       " << a++ << std::endl;
+		std::cout << "\ta         " << a << std::endl;
+		std::cout << "\tb         " << b << std::endl;
+		std::cout << "\tmax(a, b) " << Fixed::max( a, b ) << std::endl;
+		std::cout << "===================================" << std::endl;
+		std::cout << "\t--a       " << --a << std::endl;
+		std::cout << "\tb         " << b << std::endl;
+		std::cout << "\tb <  a    " <<  (b < a) << std::endl;
+		std::cout << "\tb >  a    " <<  (b > a) << std::endl;
+		std::cout << "\tb == a    " <<  (b == a) << std::endl;
+		std::cout << "\tb <= a    " <<  (b <= a) << std::endl;
+		std::cout << "\tb >= a    " <<  (b >= a) << std::endl;
+		std::cout << "\tb != a    " <<  (b != a) << std::endl;
+		std::cout << "===================================\n" << std::endl;
+		{
+			float f = 0.00390625;
+			Fixed min( f );
+			getData(f, min);
+		}
+		{
+			float f = 0.99609375;
+			Fixed min( f );
+			getData(f, min);
+		}
+		{
+			int i = -1;
+			Fixed min( i );
+			std::cout << "min (float):\t\t" << i << std::endl;
+			getData(i, min);
+		}
+		{
+			float i = 0.99609375;
+			Fixed min( i );
+			std::cout << "min (float):\t\t" << i << std::endl;
+			getData(i, min);
+		}
 
-		std::cout << "a		 " << a << std::endl;
-		std::cout << "b		 " << b << std::endl;
-		std::cout << "++a	   " << ++a << std::endl;
-		std::cout << " fixed point number	is " << a.getRawBits() << std::endl;
-		std::cout << " float representation  is " << a << std::endl;
-		std::cout << "a		 " << a << std::endl;
-		std::cout << "a++	   " << a++ << std::endl;
-		std::cout << "a		 " << a << std::endl;
-		std::cout << "b		 " << b << std::endl;
-		std::cout << "max(a, b) " << Fixed::max( a, b ) << std::endl;
-		std::cout << "==================" << std::endl;
-		std::cout << "--a	   " << --a << std::endl;
-		std::cout << "b		 " << b << std::endl;
-		std::cout << "b <  a	" <<  (b < a) << std::endl;
-		std::cout << "b >  a	" <<  (b > a) << std::endl;
-		std::cout << "b == a	" <<  (b == a) << std::endl;
-		std::cout << "b <= a	" <<  (b <= a) << std::endl;
-		std::cout << "b >= a	" <<  (b >= a) << std::endl;
-		std::cout << "b != a	" <<  (b != a) << std::endl;
-		std::cout << "==================" << std::endl;
-		Fixed foo;
+		Fixed foo( .5f );
 		std::cout << std::endl;
 		std::cout << "foo;" << std::endl;
-		std::cout << " fixed point number	is " << foo.getRawBits() << std::endl;
-		std::cout << " float representation  is " << foo << std::endl;
-		std::cout << std::endl;
-		std::cout << std::endl;
+		getData(foo.toFloat(), foo);
+
 		foo++;
 		std::cout << "foo++;" << std::endl;
-		std::cout << " fixed point number	is " << foo.getRawBits() << std::endl;
-		std::cout << " float representation  is " << foo << std::endl;
-		std::cout << std::endl;
-		{
-			Fixed foo( .5f );
-			std::cout << std::endl;
-			std::cout << "foo;" << std::endl;
-			std::cout << " fixed point number	is " << foo.getRawBits() << std::endl;
-			std::cout << " float representation  is " << foo << std::endl;
-			std::cout << std::endl;
-		}
-		foo++;
-		std::cout << "foo++;" << std::endl;
-		std::cout << " fixed point number	is " << foo.getRawBits() << std::endl;
-		std::cout << " float representation  is " << foo << std::endl;
-		std::cout << std::endl;
+		getData(foo.toFloat(), foo);
 
 		foo.setRawBits( foo.getRawBits() - 1 );
 		std::cout << "foo.setRawBits( foo.getRawBits() - 1 );" << std::endl;
-		std::cout << " fixed point number	is " << foo.getRawBits() << std::endl;
-		std::cout << " float representation  is " << foo << std::endl;
-		std::cout << std::endl;
+		getData(foo.toFloat(), foo);
 
 		foo = foo * 2;
 		std::cout << "foo = foo * 2;" << std::endl;
-		std::cout << " fixed point number	is " << foo.getRawBits() << std::endl;
-		std::cout << " float representation  is " << foo << std::endl;
-		std::cout << std::endl;
+		getData(foo.toFloat(), foo);
 
 		foo = foo / 2;
 		std::cout << "foo = foo / 2;" << std::endl;
-		std::cout << " fixed point number	is " << foo.getRawBits() << std::endl;
-		std::cout << " float representation  is " << foo << std::endl;
-		std::cout << std::endl;
+		getData(foo.toFloat(), foo);
 
 		foo = foo / 4.2f;
 		std::cout << "foo = foo / 4.2;" << std::endl;
-		std::cout << " fixed point number	is " << foo.getRawBits() << std::endl;
-		std::cout << " float representation  is " << foo << std::endl;
-		std::cout << std::endl;
+		getData(foo.toFloat(), foo);
 
 		std::cout << "PRECISION LOST" << std::endl;
 		std::cout << std::endl;
 
 		foo = foo * 4.2f;
 		std::cout << "foo = foo / 4.2;" << std::endl;
-		std::cout << " fixed point number	is " << foo.getRawBits() << std::endl;
-		std::cout << " float representation  is " << foo << std::endl;
-		std::cout << std::endl;
+		getData(foo.toFloat(), foo);
 
 		std::cout << "foo.max( Fixed( 5.01f ), Fixed( 5.49f ).toInt() );"
 					<< std::endl;
@@ -334,7 +297,6 @@ int main(void)
 		std::cout << "foo.max( Fixed( 42f ), Fixed( -42 ) );" << std::endl;
 		std::cout << " max is " << foo.max( i, j ) << std::endl;
 	}
-	 */
 	return 0;
 }
 #endif

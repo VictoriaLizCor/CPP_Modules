@@ -46,7 +46,7 @@ gPush:
 	@echo $(YELLOW) && git push > /dev/null || \
 	if [ $$? -ne 0 ]; then \
 		echo $(RED) "git push failed, setting upstream branch\n" $(YELLOW) && \
-		git push --set-upstream origin $(shell git branch --show-GIT_REPO) || \
+		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \
 			echo $(RED) "git push --set-upstream failed with error"; \
 		fi; \
@@ -54,7 +54,7 @@ gPush:
 	fi
 # @echo $(YELLOW) && git push > /dev/null || \
 # (echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
-# git push --set-upstream origin $(shell git branch --show-GIT_REPO))
+# git push --set-upstream origin $(shell git branch --show-current))
 #make DIRS=$CPP/CPP_0* cleanAll
 git: cleanAll gAdd gCommit gPush
 # make log m=style

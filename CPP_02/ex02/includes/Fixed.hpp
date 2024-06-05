@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:42 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/04 13:29:39 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/05 13:30:56 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <cmath>
 
 # ifndef DEBUG
-#  define DEBUG 1
+#  define DEBUG 0
 # endif
 
 /**
@@ -68,7 +68,7 @@ class Fixed
 		static Fixed min(Fixed const& obj1, Fixed const& obj2);
 		// Overload of the insertion («) operator
 		friend std::ostream& operator << (std::ostream & os, Fixed const& src);
-		#if (DEBUG == 1)
+		#if (DEBUG != 0)
 		float	MaxValue(void) const;
 		float	MinValue(void) const;
 		int 	getFractionalBits(void) const;

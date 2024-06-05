@@ -129,7 +129,7 @@ Fixed Fixed::min(Fixed const &obj1, Fixed const &obj2)
 	return (obj2);
 }
 
-#if (DEBUG == 1)
+#if (DEBUG != 0)
 float Fixed::MinValue(void) const
 {
 	float f = 1.0 / (1 << _fractionalBits);
@@ -161,7 +161,7 @@ float Fixed::MaxValue(void) const
 	int power2Fractional = (1 << _fractionalBits);
 
 	float max;
-	max = (static_cast<float>(power2Fractional - 1) / static_cast<float>(power2Fractional));
+	max = static_cast<float>(power2) + (static_cast<float>(power2Fractional - 1) / static_cast<float>(power2Fractional));
 	return (max);
 }
 /**
