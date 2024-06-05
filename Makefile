@@ -30,7 +30,7 @@ dirs:
 	@echo DIRS: $(BOLD) $(DIRS) $(E_NC)
 	@for subdir in $$(find $(DIRS) -type d -name "ex0*" | sort); do \
 		echo "\t"$(GRAY) $$subdir $(E_NC); \
-	done; \
+	done;
 gAdd:
 	@echo $(CYAN) && git add $(ROOT_CPP_MODULES)
 
