@@ -69,7 +69,8 @@ alias vs='open ~/.config/Code/User/settings.json'
 alias bs='open ~/.bashrc' 
 alias sb='source ~/.bashrc'
 alias st='open ~/.config/terminator/config'
-alias subl='$(find /var/lib/flatpak/app/com.sublimetext.three/x86_64/stable/ -name sublime_text -type f 2>/dev/null | head -n 1)'
+#alias subl='SUB_PATH=$(find /var/lib/flatpak/app/com.sublimetext.three/x86_64/stable/ -name sublime_text -type f 2>/dev/null | head -n 1); if [ -z "$SUB_PATH" ]; then echo "Sublime Text not found"; else $("$SUB_PATH" "$@"); fi'
+
 PS1='\[\e[32m\]'       # start green color
 PS1+='['               # add [
 PS1+='\[\e[m\]'        # reset color
@@ -96,6 +97,21 @@ export CPP="$CURSUS/CPP_Modules/"
 export EVAL="$CURSUS/Eval"
 export ECPP="$EVAL/CPP_modules/"
 # use -> cat file | cpyg style_name
-cpyg() {
+cpyg()
+{
 	pygmentize -g -O style=${!#}
 }
+# flatpak remote-ls --app
+# flatpak list --app --columns=application
+sublime()
+{
+	SUB_PATH=$(find /var/lib/flatpak/app/com.sublimetext.three/x86_64/stable/ -name sublime_text -type f 2>/dev/null | head -n 1)
+	if [ -z "$SUB_PATH" ]; then 
+		echo "Sublime Text not found"
+		APP_ID=$(flatpak list --app --columns=application | grep sublimetext)
+		flatpak install "$APP_ID"
+	else 
+		alias subl="$SUB_PATH"
+	fi
+}
+sublime

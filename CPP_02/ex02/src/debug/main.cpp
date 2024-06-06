@@ -139,26 +139,38 @@ int main(void)
 		// float f = 8388608.0f;
 		int f = 0;
 		Fixed a(f);
+		{
+			// int intNumber = 8388607;
+			float num = 8388607.9960937500;
+			std::cout << "Float point: "<< num << " : "<< std::endl;
+			floatPoint(num, 8, 23);
+			// std::cout << "Int Value: "<< intNumber << " : " << iBinary(intNumber) << std::endl;
+			// intNumber >>= 8;
+			// std::cout << "Int Value: "<< intNumber << " : " << iBinary(intNumber) << std::endl;
+			// intNumber <<= 8;
+			// std::cout << "Int Value: "<< intNumber << " : " << iBinary(intNumber) << std::endl;
+			
+		}
 		std::cout << "Max Value:\t\t" << a.MaxValue() << std::endl;
-		while (i < 10)
-		{
-			std::cout << i << " f: " << a << " " << " i: " << a.getRawBits()
-			<< " " << iBinary(a.getRawBits())<< std::endl;
-			a++;
-			i++;
-		}
-		f = power2(23);
-		a = f;
-		i = 0;
-		while (i < 100000)
-		{
-			std::cout << i << " f: " << a << " " << " i: " << a.getRawBits()
-			<< " " << iBinary(a.getRawBits())<< std::endl;
-			a--;
-			i++;
-		}
-		std::cout << i << " f: " << a << " " << " i: " << a.getRawBits()
-		<< " " << iBinary(a.getRawBits())<< std::endl;
+		// while (i < 10)
+		// {
+		// 	std::cout << i << " f: " << a << " " << " i: " << a.getRawBits()
+		// 	<< " " << iBinary(a.getRawBits())<< std::endl;
+		// 	a++;
+		// 	i++;
+		// }
+		// f = power2(23);
+		// a = f;
+		// i = 0;
+		// while (i < 1000)
+		// {
+		// 	std::cout << i << " f: " << a << " " << " i: " << a.getRawBits()
+		// 	<< " " << iBinary(a.getRawBits())<< std::endl;
+		// 	a--;
+		// 	i++;
+		// }
+		// std::cout << i << " f: " << a << " " << " i: " << a.getRawBits()
+		// << " " << iBinary(a.getRawBits())<< std::endl;
 		return (0);
 	}
 	if (DEBUG < 3)

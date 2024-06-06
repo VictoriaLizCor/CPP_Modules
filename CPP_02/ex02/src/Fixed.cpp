@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:38 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/05 15:49:42 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/06 16:01:09 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ Fixed::Fixed(int const& number): _intValue(number << _fractionalBits)
  */
 Fixed::Fixed(float const& number)
 {
+	int n;
+
+	n = static_cast<int>(roundf(number));
 	setRawBits(static_cast<int>(roundf(number * ( 1 << _fractionalBits))));
 	return ;
 }
