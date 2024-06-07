@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:38 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/06 16:01:09 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/07 13:26:42 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ Fixed:: Fixed(Fixed const& src)
  * 
  * The `friend` keyword is not specific to any version of C++, it has been part
  * of the language since the beginning. It is used to grant a non-member function
- * or another class access to the private and protected members of the class
+ * or another clafss access to the private and protected members of the class
  * where it's declared.
  * 
  * In the context of overloading the `<<` operator for a custom class, the

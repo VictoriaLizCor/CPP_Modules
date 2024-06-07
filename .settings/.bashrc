@@ -103,15 +103,24 @@ cpyg()
 }
 # flatpak remote-ls --app
 # flatpak list --app --columns=application
+#flatpak remote-ls --app --columns=application | grep sublimetext
+#flatpak uninstall com.sublimetext.three
 sublime()
 {
-	SUB_PATH=$(find /var/lib/flatpak/app/com.sublimetext.three/x86_64/stable/ -name sublime_text -type f 2>/dev/null | head -n 1)
-	if [ -z "$SUB_PATH" ]; then 
-		echo "Sublime Text not found"
-		APP_ID=$(flatpak list --app --columns=application | grep sublimetext)
-		flatpak install "$APP_ID"
+	SYSTEM_PATH=$(find /var/lib/flatpak/app/ -name sublime_text -type f 2>/dev/null | head -n 1)
+	if [ -z "$SYSTEM_PATH" ]; then 
+		if [ -z "$(flatpak list --columns=application | grep sublimetext)" ]; then 
+			echo "Sublime Text not found in System path: /var/lib/flatpak/app/"
+			echo "Installing ..."
+			APP_ID=$(flatpak remote-ls flathub --user --app --columns=application | grep sublimetext)
+			flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
+			flatpak install --user flathub "$APP_ID" -y
+		fi
+		USER_PATH=$(find $HOME/.local/share/flatpak/app -name sublime_text -type f 2>/dev/null | head -n 1)
+		#echo "User path = $USER_PATH"
+		alias subl="$USER_PATH"
 	else 
-		alias subl="$SUB_PATH"
+		alias subl="$SYSTEM_PATH"
 	fi
 }
 sublime

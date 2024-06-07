@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:42 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/06 13:21:09 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/07 16:20:01 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,11 @@ class Fixed
 		// Overload of the insertion («) operator
 		friend std::ostream& operator << (std::ostream & os, Fixed const& src);
 		#if (DEBUG != 0)
-		float	MaxValue(void) const;
-		float	MinValue(void) const;
-		int 	getFractionalBits(void) const;
+			float	MaxValue(void) const;
+			float	MinValue(void) const;
+			int 	getFractionalBits(void) const;
+			double 	toDouble(void) const;
+			Fixed(double const& number);
 		#endif
 };
 #endif

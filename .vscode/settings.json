@@ -78,10 +78,11 @@
 		"ctime": "cpp",
 		"iomanip": "cpp",
 		"sstream": "cpp",
-		"fstream": "cpp"
+		"fstream": "cpp",
+		"bitset": "cpp"
 	},
 	"accessibility.signals.sounds.volume": 0,
-	"C_Cpp.dimInactiveRegions": true,
+	"C_Cpp.dimInactiveRegions": false,
 	"doxdocgen.generic.commandSuggestionAddPrefix": true, // true indicates that the extension will print debug to its output channel.
 	"files.exclude":
 	{

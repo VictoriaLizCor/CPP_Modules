@@ -1,4 +1,5 @@
 #include "Fixed.hpp"
+
 #if (DEBUG != 0)
 # include <iostream>
 # include <bitset>
@@ -15,81 +16,6 @@ static std::bitset<32> iBinary(int num)
 	return (binary);
 }
 
-float power2(int n)
-{
-	int i = 0;
-	float res = 1.0f;
-
-	while (i++ < n)
-		res *= 2;
-	return (res);
-}
-
-void floatPoint(float number, int expBits, int fractionBits)
-{
-	// Step 1: Check if the number is negative
-	int sign = (number < 0) ? 1 : 0;
-	if (sign)
-		number = -number;
-	// Step 2: Convert the number to scientific notation in base 2
-	int exponent = 0;
-	if (DEBUG == 2)
-		std::cout << exponent << " number: " << number << std::endl;
-	while (number >= 2.0f)
-	{
-		number /= 2.0f;
-		exponent++;
-		if (DEBUG == 2)
-			std::cout << "\t\t" << exponent << " number: " << number << std::endl;
-		if (exponent == 255)
-			break;
-	}
-	// in case of negative exponent
-	while (number < 1.0f)
-	{
-		number *= 2.0f;
-		exponent--;
-		if (DEBUG == 2)
-			std::cout << "\t\t"<< exponent << " number: " << number << std::endl;
-		if (exponent == 255)
-			break;
-	}
-	// Step 3: Add 127 to the real exponent value and convert it to binary
-	std::bitset<32> exponentBits(exponent + power2(expBits - 1) - 1);
-	// Step 4: Get the mantissa
-	number -= 1.0f; // remove the leading 1
-	std::bitset<32> mantissaBits;
-	for (int i = fractionBits - 1; i >= 0; i--)
-	{
-		number *= 2.0f;
-		int integralPart = (int)number;
-		if (integralPart == 1)
-		{
-			number -= 1.0f;
-			mantissaBits.set(i);
-		}
-	}
-	if (exponent == 255)
-	{
-		exponentBits = std::bitset<32> (exponent);
-		mantissaBits.set();
-	}
-	// Step 5: Combine the sign, exponent and mantissa to print
-	std::cout << "sign|exponen|franction : \t" << sign << " ";
-	for (int i = expBits - 1; i >= 0; --i)
-		std::cout << exponentBits[i];
-	std::cout << " ";
-	for (int i = fractionBits - 1; i >= 0; --i)
-		std::cout << mantissaBits[i];
-	std::cout << std::endl;
-	// Print the number in the desired format
-	std::cout << "Representation :\t\t(-1)^" << sign << " * 2^" << exponent << " * 1.";
-	for (int i = fractionBits - 1; i >= 0; --i)
-		std::cout << mantissaBits[i];
-	std::cout << std::endl;
-	std::cout << "------------------------------------------------"<< std::endl;
-}
-
 /**
  * `reinterpret_cast<int*>(&num)` is used to get a pointer to the float `num` as
  * an integer pointer. Then, `std::bitset<32>` is used to create a binary
@@ -101,6 +27,91 @@ static std::bitset<32> fBinary(float num)
 	int* intPtr = reinterpret_cast<int*>(&num);
 	std::bitset<32> bits(*intPtr);
 	return (bits);
+}
+
+static std::bitset<64> fBinary(double num)
+{
+	long long* longPtr = reinterpret_cast<long long*>(&num);
+	std::bitset<64> bits(*longPtr);
+	return (bits);
+}
+
+
+float power2(int n)
+{
+	int i = 0;
+	float res = 1.0f;
+
+	while (i++ < n)
+		res *= 2;
+	return (res);
+}
+
+void floatPoint(double number, int expBits, int fractionBits)
+{
+	int bias = power2(expBits - 1) - 1;
+	int expLimit = power2(expBits) - 1;
+	// Step 1: Check if the number is negative
+	int sign = (number < 0) ? 1 : 0;
+	if (sign)
+		number = -number;
+	// Step 2: Convert the number to scientific notation in base 2
+	int exponent = 0;
+	if (expBits == 8)
+		std::cout << "fNumber : " << number << " : " << fBinary(static_cast<float>(number)) << std::endl;
+	else
+		std::cout << "dNumber : " << number << " : " << fBinary(static_cast<double>(number)) << std::endl;
+	while (number >= 2.0f)
+	{
+		number /= 2.0f;
+		exponent++;
+		if (DEBUG == 2)
+			std::cout << "\t\t" << exponent << " number: " << number << std::endl;
+		if (exponent == expLimit)
+			break;
+	}
+	// in case of negative exponent
+	while (number < 1.0f)
+	{
+		number *= 2.0f;
+		exponent--;
+		if (DEBUG == 2)
+			std::cout << "\t\t"<< exponent << " number: " << number << std::endl;
+		if (exponent == expLimit)
+			break;
+	}
+	// Step 3: Add 127 to the real exponent value and convert it to binary
+	std::bitset<64> exponentBits(exponent + power2(expBits - 1) - 1);
+	std::cout << "Exponent bias in b^10  :\t" << ((exponentBits.to_ulong()) & 0xFF) 
+	<< " - " << bias
+	<< " = " << (int)(((exponentBits.to_ulong()) & expLimit) - bias) << std::endl;
+	// Step 4: Get the mantissa
+	number -= 1.0f; // remove the leading 1
+	std::bitset<64> mantissaBits;
+	for (int i = fractionBits - 1; i >= 0; i--)
+	{
+		number *= 2.0f;
+		int integralPart = (int)number;
+		if (integralPart == 1)
+		{
+			number -= 1.0f;
+			mantissaBits.set(i);
+		}
+	}
+	if (exponent == bias)
+	{
+		exponentBits = std::bitset<64> (exponent);
+		mantissaBits.set();
+	}
+	// Step 5: Combine the sign, exponent and mantissa to print
+	std::cout << "sign|exponen|franction : \t" << sign << " "
+	<< exponentBits.to_string().substr(64 - expBits) << " "
+	<< mantissaBits.to_string().substr(64 - fractionBits) << std::endl;
+
+	// Print the number in the desired format
+	std::cout << "Representation :\t\t(-1)^" << sign << " * 2^" << exponent << " * 1."
+	<< mantissaBits.to_string().substr(64 - fractionBits) << std::endl;
+	std::cout << "------------------------------------------------"<< std::endl;
 }
 
 /**
@@ -131,27 +142,32 @@ static void getData(float number, Fixed const& f)
 int main(void)
 {
 	std::cout << std::fixed;
-	std::cout.precision(15);
+	std::cout.precision(12);
 	if (DEBUG == 4)
 	{
-		std::cout.precision(8);
-		int i = 1;
-		// float f = 8388608.0f;
 		int f = 0;
 		Fixed a(f);
 		{
 			// int intNumber = 8388607;
-			float num = 8388607.9960937500;
-			std::cout << "Float point: "<< num << " : "<< std::endl;
-			floatPoint(num, 8, 23);
-			// std::cout << "Int Value: "<< intNumber << " : " << iBinary(intNumber) << std::endl;
-			// intNumber >>= 8;
-			// std::cout << "Int Value: "<< intNumber << " : " << iBinary(intNumber) << std::endl;
-			// intNumber <<= 8;
-			// std::cout << "Int Value: "<< intNumber << " : " << iBinary(intNumber) << std::endl;
-			
+			// float num = 8388607.9960937500;
+			// float num = ((power2(23) - 1) * std::numeric_limits<float>::epsilon());
+			floatPoint(((power2(23) - 1) * std::numeric_limits<float>::epsilon()), 8, 23);
+			std::cout << ((power2(23) - 1) * std::numeric_limits<float>::epsilon()) + 16777215 << std::endl;
+			floatPoint(16777215 + (std::numeric_limits<float>::epsilon()), 8, 23);
+			std::cout << "Epsilon " ;
+			floatPoint( std::numeric_limits<float>::epsilon(), 8, 23);
+			floatPoint( power2(23), 8, 23);
+			floatPoint(16777214.01, 8, 23);
+			floatPoint(power2(23) - 1, 8, 23);
+			Fixed a(-8388607.99609375d);
+			std::cout << "a: " << a.toDouble() << std::endl;
+			std::cout << "iBinary(Rawbits) : "<< iBinary(a.getRawBits()) << std::endl;
+			a.setRawBits(-8388607);
+			std::cout << "last Value : " << a.toFloat() << std::endl;
+			floatPoint(a.toDouble(), 11, 52);
 		}
-		std::cout << "Max Value:\t\t" << a.MaxValue() << std::endl;
+		// std::cout << "Max Value:\t\t" << a.MaxValue() << std::endl;
+		// int i = 1;
 		// while (i < 10)
 		// {
 		// 	std::cout << i << " f: " << a << " " << " i: " << a.getRawBits()

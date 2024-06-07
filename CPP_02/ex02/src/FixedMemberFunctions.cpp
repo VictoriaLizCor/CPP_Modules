@@ -164,6 +164,19 @@ float Fixed::MaxValue(void) const
 	max = static_cast<float>(power2) + (static_cast<float>(power2Fractional - 1) / static_cast<float>(power2Fractional));
 	return (max);
 }
+
+Fixed::Fixed(double const& number)
+{
+	setRawBits(static_cast<int>(round(number * ( 1 << _fractionalBits))));
+	return ;
+}
+
+double Fixed::toDouble(void) const
+{
+	double d;
+	d = static_cast<double>(_intValue) / static_cast<double>(1 << _fractionalBits);
+	return (d);
+}
 /**
  * (sizeof(int) * 8) - _fractionalBits = 
  * 32 - 8 = 24
@@ -171,6 +184,7 @@ float Fixed::MaxValue(void) const
  * ((2^23) - 1) + 255/256 =
  *  8388607 + 255/256 =
 */
+
 #endif
 
 // 0 10000001 10000000000000000000000
