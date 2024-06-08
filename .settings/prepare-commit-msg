@@ -36,4 +36,4 @@ else
 	echo -e "$body" >> "$COMMIT_MSG_FILE"
 	echo -e "~~~\n~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~" >> "$COMMIT_MSG_FILE"
 fi
-# /////////////////////////////////////////////
+# ////////////////////////////////////////////
