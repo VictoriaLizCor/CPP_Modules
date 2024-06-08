@@ -62,7 +62,7 @@ mlog:
 	@git log -5 --pretty=format:"'%h'%m%s {%cd} %b" --date=format:'%Y-%m-%d %H:%M' | \
 	pygmentize -g -O  style=$$m | cut -d'|' -f1
 plog:
-	@git log -5 --pretty=format:"{%cd} ('%h') %m %n %s %n %b " --date=format:'%Y-%m-%d %H:%M' |\
+	@git log -5 --pretty=format:"{%cd} ('%h') %m [%B] " --date=format:'%Y-%m-%d %H:%M' |\
 	pygmentize -g -O  style=material
 #	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 
@@ -87,13 +87,13 @@ soft:
 	@read -p "Do you want to reset the last commit? (y/n) " yn; \
 	case $$yn in \
 		[Yy]* ) git reset --soft HEAD~1;\
-		git push origin --force-with-lease $(shell git branch --show-GIT_REPO) ;\
+		git push origin --force-with-lease $(shell git branch --show-current) ;\
 		echo $(RED) "Last commit reset" $(E_NC) ;; \
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
 amend:
 	@git commit --amend
-	@echo $(YELLOW) && git push origin --force-with-lease $(shell git branch --show-GIT_REPO)
+	@echo $(YELLOW) && git push origin --force-with-lease $(shell git branch --show-current)
 template:
 	@git config --local commit.template .settings/.gitmessage
 pre-commit:
