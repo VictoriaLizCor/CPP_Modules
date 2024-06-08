@@ -1,6 +1,5 @@
 #!/bin/bash
-# ///////////////////////////////////////////////
-prefix="TICKET"
+
 # The Ticket ID prefix you want to include to your commit messages.
 
 # Gets the commit message received as parameter and the current branch name.
