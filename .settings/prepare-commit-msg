@@ -1,12 +1,10 @@
 #!/bin/bash
 
-# The Ticket ID prefix you want to include to your commit messages.
-
 # Gets the commit message received as parameter and the current branch name.
 COMMIT_MSG_FILE=$1
 message=$(cat "$COMMIT_MSG_FILE")
 branchName=$(git symbolic-ref --short HEAD)
-
+# The Ticket ID prefix you want to include to your commit messages.
 BranchTicket1=$(git symbolic-ref --short HEAD | sed -nE 's,([A-Z]?-?[0-9]+)-.+,\1,p')
 BranchTicket2=$(git symbolic-ref --short HEAD | sed -nE 's,.+-([0-9]+),\1,p')
 ticketID=$(echo "[$BranchTicket1{$BranchTicket2}]")
@@ -23,13 +21,19 @@ if [[ $message == *"$ticketID"* ]]; then
 	exit 0
 fi
 
+# Separate the subject and body of the commit message
+subject=${LINES[0]}
+body=${LINES[@]:1}
+
 # Check if the commit message file has only one line
 if [ "${#LINES[@]}" -eq 1 ]; then
 	# If the commit message file has only one line, prepend the ticketID to the commit message
-	echo -e "$ticketID\n${LINES[0]}" > "$COMMIT_MSG_FILE"
+	echo -e "$ticketID\n$subject" > "$COMMIT_MSG_FILE"
 	echo -e "~~~\n~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~" >> "$COMMIT_MSG_FILE"
 else
-	# If the commit message file has more than one line, keep the original commit message
-	printf "%s\n" "${LINES[0]}" "$ticketID" "${LINES[@]:1}" > "$COMMIT_MSG_FILE"
+	# If the commit message file has more than one line, prepend the ticketID to the subject and keep the original body
+	echo -e "$ticketID\n$subject" > "$COMMIT_MSG_FILE"
+	echo -e "$body" >> "$COMMIT_MSG_FILE"
+	echo -e "~~~\n~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~" >> "$COMMIT_MSG_FILE"
 fi
 # /////////////////////////////////////////////

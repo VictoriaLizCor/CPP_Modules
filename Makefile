@@ -57,7 +57,7 @@ mlog:
 	@git log -5 --pretty=format:"'%h'%m%s {%cd} %b" --date=format:'%Y-%m-%d %H:%M' | \
 	pygmentize -g -O  style=$$m | cut -d'|' -f1
 plog:
-	@git log -5 --pretty=format:"{%cd} ('%h') %m [%B] " --date=format:'%Y-%m-%d %H:%M' |\
+	@git log -5 --pretty=format:"{%cd} (%h) %m %B" --date=format:'%Y-%m-%d %H:%M' |\
 	pygmentize -g -O  style=material
 #	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
 
