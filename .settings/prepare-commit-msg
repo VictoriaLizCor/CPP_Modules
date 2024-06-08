@@ -29,5 +29,5 @@ else
 	# If the commit message file has more than one line, keep the original commit message
 	printf "%s\n" "${LINES[0]}" "$ticketID" "${LINES[@]:1}" > "$COMMIT_MSG_FILE"
 fi
-echo -e "~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~" >> "$COMMIT_MSG_FILE"
-# //////////////////////////////////////////
+echo "~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~" >> "$COMMIT_MSG_FILE"
+# /////////////////////////////////////////
