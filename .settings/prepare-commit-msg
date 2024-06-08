@@ -27,7 +27,7 @@ fi
 if [ "${#LINES[@]}" -eq 1 ]; then
 	# If the commit message file has only one line, prepend the ticketID to the commit message
 	echo -e "$ticketID\n${LINES[0]}" > "$COMMIT_MSG_FILE"
-	echo -e "\n~~~\n~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~" >> "$COMMIT_MSG_FILE"
+	echo -e "~~~\n~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~" >> "$COMMIT_MSG_FILE"
 else
 	# If the commit message file has more than one line, keep the original commit message
 	printf "%s\n" "${LINES[0]}" "$ticketID" "${LINES[@]:1}" > "$COMMIT_MSG_FILE"
