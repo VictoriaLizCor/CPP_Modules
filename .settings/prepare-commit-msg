@@ -30,4 +30,4 @@ else
 	printf "%s\n" "${LINES[0]}" "$ticketID" "${LINES[@]:1}" > "$COMMIT_MSG_FILE"
 fi
 echo -e "~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~" >> "$COMMIT_MSG_FILE"
-# /////////////////////////////////////////////
+# ////////////////////////////////////////////
