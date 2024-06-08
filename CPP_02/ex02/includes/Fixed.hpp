@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/23 10:14:42 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/07 16:20:01 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/08 12:34:40 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <cmath>
 
 # ifndef DEBUG
-#  define DEBUG 1
+#  define DEBUG 0
 # endif
 
 /**
@@ -71,7 +71,6 @@ class Fixed
 		#if (DEBUG != 0)
 			float	MaxValue(void) const;
 			float	MinValue(void) const;
-			int 	getFractionalBits(void) const;
 			double 	toDouble(void) const;
 			Fixed(double const& number);
 		#endif

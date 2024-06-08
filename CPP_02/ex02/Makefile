@@ -11,7 +11,7 @@ GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir $(shell find $(PROJECT_ROOT) -name Makefile | sort)))
 CURRENT		:= $(shell basename $$PWD)
 #------ DEBUG FLAG ------#
-D			= 1
+D			= 0
 #------ Sanitizer Flag ------#
 S			= 0
 #------ DEBUG UTILS ------#

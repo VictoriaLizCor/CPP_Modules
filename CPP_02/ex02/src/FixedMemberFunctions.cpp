@@ -136,12 +136,7 @@ float Fixed::MinValue(void) const
 	return (f);
 }
 
-int Fixed::getFractionalBits(void) const
-{
-	return (_fractionalBits);
-}
-
-static float power2(int n)
+static int powerExp2(int n)
 {
 	int i = 0;
 	int res = 1;
@@ -154,14 +149,12 @@ static float power2(int n)
 
 float Fixed::MaxValue(void) const
 {
+	float max;
 	int intBits = sizeof(int) * 8;
-	int signBit = 1;
-	int power2Exponent = intBits - _fractionalBits - signBit;
-	int power2 = (1 << power2Exponent) - 1;
+	int power2Exponent = intBits - _fractionalBits;
 	int power2Fractional = (1 << _fractionalBits);
 
-	float max;
-	max = static_cast<float>(power2) + (static_cast<float>(power2Fractional - 1) / static_cast<float>(power2Fractional));
+	max = ((powerExp2(power2Exponent) >> _fractionalBits) - 1) + ((float)(power2Fractional - 1) / (float)power2Fractional);
 	return (max);
 }
 
@@ -177,6 +170,7 @@ double Fixed::toDouble(void) const
 	d = static_cast<double>(_intValue) / static_cast<double>(1 << _fractionalBits);
 	return (d);
 }
+
 /**
  * (sizeof(int) * 8) - _fractionalBits = 
  * 32 - 8 = 24
