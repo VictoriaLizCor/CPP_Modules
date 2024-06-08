@@ -79,7 +79,7 @@ quick: cleanAll
 	git commit -am "* Update in files: '\
 	$(shell git diff --name-only --diff-filter=M | paste -sd ", " -)'"
 	@echo $(YELLOW) && git push
-# commit correction git commit --amend
+
 # //avoid last commit message
 soft:
 	@echo && echo $(GREEN) "Last 10 commits:" $(E_NC)
