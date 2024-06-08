@@ -77,7 +77,7 @@ plog:
 quick: cleanAll
 	@echo $(GREEN) && \
 	git commit -am "* Update in files: ' \
-	$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
+	$(shell git diff --name-only --diff-filter=M | paste -sd ", " -)'"
 	@echo $(YELLOW) && git push
 # commit correction git commit --amend
 # //avoid last commit message
