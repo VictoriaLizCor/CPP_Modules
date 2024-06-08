@@ -37,11 +37,6 @@ gAdd:
 gCommit:
 	@echo $(GREEN) && git commit -e
 
-gtest:
-	@ls x > /dev/null || \
-	if [ $$? -ne 0 ]; then \
-		echo $(RED) "Command failed" $(YELLOW); \
-	fi
 gPush:
 	@echo $(YELLOW) && git push > /dev/null || \
 	if [ $$? -ne 0 ]; then \
