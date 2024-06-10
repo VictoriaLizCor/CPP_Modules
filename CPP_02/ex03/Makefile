@@ -1,7 +1,7 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
+D_FLAGS		= -Wall -Wextra -std=c++98 #-Werror
 INCLUDES	+= -I includes/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR	:= src/
@@ -155,14 +155,16 @@ soft:
 	if [ $$? -ne 0 ]; then \
 		echo $(RED) GIT_REPO not found $(E_NC); \
 	fi
-cpp: # Usage: make cpp f=filename
+cpp: # Usage: make cpp h=filename
 	@if [ ! -d "includes" ]; then \
 		mkdir includes; \
-		touch includes/$(f).hpp; \
 	fi
 	@if [ ! -d "src" ]; then \
 		mkdir src; \
 		touch src/main.cpp; \
+	fi
+	@if [ ! -f "includes/$(h)" ]; then \
+		touch includes/$(h); \
 	fi
 	@for file in includes/*.hpp; do \
 		if [ ! -f "src/$$(basename "$${file%.*}").cpp" ]; then \
