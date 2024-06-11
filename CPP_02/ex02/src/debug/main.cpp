@@ -138,7 +138,8 @@ static void getData(float number, Fixed const& f)
 
 int main(void)
 {
-	
+	std::cout << std::fixed;
+	std::cout.precision(10);
 	if (DEBUG == 4)
 	{
 		{

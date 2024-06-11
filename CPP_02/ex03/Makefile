@@ -1,11 +1,11 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 #-Werror
+D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 INCLUDES	+= -I includes/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR	:= src/
-SRC			:=  $(shell find $(SRC_DIR) -name '*.cpp' ! -name 'main.cpp')
+SRC			:=  $(shell find $(SRC_DIR) -name '*.cpp')
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir $(shell find $(PROJECT_ROOT) -name Makefile | sort)))
@@ -26,7 +26,6 @@ DEBUG_DIR	:= $(NAME).dSYM
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 CC			= g++
-SRC			+= $(SRC_DIR)debug/main.cpp
 D_FLAGS		+= -DDEBUG=$(D)
 else
 SRC			+= $(SRC_DIR)main.cpp

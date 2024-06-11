@@ -1,6 +1,62 @@
 #include "Point.hpp"
 
 /**
+ * @brief Checks if a point is on the edges of a triangle.
+ *
+ * This function checks if a given point lies on any of the edges of a triangle
+ * defined by three points. It prints the results to the standard output.
+ *
+ * @param a First point of the triangle.
+ * @param b Second point of the triangle.
+ * @param c Third point of the triangle.
+ * @param p Point to check.
+ */
+bool static inRange(float p1, float p2, float p)
+{
+	if (p >= std::min(p1, p2) && p <= std::max(p1, p2))
+		return (1);
+	return (0);
+}
+
+/**
+ * @brief Checks if a point lies on the line defined by two other points.
+ *
+ * @param p1 The first point defining the line.
+ * @param p2 The second point defining the line.
+ * @param p The point to check.
+ * @return true If the point p lies on the line defined by p1 and p2.
+ */
+std::string pointInLine(Point const& p1, Point const& p2, Point const& p)
+{
+	std::ostringstream os;
+	float m, b, y; 
+	bool r;
+
+	if (DEBUG == 1)
+	{
+		os << std::fixed;
+		os.precision(12);
+	}
+	if (inRange(p1.getX(), p2.getX(), p.getX()))
+	{
+		if (p2.getX() - p1.getX() == 0) // Check division with 0
+		{
+			return ("1");
+		}
+		m = (p2.getY() - p1.getY()) / (p2.getX() - p1.getX());
+		b = p1.getY() - m * p1.getX();
+		y = (m * p.getX() + b);
+		r = (p.getY() == y);
+		os << static_cast<int>(r);
+		if (r == false)
+			os <<", Correct Point when x = " << p.getX() << " is " << " y = " << y ;
+	}
+	else
+		os << "0 , Outside range";
+	return (os.str());
+}
+
+/**
  * @brief Calculates the cross product of two vectors in 2D space.
  *
  * The vectors are defined by three points: `a`, `b`, and `p`. The first vector
@@ -26,9 +82,9 @@ float static crossProduct(Point a, Point b, Point p)
  * @brief Checks if a point is inside a triangle.
  *
  * This function calculates the cross product of vectors formed by the triangle's
- * vertices and the point. If the point lies on an edge or a vertex of the 
- * triangle, the function returns false. Otherwise, it checks the signs of the 
- * cross products. If all the signs are the same (either positive or negative), 
+ * vertices and the point. If the point lies on an edge or a vertex of the
+ * triangle, the function returns false. Otherwise, it checks the signs of the
+ * cross products. If all the signs are the same (either positive or negative),
  * the point is inside the triangle.
  *
  * @param a The first vertex of the triangle.
@@ -45,9 +101,10 @@ bool bsp(Point const a, Point const b, Point const c, Point const point)
 	float crossProductCA = crossProduct(c, a, point);
 
 	// Check if the point is on an edge or a vertex
-	//float tolerance = a.epsilon();
+	// float tolerance = a.epsilon();
 	// if (std::abs(crossProductAB) < tolerance || std::abs(crossProductBC) < tolerance || std::abs(crossProductCA) < tolerance)
-	if (crossProductAB == 0 || crossProductBC == 0 || crossProductCA == 0) {
+	if (crossProductAB == 0 || crossProductBC == 0 || crossProductCA == 0)
+	{
 		return false;
 	}
 
@@ -59,7 +116,6 @@ bool bsp(Point const a, Point const b, Point const c, Point const point)
 	// The point is inside the triangle if all the signs are the same
 	return (signAB == signBC) && (signBC == signCA);
 }
-
 
 // float triangleArea(Point a, Point b, Point c)
 // {
@@ -87,7 +143,7 @@ bool bsp(Point const a, Point const b, Point const c, Point const point)
 // 	std:: cout << "Area3 : " << triangle3Area << std::endl;
 // 	std:: cout << "AreaM : " << mainTriangleArea << std::endl;
 // 	std:: cout << "A1 + A2 + A3 : " << triangle1Area + triangle2Area + triangle3Area << std::endl;
-// 	std::cout << "AreaM - (A1 + A2 + A2) = " 
+// 	std::cout << "AreaM - (A1 + A2 + A2) = "
 // 	<< std::abs(mainTriangleArea - (triangle1Area + triangle2Area + triangle3Area)) << std::endl;
 // 	return (std::abs(mainTriangleArea - (triangle1Area + triangle2Area + triangle3Area)) < a.epsilon());
 // }
@@ -97,22 +153,22 @@ bool bsp(Point const a, Point const b, Point const c, Point const point)
  * In 2D space, the cross product of two vectors is a scalar value, unlike in 3D
  * space where it’s a vector. The cross product of two vectors A and B in 2D
  * space is defined as:
- * 
+ *
  * A×B = (Ax​⋅By) ​− (Ay​⋅Bx​)
- * 
+ *
  * Here, A = (A_x, A_y) and B = (B_x, B_y) are the two vectors, and A_x, A_y, B_x,
  * B_y are their respective x and y components.
- * 
+ *
  * The result, A × B, represents the area of the parallelogram formed by the two
  * vectors. If the vectors are unit vectors, the cross product gives the sine of
  * the angle between them.
- * 
+ *
  * The sign of the cross product can be used to determine the relative orientation
  * of the vectors:
- * 
- *     If A × B > 0, then A is to the “left” of B (counterclockwise).
- *     If A × B < 0, then A is to the “right” of B (clockwise).
- *     If A × B = 0, then A and B are collinear (they lie on the same line).
+ *
+ *	 If A × B > 0, then A is to the “left” of B (counterclockwise).
+ *	 If A × B < 0, then A is to the “right” of B (clockwise).
+ *	 If A × B = 0, then A and B are collinear (they lie on the same line).
  *
  * https://math.libretexts.org/Bookshelves/Calculus/Calculus_%28OpenStax%29/12%3A_Vectors_in_Space/12.04%3A_The_Cross_Product
-*/
+ */

@@ -81,7 +81,6 @@
 		"fstream": "cpp",
 		"bitset": "cpp"
 	},
-	"accessibility.signals.sounds.volume": 0,
 	"C_Cpp.dimInactiveRegions": false,
 	"doxdocgen.generic.commandSuggestionAddPrefix": true, // true indicates that the extension will print debug to its output channel.
 	"files.exclude":
@@ -89,5 +88,8 @@
 		"**/CPP_00": true,
 		"**/CPP_01": true,
 		// "**/CPP_02": true,
+	},
+	"accessibility.signalOptions": {
+		"volume": 0
 	}
 }
