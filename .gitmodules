@@ -1,3 +1,6 @@
 [submodule "evals/cpp01"]
 	path = evals/cpp01
 	url = git@vogsphere.42wolfsburg.de:vogsphere/intra-uuid-c21c80d7-6e3d-4fe0-859d-8dfb8812f48c-5666416-lilizarr
+[submodule "evals/cpp02"]
+	path = evals/cpp02
+	url = git@vogsphere.42wolfsburg.de:vogsphere/intra-uuid-4b7114ed-8557-40d9-a5fc-5d132562e7f1-5693786-lilizarr

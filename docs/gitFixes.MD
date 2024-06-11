@@ -155,6 +155,12 @@ git submodule add https://github.com/username/repo.git path/to/submodule
 git commit -m "Added submodule"
 git push
 ```
+4. UpdateSubmodule
+
+```bash
+git submodule sync
+git submodule update --init --recursive
+```
 
 Now, the submodule is added to your project. When you clone the project, use the `--recursive` option to also clone all submodules:
 
