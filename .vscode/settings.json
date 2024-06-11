@@ -87,7 +87,7 @@
 	{
 		"**/CPP_00": true,
 		"**/CPP_01": true,
-		// "**/CPP_02": true,
+		"**/CPP_02": true,
 	},
 	"accessibility.signalOptions": {
 		"volume": 0
