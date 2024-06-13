@@ -1,9 +1,10 @@
-#if (DEBUG != 0)
 #include <ClapTrap.hpp>
-#include <stringUtils.hpp>
+
+#if (DEBUG != 0)
 int main(void)
 {
-	std::cout << sColor("HELLO WORLD", FGREEN ,0) << std::endl;
+	ClapTrap o1("Victoria");
+	ClapTrap o2("Linda");
 	return (0);
 }
 #endif

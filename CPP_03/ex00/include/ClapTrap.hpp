@@ -5,6 +5,7 @@
 # include <iostream>
 # include <sstream>
 # include <string>
+# include <stringUtils.hpp>
 
 # ifndef DEBUG
  #  define DEBUG 0
@@ -15,10 +16,17 @@
 class ClapTrap
 {
 private:
-	/* data */
+	t_Name			_name;
+	static int		_color;
+	unsigned int	_hitPoints;
+	unsigned int	_energyPoints;
+	unsigned int	_attackDamage;
 public:
-	ClapTrap(/* args */);
+	ClapTrap(std::string const& name);
 	~ClapTrap();
+	void	attack(const std::string& target);
+	void	takeDamage(unsigned int amount);
+	void	beRepaired(unsigned int amount);
 };
 
 #endif

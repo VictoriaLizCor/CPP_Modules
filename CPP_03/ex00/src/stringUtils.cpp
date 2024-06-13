@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/05/23 11:48:33 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/13 17:33:07 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  *
  * @param str The string to print.
  */
-void	println(std::string str)
+void	printnl(std::string str)
 {
 	std::cout << str << std::endl;
 }
@@ -40,7 +40,7 @@ void	println(std::string str)
  * @param err A boolean flag indicating whether the message is an error message.
  * @return The formatted message string.
  */
-std::string	sColor(const std::string& msg, int color, bool err)
+std::string	setColor(const std::string& msg, int color, bool err)
 {
 	std::ostringstream strColor;
 	std::string	fmt;
@@ -72,20 +72,6 @@ std::string toString(int value)
 }
 
 /**
- * @brief Generates a formatted string representing an RGB color.
- *
- * This function takes three integer values representing the red, green, and
- * blue components of an RGB color and returns a formatted string representing
- * the color in ANSI escape code format.
- *
- * @param red The red component of the RGB color.
- * @param green The green component of the RGB color.
- * @param blue The blue component of the RGB color.
- * @return A formatted string representing the RGB color in ANSI escape code
- * format.
- */
-
-/**
  * @brief Concatenates a color code, a message, and a default color code.
  *
  * This function takes a message and a color code as input and concatenates them
@@ -96,9 +82,9 @@ std::string toString(int value)
  * @return The colored message.
  * gColor(msg, rColor(1));
  */
-std::string	gColor(const std::string& msg, std::string color)
+std::string	getColor(t_Name const& name)
 {
-	return (color + msg + C_DEFAULT);
+	return (name.color + name.str + C_DEFAULT);
 }
 
 static std::string	rColorRGB(int red, int green, int blue)
@@ -131,7 +117,7 @@ static int ft_rand(int min, int max)
  * @param bold Whether to apply bold formatting.
  * @return std::string The colored string.
  */
-std::string rColor(int bold)
+std::string setRandomColor(int bold)
 {
 	std::ostringstream strColor;
 	std::string	fmt;

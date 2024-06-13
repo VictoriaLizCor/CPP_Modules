@@ -7,7 +7,12 @@ branchName=$(git symbolic-ref --short HEAD)
 # The Ticket ID prefix you want to include to your commit messages.
 BranchTicket1=$(git symbolic-ref --short HEAD | sed -nE 's,([A-Z]?-?[0-9]+)-.+,\1,p')
 BranchTicket2=$(git symbolic-ref --short HEAD | sed -nE 's,.+-([0-9]+),\1,p')
-ticketID=$(echo "[$BranchTicket1{$BranchTicket2}]")
+
+if [ -z "$BranchTicket1" ] || [ -z "$BranchTicket2" ]; then
+	ticketID=$(echo "[$branchName]")
+else
+	ticketID=$(echo "[$BranchTicket1-$BranchTicket2]")
+fi
 # [cpp00ex02(TICKET:#0001)]
 # Read the commit message into an array
 LINES=()
@@ -23,7 +28,7 @@ fi
 
 mergeBranch=""
 if [ -f .git/MERGE_HEAD ]; then
-    mergeBranch="Merge: $(git branch --show-current)"
+	mergeBranch="Merge: $(cat .git/MERGE_HEAD | cut -d ' ' -f1 | xargs git rev-parse --abbrev-ref)"
 fi
 
 
@@ -35,5 +40,5 @@ else
 	# If the commit message file has more than one line, keep the original commit message
 	 printf "%s\n" "${LINES[0]}" "$ticketID $mergeBranch" "${LINES[@]:1}" > "$COMMIT_MSG_FILE"
 fi
-echo -e "~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~" >> "$COMMIT_MSG_FILE"
-# /////////////////////////////////////////
+echo "~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~" >> "$COMMIT_MSG_FILE"
+# ////////////////////////////////////////

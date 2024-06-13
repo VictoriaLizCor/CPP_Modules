@@ -122,7 +122,7 @@ dirs:
 	@echo OBJS: $(GRAY) $(OBJS) $(E_NC)
 testAll:
 	@for dir in $(DIRS); do \
-		$(MAKE) -C $$dir test; \
+		$(MAKE) -C $$dir D=$(D) test; \
 	done
 cleanAll:
 	@for dir in $(DIRS); do \
