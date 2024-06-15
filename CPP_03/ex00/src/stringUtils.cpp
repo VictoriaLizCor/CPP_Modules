@@ -6,11 +6,21 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/13 17:33:07 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/15 13:02:46 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "stringUtils.hpp"
+
+/**
+ * @brief Get the colored name.
+ * This function returns the colored name.
+ * @return The colored name.
+ */
+std::string s_coloredName::getName() const
+{
+	return (color + str + C_DEFAULT);
+}
 
 /**
  * @brief Prints a string followed by a newline.
@@ -20,10 +30,15 @@
  * library to print the string.
  *
  * @param str The string to print.
+ * std::string string1 = "Hello";
+ * std::string string2 = "World";
+ * printnl(std::cout, string1);
+ * printnl(std::cout, string2);
  */
-void	printnl(std::string str)
+std::ostream& coutnl(std::ostream& os)
 {
-	std::cout << str << std::endl;
+	os << std::endl;
+	return os;
 }
 
 /**
@@ -46,15 +61,15 @@ std::string	setColor(const std::string& msg, int color, bool err)
 	std::string	fmt;
 
 	fmt = C_FMT;
+	if (color > FGRAY)
+		fmt += "1;";
 	if (err)
 		strColor << fmt << FRED << "m" << "ERROR:";
 	else
 		strColor << fmt << color << "m";
 	if (msg.empty())
 		return (strColor.str());
-	if (color >= FDEFAULT)
-		fmt += "1;";
-	strColor << msg << C_DEFAULT;
+	strColor << fmt << msg << C_DEFAULT;
 	return (strColor.str());
 }
 
@@ -82,7 +97,7 @@ std::string toString(int value)
  * @return The colored message.
  * gColor(msg, rColor(1));
  */
-std::string	getColor(t_Name const& name)
+std::string	getColorStr(t_Name const& name)
 {
 	return (name.color + name.str + C_DEFAULT);
 }

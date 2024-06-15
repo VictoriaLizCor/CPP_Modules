@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:13:36 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/13 17:33:21 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/15 13:03:36 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,28 @@ typedef enum eColor
 	BGRAY			= 100,
 } t_color;
 
+/**
+ * @struct s_coloredName
+ * @brief Struct for storing a colored name.
+ *
+ * This struct stores a name and its associated color.
+ * inline std::string getName() const
+ * {
+ * 	return (color + str + C_DEFAULT);
+ * }
+ */
 struct s_coloredName
 {
 	std::string		str;
 	std::string		color;
+
+	std::string getName() const;
 };
 typedef s_coloredName t_Name;
-void		printnl(std::string str);
+std::ostream& coutnl(std::ostream& os);
 std::string	toString(int value);
 std::string	setColor(const std::string& msg, int color, bool err);
-std::string	getColor(t_Name const& name);
+std::string	getColorStr(t_Name const& name);
 std::string setRandomColor(int bold);
 bool		checkInput(const std::string& str, int (*check_type)(int));
 bool		isOnlySpaces(const std::string& str);

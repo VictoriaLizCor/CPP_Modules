@@ -16,6 +16,12 @@ static std::string	setName(int const& color)
 		return (setRandomColor(1));
 }
 
+/**
+ * @brief Construct a new Clap Trap object
+ * 
+ * @param name The name of the Clap Trap
+ * 	_name{name, setName(++_color)}; // not allowed in std98++
+ */
 ClapTrap::ClapTrap(std::string const& name):
 _hitPoints(10),
 _energyPoints(10),
@@ -23,11 +29,78 @@ _attackDamage(0)
 {
 	_name.str = name;
 	_name.color = setName(++_color);
-	printnl(getColor(_name) + " " + setColor(" was Created", FGRAY, 0));
+	coutnl(std::cout << getName() + " " + setColor(" was Created", FGRAY, 0));
 };
 
+ClapTrap::ClapTrap(std::string const& name, int attackDamage):
+_hitPoints(10),
+_energyPoints(10),
+_attackDamage(attackDamage)
+{
+	_name.str = name;
+	_name.color = setName(++_color);
+	coutnl(std::cout << getName() + " " + setColor(" was Created", FGRAY, 0));
+};
+
+/**
+ * @brief Construct a new Clap Trap object
+ * 
+ * @param name The name of the Clap Trap
+ */
 ClapTrap::~ClapTrap(void)
 {
-	printnl(getColor(_name) + " " + setColor(" was Destroyed", FGRAY, 0));
+	// printnl(getColorStr(_name) + " " + setColor(" was Destroyed", FGRAY, 0));
 }
 
+void ClapTrap::setAD(unsigned int amount)
+{
+	_attackDamage = amount;
+}
+
+void ClapTrap::action(ClapTrap& o1, ClapTrap& o2, int amount)
+{
+	o1.attack(o2.getName());
+	o2.takeDamage(amount);
+}
+
+void ClapTrap::attack(const std::string& target)
+{
+	_energyPoints--;
+	std::cout << "ClapTrap " << *this << " " << "attacks " << target
+	<< ", causing " << _attackDamage << " points of damage !";
+	coutnl(std::cout);
+}
+
+void ClapTrap::takeDamage(unsigned int amount)
+{
+	_hitPoints -= amount;
+	std::cout << "ClapTrap " << *this << " " << "took "
+	<< amount << " points of damage !";
+	coutnl(std::cout);
+}
+
+void ClapTrap::beRepaired(unsigned int amount)
+{
+	_energyPoints--;
+	_hitPoints += amount;
+	std::cout << "ClapTrap " << *this << " " << "recovered "
+	<< amount << " hit points!";
+	coutnl(std::cout);
+}
+
+unsigned int ClapTrap::getEP(void) const
+{
+	return (_energyPoints);
+}
+
+
+std::string ClapTrap::getName(void)
+{
+	return (_name.getName());
+}
+
+std::ostream& operator << (std::ostream & os, ClapTrap& rhs)
+{
+	os << rhs.getName();
+	return (os);
+}
