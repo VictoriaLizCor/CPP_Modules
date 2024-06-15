@@ -23,9 +23,7 @@ std::string objName()
 static void action(ClapTrap& o1, ClapTrap& o2, int amount)
 {
 	if (getRandomNum() == 1)
-	{
 		o1.action(o1, o2, amount);
-	}
 	else
 		o1.beRepaired(amount);
 }
@@ -40,7 +38,6 @@ int main(void)
 	coutnl(std::cout << "\n========== CLAPTRAP BEGINS ==========\n");
 	while (i)
 	{
-		std::cout << i << " ";
 		if (getRandomNum() == 1)
 			action(o1, o2, getRandomObj(o1));
 		else
