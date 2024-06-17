@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:13:36 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/15 13:03:36 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:27:29 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,9 @@ struct s_coloredName
 
 	std::string getName() const;
 };
+
 typedef s_coloredName t_Name;
-std::ostream& coutnl(std::ostream& os);
+void coutnl(std::ostream& os);
 std::string	toString(int value);
 std::string	setColor(const std::string& msg, int color, bool err);
 std::string	getColorStr(t_Name const& name);

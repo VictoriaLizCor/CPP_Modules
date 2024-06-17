@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/15 13:02:46 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:27:14 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,9 @@ std::string s_coloredName::getName() const
  * printnl(std::cout, string1);
  * printnl(std::cout, string2);
  */
-std::ostream& coutnl(std::ostream& os)
+void coutnl(std::ostream& os)
 {
 	os << std::endl;
-	return os;
 }
 
 /**
@@ -83,7 +82,7 @@ std::string toString(int value)
 {
 	std::ostringstream ss;
 	ss << value;
-	return ss.str();
+	return (ss.str());
 }
 
 /**

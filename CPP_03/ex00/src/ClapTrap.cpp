@@ -39,7 +39,7 @@ _attackDamage(attackDamage)
 {
 	_name.str = name;
 	_name.color = setName(++_color);
-	coutnl(std::cout << getName() + " " + setColor(" was Created", FGRAY, 0));
+	coutnl(std::cout << *this << + " " + setColor(" was Created", FGRAY, 0));
 };
 
 /**
@@ -49,7 +49,7 @@ _attackDamage(attackDamage)
  */
 ClapTrap::~ClapTrap(void)
 {
-	// printnl(getColorStr(_name) + " " + setColor(" was Destroyed", FGRAY, 0));
+	coutnl(std::cout << *this << " " + setColor(" was Destroyed", FGRAY, 0));
 }
 
 void ClapTrap::setAD(unsigned int amount)
@@ -66,17 +66,17 @@ void ClapTrap::action(ClapTrap& o1, ClapTrap& o2, int amount)
 void ClapTrap::attack(const std::string& target)
 {
 	_energyPoints--;
-	std::cout << "ClapTrap " << *this << " " << "attacks " << target
-	<< ", causing " << _attackDamage << " points of damage !";
+	std::cout << "ClapTrap " << *this << " attacks " << target
+	<< ", causing " << _attackDamage << " points of damage!";
 	coutnl(std::cout);
 }
 
 void ClapTrap::takeDamage(unsigned int amount)
 {
 	_hitPoints -= amount;
-	std::cout << "ClapTrap " << *this << " " << "took "
-	<< amount << " points of damage !";
-	coutnl(std::cout);
+	std::cout << "ClapTrap " << *this << " took "
+	<< amount << " points of damage!";
+	// status();
 }
 
 void ClapTrap::beRepaired(unsigned int amount)
@@ -88,11 +88,31 @@ void ClapTrap::beRepaired(unsigned int amount)
 	coutnl(std::cout);
 }
 
-unsigned int ClapTrap::getEP(void) const
-{
-	return (_energyPoints);
-}
+int ClapTrap::getHP(void) const {return (static_cast<int>(_hitPoints));}
 
+int ClapTrap::getEP(void) const {return (static_cast<int>(_energyPoints));}
+
+int ClapTrap::getAD(void) const {return (static_cast<int>(_attackDamage));}
+
+int ClapTrap::getMP(void) const {return (static_cast<int>(_MAX_POINTS));}
+
+// static std::string coloredStatus(std::string strType, unsigned int type, int color)
+// {
+// 	std::ostringstream ss;
+// 	ss << strType << type;
+// 	return (setColor(ss.str(), color, 0));
+// }
+
+void ClapTrap::status(void)
+{
+	// std::cout << "\t||" << *this << "->("
+	// std::cout << "\t["
+	// std::cout << setColor("HP: " + toString(static_cast<int>(_hitPoints)), FGREEN, 0) 
+	// << ", " << std::endl;
+	// << coloredStatus("HP: ", _hitPoints, FGREEN) << ", "
+	// << coloredStatus("AD: ", _attackDamage, FRED) << ", "
+	// << coloredStatus("EP: ", _energyPoints, FBLUE) << ")||\n";
+}
 
 std::string ClapTrap::getName(void)
 {

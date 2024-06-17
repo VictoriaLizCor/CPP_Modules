@@ -1,7 +1,7 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
+D_FLAGS		= -Wall -Wextra -std=c++98 #-Werror
 INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR		:= src/
@@ -12,7 +12,7 @@ DIRS		:= $(abspath $(dir $(shell find $(PROJECT_ROOT) -name Makefile | sort)))
 CURRENT		:= $(shell basename $$PWD)
 DEBUG_FILES	:= debug/
 #------ DEBUG FLAG ------#
-D			= 0
+D			= 1
 #------ Sanitizer Flag ------#
 S			= 0
 #------ DEBUG UTILS ------#
