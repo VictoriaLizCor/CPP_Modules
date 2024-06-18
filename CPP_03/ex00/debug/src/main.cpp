@@ -1,14 +1,13 @@
 #include <ClapTrap.hpp>
 
 #if (DEBUG != 0)
-static int getRandomObj(ClapTrap const& obj) 
-{
-	return (rand() % obj.getEP() + 1);
-}
 
-static bool getRandomNum() 
+static int getRandomNum(int num)
 {
-	return (rand() % 2);
+	int val = rand() % num;
+
+	std::cout << val << std::endl;
+	return (val);
 }
 
 std::string objName()
@@ -22,38 +21,37 @@ std::string objName()
 
 static void action(ClapTrap& o1, ClapTrap& o2, int amount)
 {
-	if (bool r1 = getRandomNum() == 0 && o1.getHP() < o1.getMP())
-	{
-		std::cout << r1;
-		o1.beRepaired(amount);
-	}
+	if (getRandomNum(2) == 0 && (o1.getHP() <= o1.getMP() - o1.getRP()))
+		o1.beRepaired(o1.getRP());
 	else
-		o1.action(o1, o2, amount);
+		o1.executaAttack(o1, o2, amount);
 }
 
 int main(void)
 {
 	srand(static_cast<unsigned int>(time(0)));
-	int i = 10;
-	ClapTrap o1(objName());
-	ClapTrap o2(objName(), getRandomObj(o1) / 2);
-	o1.setAD(getRandomObj(o1) / 2);
+
+	ClapTrap o1(objName(), getRandomNum(ClapTrap::getMP()) + 1);
+	ClapTrap o2(objName());
+	o2.setAD(getRandomNum(ClapTrap::getMP()) + 1);
 	coutnl(std::cout << "\n========== CLAPTRAP BEGINS ==========\n");
+	o1.status();
+	o2.status();
+	coutnl(std::cout << "\n\n==============\n");
+	int i = getRandomNum(2);
+	while (o1.getHP() || o2.getHP())
 	{
-		std::cout << o1  << " " + setColor("HP: ", FGREEN, 0) << std::endl;
+		if (++i % 2 == 0)
+			action(o1, o2, o1.getAD());
+		else
+			action(o2, o1, o2.getAD());
+		o1.status();
+		o2.status();
+		std::cout << "\n\n";
+		if (!o1.getEP() && !o2.getEP())
+			break ;
 	}
-	// o1.status();
-	// o2.status();
-	// coutnl(std::cout << "==============");
-	// while (i)
-	// {
-	// 	if (getRandomNum() == 1)
-	// 		action(o1, o2, getRandomObj(o1));
-	// 	else
-	// 		action(o2, o1, getRandomObj(o2));
-	// 	i--;
-	// }
-	coutnl(std::cout << "\n========== CLAPTRAP STOPS ==========\n");
+	coutnl(std::cout << "========== CLAPTRAP STOPS ==========\n");
 	return (0);
 }
 #endif
