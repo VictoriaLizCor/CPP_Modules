@@ -16,31 +16,31 @@ static std::string	setName(int const& color)
 		return (setRandomColor(1));
 }
 
+void ClapTrap::initialize(std::string const& name)
+{
+	_hitPoints = _MAX_POINTS;
+	_energyPoints = _MAX_POINTS;
+	_recoveryPoints = 0;
+	_name.str = name;
+	_name.color = setName(++_color);
+}
+
 /**
  * @brief Construct a new Clap Trap object
  * 
  * @param name The name of the Clap Trap
  * 	_name{name, setName(++_color)}; // not allowed in std98++
  */
-ClapTrap::ClapTrap(std::string const& name):
-_hitPoints(_MAX_POINTS),
-_energyPoints(_MAX_POINTS),
-_attackDamage(0),
-_recoveryPoints(0)
+ClapTrap::ClapTrap(std::string const& name)
 {
-	_name.str = name;
-	_name.color = setName(++_color);
+	initialize(name);
 	coutnl(std::cout << getName() + " " + setColor(" was Created", FGRAY, 0));
 };
 
-ClapTrap::ClapTrap(std::string const& name, unsigned int attackDamage):
-_hitPoints(_MAX_POINTS),
-_energyPoints(_MAX_POINTS),
-_recoveryPoints(0)
+ClapTrap::ClapTrap(std::string const& name, unsigned int attackDamage)
 {
-	_name.str = name;
-	_name.color = setName(++_color);
-	setAD(attackDamage);
+	initialize(name);
+	setAttackDamage(attackDamage);
 	coutnl(std::cout << *this << + " " + setColor(" was Created", FGRAY, 0));
 };
 
@@ -54,31 +54,43 @@ ClapTrap::~ClapTrap(void)
 	coutnl(std::cout << *this << " " + setColor(" was Destroyed", FGRAY, 0));
 }
 
-void ClapTrap::setAD(unsigned int amount)
+void ClapTrap::setAttackDamage(unsigned int amount)
 {
 	_attackDamage = amount;
-	setRP();
+	if (_attackDamage == _MAX_POINTS)
+		_attackDamage--;
+	setRecoveryPoints();
 }
 
-void ClapTrap::setRP(void)
+void ClapTrap::setRecoveryPoints(void)
 {
 	_recoveryPoints = abs(static_cast<int>(_MAX_POINTS) - static_cast<int>(_attackDamage));
 }
 
-void ClapTrap::executaAttack(ClapTrap& o1, ClapTrap& o2, int amount)
+bool	ClapTrap::check_KO_Status(void)
 {
-	o1.attack(o2.getName());
-	if (o1.getHP() && o1.getEP())
-		o2.takeDamage(amount);
+	if (_energyPoints && _hitPoints)
+		return (0);
+	if (!_hitPoints)
+		std::cout << setColor("FATALITY!: ", FLRED, 0) << 
+		*this << setColor(" has no more HP left\n", FWHITE, 0);
+	else if (!_energyPoints)
+		std::cout << *this << setColor(" has no more EP left\n", FWHITE, 0);
+	return (1);
+}
+
+void ClapTrap::executaAttack(ClapTrap& o2, int amount)
+{
+	if (!getHitPoints() || check_KO_Status())
+		return ;
+	attack(o2.getName());
+	o2.takeDamage(amount);
 }
 
 void ClapTrap::attack(std::string const& target)
 {
-	if (!_energyPoints)
-	{
-		std::cout << *this << " has no more EP left\n";
+	if (check_KO_Status())
 		return ;
-	}
 	std::cout << "ClapTrap " << *this << " " << setColor("attacks", BRED, 0)
 	<< " " << target << ", causing " << _attackDamage << " points of damage!";
 	_energyPoints--;
@@ -96,15 +108,14 @@ void ClapTrap::takeDamage(unsigned int amount)
 		_hitPoints -= amount;
 	std::cout << "ClapTrap " << *this << " took "
 	<< amount << " points of damage!\n";
+	if (_hitPoints == 0)
+		check_KO_Status();
 }
 
 void ClapTrap::beRepaired(unsigned int amount)
 {
-	if (!_energyPoints)
-	{
-		std::cout << *this << " has no more EP left\n";
+	if (check_KO_Status())
 		return ;
-	}
 	std::cout << "ClapTrap " << *this << " " << setColor("recovers", BGREEN, 0)
 	<< " " << amount << " hit points!\n";
 	_energyPoints--;
@@ -114,24 +125,24 @@ void ClapTrap::beRepaired(unsigned int amount)
 		_hitPoints += amount;
 }
 
-int ClapTrap::getHP(void) const {return (static_cast<int>(_hitPoints));}
+int ClapTrap::getHitPoints(void) const {return (static_cast<int>(_hitPoints));}
 
-int ClapTrap::getEP(void) const {return (static_cast<int>(_energyPoints));}
+int ClapTrap::getEnergyPoints(void) const {return (static_cast<int>(_energyPoints));}
 
-int ClapTrap::getAD(void) const {return (static_cast<int>(_attackDamage));}
+int ClapTrap::getAttackDamage(void) const {return (static_cast<int>(_attackDamage));}
 
-int ClapTrap::getRP(void) const {return (static_cast<int>(_recoveryPoints));}
+int ClapTrap::getRecoveryPoints(void) const {return (static_cast<int>(_recoveryPoints));}
 
-int ClapTrap::getMP(void){return (static_cast<int>(_MAX_POINTS));}
+int ClapTrap::getMaxPoints(void){return (static_cast<int>(_MAX_POINTS));}
 
 
-void ClapTrap::status(void)
+void ClapTrap::printStatus(void)
 {
-	std::cout << "[" << *this << "->("
-	<< setColor("HP: " + toString(getHP()), FBLUE, 0) << ", "
-	<< setColor("EP: " + toString(getEP()), FCYAN, 0) << ", "
-	<< setColor("AD: " + toString(getAD()), FMAGENTA, 0) << ", "
-	<< setColor("RP: " + toString(getRP()), FGRAY, 0) << ")]";
+	std::cout << "[" << *this
+	<< setColor(" HP:" + toString(getHitPoints()), FBLUE, 0) << ", "
+	<< setColor("EP:" + toString(getEnergyPoints()), FCYAN, 0) << ", "
+	<< setColor("AD:" + toString(getAttackDamage()), FMAGENTA, 0) << ", "
+	<< setColor("RP:" + toString(getRecoveryPoints()), FGRAY, 0) << "]\n";
 }
 
 std::string ClapTrap::getName(void){return (_name.getName());}

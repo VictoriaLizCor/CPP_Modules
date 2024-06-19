@@ -13,45 +13,58 @@ std::string objName()
 	return (os.str());
 }
 
-static void action(ClapTrap& o1, ClapTrap& o2, int amount)
+static bool checkObj(ClapTrap& o1 , ClapTrap& o2)
+{
+	if (!o1.getHitPoints() || !o2.getHitPoints())
+		return (1);
+	else if (!o1.getEnergyPoints() && !o2.getEnergyPoints())
+		return (o1.check_KO_Status() && o2.check_KO_Status());
+	return (0);
+}
+
+static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 {
 	bool priority;
 
-	if (o1.getHP() <= o1.getMP() - o1.getRP())
+	std::cout << "\n";
+	if (checkObj(o1, o2))
+		return (1);
+	if (o1.getHitPoints() <= o1.getMaxPoints() - o1.getRecoveryPoints())
 		priority = 1;
 	else
 		priority = getRandomNum(2);
-	if (priority == 1 && o1.getHP() <= o1.getMP() - o1.getRP())
-		o1.beRepaired(o1.getRP());
+	if (priority == 1 && o1.getHitPoints() <= o1.getMaxPoints() - o1.getRecoveryPoints())
+		o1.beRepaired(o1.getRecoveryPoints());
 	else
-		o1.executaAttack(o1, o2, amount);
+		o1.executaAttack(o2, amount);
+	return (0);
 }
 
 int main(void)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	ClapTrap o1(objName(), getRandomNum(ClapTrap::getMP()) + 1);
+	bool KO = 0;
+	ClapTrap o1(objName(), 1);
 	ClapTrap o2(objName());
-	o2.setAD(getRandomNum(ClapTrap::getMP()) + 1);
-	coutnl(std::cout << "\n========== CLAPTRAP BEGINS ==========\n");
-	o1.status();
-	o2.status();
-	coutnl(std::cout << "\n\n==============\n");
-	int i = getRandomNum(2);
-	while (o1.getHP() || o2.getHP())
+	o2.setAttackDamage(3);;
+	int i = 1;
+	std::cout << "\n" << i << " ========== CLAPTRAP BEGINS ==========\n\n";
+	o1.printStatus();
+	o2.printStatus();
+	std::cout << "\n==============\n";
+	while (1)
 	{
-		if (++i % 2 == 0)
-			action(o1, o2, o1.getAD());
+		if (++i % 2 == 1)
+			KO = action(o1, o2, o1.getAttackDamage());
 		else
-			action(o2, o1, o2.getAD());
-		o1.status();
-		o2.status();
-		std::cout << "\n\n";
-		if (!o1.getEP() && !o2.getEP())
+			KO = action(o2, o1, o2.getAttackDamage());
+		if (KO)
 			break ;
+		o1.printStatus();
+		o2.printStatus();
 	}
-	coutnl(std::cout << "========== CLAPTRAP STOPS ==========\n");
+	std::cout << "\n" << i << " ========== CLAPTRAP STOPS ==========\n\n";
 	return (0);
 }
 
