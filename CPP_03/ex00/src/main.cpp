@@ -2,7 +2,6 @@
 
 #if (DEBUG == 0)
 
-static int getRandomNum(int num){return (rand() % num);}
 
 std::string objName()
 {
@@ -24,16 +23,13 @@ static bool checkObj(ClapTrap& o1 , ClapTrap& o2)
 
 static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 {
-	bool priority;
+	bool healthPriority = o1.getHitPoints() <= o1.getMaxPoints() - o1.getRecoveryPoints();
+	bool attackPriority = o1.getHitPoints() < o2.getHitPoints();
 
 	std::cout << "\n";
 	if (checkObj(o1, o2))
 		return (1);
-	if (o1.getHitPoints() <= o1.getMaxPoints() - o1.getRecoveryPoints())
-		priority = 1;
-	else
-		priority = getRandomNum(2);
-	if (priority == 1 && o1.getHitPoints() <= o1.getMaxPoints() - o1.getRecoveryPoints())
+	if (healthPriority || attackPriority)
 		o1.beRepaired(o1.getRecoveryPoints());
 	else
 		o1.executaAttack(o2, amount);
@@ -42,13 +38,11 @@ static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 
 int main(void)
 {
-	srand(static_cast<unsigned int>(time(0)));
-
 	bool KO = 0;
-	ClapTrap o1(objName(), 1);
+	ClapTrap o1(objName(), 3);
 	ClapTrap o2(objName());
-	o2.setAttackDamage(3);;
-	int i = 1;
+	o2.setAttackDamage(2);;
+	int i = 0;
 	std::cout << "\n" << i << " ========== CLAPTRAP BEGINS ==========\n\n";
 	o1.printStatus();
 	o2.printStatus();

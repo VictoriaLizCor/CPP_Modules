@@ -24,11 +24,13 @@ class ClapTrap
 		unsigned int	_attackDamage;
 		//
 		unsigned int	_recoveryPoints;
-		static int const _MAX_POINTS = 5;
+		static int const _MAX_POINTS = 10;
 		void		initialize(std::string const& name);
 	public:
 		ClapTrap(std::string const& name);
 		ClapTrap(std::string const& name, unsigned int attackDamage);
+		ClapTrap& operator=(ClapTrap const& rhs);
+		ClapTrap(ClapTrap const& rhs);
 		~ClapTrap();
 		void		attack(std::string const& target);
 		void		takeDamage(unsigned int amount);
@@ -41,7 +43,7 @@ class ClapTrap
 		int			getAttackDamage(void) const;
 		int			getRecoveryPoints(void) const;
 		static int	getMaxPoints(void);
-
+		static int	getObjects(void);
 		void		printStatus(void);
 		bool		check_KO_Status(void);
 		std::string	getName(void);

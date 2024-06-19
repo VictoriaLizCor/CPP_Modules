@@ -79,7 +79,9 @@
 		"iomanip": "cpp",
 		"sstream": "cpp",
 		"fstream": "cpp",
-		"bitset": "cpp"
+		"bitset": "cpp",
+		"chrono": "cpp",
+		"ratio": "cpp"
 	},
 	"C_Cpp.dimInactiveRegions": false,
 	"doxdocgen.generic.commandSuggestionAddPrefix": true, // true indicates that the extension will print debug to its output channel.
