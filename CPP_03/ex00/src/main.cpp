@@ -31,15 +31,15 @@ int main(void)
 {
 	srand(static_cast<unsigned int>(time(0)));
 
-	ClapTrap o1(objName(), getRandomNum(ClapTrap::getMP() - 1) + 1);
+	ClapTrap o1(objName(), getRandomNum(ClapTrap::getMP()) + 1);
 	ClapTrap o2(objName());
-	o2.setAD(static_cast<unsigned int>(getRandomNum(ClapTrap::getMP() - 1) + 1));
+	o2.setAD(getRandomNum(ClapTrap::getMP()) + 1);
 	coutnl(std::cout << "\n========== CLAPTRAP BEGINS ==========\n");
 	o1.status();
 	o2.status();
 	coutnl(std::cout << "\n\n==============\n");
 	int i = getRandomNum(2);
-	while (o1.getEP() || o2.getEP())
+	while (o1.getHP() || o2.getHP())
 	{
 		if (++i % 2 == 0)
 			action(o1, o2, o1.getAD());
@@ -48,7 +48,7 @@ int main(void)
 		o1.status();
 		o2.status();
 		std::cout << "\n\n";
-		if ((!o1.getHP() || !o2.getHP()) && i <= ClapTrap::getMP() * 2 + 1)
+		if (!o1.getEP() && !o2.getEP())
 			break ;
 	}
 	coutnl(std::cout << "========== CLAPTRAP STOPS ==========\n");
