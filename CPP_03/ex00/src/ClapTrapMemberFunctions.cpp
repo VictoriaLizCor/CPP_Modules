@@ -18,8 +18,7 @@ bool	ClapTrap::check_KO_Status(void)
 	if (_energyPoints > 0 && _hitPoints > 0)
 		return (false);
 	if (_hitPoints == 0)
-		std::cout << setColor("FATALITY!: ", FLRED, 0) << 
-		*this << setColor(" has no more HP left\n", FWHITE, 0);
+		std::cout << *this << setColor(" has no more HP left\n", FWHITE, 0);
 	else if (_energyPoints == 0)
 		std::cout << *this << setColor(" has no more EP left\n", FWHITE, 0);
 	return (true);
@@ -53,7 +52,10 @@ void ClapTrap::takeDamage(unsigned int amount)
 	std::cout << "ClapTrap " << *this << " took "
 	<< amount << " points of damage!\n";
 	if (_hitPoints == 0)
+	{
+		std::cout << setColor("FATALITY!: ", FLRED, 0);
 		(void)check_KO_Status();
+	}
 }
 
 void ClapTrap::beRepaired(unsigned int amount)

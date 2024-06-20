@@ -13,12 +13,12 @@ std::string objName()
 	return (os.str());
 }
 
-static bool checkObj(ClapTrap& o1 , ClapTrap& o2)
+static bool checkObjs(ClapTrap& o1 , ClapTrap& o2)
 {
-	if (!o1.getHitPoints() || !o2.getHitPoints())
+	if (o1.getHitPoints() == 0 || o2.getHitPoints() == 0)
 		return (1);
 	else if (!o1.getEnergyPoints() && !o2.getEnergyPoints())
-		return (o1.check_KO_Status() && o2.check_KO_Status());
+		return (1);
 	return (0);
 }
 
@@ -26,8 +26,7 @@ static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 {
 	bool healthPriority = o1.getHitPoints() <= o1.getMaxPoints() - o1.getRecoveryPoints();
 
-	std::cout << "\n";
-	if (checkObj(o1, o2))
+	if (checkObjs(o1, o2))
 		return (1);
 	if (getRandomNum(2) == 0 && healthPriority)
 		o1.beRepaired(o1.getRecoveryPoints());
@@ -38,13 +37,21 @@ static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 
 static void startClapTrap(ClapTrap& o1 , ClapTrap& o2)
 {
-	bool KO = 0;
+	bool KO;
 	std::cout << "\n========== CLAPTRAP BEGINS ==========\n\n";
 	o1.printStatus();
 	o2.printStatus();
 	std::cout << "\n==============\n";
-	while (1)
+	KO = checkObjs(o1, o2);
+	if (checkObjs(o1, o2))
 	{
+		std::cout << "\n";
+		(void)o1.check_KO_Status();
+		(void)o2.check_KO_Status();
+	}
+	while (!KO)
+	{
+		std::cout << "\n";
 		if (getRandomNum(2)== 1)
 			KO = action(o1, o2, o1.getAttackDamage());
 		else
@@ -67,7 +74,7 @@ int main(void)
 	{
 		ClapTrap o3(o1);
 		ClapTrap o4(o2);
-		
+		std::cout << "*******************************************\n";
 		startClapTrap(o3, o4);
 	}
 	return (0);
