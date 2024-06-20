@@ -20,8 +20,8 @@
 	], // Compiler options
 	"compiler-explorer.debug": true,
 	"compiler-explorer.include": [
-		"${workspaceFolder}/CPP_01/ex04/src/${workspaceFolder}/CPP_01/ex04/src/main.cpp",
-	//	"${workspaceFolder}/CPP_00/ex01/src/${workspaceFolder}/CPP_00/ex01/src/my_awesome_phonebook.cpp"
+		// "${workspaceFolder}/CPP_01/ex04/src/${workspaceFolder}/CPP_01/ex04/src/main.cpp",
+		//	"${workspaceFolder}/CPP_00/ex01/src/${workspaceFolder}/CPP_00/ex01/src/my_awesome_phonebook.cpp"
 	],
 	"window.customTitleBarVisibility": "auto",
 	"rewrap.wrappingColumn": 80,

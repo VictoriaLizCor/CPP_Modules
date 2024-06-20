@@ -35,7 +35,7 @@ git merge branch-to-merge
 ```
 ## Change merge default message
 ```bash
-git merge --edit branch-to-merge
+git merge --e branch-to-merge
 ```
 # Delete the merged branch locally
 ```bash
