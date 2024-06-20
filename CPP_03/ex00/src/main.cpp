@@ -24,12 +24,12 @@ static bool checkObj(ClapTrap& o1 , ClapTrap& o2)
 static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 {
 	bool healthPriority = o1.getHitPoints() <= o1.getMaxPoints() - o1.getRecoveryPoints();
-	bool attackPriority = o1.getHitPoints() < o2.getHitPoints();
-
+	
+	healthPriority |= o1.getHitPoints() < o2.getHitPoints();
 	std::cout << "\n";
 	if (checkObj(o1, o2))
 		return (1);
-	if (healthPriority || attackPriority)
+	if (healthPriority)
 		o1.beRepaired(o1.getRecoveryPoints());
 	else
 		o1.executaAttack(o2, amount);

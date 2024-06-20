@@ -79,7 +79,7 @@ int ClapTrap::getRecoveryPoints(void) const {return (static_cast<int>(_recoveryP
 
 int ClapTrap::getMaxPoints(void){return (static_cast<int>(_MAX_POINTS));}
 
-int ClapTrap::getObjects(void){return (_color - FGRAY);};
+int ClapTrap::getObjects(void){return (_ObjectColor - FGRAY);};
 
 void ClapTrap::printStatus(void)
 {
@@ -90,7 +90,8 @@ void ClapTrap::printStatus(void)
 	<< setColor("RP:" + toString(getRecoveryPoints()), FGRAY, 0) << "]\n";
 }
 
-std::string ClapTrap::getName(void){return (_name.color + _name.str + C_DEFAULT);}
+// std::string ClapTrap::getName(void){return (_name.color + _name.str + C_DEFAULT);}
+std::string ClapTrap::getName(void){return (_name.getName());}
 
 std::ostream& operator << (std::ostream & os, ClapTrap& rhs)
 {

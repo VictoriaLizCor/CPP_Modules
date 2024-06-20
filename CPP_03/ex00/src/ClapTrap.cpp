@@ -1,6 +1,6 @@
 #include <ClapTrap.hpp>
 
-int ClapTrap::_color = FGRAY;
+int ClapTrap::_ObjectColor = FGRAY;
 /**
  * @brief Concatenates a message with a color and returns the result.
  * 
@@ -22,7 +22,7 @@ void ClapTrap::initialize(std::string const& name)
 	_energyPoints = _MAX_POINTS;
 	_recoveryPoints = 0;
 	_name.str = name;
-	_name.color = setName(++_color);
+	_name.color = setName(++_ObjectColor);
 }
 
 /**
@@ -59,7 +59,7 @@ ClapTrap&::ClapTrap::operator=(ClapTrap const& rhs)
 	if (this != &rhs)
 	{
 		this->_name.str = rhs._name.str;
-		this->_name.color = setName(++_color);
+		this->_name.color = setName(++_ObjectColor);
 		this->_hitPoints = rhs._hitPoints;
 		this->_energyPoints = rhs._energyPoints;
 		this->_attackDamage = rhs._attackDamage;

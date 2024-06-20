@@ -18,7 +18,7 @@ class ClapTrap
 {
 	private:
 		t_Name			_name;
-		static int		_color;
+		static int		_ObjectColor;
 		unsigned int	_hitPoints;
 		unsigned int	_energyPoints;
 		unsigned int	_attackDamage;
