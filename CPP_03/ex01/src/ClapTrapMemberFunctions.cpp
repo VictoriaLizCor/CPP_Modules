@@ -1,5 +1,7 @@
 #include <ClapTrap.hpp>
 
+void ClapTrap::setName(std::string const& name){_name.str = name;}
+
 void ClapTrap::setAttackDamage(unsigned int amount)
 {
 	_attackDamage = amount;

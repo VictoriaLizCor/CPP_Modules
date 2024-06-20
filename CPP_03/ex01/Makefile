@@ -12,7 +12,7 @@ DIRS		:= $(abspath $(dir $(shell find $(PROJECT_ROOT) -name Makefile | sort)))
 CURRENT		:= $(shell basename $$PWD)
 DEBUG_FILES	:= debug
 #------ DEBUG FLAG ------#
-D			= 0
+D			= 1
 #------ Sanitizer Flag ------#
 S			= 0
 #------ DEBUG UTILS ------#

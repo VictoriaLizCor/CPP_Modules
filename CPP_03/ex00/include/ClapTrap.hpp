@@ -24,7 +24,7 @@ class ClapTrap
 		unsigned int	_attackDamage;
 		//
 		unsigned int	_recoveryPoints;
-		static int const _MAX_POINTS = 5;
+		static int const _MAX_POINTS = 10;
 		void		initialize(std::string const& name);
 	public:
 		ClapTrap(void);

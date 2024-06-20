@@ -21,6 +21,7 @@ void ClapTrap::initialize(std::string const& name)
 	_hitPoints = _MAX_POINTS;
 	_energyPoints = _MAX_POINTS;
 	_recoveryPoints = 0;
+	_attackDamage = 0;
 	_name.str = name;
 	_name.color = setName(++_ObjectColor);
 }
@@ -64,11 +65,11 @@ ClapTrap&::ClapTrap::operator=(ClapTrap const& rhs)
 {
 	if (this != &rhs)
 	{
-		this->_name.str = rhs._name.str;
-		this->_name.color = setName(++_ObjectColor);
-		this->_hitPoints = rhs._hitPoints;
-		this->_energyPoints = rhs._energyPoints;
-		this->_attackDamage = rhs._attackDamage;
+		_name.str = rhs._name.str;
+		_name.color = setName(++_ObjectColor);
+		_hitPoints = rhs._hitPoints;
+		_energyPoints = rhs._energyPoints;
+		_attackDamage = rhs._attackDamage;
 	}
 	return (*this);
 }

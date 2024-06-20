@@ -1,14 +1,14 @@
-#include <ClapTrap.hpp>
+#include "ScavTrap.hpp"
 
 #if (DEBUG == 0)
 
 
-std::string objName()
+std::string objName(std::string const& name)
 {
 	static unsigned int num;
 
 	std::ostringstream os;
-	os << "Obj_" << (++num);
+	os << name << (++num);
 	return (os.str());
 }
 
@@ -39,26 +39,26 @@ static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 int main(void)
 {
 	bool KO = 0;
-	ClapTrap o1(objName(), 3);
-	ClapTrap o2(objName());
-	o2.setAttackDamage(2);;
-	int i = 0;
-	std::cout << "\n" << i << " ========== CLAPTRAP BEGINS ==========\n\n";
-	o1.printStatus();
-	o2.printStatus();
-	std::cout << "\n==============\n";
-	while (1)
-	{
-		if (++i % 2 == 1)
-			KO = action(o1, o2, o1.getAttackDamage());
-		else
-			KO = action(o2, o1, o2.getAttackDamage());
-		if (KO)
-			break ;
-		o1.printStatus();
-		o2.printStatus();
-	}
-	std::cout << "\n" << i << " ========== CLAPTRAP STOPS ==========\n\n";
+	ClapTrap o1(objName("ClapTrap"), 3);
+	// ScavTrap o2(objName("ScavTrap"));
+	// o2.setAttackDamage(2);;
+	// int i = 0;
+	// std::cout << "\n" << i << " ========== CLAPTRAP BEGINS ==========\n\n";
+	// o1.printStatus();
+	// o2.printStatus();
+	// std::cout << "\n==============\n";
+	// while (1)
+	// {
+	// 	if (++i % 2 == 1)
+	// 		KO = action(o1, o2, o1.getAttackDamage());
+	// 	else
+	// 		KO = action(o2, o1, o2.getAttackDamage());
+	// 	if (KO)
+	// 		break ;
+	// 	o1.printStatus();
+	// 	o2.printStatus();
+	// }
+	// std::cout << "\n" << i << " ========== CLAPTRAP STOPS ==========\n\n";
 	return (0);
 }
 

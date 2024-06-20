@@ -9,7 +9,7 @@ std::string objName()
 	static unsigned int num;
 
 	std::ostringstream os;
-	os << "Obj_" << (++num);
+	os << "Obj" << (++num);
 	return (os.str());
 }
 
@@ -66,19 +66,21 @@ static void startClapTrap(ClapTrap& o1 , ClapTrap& o2)
 int main(void)
 {
 	srand(static_cast<unsigned int>(time(0)));
-	
-	ClapTrap o1(objName(), getRandomNum(ClapTrap::getMaxPoints() - 1) + 1);
-	ClapTrap o2(objName());
-	o2.setAttackDamage(static_cast<unsigned int>(getRandomNum(ClapTrap::getMaxPoints() - 1) + 1));
-	startClapTrap(o1, o2);
-	{
-		ClapTrap o3(o1);
-		ClapTrap o4(o2);
-		std::cout << "*******************************************\n";
-		startClapTrap(o3, o4);
 
-		ClapTrap o5;
-	}
+	ClapTrap o1(objName());
+	ClapTrap o2(objName());
+	// ClapTrap o1(objName(), getRandomNum(ClapTrap::getMaxPoints() - 1) + 1);
+	// ClapTrap o2(objName());
+	// o2.setAttackDamage(static_cast<unsigned int>(getRandomNum(ClapTrap::getMaxPoints() - 1) + 1));
+	// startClapTrap(o1, o2);
+	// {
+	// 	ClapTrap o3(o1);
+	// 	ClapTrap o4(o2);
+	// 	std::cout << "*******************************************\n";
+	// 	startClapTrap(o3, o4);
+
+	// 	ClapTrap o5;
+	// }
 	return (0);
 }
 #endif
