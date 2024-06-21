@@ -2,6 +2,7 @@
 
 #if (DEBUG == 0)
 
+static int getRandomNum(int num){return (rand() % num);}
 
 std::string objName()
 {
@@ -12,7 +13,7 @@ std::string objName()
 	return (os.str());
 }
 
-static bool checkObj(ClapTrap& o1 , ClapTrap& o2)
+static bool checkObjs(ClapTrap& o1 , ClapTrap& o2)
 {
 	if (!o1.getHitPoints() || !o2.getHitPoints())
 		return (1);
@@ -27,7 +28,7 @@ static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 	
 	healthPriority |= o1.getHitPoints() < o2.getHitPoints();
 	std::cout << "\n";
-	if (checkObj(o1, o2))
+	if (checkObjs(o1, o2))
 		return (1);
 	if (healthPriority)
 		o1.beRepaired(o1.getRecoveryPoints());

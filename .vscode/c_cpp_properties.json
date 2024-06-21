@@ -4,7 +4,7 @@
             "name": "Linux",
             "includePath": [
 				"${workspaceFolder}/**",
-                "${workspaceFolder}/CPP_03/ex00/include",
+                // "${workspaceFolder}/CPP_03/ex00/include",
 				"${workspaceFolder}/CPP_03/ex01/include"
             ],
             "defines": [],

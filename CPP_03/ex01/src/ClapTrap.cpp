@@ -1,7 +1,9 @@
 #include "ClapTrap.hpp"
 #include <typeinfo>
 
-int ClapTrap::_ObjectColor = FGRAY;
+unsigned int ClapTrap::_MAX_HIT_POINTS = 10;
+// ClapTrap::setMaxHitPoints(10);
+int ClapTrap::_objectColor = FGRAY;
 /**
  * @brief Concatenates a message with a color and returns the result.
  * 
@@ -19,19 +21,21 @@ static std::string setColorName(int const& color)
 
 void ClapTrap::initialize(std::string const& name)
 {
+	// setMaxHitPoints(10);
 	if(_name.str.empty())
-		_name.color = setColorName(++_ObjectColor);
+		_name.color = setColorName(++_objectColor);
 	setName(name);
-	_hitPoints = _MAX_POINTS;
-	_energyPoints = _MAX_POINTS;
+	_hitPoints = 10;
+	_energyPoints = 10;
 	_recoveryPoints = 0;
 	_attackDamage = 0;
 }
- 
+
+
 ClapTrap::ClapTrap(void)
 {
 	initialize("DefaultClapTrap");
-	std::cout << setColor(typeid(*this).name(), FGRAY, 0)<< " " <<
+	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
 	*this << setColor(" was Created", FGRAY, 0) << std::endl ;
 };
 
@@ -44,7 +48,7 @@ ClapTrap::ClapTrap(void)
 ClapTrap::ClapTrap(std::string const& name)
 {
 	initialize(name);
-	std::cout << setColor(typeid(*this).name(), FGRAY, 0)<< " " <<
+	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
 	*this << setColor(" was Created", FGRAY, 0) << std::endl ;
 };
 
@@ -52,7 +56,23 @@ ClapTrap::ClapTrap(std::string const& name, unsigned int attackDamage)
 {
 	initialize(name);
 	setAttackDamage(attackDamage);
-	std::cout << setColor(typeid(*this).name(), FGRAY, 0)<< " " <<
+	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
+	*this << setColor(" was Created", FGRAY, 0) << std::endl ;
+};
+
+ClapTrap::ClapTrap(
+std::string const& name,
+unsigned int hitPoints,
+unsigned int energyPoints,
+unsigned int attackDamage):
+_hitPoints(hitPoints),
+_energyPoints(energyPoints)
+{
+	if(_name.str.empty())
+		_name.color = setColorName(++_objectColor);
+	setName(name);
+	setAttackDamage(attackDamage);
+	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
 	*this << setColor(" was Created", FGRAY, 0) << std::endl ;
 };
 
@@ -63,7 +83,8 @@ ClapTrap::ClapTrap(std::string const& name, unsigned int attackDamage)
  */
 ClapTrap::~ClapTrap(void)
 {
-	coutnl(std::cout << *this << setColor(" was Destroyed", FGRAY, 0));
+	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
+	*this << setColor(" was Destroyed", FGRAY, 0) << std::endl ;
 }
 
 ClapTrap&::ClapTrap::operator=(ClapTrap const& rhs)
@@ -71,7 +92,7 @@ ClapTrap&::ClapTrap::operator=(ClapTrap const& rhs)
 	if (this != &rhs)
 	{
 		_name.str = rhs._name.str;
-		_name.color = setColorName(++_ObjectColor);
+		_name.color = setColorName(++_objectColor);
 		_hitPoints = rhs._hitPoints;
 		_energyPoints = rhs._energyPoints;
 		_attackDamage = rhs._attackDamage;

@@ -1,16 +1,18 @@
 #include <ClapTrap.hpp>
 
+void ClapTrap::setName(std::string const& name){_name.str = name;}
+
 void ClapTrap::setAttackDamage(unsigned int amount)
 {
 	_attackDamage = amount;
-	if (_attackDamage == _MAX_POINTS)
+	if (_attackDamage == _MAX_HIT_POINTS)
 		_attackDamage--;
 	setRecoveryPoints();
 }
 
 void ClapTrap::setRecoveryPoints(void)
 {
-	_recoveryPoints = abs(static_cast<int>(_MAX_POINTS) - static_cast<int>(_attackDamage));
+	_recoveryPoints = abs(static_cast<int>(_MAX_HIT_POINTS) - static_cast<int>(_attackDamage));
 }
 
 bool	ClapTrap::check_KO_Status(void)
@@ -18,7 +20,8 @@ bool	ClapTrap::check_KO_Status(void)
 	if (_energyPoints > 0 && _hitPoints > 0)
 		return (false);
 	if (_hitPoints == 0)
-		std::cout << *this << setColor(" has no more HP left\n", FWHITE, 0);
+		std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
+		*this << setColor(" has no more HP left\n", FWHITE, 0);
 	else if (_energyPoints == 0)
 		std::cout << *this << setColor(" has no more EP left\n", FWHITE, 0);
 	return (true);
@@ -34,8 +37,9 @@ void ClapTrap::executaAttack(ClapTrap& o2, int amount)
 
 void ClapTrap::attack(std::string const& target)
 {
-	std::cout << "ClapTrap " << *this << " " << setColor("attacks", BRED, 0)
-	<< " " << target << ", causing " << _attackDamage << " points of damage!";
+	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
+	*this << " " << setColor("attacks", BRED, 0) << " " << target <<
+	", causing " << _attackDamage << " points of damage!";
 	_energyPoints--;
 	coutnl(std::cout);
 }
@@ -49,8 +53,8 @@ void ClapTrap::takeDamage(unsigned int amount)
 	}
 	else
 		_hitPoints -= amount;
-	std::cout << "ClapTrap " << *this << " took "
-	<< amount << " points of damage!\n";
+	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
+	*this << " took " << amount << " points of damage!\n";
 	if (_hitPoints == 0)
 	{
 		std::cout << setColor("FATALITY!: ", FLRED, 0);
@@ -60,11 +64,12 @@ void ClapTrap::takeDamage(unsigned int amount)
 
 void ClapTrap::beRepaired(unsigned int amount)
 {
-	std::cout << "ClapTrap " << *this << " " << setColor("recovers", BGREEN, 0)
+	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
+	*this << " " << setColor("recovers", BGREEN, 0)
 	<< " " << amount << " hit points!\n";
 	_energyPoints--;
-	if ((_hitPoints + amount) > _MAX_POINTS)
-		_hitPoints = _MAX_POINTS;
+	if ((_hitPoints + amount) > _MAX_HIT_POINTS)
+		_hitPoints = _MAX_HIT_POINTS;
 	else
 		_hitPoints += amount;
 }
@@ -77,9 +82,9 @@ int ClapTrap::getAttackDamage(void) const {return (static_cast<int>(_attackDamag
 
 int ClapTrap::getRecoveryPoints(void) const {return (static_cast<int>(_recoveryPoints));}
 
-int ClapTrap::getMaxPoints(void){return (static_cast<int>(_MAX_POINTS));}
+int ClapTrap::getMaxPoints(void){return (static_cast<int>(_MAX_HIT_POINTS));}
 
-int ClapTrap::getObjects(void){return (_ObjectColor - FGRAY);};
+int ClapTrap::getObjects(void){return (_objectColor - FGRAY);};
 
 void ClapTrap::printStatus(void)
 {

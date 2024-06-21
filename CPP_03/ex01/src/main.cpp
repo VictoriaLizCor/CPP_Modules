@@ -2,17 +2,9 @@
 
 #if (DEBUG == 0)
 
+static int getRandomNum(int num){return (rand() % num);}
 
-std::string objName(std::string const& name)
-{
-	static unsigned int num;
-
-	std::ostringstream os;
-	os << name << (++num);
-	return (os.str());
-}
-
-static bool checkObj(ClapTrap& o1 , ClapTrap& o2)
+static bool checkObjs(ClapTrap& o1 , ClapTrap& o2)
 {
 	if (!o1.getHitPoints() || !o2.getHitPoints())
 		return (1);
@@ -27,7 +19,7 @@ static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 	
 	healthPriority |= o1.getHitPoints() < o2.getHitPoints();
 	std::cout << "\n";
-	if (checkObj(o1, o2))
+	if (checkObjs(o1, o2))
 		return (1);
 	if (healthPriority)
 		o1.beRepaired(o1.getRecoveryPoints());
@@ -36,29 +28,48 @@ static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 	return (0);
 }
 
+
 int main(void)
 {
+	std:: string obj = "Obj";
 	bool KO = 0;
-	ClapTrap o1(objName("ClapTrap"), 3);
-	// ScavTrap o2(objName("ScavTrap"));
-	// o2.setAttackDamage(2);;
-	// int i = 0;
-	// std::cout << "\n" << i << " ========== CLAPTRAP BEGINS ==========\n\n";
-	// o1.printStatus();
-	// o2.printStatus();
-	// std::cout << "\n==============\n";
-	// while (1)
-	// {
-	// 	if (++i % 2 == 1)
-	// 		KO = action(o1, o2, o1.getAttackDamage());
-	// 	else
-	// 		KO = action(o2, o1, o2.getAttackDamage());
-	// 	if (KO)
-	// 		break ;
-	// 	o1.printStatus();
-	// 	o2.printStatus();
-	// }
-	// std::cout << "\n" << i << " ========== CLAPTRAP STOPS ==========\n\n";
+	ScavTrap o1(obj);
+	ScavTrap o2(obj);
+	int i = 0;
+	std::cout << "\n" << i << " ========== CLAPTRAP BEGINS ==========\n\n";
+	o1.printStatus();
+	o2.printStatus();
+	std::cout << "\n==============\n";
+	while (1)
+	{
+		if (++i % 2 == 1)
+			KO = action(o1, o2, o1.getAttackDamage());
+		else
+			KO = action(o2, o1, o2.getAttackDamage());
+		if (KO)
+			break ;
+		o1.printStatus();
+		o2.printStatus();
+	}
+	std::cout << "\n" << i << " ========== CLAPTRAP STOPS ==========\n\n";
+	{
+		std:: string obj = "test";
+
+		ClapTrap o10;
+		ClapTrap o11(obj);
+		ClapTrap o12(obj, 5, 5, 1);
+		ScavTrap o20;
+		ScavTrap o21(obj);
+		ScavTrap o22(obj, 5, 5, 1);
+
+		o10.printStatus();
+		o11.printStatus();
+		o12.printStatus();
+		o20.printStatus();
+		o21.printStatus();
+		o22.printStatus();
+		o22.guardGate();
+	}
 	return (0);
 }
 
