@@ -26,8 +26,8 @@ class ClapTrap
 		static int				_objectColor;
 		static unsigned int		_MAX_HIT_POINTS;
 
-		void			initialize(std::string const& name);
-		void				setRecoveryPoints(void);
+		void				initialize(std::string const& name);
+		virtual void		setRecoveryPoints(void);
 		static int			getObjects(void);
 		void				takeDamage(unsigned int amount);
 	private:

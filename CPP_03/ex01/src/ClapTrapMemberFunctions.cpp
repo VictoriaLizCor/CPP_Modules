@@ -1,7 +1,17 @@
 #include <ClapTrap.hpp>
 
+/**
+ * @brief Copy constructor for ClapTrap.
+ * 
+ * @param rhs The ClapTrap object to copy from.
+ */
 void ClapTrap::setName(std::string const& name){_name.str = name + toString(getObjects());}
 
+/**
+ * @brief Sets the attack damage of the ClapTrap object.
+ * 
+ * @param amount The new attack damage for the ClapTrap object.
+ */
 void ClapTrap::setAttackDamage(unsigned int amount)
 {
 	if (amount >= _hitPoints)
@@ -11,11 +21,23 @@ void ClapTrap::setAttackDamage(unsigned int amount)
 	setRecoveryPoints();
 }
 
+/**
+ * @brief Sets the recovery points of the ClapTrap object.
+ * 
+ * Recovery points are calculated as the difference between hit points and attack damage.
+ */
 void ClapTrap::setRecoveryPoints(void)
 {
 	_recoveryPoints = _hitPoints - _attackDamage;
 }
 
+/**
+ * @brief Checks if the ClapTrap object is knocked out (KO).
+ * 
+ * A ClapTrap object is considered KO if it has no hit points or energy points left.
+ * 
+ * @return bool Returns true if the ClapTrap is KO, false otherwise.
+ */
 bool	ClapTrap::check_KO_Status(void)
 {
 	if (_energyPoints > 0 && _hitPoints > 0)
@@ -28,6 +50,13 @@ bool	ClapTrap::check_KO_Status(void)
 	return (true);
 }
 
+/**
+ * @brief Checks if the ClapTrap object is knocked out (KO).
+ * 
+ * A ClapTrap object is considered KO if it has no hit points or energy points left.
+ * 
+ * @return bool Returns true if the ClapTrap is KO, false otherwise.
+ */
 void ClapTrap::executaAttack(ClapTrap& o2, int amount)
 {
 	if (check_KO_Status() == 1)
@@ -36,6 +65,14 @@ void ClapTrap::executaAttack(ClapTrap& o2, int amount)
 	o2.takeDamage(amount);
 }
 
+/**
+ * @brief Executes an attack on a target.
+ * 
+ * @param target The name of the target to attack.
+ * 
+ * Outputs a message indicating the attack and the damage caused. Decreases the 
+ * energy points of the ClapTrap object by 1 after the attack.
+ */
 void ClapTrap::attack(std::string const& target)
 {
 	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
@@ -45,6 +82,16 @@ void ClapTrap::attack(std::string const& target)
 	coutnl(std::cout);
 }
 
+/**
+ * @brief Inflicts damage on the ClapTrap object.
+ * 
+ * @param amount The amount of damage to inflict.
+ * 
+ * If the amount of damage is greater than the ClapTrap's hit points, the hit points
+ * are set to 0. Otherwise, the hit points are reduced by the amount of damage.
+ * Outputs a message indicating the damage taken. If the hit points reach 0, a 
+ * "FATALITY!" message is output and the KO status is checked.
+ */
 void ClapTrap::takeDamage(unsigned int amount)
 {
 	if (amount > _hitPoints)
@@ -63,6 +110,16 @@ void ClapTrap::takeDamage(unsigned int amount)
 	}
 }
 
+/**
+ * @brief Repairs the ClapTrap object, recovering hit points.
+ * 
+ * @param amount The amount of hit points to recover.
+ * 
+ * Outputs a message indicating the recovery. Decreases the energy points of the 
+ * ClapTrap object by 1 after the recovery. If the recovery amount would cause the 
+ * hit points to exceed the maximum, the hit points are set to the maximum. 
+ * Otherwise, the hit points are increased by the recovery amount.
+ */
 void ClapTrap::beRepaired(unsigned int amount)
 {
 	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
@@ -75,6 +132,11 @@ void ClapTrap::beRepaired(unsigned int amount)
 		_hitPoints += amount;
 }
 
+/**
+ * @brief Prints the status of the ClapTrap object.
+ * 
+ * Getters for attributes
+ */
 unsigned int ClapTrap::getHitPoints(void) const{return (_hitPoints);}
 
 unsigned int ClapTrap::getEnergyPoints(void) const{return (_energyPoints);}
@@ -85,8 +147,20 @@ unsigned int ClapTrap::getRecoveryPoints(void) const{return (_recoveryPoints);}
 
 unsigned int ClapTrap::getMaxPoints(void){return (_MAX_HIT_POINTS);}
 
+/**
+ * @brief Gets the number of ClapTrap objects.
+ * 
+ * @return int The number of ClapTrap objects, calculated as the difference 
+ * between the current object color and the base color (FGRAY).
+ */
 int ClapTrap::getObjects(void){return (_objectColor - FGRAY);};
 
+/**
+ * @brief Prints the status of the ClapTrap object.
+ * 
+ * Outputs the name, hit points, energy points, attack damage, and recovery points
+ * of the ClapTrap object. Each attribute is color-coded for easy reading.
+ */
 void ClapTrap::printStatus(void)
 {
 	std::cout << "[" + setColor(typeid(*this).name(), FGRAY, 0) << " " << *this
@@ -97,8 +171,21 @@ void ClapTrap::printStatus(void)
 }
 
 // std::string ClapTrap::getName(void){return (_name.color + _name.str + C_DEFAULT);}
+/**
+ * @brief Gets the name of the ClapTrap object.
+ * 
+ * @return std::string The name of the ClapTrap object.
+ */
 std::string ClapTrap::getName(void){return (_name.getName());}
 
+/**
+ * @brief Overloads the << operator for the ClapTrap class.
+ * 
+ * @param os The output stream to write to.
+ * @param rhs The ClapTrap object to write to the output stream.
+ * 
+ * @return std::ostream& The output stream after writing the ClapTrap object.
+ */
 std::ostream& operator << (std::ostream & os, ClapTrap& rhs)
 {
 	os << rhs.getName();

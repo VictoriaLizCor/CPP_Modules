@@ -2,14 +2,12 @@
 #include <typeinfo>
 
 unsigned int ClapTrap::_MAX_HIT_POINTS = 10;
-// ClapTrap::setMaxHitPoints(10);
 int ClapTrap::_objectColor = FGRAY;
 /**
- * @brief Concatenates a message with a color and returns the result.
+ * @brief Sets the color name based on the provided color code.
  * 
- * @param msg The message to be concatenated.
- * @param color The color to be added to the message.
- * @return The concatenated string with the color.
+ * @param color The color code.
+ * @return std::string The color name.
  */
 static std::string setColorName(int const& color)
 {
@@ -19,9 +17,13 @@ static std::string setColorName(int const& color)
 		return (setRandomColor(1));
 }
 
+/**
+ * @brief Initializes a ClapTrap object.
+ * 
+ * @param name The name of the ClapTrap object.
+ */
 void ClapTrap::initialize(std::string const& name)
 {
-	// setMaxHitPoints(10);
 	if(_name.str.empty())
 		_name.color = setColorName(++_objectColor);
 	setName(name);
@@ -31,7 +33,11 @@ void ClapTrap::initialize(std::string const& name)
 	_attackDamage = 0;
 }
 
-
+/**
+ * @brief Default constructor for ClapTrap.
+ * 
+ * Initializes a ClapTrap object with the default name "DefaultClapTrap".
+ */
 ClapTrap::ClapTrap(void)
 {
 	initialize("DefaultClapTrap");
@@ -52,6 +58,12 @@ ClapTrap::ClapTrap(std::string const& name)
 	*this << setColor(" was Created", FGRAY, 0) << std::endl ;
 };
 
+/**
+ * @brief Constructor for ClapTrap.
+ * 
+ * @param name The name of the ClapTrap object.
+ * @param attackDamage The attack damage of the ClapTrap object.
+ */
 ClapTrap::ClapTrap(std::string const& name, unsigned int attackDamage)
 {
 	initialize(name);
@@ -60,6 +72,12 @@ ClapTrap::ClapTrap(std::string const& name, unsigned int attackDamage)
 	*this << setColor(" was Created", FGRAY, 0) << std::endl ;
 };
 
+/**
+ * @brief Constructor for ClapTrap.
+ * 
+ * @param name The name of the ClapTrap object.
+ * @param attackDamage The attack damage of the ClapTrap object.
+ */
 ClapTrap::ClapTrap(
 std::string const& name,
 unsigned int hitPoints,
@@ -77,9 +95,9 @@ _energyPoints(energyPoints)
 };
 
 /**
- * @brief Construct a new Clap Trap object
+ * @brief Destructor for ClapTrap.
  * 
- * @param name The name of the Clap Trap
+ * Outputs a message indicating that the ClapTrap object was destroyed.
  */
 ClapTrap::~ClapTrap(void)
 {
@@ -87,6 +105,12 @@ ClapTrap::~ClapTrap(void)
 	*this << setColor(" was Destroyed", FGRAY, 0) << std::endl ;
 }
 
+/**
+ * @brief Overloads the assignment operator for ClapTrap.
+ * 
+ * @param rhs The ClapTrap object to assign from.
+ * @return ClapTrap& A reference to the assigned ClapTrap object.
+ */
 ClapTrap&::ClapTrap::operator=(ClapTrap const& rhs)
 {
 	if (this != &rhs)
@@ -100,4 +124,9 @@ ClapTrap&::ClapTrap::operator=(ClapTrap const& rhs)
 	return (*this);
 }
 
+/**
+ * @brief Copy constructor for ClapTrap.
+ * 
+ * @param rhs The ClapTrap object to copy from.
+ */
 ClapTrap::ClapTrap(ClapTrap const& rhs){*this = rhs;}
