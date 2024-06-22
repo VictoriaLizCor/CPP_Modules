@@ -65,22 +65,13 @@ mlog:
 plog:
 	@git log -5 --pretty=format:"{%cd} (%h) %m %B" --date=format:'%Y-%m-%d %H:%M' |\
 	pygmentize -g -O  style=material
-#	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
-
-# quick:cleanAll gAdd
-# # git commit --amend --no-edit 
-# 	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
-# 	@git status --porcelain -b -s > msg_template
-# 	@git commit -aF msg_template
-# 	@rm msg_template
-# 	$(MAKE) gPush
 
 quick: cleanAll
 	@echo $(GREEN) && git commit -am "* Update in files: '\
 	$(shell git diff --name-only --diff-filter=M | paste -sd ", " -)'"
 	@echo $(YELLOW) && git push
 
-# //avoid last commit message
+# Avoid last commit message
 soft:
 	@echo && echo $(GREEN) "Last 10 commits:" $(E_NC)
 	@$(MAKE) plog && echo 
