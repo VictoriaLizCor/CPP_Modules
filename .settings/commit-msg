@@ -27,7 +27,7 @@ commit_msg=$(cat "$COMMIT_MSG_FILE")
 #     echo "The specified patterns were not found in the commit message."
 #     exit 1  # Exit with failure status if the patterns are not found
 # fi
-
+## dont forget to make commit-msg
 # Check if commit_msg was modified
 if [[ "$commit_msg" != "$original_commit_msg" ]]; then
 	echo "$commit_msg"
