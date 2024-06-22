@@ -5,7 +5,7 @@ COMMIT_MSG_FILE="$1"
 
 # Read the commit message from the file
 commit_msg=$(cat "$COMMIT_MSG_FILE")
-echo $commit_msg
+
 # # Corrected regular expression pattern
 # regex_pattern="\* \\something\\:.*~ Autor: Victoria Lizarraga \(@VictoriaLizCor / @lilizarr\) ~"
 
@@ -30,7 +30,7 @@ echo $commit_msg
 
 # Check if commit_msg was modified
 if [[ "$commit_msg" != "$original_commit_msg" ]]; then
-	echo "Different"
+	echo "$commit_msg"
 	exit 0
 else
 	echo "NO changes made"
