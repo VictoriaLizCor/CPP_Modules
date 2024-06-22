@@ -6,7 +6,7 @@ commit_msg=$(cat "$COMMIT_MSG_FILE")
 # Get the last commit message
 last_commit_msg=$(git log -1 --pretty=%B)
 
-# echo -e "$commit_msg \n"
+echo -e "$commit_msg \n"
 # echo -e "$last_commit_msg \n"
 # Check if the commit message is the same as the last commit
 if [[ "$commit_msg" =~ "$last_commit_msg" ]]; then
@@ -23,14 +23,13 @@ regex_pattern="^\*\s*(.*?)\s*:"
 
 # Check if the second line matches the regex pattern
 if [[ $second_line =~ $regex_pattern ]]; then
-    # Extract the string after the pattern
+	# Extract the string after the pattern
 	prefix="${BASH_REMATCH[1]}"
-	str3="${BASH_REMATCH[2]}"
 	regex_after_prefix="^\*\s*$prefix\s*:\s*(.*)"
 	if [[ $second_line =~ $regex_after_prefix ]]; then
 		# Extract the string after the prefix
 		string_after_prefix="${BASH_REMATCH[1]}"
-		echo -e "MSG: $string_after_prefix \n\n"
+		# echo -e "MSG: $string_after_prefix \n\n"
 		if [ -z "$string_after_prefix" ]; then
 			echo -e "No changes \n"
 			exit 1
@@ -38,6 +37,6 @@ if [[ $second_line =~ $regex_pattern ]]; then
 	fi
 	exit 0
 else
-	echo -e "\033[8m The second line does not match the specified pattern. \n\n \033[m"
+	echo -e "\033[0;35mThe second line does not match the specified pattern. \n\n \033[m"
 	exit 1
 fi

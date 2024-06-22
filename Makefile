@@ -51,8 +51,10 @@ gPush:
 # git push --set-upstream origin $(shell git branch --show-current))
 #make DIRS=$CPP/CPP_0* cleanAll
 git: cleanAll gAdd
-	@$(MAKE) -C . gCommit || \
-	if [ $$? -ne 0 ]; then \
+	@$(MAKE) -C . gCommit; \
+	result=$$?; \
+	if [ $$result -ne 0 ]; then \
+		echo $$result; \
 		echo $(RED) "The commit message was not modified."; \
 		exit 1; \
 	else \
@@ -68,7 +70,7 @@ plog:
 
 quick: cleanAll
 	@echo $(GREEN) && git commit -am "* Update in files: '\
-	$(shell git diff --name-only --diff-filter=M | paste -sd ", " -)'"
+	$(shell git diff --name-only --diff-filter=M | paste -sd "," - | sed 's/,/, /g'"
 	@echo $(YELLOW) && git push
 
 # Avoid last commit message

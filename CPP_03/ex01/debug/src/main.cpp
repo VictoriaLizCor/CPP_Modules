@@ -33,7 +33,7 @@ static bool checkObjs(ClapTrap& o1 , ClapTrap& o2)
  * @param o1 Reference to the first ClapTrap object.
  * @param o2 Reference to the second ClapTrap object.
  * @param amount The amount of damage to deal or health to recover.
- * @return true if a special condition is met, false otherwise.
+ * @return true if a special condition is met, false otherwise. 
  */
 static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 {
