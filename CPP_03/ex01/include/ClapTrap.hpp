@@ -47,6 +47,7 @@ class ClapTrap
 		unsigned int			getAttackDamage(void) const;
 		unsigned int			getRecoveryPoints(void) const;
 		virtual unsigned int	getMaxPoints(void);
+		unsigned int			getObjectColor(void);
 		void					executaAttack(ClapTrap& o2, int amount);
 		virtual void			attack(std::string const& target);
 		// void					attack(std::string const& target);

@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/18 12:58:04 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/22 10:00:40 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,19 @@ std::string	getColorStr(t_Name const& name)
 	return (name.color + name.str + C_DEFAULT);
 }
 
+/**
+ * @brief Generates an RGB color string for terminal output.
+ *
+ * Constructs a string that represents an RGB color using ANSI escape codes.
+ * This string can be used to set text color in terminal outputs. The function
+ * takes three integers representing the red, green, and blue components of the
+ * color, each in the range [0, 255].
+ *
+ * @param red The red component of the color, [0, 255].
+ * @param green The green component of the color, [0, 255].
+ * @param blue The blue component of the color, [0, 255].
+ * @return std::string The ANSI escape code string for the RGB color.
+ */
 static std::string	rColorRGB(int red, int green, int blue)
 {
 	std::ostringstream ss;
@@ -139,7 +152,8 @@ std::string setRandomColor(int bold)
 	fmt = C_FMT;
 	if (bold)
 		fmt = fmt + "1;";
-	strColor << fmt << rColorRGB(ft_rand(80, 150), ft_rand(80, 200), ft_rand(80, 200));
+	strColor << fmt
+	<< rColorRGB(ft_rand(80, 150), ft_rand(80, 200), ft_rand(80, 200));
 	return (strColor.str());
 }
 
@@ -214,10 +228,43 @@ size_t	maxStringLength(int arraySize, std::string* arrayData)
 	return (len);
 }
 
+/**
+ * @brief Centers a string within a specified width.
+ *
+ * This function takes a string and a target width, then pads the string with
+ * spaces on both sides such that it appears centered if printed in a field of
+ * the given width. If the required padding is odd, the extra space is added to
+ * the left side of the string.
+ *
+ * @param s The string to center.
+ * @param width The total width of the field in which to center the string.
+ * @return std::string The centered string, padded with spaces.
+ */
 std::string	center(const std::string& s, int width)
 {
 	int padding = width - s.size();
 	int left = padding / 2 + padding % 2;
 	int right = padding / 2;
 	return (std::string(left, ' ') + s + std::string(right, ' '));
+}
+
+/**
+ * @brief Extracts and returns the class name from a mangled string.
+ *
+ * This function takes a mangled class name as input and returns a cleaner
+ * version of the class name by removing any leading numeric characters. If the
+ * input string does not contain any non-numeric characters, an empty string is
+ * returned.
+ *
+ * @param str The mangled class name string.
+ * @return std::string The cleaned class name without leading numeric
+ * characters.
+ */
+std::string className(const std::string& str)
+{
+	size_t pos = str.find_first_not_of("0123456789");
+	if (pos != std::string::npos)
+		return str.substr(pos);
+	else
+		return "";
 }

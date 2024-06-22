@@ -1,15 +1,13 @@
 #include "ClapTrap.hpp"
 #include <typeinfo>
 
-int ClapTrap::_objectColor = FGRAY;
 unsigned int ClapTrap::_MAX_HIT_POINTS = 10;
-unsigned int ClapTrap::_MAX_ATTACK_POINTS = _MAX_HIT_POINTS;
+int ClapTrap::_objectColor = FGRAY;
 /**
- * @brief Concatenates a message with a color and returns the result.
+ * @brief Sets the color name based on the provided color code.
  * 
- * @param msg The message to be concatenated.
- * @param color The color to be added to the message.
- * @return The concatenated string with the color.
+ * @param color The color code.
+ * @return std::string The color name.
  */
 static std::string setColorName(int const& color)
 {
@@ -19,6 +17,11 @@ static std::string setColorName(int const& color)
 		return (setRandomColor(1));
 }
 
+/**
+ * @brief Initializes a ClapTrap object.
+ * 
+ * @param name The name of the ClapTrap object.
+ */
 void ClapTrap::initialize(std::string const& name)
 {
 	if(_name.str.empty())
@@ -29,11 +32,16 @@ void ClapTrap::initialize(std::string const& name)
 	_recoveryPoints = 0;
 	_attackDamage = 0;
 }
- 
+
+/**
+ * @brief Default constructor for ClapTrap.
+ * 
+ * Initializes a ClapTrap object with the default name "DefaultClapTrap".
+ */
 ClapTrap::ClapTrap(void)
 {
 	initialize("DefaultClapTrap");
-	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
+	std::cout << setColor(className(typeid(*this).name()), FGRAY, 0) << " " <<
 	*this << setColor(" was Created", FGRAY, 0) << std::endl ;
 };
 
@@ -46,29 +54,63 @@ ClapTrap::ClapTrap(void)
 ClapTrap::ClapTrap(std::string const& name)
 {
 	initialize(name);
-	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
-	*this << setColor(" was Created", FGRAY, 0) << std::endl ;
-};
-
-ClapTrap::ClapTrap(std::string const& name, unsigned int attackDamage)
-{
-	initialize(name);
-	setAttackDamage(attackDamage);
-	std::cout << setColor(typeid(*this).name(), FGRAY, 0) << " " <<
+	std::cout << setColor(className(typeid(*this).name()), FGRAY, 0) << " " <<
 	*this << setColor(" was Created", FGRAY, 0) << std::endl ;
 };
 
 /**
- * @brief Construct a new Clap Trap object
+ * @brief Constructor for ClapTrap.
  * 
- * @param name The name of the Clap Trap
+ * @param name The name of the ClapTrap object.
+ * @param attackDamage The attack damage of the ClapTrap object.
+ */
+ClapTrap::ClapTrap(std::string const& name, unsigned int attackDamage)
+{
+	initialize(name);
+	setAttackDamage(attackDamage);
+	std::cout << setColor(className(typeid(*this).name()), FGRAY, 0) << " " <<
+	*this << setColor(" was Created", FGRAY, 0) << std::endl ;
+};
+
+/**
+ * @brief Constructor for ClapTrap.
+ * 
+ * @param name The name of the ClapTrap object.
+ * @param attackDamage The attack damage of the ClapTrap object.
+ */
+ClapTrap::ClapTrap(
+std::string const& name,
+unsigned int hitPoints,
+unsigned int energyPoints,
+unsigned int attackDamage):
+_hitPoints(hitPoints),
+_energyPoints(energyPoints)
+{
+	if(_name.str.empty())
+		_name.color = setColorName(++_objectColor);
+	setName(name);
+	setAttackDamage(attackDamage);
+	std::cout << setColor(className(typeid(*this).name()), FGRAY, 0) << " " <<
+	*this << setColor(" was Created", FGRAY, 0) << std::endl ;
+};
+
+/**
+ * @brief Destructor for ClapTrap.
+ * 
+ * Outputs a message indicating that the ClapTrap object was destroyed.
  */
 ClapTrap::~ClapTrap(void)
 {
-	std::cout << setColor(typeid(*this).name(), FGRAY, 0)<< " " <<
+	std::cout << setColor(className(typeid(*this).name()), FGRAY, 0) << " " <<
 	*this << setColor(" was Destroyed", FGRAY, 0) << std::endl ;
 }
 
+/**
+ * @brief Overloads the assignment operator for ClapTrap.
+ * 
+ * @param rhs The ClapTrap object to assign from.
+ * @return ClapTrap& A reference to the assigned ClapTrap object.
+ */
 ClapTrap&::ClapTrap::operator=(ClapTrap const& rhs)
 {
 	if (this != &rhs)
@@ -82,4 +124,9 @@ ClapTrap&::ClapTrap::operator=(ClapTrap const& rhs)
 	return (*this);
 }
 
+/**
+ * @brief Copy constructor for ClapTrap.
+ * 
+ * @param rhs The ClapTrap object to copy from.
+ */
 ClapTrap::ClapTrap(ClapTrap const& rhs){*this = rhs;}

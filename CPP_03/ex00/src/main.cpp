@@ -2,8 +2,6 @@
 
 #if (DEBUG == 0)
 
-static int getRandomNum(int num){return (rand() % num);}
-
 std::string objName()
 {
 	static unsigned int num;

@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:13:36 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/19 17:37:54 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/22 09:37:35 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,6 @@ bool		checkInput(const std::string& str, int (*check_type)(int));
 bool		isOnlySpaces(const std::string& str);
 size_t		maxStringLength(int fieldSize, std::string* arrayData);
 std::string	center(const std::string& s, int width);
+std::string	className(const std::string& str);
+
 #endif

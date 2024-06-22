@@ -67,9 +67,9 @@ int main(void)
 {
 	srand(static_cast<unsigned int>(time(0)));
 	
-	ClapTrap o1(objName(), getRandomNum(ClapTrap::getMaxPoints() - 1) + 1);
+	ClapTrap o1(objName(), getRandomNum(o1.getMaxPoints() - 1) + 1);
 	ClapTrap o2(objName());
-	o2.setAttackDamage(static_cast<unsigned int>(getRandomNum(ClapTrap::getMaxPoints() - 1) + 1));
+	o2.setAttackDamage(static_cast<unsigned int>(getRandomNum(o2.getMaxPoints() - 1) + 1));
 	startClapTrap(o1, o2);
 	{
 		ClapTrap o3(o1);

@@ -2,8 +2,6 @@
 
 #if (DEBUG == 0)
 
-static int getRandomNum(int num){return (rand() % num);}
-
 static bool checkObjs(ClapTrap& o1 , ClapTrap& o2)
 {
 	if (!o1.getHitPoints() || !o2.getHitPoints())
@@ -52,24 +50,24 @@ int main(void)
 		o2.printStatus();
 	}
 	std::cout << "\n" << i << " ========== CLAPTRAP STOPS ==========\n\n";
-	{
-		std:: string obj = "test";
+	// {
+	// 	std:: string obj = "test";
 
-		ClapTrap o10;
-		ClapTrap o11(obj);
-		ClapTrap o12(obj, 5, 5, 1);
-		ScavTrap o20;
-		ScavTrap o21(obj);
-		ScavTrap o22(obj, 5, 5, 1);
+	// 	ClapTrap o10;
+	// 	ClapTrap o11(obj);
+	// 	ClapTrap o12(obj, 5, 5, 1);
+	// 	ScavTrap o20;
+	// 	ScavTrap o21(obj);
+	// 	ScavTrap o22(obj, 5, 5, 1);
 
-		o10.printStatus();
-		o11.printStatus();
-		o12.printStatus();
-		o20.printStatus();
-		o21.printStatus();
-		o22.printStatus();
-		o22.guardGate();
-	}
+	// 	o10.printStatus();
+	// 	o11.printStatus();
+	// 	o12.printStatus();
+	// 	o20.printStatus();
+	// 	o21.printStatus();
+	// 	o22.printStatus();
+	// 	std::cout << o22.getObjectColor() << std::endl;
+	// }
 	return (0);
 }
 
