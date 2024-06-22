@@ -30,7 +30,7 @@ commit_msg=$(cat "$COMMIT_MSG_FILE")
 ## dont forget to make commit-msg
 # Check if commit_msg was modified
 if [[ "$commit_msg" != "$original_commit_msg" ]]; then
-	echo "$commit_msg"
+	echo -e "$commit_msg \n"
 	exit 0
 else
 	echo "NO changes made"
