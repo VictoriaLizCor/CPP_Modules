@@ -44,7 +44,7 @@ else
 	if [ -n "$mergeBranch" ]; then
 		printf "%s\n" "${LINES[0]}" "$ticketID $mergeBranch" "${LINES[@]:1}" > "$COMMIT_MSG_FILE"
 	else
-		printf "%s\n" "${LINES[0]}" "$ticketID" "${LINES[@]:1}" > "$COMMIT_MSG_FILE"
+		printf "%s\n" "$ticketID" "${LINES[@]:1}" > "$COMMIT_MSG_FILE"
 	fi
 fi
 # Check if the commit message file has only one line
