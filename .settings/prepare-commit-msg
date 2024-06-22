@@ -3,6 +3,7 @@
 # Gets the commit message received as parameter and the current branch name.
 COMMIT_MSG_FILE=$1
 message=$(cat "$COMMIT_MSG_FILE")
+
 branchName=$(git symbolic-ref --short HEAD)
 # The Ticket ID prefix you want to include to your commit messages.
 BranchTicket1=$(git symbolic-ref --short HEAD | sed -nE 's,([A-Z]?-?[0-9]+)-.+,\1,p')

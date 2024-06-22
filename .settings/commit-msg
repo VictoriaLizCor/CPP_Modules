@@ -2,7 +2,18 @@
 COMMIT_MSG_FILE="$1"
 # Read the commit message from the file
 commit_msg=$(cat "$COMMIT_MSG_FILE")
-echo -e "$commit_msg \n"
+
+# Get the last commit message
+last_commit_msg=$(git log -1 --pretty=%B)
+
+# echo -e "$commit_msg \n"
+# echo -e "$last_commit_msg \n"
+# Check if the commit message is the same as the last commit
+if [[ "$commit_msg" =~ "$last_commit_msg" ]]; then
+    echo -e "No changes \n"
+	exit 1
+fi
+
 
 # Read the second line from the commit-msg file
 second_line=$(sed -n '2p' "$COMMIT_MSG_FILE")
@@ -19,7 +30,7 @@ if [[ $second_line =~ $regex_pattern ]]; then
 	if [[ $second_line =~ $regex_after_prefix ]]; then
 		# Extract the string after the prefix
 		string_after_prefix="${BASH_REMATCH[1]}"
-		echo -e "MSG: $string_after_prefix \n"
+		echo -e "MSG: $string_after_prefix \n\n"
 		if [ -z "$string_after_prefix" ]; then
 			echo -e "No changes \n"
 			exit 1
