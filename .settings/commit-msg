@@ -2,10 +2,10 @@
 
 COMMIT_MSG_FILE="$1"
 
-echo $COMMIT_MSG_FILE
+
 # Read the commit message from the file
 commit_msg=$(cat "$COMMIT_MSG_FILE")
-
+echo $commit_msg
 # # Corrected regular expression pattern
 # regex_pattern="\* \\something\\:.*~ Autor: Victoria Lizarraga \(@VictoriaLizCor / @lilizarr\) ~"
 
