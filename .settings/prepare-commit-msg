@@ -29,7 +29,7 @@ fi
 
 mergeBranch=""
 if [ -f .git/MERGE_HEAD ]; then
-	mergeBranch="Merge: $(cat .git/MERGE_HEAD | cut -d ' ' -f1 | xargs git rev-parse --abbrev-ref)"
+	mergeBranch=" Merge $(cat .git/MERGE_HEAD | cut -d ' ' -f1 | xargs git rev-parse --abbrev-ref)"
 fi
 
 # Check if the commit message file has only one line
