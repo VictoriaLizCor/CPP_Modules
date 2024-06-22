@@ -10,7 +10,7 @@ last_commit_msg=$(git log -1 --pretty=%B)
 # echo -e "$last_commit_msg \n"
 # Check if the commit message is the same as the last commit
 if [[ "$commit_msg" =~ "$last_commit_msg" ]]; then
-    echo -e "No changes \n"
+	echo -e "No changes \n"
 	exit 1
 fi
 
@@ -38,6 +38,6 @@ if [[ $second_line =~ $regex_pattern ]]; then
 	fi
 	exit 0
 else
-    echo -e "The second line does not match the specified pattern. \n\n"
+	echo -e "\033[8m The second line does not match the specified pattern. \n\n \033[m"
 	exit 1
 fi
