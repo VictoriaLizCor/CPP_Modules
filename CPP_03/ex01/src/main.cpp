@@ -2,6 +2,18 @@
 
 #if (DEBUG == 0)
 
+
+/**
+ * @brief Executes an action based on the health and status of two ClapTrap objects.
+ * 
+ * This function decides whether to repair `o1` or attack `o2` based on their health.
+ * If `o1`'s health is below a threshold or less than `o2`'s, it repairs; otherwise, it attacks.
+ * 
+ * @param o1 Reference to the first ClapTrap object.
+ * @param o2 Reference to the second ClapTrap object.
+ * @param amount The amount of damage to deal or health to recover.
+ * @return true if a special condition is met, false otherwise.
+ */
 static bool checkObjs(ClapTrap& o1 , ClapTrap& o2)
 {
 	if (!o1.getHitPoints() || !o2.getHitPoints())
@@ -11,6 +23,20 @@ static bool checkObjs(ClapTrap& o1 , ClapTrap& o2)
 	return (0);
 }
 
+
+/**
+ * @brief Executes an action based on the health and status of two ClapTrap
+ * objects.
+ *
+ * This function decides whether to repair `o1` or attack `o2` based on their
+ * health. If `o1`'s health is below a threshold or less than `o2`'s, it
+ * repairs; otherwise, it attacks.
+ *
+ * @param o1 Reference to the first ClapTrap object.
+ * @param o2 Reference to the second ClapTrap object.
+ * @param amount The amount of damage to deal or health to recover.
+ * @return true if a special condition is met, false otherwise.
+ */
 static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 {
 	bool healthPriority = o1.getHitPoints() <= o1.getMaxPoints() - o1.getRecoveryPoints();

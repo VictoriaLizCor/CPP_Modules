@@ -3,7 +3,7 @@ GIT_REPO				:= $(shell basename $$PWD)
 ROOT_CPP_MODULES	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/)
 DIRS				:= $(abspath $(dir ${shell find ./*/ -type d -name "CPP_03*" |sort}))
 #------ DEBUG ------#
-D			= 0
+D			= 1
 #------ Sanitizer ------#+
 S			= 0
 #--------------------UTILS----------------------------#
@@ -35,7 +35,7 @@ gAdd:
 	@echo $(CYAN) && git add $(ROOT_CPP_MODULES)
 
 gCommit:
-	@echo $(GREEN) && git commit -e
+	@echo $(GREEN) && git commit -e || exit 1
 
 gPush:
 	@echo $(YELLOW) && git push > /dev/null || \
@@ -121,7 +121,7 @@ colog:
 # git reset --soft HEAD~1 undoes the last commit and leaves your
 # files and staging area in the state they were in prior to the commit. This is
 # useful if you made a commit prematurely and need to add more changes or modify
-# the commit message.
+# the commit message. 
 .PHONY: gAdd gCommit gPush git gQuick fclean log norm test
 #--------------------COLORS---------------------------#
 # For print

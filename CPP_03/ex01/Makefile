@@ -1,7 +1,7 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 #-Werror
+D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
 INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR		:= src/
@@ -131,7 +131,7 @@ cleanAll:
 gAdd:
 	@echo $(CYAN) && git add $(PROJECT_ROOT)
 gCommit:
-	@echo $(GREEN) && git commit -e
+	@echo $(GREEN) && git commit -e || exit 1
 gPush:
 	@echo $(YELLOW) && git push > /dev/null || \
 	if [ $$? -ne 0 ]; then \
@@ -143,7 +143,7 @@ gPush:
 	fi
 git:
 	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
-		$(MAKE) -C $(GIT_REPO) cleanAll gAdd gCommit gPush;		\
+		$(MAKE) -C $(GIT_REPO) git;		\
 	else									\
 		$(MAKE) -C $(PROJECT_ROOT)/$(CURRENT) cleanAll gAdd gCommit gPush;	\
 	fi
