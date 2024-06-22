@@ -4,27 +4,34 @@ COMMIT_MSG_FILE="$1"
 commit_msg=$(cat "$COMMIT_MSG_FILE")
 echo -e "$commit_msg \n"
 
-# Path to the commit-msg file
-COMMIT_MSG_FILE="commit-msg"
-
 # Read the second line from the commit-msg file
 second_line=$(sed -n '2p' "$COMMIT_MSG_FILE")
-
 # Regex pattern to match and capture the string after "* [A-Z]:"
-regex_pattern="^\* \[A-Z\]: (.*)"
+# regex_pattern="^\* (Fix|Update in files|Docs|Feat|Style|Test|Refactor): (.*)"
+regex_pattern="^\*\s*(.*?)\s*:"
 
 # Check if the second line matches the regex pattern
 if [[ $second_line =~ $regex_pattern ]]; then
     # Extract the string after the pattern
-    extracted_string="${BASH_REMATCH[1]}"
-    if [[ -z $extracted_string ]]; then
-        echo "Commit was not changed."
-    else
-        echo "String after pattern: $extracted_string"
-    fi
+	prefix="${BASH_REMATCH[1]}"
+	str3="${BASH_REMATCH[2]}"
+	regex_after_prefix="^\*\s*$prefix\s*:\s*(.*)"
+	if [[ $second_line =~ $regex_after_prefix ]]; then
+		# Extract the string after the prefix
+		string_after_prefix="${BASH_REMATCH[1]}"
+		echo -e "MSG: $string_after_prefix \n"
+		if [ -z "$string_after_prefix" ]; then
+			echo -e "No changes \n"
+			exit 1
+		fi
+	fi
+	exit 0
 else
-    echo "The second line does not match the specified pattern."
+    echo -e "The second line does not match the specified pattern. \n\n"
+	exit 1
 fi
+
+
 # LINES=()
 # while IFS= read -r line; do
 # 	LINES+=("$line")
