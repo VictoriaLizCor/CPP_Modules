@@ -148,8 +148,7 @@ git:
 		$(MAKE) -C $(PROJECT_ROOT)/$(CURRENT) cleanAll gAdd gCommit gPush;	\
 	fi
 quick: cleanAll
-	@echo $(GREEN) && \
-	git commit -am "* Update in files: '\
+	@echo $(GREEN) && git commit -am "* Update in files: '\
 	$(shell git diff --name-only --diff-filter=M | paste -sd ", " -)'"
 	@echo $(YELLOW) && git push
 soft:
