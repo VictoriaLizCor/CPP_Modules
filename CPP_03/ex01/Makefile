@@ -150,7 +150,7 @@ git:
 quick: cleanAll
 	@echo $(GREEN) && \
 	git commit -am "* Update in files: '\
-	$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
+	$(shell git diff --name-only --diff-filter=M | paste -sd ", " -)'"
 	@echo $(YELLOW) && git push
 soft:
 	$(MAKE) -C $(GIT_REPO) soft || \
