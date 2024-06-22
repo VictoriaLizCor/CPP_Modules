@@ -41,8 +41,13 @@ static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 {
 	bool healthPriority = o1.getHitPoints() <= o1.getMaxPoints() - o1.getRecoveryPoints();
 	
-	healthPriority |= o1.getHitPoints() < o2.getHitPoints();
 	std::cout << "\n";
+	std::cout << "bool healthPriority = " << o1.getHitPoints()
+	<< " <= " << o1.getMaxPoints() - o1.getRecoveryPoints() << " ()"
+	<< o1.getMaxPoints() << " - " 
+	<< o1.getRecoveryPoints() << "); // " 
+	<< std::boolalpha << healthPriority << "; "
+	<< (healthPriority != o1.getHitPoints() < o2.getHitPoints()) << std::endl;
 	if (checkObjs(o1, o2))
 		return (1);
 	if (healthPriority)
@@ -76,24 +81,20 @@ int main(void)
 		o2.printStatus();
 	}
 	std::cout << "\n" << i << " ========== CLAPTRAP STOPS ==========\n\n";
-	// {
-	// 	std:: string obj = "test";
+	{
+		std:: string obj = "test";
 
-	// 	ClapTrap o10;
-	// 	ClapTrap o11(obj);
-	// 	ClapTrap o12(obj, 5, 5, 1);
-	// 	ScavTrap o20;
-	// 	ScavTrap o21(obj);
-	// 	ScavTrap o22(obj, 5, 5, 1);
+		ClapTrap o10;
+		ClapTrap o11(obj);
+		ClapTrap o12(obj, 5, 5, 1);
+		ScavTrap o20;
+		ScavTrap o21(obj);
+		ScavTrap o22(obj, 5, 5, 1);
 
-	// 	o10.printStatus();
-	// 	o11.printStatus();
-	// 	o12.printStatus();
-	// 	o20.printStatus();
-	// 	o21.printStatus();
-	// 	o22.printStatus();
-	// 	std::cout << o22.getObjectColor() << std::endl;
-	// }
+		o10.printStatus();
+		o20.printStatus();
+		std::cout << o22.getObjectColor() << std::endl;
+	}
 	return (0);
 }
 

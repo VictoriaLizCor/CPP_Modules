@@ -131,7 +131,7 @@ cleanAll:
 gAdd:
 	@echo $(CYAN) && git add $(PROJECT_ROOT)
 gCommit:
-	@echo $(GREEN) && git commit -e || exit 1
+	@echo $(GREEN) && git commit -e
 gPush:
 	@echo $(YELLOW) && git push > /dev/null || \
 	if [ $$? -ne 0 ]; then \
@@ -139,13 +139,14 @@ gPush:
 		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \
 			echo $(RED) "git push --set-upstream failed with error" $(E_NC); \
+			exit 1; \
 		fi \
 	fi
 git:
-	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
-		$(MAKE) -C $(GIT_REPO) git;		\
-	else									\
-		$(MAKE) -C $(PROJECT_ROOT)/$(CURRENT) cleanAll gAdd gCommit gPush;	\
+	@if [ -f "$(GIT_REPO)/Makefile" ] && [ -d "$(GIT_REPO)/.git" ]; then \
+		$(MAKE) -C "$(GIT_REPO)" git; \
+	else \
+		$(MAKE) -C "$(PROJECT_ROOT)/$(CURRENT)" cleanAll gAdd gCommit gPush; \
 	fi
 quick: cleanAll
 	@echo $(GREEN) && git commit -am "* Update in files: '\

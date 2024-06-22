@@ -50,7 +50,6 @@ class ClapTrap
 		unsigned int			getObjectColor(void);
 		void					executaAttack(ClapTrap& o2, int amount);
 		virtual void			attack(std::string const& target);
-		// void					attack(std::string const& target);
 		// void					takeDamage(unsigned int amount);
 		void					beRepaired(unsigned int amount);
 		void					printStatus(void);

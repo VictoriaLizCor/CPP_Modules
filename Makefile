@@ -33,10 +33,8 @@ dirs:
 	done;
 gAdd:
 	@echo $(CYAN) && git add $(ROOT_CPP_MODULES)
-
 gCommit:
-	@echo $(GREEN) && git commit -e || exit 1
-
+	@echo $(GREEN) && git commit -e
 gPush:
 	@echo $(YELLOW) && git push > /dev/null || \
 	if [ $$? -ne 0 ]; then \
@@ -44,6 +42,7 @@ gPush:
 		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \
 			echo $(RED) "git push --set-upstream failed with error"; \
+			exit 1; \
 		fi; \
 		echo $(E_NC); \
 	fi
@@ -51,8 +50,15 @@ gPush:
 # (echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
 # git push --set-upstream origin $(shell git branch --show-current))
 #make DIRS=$CPP/CPP_0* cleanAll
-git: cleanAll gAdd gCommit gPush
-# make log m=style
+git: cleanAll gAdd
+	@$(MAKE) -C . gCommit || \
+	if [ $$? -ne 0 ]; then \
+		echo $(RED) "The commit message was not modified."; \
+		exit 1; \
+	else \
+		$(MAKE) -C . gPush; \
+	fi
+
 mlog:
 	@git log -5 --pretty=format:"'%h'%m%s {%cd} %b" --date=format:'%Y-%m-%d %H:%M' | \
 	pygmentize -g -O  style=$$m | cut -d'|' -f1
@@ -93,6 +99,9 @@ template:
 pre-commit:
 	cp .settings/prepare-commit-msg .git/hooks/
 	chmod +x .git/hooks/prepare-commit-msg
+commit-msg:
+	cp .settings/commit-msg .git/hooks/
+	chmod +x .git/hooks/commit-msg
 showcolors:
 	@i=0; \
 	while [ $$i -le 255 ]; do \

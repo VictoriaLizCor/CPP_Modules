@@ -1,0 +1,37 @@
+#!/bin/bash
+
+COMMIT_MSG_FILE="$1"
+
+# Read the commit message from the file
+commit_msg=$(cat "$COMMIT_MSG_FILE")
+
+# # Corrected regular expression pattern
+# regex_pattern="\* \\something\\:.*~ Autor: Victoria Lizarraga \(@VictoriaLizCor / @lilizarr\) ~"
+
+# # Check if the commit message contains the specified content
+# if [[ $commit_msg =~ $regex_pattern ]]; then
+#     # Extract the matched content
+#     matched_content="${BASH_REMATCH[0]}"
+
+#     # Corrected check for content between the patterns
+#     # Note: This pattern assumes you want to match any content followed by "~ Autor: Victoria Lizarraga"
+#     # and does not use non-greedy quantifiers or \s
+#     if [[ $matched_content =~ \*\ \\something\\:[[:space:]]*(.+)[[:space:]]*~\ Autor:\ Victoria\ Lizarraga ]]; then
+#         echo "Content was modified between the specified patterns."
+#     else
+#         echo "No modifications detected between the specified patterns. Commit rejected."
+#         exit 1  # Exit with failure status if no modifications were made
+#     fi
+# else
+#     echo "The specified patterns were not found in the commit message."
+#     exit 1  # Exit with failure status if the patterns are not found
+# fi
+
+# Check if commit_msg was modified
+if [[ "$commit_msg" != "$original_commit_msg" ]]; then
+	echo "Different"
+	exit 0
+else
+	echo "NO changes made"
+	exit 1
+fi

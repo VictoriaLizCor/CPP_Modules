@@ -122,14 +122,18 @@ void ClapTrap::takeDamage(unsigned int amount)
  */
 void ClapTrap::beRepaired(unsigned int amount)
 {
-	std::cout << setColor(className(typeid(*this).name()), FGRAY, 0) << " " <<
-	*this << " " << setColor("recovers", BGREEN, 0)
-	<< " " << amount << " hit points!\n";
-	_energyPoints--;
+	unsigned int tmp;
+
+	tmp = _hitPoints;
 	if ((_hitPoints + amount) > this->getMaxPoints())
 		_hitPoints = this->getMaxPoints();
 	else
 		_hitPoints += amount;
+	tmp = _hitPoints - tmp;
+	std::cout << setColor(className(typeid(*this).name()), FGRAY, 0) << " " <<
+	*this << " " << setColor("recovers", BGREEN, 0)
+	<< " " << tmp << " hit points!\n";
+	_energyPoints--;
 }
 
 /**
