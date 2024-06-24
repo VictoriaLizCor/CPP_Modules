@@ -1,7 +1,7 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 -Werror
+D_FLAGS		= -Wall -Wextra -std=c++98 -Werror #-Wunused
 INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR		:= src/
@@ -12,7 +12,7 @@ DIRS		:= $(abspath $(dir $(shell find $(PROJECT_ROOT) -name Makefile | sort)))
 CURRENT		:= $(shell basename $$PWD)
 DEBUG_FILES	:= debug
 #------ DEBUG FLAG ------#
-D			= 0
+D			= 1
 #------ Sanitizer Flag ------#
 S			= 0
 #------ DEBUG UTILS ------#
@@ -131,14 +131,15 @@ cleanAll:
 gAdd:
 	@echo $(CYAN) && git add $(PROJECT_ROOT)
 gCommit:
-	@echo $(GREEN) && git commit -e || \
-	if [ $$? -ne 0 ]; then \
+	@echo $(GREEN) && git commit -e ; \
+	ret=$$?; \
 		echo $(RED) "Error in commit message"; \
 		exit 1; \
 	fi
 gPush:
-	@echo $(YELLOW) && git push || \
-	if [ $$? -ne 0 ]; then \
+	@echo $(YELLOW) && git push ; \
+	ret=$$? ; \
+	if [ $$ret -ne 0 ]; then \
 		echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
 		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \

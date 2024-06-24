@@ -88,7 +88,14 @@ int main(void)
 	ScavTrap o1(obj, getRandomNum(o1.getMaxPoints() - 1) + 1);
 	ScavTrap o2(obj, getRandomNum(o1.getMaxPoints() - 1) + 1);
 	startClapTrap(o1, o2);
-
+	{
+		ScavTrap o3(o1);
+	}
+	std::cout << "------\n";
+	{
+		ScavTrap o3=o1;
+	}
+	std::cout << "------\n";
 	return (0);
 }
 #endif

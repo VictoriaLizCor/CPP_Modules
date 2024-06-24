@@ -66,6 +66,40 @@ ClapTrap(name, hitPoints , energyPoints , attackDamage)
 }
 
 /**
+ * @brief Assignment operator for ScavTrap.
+ * 
+ * Assigns the values from one ScavTrap object to another. If the object being
+ * assigned is not the same as the current object, it calls the base class
+ * ClapTrap's assignment operator to copy the base class attributes.
+ * 
+ * @param rhs The ScavTrap object to assign from.
+ * @return Returns a reference to the current object.
+ */
+ScavTrap&::ScavTrap::operator=(ScavTrap const& rhs)
+{
+	if (this != &rhs) {
+		ClapTrap::operator=(rhs);
+	}
+	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " " 
+	<< *this << setColor(" Copy was Created ", FGRAY, 0) << std::endl ;
+	return *this;
+}
+/**
+ * @brief Copy constructor for ScavTrap.
+ * 
+ * This constructor creates a new ScavTrap as a copy of an existing one by
+ * invoking the copy constructor of the base class, ClapTrap.
+ * 
+ * @param rhs The ScavTrap instance to copy.
+ */
+ScavTrap::ScavTrap(ScavTrap const& rhs): ClapTrap(rhs)
+{
+	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " " 
+	<< *this << setColor(" Copy was Created ", FGRAY, 0) << std::endl ;
+}
+
+
+/**
  * @brief Constructs a new ScavTrap object.
  * 
  * Initializes a new ScavTrap object with a custom name by calling the ClapTrap

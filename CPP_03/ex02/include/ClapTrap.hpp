@@ -39,7 +39,7 @@ class ClapTrap
 		ClapTrap(std::string const& name, unsigned int hitPoints, unsigned int energyPoints, unsigned int attackDamage);
 		ClapTrap& operator=(ClapTrap const& rhs);
 		ClapTrap(ClapTrap const& rhs);
-		virtual				~ClapTrap();
+		virtual					~ClapTrap();
 		void					setName(std::string const& name);
 		void					setAttackDamage(unsigned int amount);
 		unsigned int			getEnergyPoints(void) const;
@@ -50,7 +50,6 @@ class ClapTrap
 		unsigned int			getObjectColor(void);
 		void					executaAttack(ClapTrap& o2, int amount);
 		virtual void			attack(std::string const& target);
-		// void					takeDamage(unsigned int amount);
 		void					beRepaired(unsigned int amount);
 		void					printStatus(void);
 		bool					check_KO_Status(void);
