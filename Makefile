@@ -97,6 +97,7 @@ amend:
 		exit 1; \
 	else \
 		echo $(YELLOW) && git push origin --force-with-lease $(shell git branch --show-current); \
+		exit 0
 	fi
 template:
 	@git config --local commit.template .settings/.gitmessage
