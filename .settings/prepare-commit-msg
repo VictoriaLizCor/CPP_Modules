@@ -50,8 +50,8 @@ if [ "${#LINES[@]}" -eq 1 ]; then
 	if [ -n "$mergeBranch" ]; then
 		echo -e "$ticketID\n$mergeBranch\n${LINES[0]}" > "$COMMIT_MSG_FILE"
 	else
-		# modified_files=$(git diff --name-only --diff-filter=M | awk 'NR > 1 {print prev","} {prev=$0} END {print $0}')
-		# echo -e "FILES:$modified_files"
+		modified_files=$(git diff --cached --name-only --diff-filter=M | awk 'NR > 1 {print prev","} {prev=$0} END {print $0}')
+		echo -e "FILES:$modified_files"
 		# echo -e "FILES:$(git diff --name-only --diff-filter=M )"
 		printf "%s\n%s\n" "$ticketID" "${LINES[0]}" > "$COMMIT_MSG_FILE"
 	fi
