@@ -58,8 +58,9 @@ gPush:
 # git push --set-upstream origin $(shell git branch --show-current))
 #make DIRS=$CPP/CPP_0* cleanAll
 git: cleanAll gAdd
-	@$(MAKE) -C . gCommit || \
-	if [ $$? -ne 0 ]; then \
+	@$(MAKE) -C . gCommit; \
+	r=$$?; \
+	if [ $r -ne 0 ]; then \
 		exit 1; \
 	else \
 		$(MAKE) -C . gPush; \
