@@ -85,13 +85,14 @@ soft:
 		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
 	esac
 amend:
-	@echo $(CYAN) && git commit --amend || \
-	if [ $$? -ne 0 ]; then \
+	@echo $(CYAN) && git commit --amend; \
+	result=$$?; \
+	if [ $$result -ne 0 ]; then \
 		echo $(RED) "The amend commit message was not modified."; \
 		exit 1; \
 	else \
 		echo $(YELLOW) && git push origin --force-with-lease $(shell git branch --show-current); \
-		exit
+		exit 0; \
 	fi
 template:
 	@git config --local commit.template .settings/.gitmessage

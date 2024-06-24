@@ -10,7 +10,7 @@ echo -e "----\n$commit_msg \n---------\n"
 # echo -e "$last_commit_msg \n"
 # Check if the commit message is the same as the last commit
 if [[ "$commit_msg" =~ "$last_commit_msg" ]]; then
-	echo -e "No changes \n"
+	echo -e "\033[0;35mNo changes \n \033[m"
 	exit 1
 fi
 
