@@ -39,14 +39,16 @@ dirs:
 gAdd:
 	@echo $(CYAN) && git add $(ROOT_CPP_MODULES)
 gCommit:
-	@echo $(GREEN) && git commit -e || \
-	if [ $$? -ne 0 ]; then \
+	@echo $(GREEN) && git commit -e ; \
+	ret=$$? ; \
+	if [ $$ret -ne 0 ]; then \
 		echo $(RED) "Error in commit message"; \
 		exit 1; \
 	fi
 gPush:
-	@echo $(YELLOW) && git push || \
-	if [ $$? -ne 0 ]; then \
+	@echo $(YELLOW) && git push ; \
+	ret=$$? ; \
+	if [ $$ret -ne 0 ]; then \
 		echo $(RED) "git push failed, setting upstream branch\n" $(YELLOW) && \
 		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \
@@ -59,8 +61,8 @@ gPush:
 #make DIRS=$CPP/CPP_0* cleanAll
 git: cleanAll gAdd
 	@$(MAKE) -C . gCommit; \
-	r=$$?; \
-	if [ $r -ne 0 ]; then \
+	ret=$$?; \
+	if [ $$ret -ne 0 ]; then \
 		exit 1; \
 	else \
 		$(MAKE) -C . gPush; \

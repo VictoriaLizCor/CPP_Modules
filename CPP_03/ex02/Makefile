@@ -131,14 +131,15 @@ cleanAll:
 gAdd:
 	@echo $(CYAN) && git add $(PROJECT_ROOT)
 gCommit:
-	@echo $(GREEN) && git commit -e || \
-	if [ $$? -ne 0 ]; then \
+	@echo $(GREEN) && git commit -e ; \
+	ret=$$?; \
 		echo $(RED) "Error in commit message"; \
 		exit 1; \
 	fi
 gPush:
-	@echo $(YELLOW) && git push || \
-	if [ $$? -ne 0 ]; then \
+	@echo $(YELLOW) && git push ; \
+	ret=$$? ; \
+	if [ $$ret -ne 0 ]; then \
 		echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
 		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \
