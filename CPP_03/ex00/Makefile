@@ -131,30 +131,39 @@ cleanAll:
 gAdd:
 	@echo $(CYAN) && git add $(PROJECT_ROOT)
 gCommit:
-	@echo $(GREEN) && git commit -e
-gPush:
-	@echo $(YELLOW) && git push > /dev/null || \
+	@echo $(GREEN) && git commit -e || \
 	if [ $$? -ne 0 ]; then \
-		echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
+		echo $(RED) "Error in commit message"; \
+		exit 1; \
+	fi
+gPush:
+	@echo $(YELLOW) && git push || \
+	if [ $$? -ne 0 ]; then \
+		echo $(RED) "git push failed, setting upstream branch\n" $(YELLOW) && \
 		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \
 			echo $(RED) "git push --set-upstream failed with error" $(E_NC); \
+			exit 1; \
 		fi \
 	fi
 git:
-	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
-		$(MAKE) -C $(GIT_REPO) cleanAll gAdd gCommit gPush;		\
-	else									\
-		$(MAKE) -C $(PROJECT_ROOT)/$(CURRENT) cleanAll gAdd gCommit gPush;	\
+	@if [ -f "$(GIT_REPO)/Makefile" ] && [ -d "$(GIT_REPO)/.git" ]; then \
+		$(MAKE) -C "$(GIT_REPO)" git; \
+	else \
+		$(MAKE) -C "$(PROJECT_ROOT)/$(CURRENT)" cleanAll gAdd gCommit gPush; \
 	fi
 quick: cleanAll
-	@echo $(GREEN) && \
-	git commit -am "* Update in files: ' \
-	$(shell git diff --name-only --diff-filter=M | paste -sd "," -)'"
-	@echo $(YELLOW) && git push
+	@echo $(GREEN) && git commit -am "* Update in files: "; \
+	ret=$$? ; \
+	if [ $$ret -ne 0 ]; then \
+		exit 1; \
+	else \
+		$(MAKE) -C . gPush; \
+	fi
 soft:
-	$(MAKE) -C $(GIT_REPO) soft || \
-	if [ $$? -ne 0 ]; then \
+	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
+		$(MAKE) -C $(GIT_REPO) soft || \
+		if [ $$? -ne 0 ]; then \
 		echo $(RED) GIT_REPO not found $(E_NC); \
 	fi
 cpp: # Usage: make cpp h=filename
@@ -175,28 +184,29 @@ cpp: # Usage: make cpp h=filename
 	done
 #--------------------COLORS----------------------------#
 # For print
-CL_BOLD = \e[1m
-RAN = \033[48;5;237m\033[38;5;255m
-NC = \033[m
-P_RED = \e[1;91m
-P_GREEN = \e[1;32m
-P_BLUE = \e[0;36m
+CL_BOLD  = \e[1m
+RAN      = \033[48;5;237m\033[38;5;255m
+NC       = \033[m
+P_RED    = \e[1;91m
+P_GREEN  = \e[1;32m
+P_BLUE   = \e[0;36m
 P_YELLOW = \e[1;33m
-P_CCYN = \e[0;1;36m
-P_NC = \e[0m
-LF = \e[1K\r$(P_NC)
-FG_TEXT = $(P_NC)\e[38;2;189;147;249m
+P_CCYN   = \e[0;1;36m
+P_NC     = \e[0m
+LF       = \e[1K\r$(P_NC)
+FG_TEXT  = $(P_NC)\e[38;2;189;147;249m
 # For bash echo
-CLEAR = "\033c"
-BOLD = "\033[1m"
-CROSS = "\033[8m"
-RED = "\033[1;91m"
-GREEN = "\033[1;32m"
-BLUE = "\033[1;34m"
+CLEAR  = "\033c"
+BOLD   = "\033[1m"
+CROSS  = "\033[8m"
+E_NC   = "\033[m"
+RED    = "\033[1;31m"
+GREEN  = "\033[1;32m"
 YELLOW = "\033[1;33m"
-E_NC	= "\033[0m"
-CYAN = "\033[1;36m"
-GRAY = "\033[1;90m"
+BLUE   = "\033[1;34m"
+MAG    = "\033[1;35m"
+CYAN   = "\033[0;1;36m"
+GRAY   = "\033[1;90m"
 BANNER = "$$CPP"
 TRASH_BANNER = "$$TRASH"
 

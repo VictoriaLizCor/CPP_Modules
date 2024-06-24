@@ -39,28 +39,27 @@ dirs:
 gAdd:
 	@echo $(CYAN) && git add $(ROOT_CPP_MODULES)
 gCommit:
-	@echo $(GREEN) && git commit -e
+	@echo $(GREEN) && git commit -e || \
+	if [ $$? -ne 0 ]; then \
+		echo $(RED) "Error in commit message"; \
+		exit 1; \
+	fi
 gPush:
-	@echo $(YELLOW) && git push > /dev/null || \
+	@echo $(YELLOW) && git push || \
 	if [ $$? -ne 0 ]; then \
 		echo $(RED) "git push failed, setting upstream branch\n" $(YELLOW) && \
 		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \
-			echo $(RED) "git push --set-upstream failed with error"; \
-			exit 1; \
-		fi; \
-		echo $(E_NC); \
+			echo $(RED) "git push --set-upstream failed with error" $(E_NC); \
+		fi \
 	fi
 # @echo $(YELLOW) && git push > /dev/null || \
 # (echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
 # git push --set-upstream origin $(shell git branch --show-current))
 #make DIRS=$CPP/CPP_0* cleanAll
 git: cleanAll gAdd
-	@$(MAKE) -C . gCommit; \
-	result=$$?; \
-	if [ $$result -ne 0 ]; then \
-		echo $$result; \
-		echo $(RED) "The commit message was not modified."; \
+	@$(MAKE) -C . gCommit || \
+	if [ $$? -ne 0 ]; then \
 		exit 1; \
 	else \
 		$(MAKE) -C . gPush; \
@@ -74,20 +73,24 @@ plog:
 	pygmentize -g -O  style=material
 
 quick: cleanAll
-	@echo $(GREEN) && git commit -am "* Update in files: "
-	@echo $(YELLOW) && git push
+	@echo $(GREEN) && git commit -am "* Update in files: "; \
+	ret=$$? ; \
+	if [ $$ret -ne 0 ]; then \
+		exit 1; \
+	else \
+		$(MAKE) -C . gPush; \
+	fi
 #$(shell git diff --name-only --diff-filter=M | awk 'NR > 1 {print prev","} {prev=$$0} END {print $0}')"
-
 # Avoid last commit message
 soft:
-	@echo && echo $(GREEN) "Last 10 commits:" $(E_NC)
+	@echo $(GREEN) "\nLast 10 commits:" $(E_NC)
 	@$(MAKE) plog && echo 
 	@read -p "Do you want to reset the last commit? (y/n) " yn; \
 	case $$yn in \
 		[Yy]* ) git reset --soft HEAD~1;\
 		git push origin --force-with-lease $(shell git branch --show-current) ;\
 		echo $(RED) "Last commit reset" $(E_NC) ;; \
-		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
+		* ) echo $(MAG) "No changes made" $(E_NC) ;; \
 	esac
 amend:
 	@echo $(CYAN) && git commit --amend; \
@@ -165,7 +168,7 @@ BANNER = "$$CPP"
 TRASH_BANNER = "$$TRASH"
 #------------- TEST UTILS -----------------------------------#
 list:
-	@ls --color=auto -la ./*/*
+	@ls --color=auto -Rla $(DIRS)
 
 define CPP
 	   $(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢟⡋⣇⠧⣹⢰⡛⡻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
