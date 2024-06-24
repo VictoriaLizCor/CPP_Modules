@@ -50,7 +50,7 @@ else
 	if [ -n "$mergeBranch" ]; then
 		printf "%s\n%s%s\n" "$ticketID" "$mergeBranch" "${LINES[@]}"> "$COMMIT_MSG_FILE"
 	else
-		printf "%s\n%s\n " "$ticketID" "${LINES[@]}" > "$COMMIT_MSG_FILE"
+		printf "%s\n" "$ticketID" "${LINES[0]}" "${LINES[@]:1}" > "$COMMIT_MSG_FILE"
 	fi
 fi
 regex_pattern="~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~"
