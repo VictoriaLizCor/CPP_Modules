@@ -37,15 +37,6 @@ static bool checkObjs(ClapTrap& o1 , ClapTrap& o2)
  * @param amount The amount of damage to deal or health to recover.
  * @return true if a special condition is met, false otherwise.
  */
-/**
- * NOTES:
- *  std::cout << "bool healthPriority = " << o1.getHitPoints()
-	<< " <= " << o1.getMaxPoints() - o1.getRecoveryPoints() << " ()"
-	<< o1.getMaxPoints() << " - " 
-	<< o1.getRecoveryPoints() << "); // " 
-	<< std::boolalpha << healthPriority << "; "
-	<< (healthPriority != o1.getHitPoints() < o2.getHitPoints()) << std::endl;
- */
 static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 {
 	bool healthPriority = o1.getHitPoints() <= o1.getMaxPoints() - o1.getRecoveryPoints();
