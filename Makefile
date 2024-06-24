@@ -70,14 +70,8 @@ plog:
 
 quick: cleanAll
 	@echo $(GREEN) && git commit -am "* Update in files: "
-
-#$(shell git diff --name-only --diff-filter=M | awk 'NR > 1 {print prev","} {prev=$$0} END {print $0}')"
 	@echo $(YELLOW) && git push
-#	'$(shell git diff --name-only --diff-filter=M | awk "{ if(NR > 1) printf \",\\n\"; printf \"%s\", \$$0; }")'"
-#	@echo $(GREEN) && git commit -am "* Update in files: ' \ 
-#	"$(shell echo -e $(shell git diff --name-only --diff-filter=M | awk 'NR > 1 {print prev",\\n"} {prev=$$0} END {print $$0}')')"
-# $(shell git diff --name-only --diff-filter=M | paste -sd "\n" - | sed 's/,/, /g'"
-#	@echo $(YELLOW) && git push
+#$(shell git diff --name-only --diff-filter=M | awk 'NR > 1 {print prev","} {prev=$$0} END {print $0}')"
 
 # Avoid last commit message
 soft:
@@ -97,7 +91,7 @@ amend:
 		exit 1; \
 	else \
 		echo $(YELLOW) && git push origin --force-with-lease $(shell git branch --show-current); \
-		exit 0
+		exit
 	fi
 template:
 	@git config --local commit.template .settings/.gitmessage
