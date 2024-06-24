@@ -6,7 +6,7 @@ commit_msg=$(cat "$COMMIT_MSG_FILE")
 # Get the last commit message
 last_commit_msg=$(git log -1 --pretty=%B)
 
-echo -e "$commit_msg \n"
+echo -e "----\n$commit_msg \n---------\n"
 # echo -e "$last_commit_msg \n"
 # Check if the commit message is the same as the last commit
 if [[ "$commit_msg" =~ "$last_commit_msg" ]]; then
@@ -14,9 +14,13 @@ if [[ "$commit_msg" =~ "$last_commit_msg" ]]; then
 	exit 1
 fi
 
+LINES=()
+while IFS= read -r line; do
+	LINES+=("$line")
+done < "$COMMIT_MSG_FILE"
 
 # Read the second line from the commit-msg file
-second_line=$(sed -n '2p' "$COMMIT_MSG_FILE")
+second_line=${LINES[1]}
 # Regex pattern to match and capture the string after "* [A-Z]:"
 # regex_pattern="^\* (Fix|Update in files|Docs|Feat|Style|Test|Refactor): (.*)"
 regex_pattern="^\*\s*(.*?)\s*:"
@@ -31,12 +35,13 @@ if [[ $second_line =~ $regex_pattern ]]; then
 		string_after_prefix="${BASH_REMATCH[1]}"
 		# echo -e "MSG: $string_after_prefix \n\n"
 		if [ -z "$string_after_prefix" ]; then
-			echo -e "No changes \n"
+			echo -e "\033[0;35mNo changes \n \033[m"
 			exit 1
 		fi
 	fi
 	exit 0
 else
+	echo -e "---\n$second_line\n-----\n"
 	echo -e "\033[0;35mThe second line does not match the specified pattern. \n\n \033[m"
 	exit 1
 fi

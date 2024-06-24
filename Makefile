@@ -69,9 +69,15 @@ plog:
 	pygmentize -g -O  style=material
 
 quick: cleanAll
-	@echo $(GREEN) && git commit -am "* Update in files: '\
-	$(shell git diff --name-only --diff-filter=M | paste -sd "," - | sed 's/,/, /g'"
+	@echo $(GREEN) && git commit -am "* Update in files: \
+	$(shell git diff --name-only --diff-filter=M | \
+	awk 'NR > 1 {print prev","} {prev=$$0} END {print $0}')"
 	@echo $(YELLOW) && git push
+#	'$(shell git diff --name-only --diff-filter=M | awk "{ if(NR > 1) printf \",\\n\"; printf \"%s\", \$$0; }")'"
+#	@echo $(GREEN) && git commit -am "* Update in files: ' \ 
+#	"$(shell echo -e $(shell git diff --name-only --diff-filter=M | awk 'NR > 1 {print prev",\\n"} {prev=$$0} END {print $$0}')')"
+# $(shell git diff --name-only --diff-filter=M | paste -sd "\n" - | sed 's/,/, /g'"
+#	@echo $(YELLOW) && git push
 
 # Avoid last commit message
 soft:
@@ -193,3 +199,5 @@ define TRASH
 
 endef
 export TRASH
+ 
+~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~
