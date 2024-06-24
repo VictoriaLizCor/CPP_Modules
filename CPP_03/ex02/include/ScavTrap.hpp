@@ -14,8 +14,8 @@ class ScavTrap : public ClapTrap
 		ScavTrap(std::string const& name);
 		ScavTrap(std::string const& name, unsigned int attackDamage);
 		ScavTrap(std::string const& name, unsigned int hitPoints, unsigned int energyPoints, unsigned int attackDamage);
-		ScavTrap& operator=(ScavTrap const& rhs);
-		ScavTrap(ScavTrap const& rhs);
+		ScavTrap& operator=(ClapTrap const& rhs);
+		ScavTrap(ClapTrap const& rhs);
 		virtual ~ScavTrap();
 
 		unsigned int	getMaxPoints(void);

@@ -120,6 +120,7 @@ ClapTrap&::ClapTrap::operator=(ClapTrap const& rhs)
 		_hitPoints = rhs._hitPoints;
 		_energyPoints = rhs._energyPoints;
 		_attackDamage = rhs._attackDamage;
+		_recoveryPoints = rhs._recoveryPoints;
 	}
 	std::cout << setColor(className(typeid(*this).name()), FGRAY, 0) << " " 
 	<< *this << setColor(" Copy was Created ", FGRAY, 0) << std::endl ;

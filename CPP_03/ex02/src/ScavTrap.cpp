@@ -75,11 +75,10 @@ ClapTrap(name, hitPoints , energyPoints , attackDamage)
  * @param rhs The ScavTrap object to assign from.
  * @return Returns a reference to the current object.
  */
-ScavTrap&::ScavTrap::operator=(ScavTrap const& rhs)
+ScavTrap&::ScavTrap::operator=(ClapTrap const& rhs)
 {
-	if (this != &rhs) {
+	if (this != &rhs)
 		ClapTrap::operator=(rhs);
-	}
 	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " " 
 	<< *this << setColor(" Copy was Created ", FGRAY, 0) << std::endl ;
 	return *this;
@@ -92,7 +91,7 @@ ScavTrap&::ScavTrap::operator=(ScavTrap const& rhs)
  * 
  * @param rhs The ScavTrap instance to copy.
  */
-ScavTrap::ScavTrap(ScavTrap const& rhs): ClapTrap(rhs)
+ScavTrap::ScavTrap(ClapTrap const& rhs): ClapTrap(rhs)
 {
 	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " " 
 	<< *this << setColor(" Copy was Created ", FGRAY, 0) << std::endl ;
@@ -115,13 +114,14 @@ ScavTrap::~ScavTrap()
 }
 
 /**
- * @brief Constructs a new ScavTrap object.
+ * @brief Executes an attack on a target.
  * 
- * Initializes a new ScavTrap object with a custom name by calling the ClapTrap
- * constructor with specified name and predefined health, energy, and attack
- * values. It activates guard mode immediately upon creation.
+ * This function prints a message to the console indicating that the ScavTrap
+ * instance has attacked a target, specifying the target and the amount of
+ * damage dealt. It also decrements the energy points of the ScavTrap instance
+ * by one.
  * 
- * @param name The name for the ScavTrap object.
+ * @param target The name of the target being attacked.
  */
 void ScavTrap::attack(std::string const& target)
 {
@@ -132,24 +132,25 @@ void ScavTrap::attack(std::string const& target)
 }
 
 /**
- * @brief Constructs a new ScavTrap object.
+ * @brief Retrieves the maximum hit points for ScavTrap.
  * 
- * Initializes a new ScavTrap object with a custom name by calling the ClapTrap
- * constructor with specified name and predefined health, energy, and attack
- * values. It activates guard mode immediately upon creation.
+ * This function returns the maximum hit points value, defined by the
+ * _MAX_HIT_POINTS constant, for a ScavTrap instance. It's a simple getter
+ * method used to access the private _MAX_HIT_POINTS attribute from outside
+ * the class.
  * 
- * @param name The name for the ScavTrap object.
+ * @return The maximum hit points of ScavTrap.
  */
 unsigned int ScavTrap::getMaxPoints(void){return (_MAX_HIT_POINTS);}
 
 /**
- * @brief Constructs a new ScavTrap object.
+ * @brief Activates Gate Keeper Mode for the ScavTrap.
  * 
- * Initializes a new ScavTrap object with a custom name by calling the ClapTrap
- * constructor with specified name and predefined health, energy, and attack
- * values. It activates guard mode immediately upon creation.
- * 
- * @param name The name for the ScavTrap object.
+ * This function enables the Gate Keeper Mode for a ScavTrap instance, 
+ * indicating this mode activation through a message printed to the console. 
+ * The message includes the name of the ScavTrap instance, dynamically 
+ * obtained using RTTI (Run-Time Type Information) to ensure accurate 
+ * identification of the object's class.
  */
 void ScavTrap::guardGate(void)
 {

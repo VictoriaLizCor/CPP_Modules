@@ -1,3 +1,4 @@
+#include "FragTrap.hpp"
 #include "ScavTrap.hpp"
 
 #if (DEBUG == 0)
@@ -85,18 +86,9 @@ int main(void)
 	}
 	std::cout << "\n" << i << " ========== CLAPTRAP STOPS ==========\n\n";
 	{
-		std:: string obj = "test";
-
-		ClapTrap o10;
-		ClapTrap o11(obj);
-		ClapTrap o12(obj, 5, 5, 1);
-		ScavTrap o20;
-		ScavTrap o21(obj);
-		ScavTrap o22(obj, 5, 5, 1);
-
-		o10.printStatus();
-		o20.printStatus();
-		std::cout << o22.getObjectColor() << std::endl;
+		ClapTrap c1;
+		FragTrap f1=c1;
+		f1.printStatus();
 	}
 	return (0);
 }

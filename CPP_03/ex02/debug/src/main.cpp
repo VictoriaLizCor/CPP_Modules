@@ -1,4 +1,5 @@
-#include <ScavTrap.hpp>
+#include "FragTrap.hpp"
+#include "ScavTrap.hpp"
 
 #if (DEBUG != 0)
 
@@ -85,17 +86,42 @@ int main(void)
 
 	std:: string obj = "Obj";
 
-	ScavTrap o1(obj, getRandomNum(o1.getMaxPoints() - 1) + 1);
-	ScavTrap o2(obj, getRandomNum(o1.getMaxPoints() - 1) + 1);
+	FragTrap o1(obj);
+	FragTrap o2(obj, getRandomNum(o1.getMaxPoints() - 1) + 1);
 	startClapTrap(o1, o2);
 	{
-		ScavTrap o3(o1);
+		ScavTrap s1;
+		FragTrap f1=s1;
+		f1.printStatus();
 	}
 	std::cout << "------\n";
 	{
-		ScavTrap o3=o1;
+		ClapTrap c1;
+		FragTrap f1(c1);
+		f1.printStatus();
 	}
 	std::cout << "------\n";
 	return (0);
 }
 #endif
+
+/**
+* NOTES:
+ * Making the destructor virtual in a base class like
+ * [`ClapTrap`]is necessary for proper cleanup of derived
+ * class objects when they are deleted through a pointer to the base class. This
+ * is a fundamental concept in C++ known as polymorphic deletion.
+ * 
+ * When you have a class hierarchy and you delete a derived class object through a
+ * pointer to the base class, having a virtual destructor ensures that the
+ * destructor of the derived class is called first, followed by the base class
+ * destructor. This proper sequence of destructor calls ensures that all resources
+ * allocated by the derived class and the base class are released correctly,
+ * preventing resource leaks and undefined behavior.
+ * 
+ * Without a virtual destructor in the base class, only the base class's destructor
+ * would be called if an object of a derived class is deleted through a base class
+ * pointer, potentially leading to resource leaks if the derived class has its own
+ * resources to manage.
+ *  * 
+ * */

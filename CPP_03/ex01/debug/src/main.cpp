@@ -93,7 +93,10 @@ int main(void)
 	}
 	std::cout << "------\n";
 	{
-		ScavTrap o3=o1;
+		ClapTrap c1;
+		c1.printStatus();
+		ScavTrap o3=c1;
+		o3.printStatus();
 	}
 	std::cout << "------\n";
 	return (0);

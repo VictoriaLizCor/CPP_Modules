@@ -150,6 +150,7 @@ unsigned int ClapTrap::getAttackDamage(void) const{return (_attackDamage);}
 unsigned int ClapTrap::getRecoveryPoints(void) const{return (_recoveryPoints);}
 
 unsigned int ClapTrap::getMaxPoints(void){return (_MAX_HIT_POINTS);}
+
 unsigned int ClapTrap::getObjectColor(void){return (_objectColor);}
 /**
  * @brief Gets the number of ClapTrap objects.

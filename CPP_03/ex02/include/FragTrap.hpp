@@ -3,7 +3,7 @@
  #include "ClapTrap.hpp"
  # include <typeinfo>
 
-class ScavTrap : public ClapTrap
+class FragTrap : public ClapTrap
 {
 	protected:
 		
@@ -11,16 +11,15 @@ class ScavTrap : public ClapTrap
 		static unsigned int		_MAX_HIT_POINTS;
 	public:
 
-		ScavTrap(void);
-		ScavTrap(std::string const& name);
-		ScavTrap(std::string const& name, unsigned int attackDamage);
-		ScavTrap(std::string const& name, unsigned int hitPoints, unsigned int energyPoints, unsigned int attackDamage);
-		ScavTrap& operator=(ScavTrap const& rhs);
-		ScavTrap(ScavTrap const& rhs);
-		virtual ~ScavTrap();
+		FragTrap(void);
+		FragTrap(std::string const& name);
+		FragTrap(std::string const& name, unsigned int attackDamage);
+		FragTrap(std::string const& name, unsigned int hitPoints, unsigned int energyPoints, unsigned int attackDamage);
+		FragTrap& operator=(ClapTrap const& rhs);
+		FragTrap(ClapTrap const& rhs);
+		virtual ~FragTrap();
 
 		unsigned int	getMaxPoints(void);
-		void			attack( std::string const& target );
-		void			guardGate( void );
+		void			highFivesGuys( void );
 };
 #endif

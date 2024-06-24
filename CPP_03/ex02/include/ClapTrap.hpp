@@ -40,16 +40,18 @@ class ClapTrap
 		ClapTrap& operator=(ClapTrap const& rhs);
 		ClapTrap(ClapTrap const& rhs);
 		virtual					~ClapTrap();
+		//
 		void					setName(std::string const& name);
 		void					setAttackDamage(unsigned int amount);
 		unsigned int			getEnergyPoints(void) const;
 		unsigned int			getHitPoints(void) const;
 		unsigned int			getAttackDamage(void) const;
 		unsigned int			getRecoveryPoints(void) const;
-		virtual unsigned int	getMaxPoints(void);
 		unsigned int			getObjectColor(void);
-		void					executaAttack(ClapTrap& o2, int amount);
+		// 
+		virtual unsigned int	getMaxPoints(void);
 		virtual void			attack(std::string const& target);
+		void					executaAttack(ClapTrap& o2, int amount);
 		void					beRepaired(unsigned int amount);
 		void					printStatus(void);
 		bool					check_KO_Status(void);
