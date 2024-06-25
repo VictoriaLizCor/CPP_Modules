@@ -57,4 +57,5 @@ obj*/
 #.vscode*/
 msg_template
 #evals/
+/*/*/ex*
 *.DS_Store
