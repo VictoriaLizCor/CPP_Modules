@@ -113,6 +113,9 @@ pre-commit:
 commit-msg:
 	cp .settings/commit-msg .git/hooks/
 	chmod +x .git/hooks/commit-msg
+post-merge:
+	cp .settings/post-merge .git/hooks/
+	chmod +x .git/hooks/post-merge
 showcolors:
 	@i=0; \
 	while [ $$i -le 255 ]; do \
