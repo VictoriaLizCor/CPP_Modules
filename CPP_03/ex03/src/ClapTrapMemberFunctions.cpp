@@ -5,7 +5,12 @@
  * 
  * @param rhs The ClapTrap object to copy from.
  */
-void ClapTrap::setName(std::string const& name){_name.str = name + toString(getObjects());}
+void ClapTrap::setName(std::string const& name)
+{
+	if(_name.str.empty())
+		_name.color = setColorName(++_objectColor);
+	_name.str = name;
+}
 
 /**
  * @brief Sets the attack damage of the ClapTrap object.
@@ -28,7 +33,7 @@ void ClapTrap::setAttackDamage(unsigned int amount)
  */
 void ClapTrap::setRecoveryPoints(void)
 {
-	_recoveryPoints = _hitPoints - _attackDamage;
+	_recoveryPoints = this->getMaxPoints() - _attackDamage;
 }
 
 /**
@@ -57,7 +62,7 @@ bool	ClapTrap::check_KO_Status(void)
  * 
  * @return bool Returns true if the ClapTrap is KO, false otherwise.
  */
-void ClapTrap::executaAttack(ClapTrap& o2, int amount)
+void ClapTrap::executaAttack(ClapTrap& o2, unsigned int amount)
 {
 	if (check_KO_Status() == 1)
 		return ;
@@ -149,7 +154,12 @@ unsigned int ClapTrap::getAttackDamage(void) const{return (_attackDamage);}
 
 unsigned int ClapTrap::getRecoveryPoints(void) const{return (_recoveryPoints);}
 
-unsigned int ClapTrap::getMaxPoints(void){return (_MAX_HIT_POINTS);}
+unsigned int ClapTrap::getMaxPoints(void)
+{
+	unsigned int tmp;
+	tmp = this->_MAX_HIT_POINTS;
+	return (tmp);
+}
 unsigned int ClapTrap::getObjectColor(void){return (_objectColor);}
 /**
  * @brief Gets the number of ClapTrap objects.
@@ -157,7 +167,7 @@ unsigned int ClapTrap::getObjectColor(void){return (_objectColor);}
  * @return int The number of ClapTrap objects, calculated as the difference 
  * between the current object color and the base color (FGRAY).
  */
-int ClapTrap::getObjects(void){return (_objectColor - FGRAY);};
+int ClapTrap::getObjects(void){return (static_cast<int>(_objectColor - FGRAY));}
 
 /**
  * @brief Prints the status of the ClapTrap object.
@@ -168,10 +178,11 @@ int ClapTrap::getObjects(void){return (_objectColor - FGRAY);};
 void ClapTrap::printStatus(void)
 {
 	std::cout << "[" + setColor(className(className(typeid(*this).name())), FGRAY, 0) << " " << *this
-	<< setColor(" HP:" + toString(getHitPoints()), FLGREEN, 0) << ", "
-	<< setColor("EP:" + toString(getEnergyPoints()), FLYELLOW, 0) << ", "
-	<< setColor("AD:" + toString(getAttackDamage()), FLMAGENTA, 0) << ", "
-	<< setColor("RP:" + toString(getRecoveryPoints()), FLCYAN, 0) << "]\n";
+	<< setColor(" HP:" + toString(static_cast<int>(getHitPoints())), FLGREEN, 0) << ", "
+	<< setColor("EP:" + toString(static_cast<int>(getEnergyPoints())), FLYELLOW, 0) << ", "
+	<< setColor("AD:" + toString(static_cast<int>(getAttackDamage())), FLMAGENTA, 0) << ", "
+	<< setColor("RP:" + toString(static_cast<int>(getRecoveryPoints())), FLCYAN, 0) << "]"
+	<< setColor(" MaxPoints: " + toString(static_cast<int>(getMaxPoints())), FGRAY, 0) << "\n";
 }
 
 // std::string ClapTrap::getName(void){return (_name.color + _name.str + C_DEFAULT);}

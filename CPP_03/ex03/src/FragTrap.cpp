@@ -2,6 +2,18 @@
 
 unsigned int FragTrap::_MAX_HIT_POINTS = 100;
 
+// void FragTrap::setRecoveryPoints(void)
+// {
+// 	_recoveryPoints = this->getMaxPoints() - this->_attackDamage;
+// }
+
+void FragTrap::initialize()
+{
+	this->_hitPoints = this->getMaxPoints();
+	this->_energyPoints = 100;
+	setAttackDamage(30);
+}
+
 /**
  * @brief Constructs a new FragTrap object with default values.
  * 
@@ -10,10 +22,12 @@ unsigned int FragTrap::_MAX_HIT_POINTS = 100;
  * values. It also activates guard mode immediately upon creation.
  */
 FragTrap::FragTrap(void):
-ClapTrap("DefaultFragTrap", 100, 100 , 30)
+ClapTrap("Default_FragTrap")
 {
+	this->initialize();
 	highFivesGuys();
-};
+	printStatus();
+}
 
 /**
  * @brief Constructs a new FragTrap object.
@@ -25,10 +39,12 @@ ClapTrap("DefaultFragTrap", 100, 100 , 30)
  * @param name The name for the FragTrap object.
  */
 FragTrap::FragTrap(std::string const& name):
-ClapTrap(name, 100, 100 , 30)
+ClapTrap(name)
 {
+	initialize();
 	highFivesGuys();
-};
+	printStatus();
+}
 
 /**
  * @brief Constructs a new FragTrap object.
@@ -40,9 +56,11 @@ ClapTrap(name, 100, 100 , 30)
  * @param name The name for the FragTrap object.
  */
 FragTrap::FragTrap(std::string const& name, unsigned int attackDamage):
-ClapTrap(name, 100 , 100 , attackDamage)
+ClapTrap(name, attackDamage)
 {
+	initialize();
 	highFivesGuys();
+	printStatus();
 }
 
 /**
@@ -61,8 +79,10 @@ unsigned int energyPoints,
 unsigned int attackDamage):
 ClapTrap(name, hitPoints , energyPoints , attackDamage)
 {
+	initialize();
 	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0)<< " " <<
 	*this << setColor(" was Created", FGRAY, 0) << std::endl;
+	printStatus();
 }
 
 /**
@@ -80,9 +100,8 @@ FragTrap&::FragTrap::operator=(ClapTrap const& rhs)
 	if (this != &rhs) {
 		ClapTrap::operator=(rhs);
 	}
-	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " " 
-	<< *this << setColor(" Copy was Created ", FGRAY, 0) << std::endl ;
-	return *this;
+	printStatus();
+	return (*this);
 }
 /**
  * @brief Copy constructor for FragTrap.
@@ -94,8 +113,8 @@ FragTrap&::FragTrap::operator=(ClapTrap const& rhs)
  */
 FragTrap::FragTrap(ClapTrap const& rhs): ClapTrap(rhs)
 {
-	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " " 
-	<< *this << setColor(" Copy was Created ", FGRAY, 0) << std::endl ;
+	initialize();
+	printStatus();
 }
 
 /**

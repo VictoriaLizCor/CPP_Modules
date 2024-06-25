@@ -6,13 +6,13 @@ commit_msg=$(cat "$COMMIT_MSG_FILE")
 # Get the last commit message
 last_commit_msg=$(git log -1 --pretty=%B)
 
-echo -e "----\n$commit_msg \n---------\n"
 # echo -e "$last_commit_msg \n"
 # Check if the commit message is the same as the last commit
 if [[ "$commit_msg" =~ "$last_commit_msg" ]]; then
 	echo -e "\033[0;35mNo changes \n \033[m"
 	exit 1
 fi
+echo -e "----\n$commit_msg \n---------\n"
 
 LINES=()
 while IFS= read -r line; do
@@ -29,13 +29,15 @@ regex_pattern="^\*\s*(.*?)\s*:"
 if [[ $second_line =~ $regex_pattern ]]; then
 	# Extract the string after the pattern
 	prefix="${BASH_REMATCH[1]}"
+	#echo -e "BASH_REMATCH[0]: ${BASH_REMATCH[0]}\n\n"
+	#echo -e "PREFIX: $prefix \n\n"
 	regex_after_prefix="^\*\s*$prefix\s*:\s*(.*)"
 	if [[ $second_line =~ $regex_after_prefix ]]; then
 		# Extract the string after the prefix
 		string_after_prefix="${BASH_REMATCH[1]}"
 		# echo -e "MSG: $string_after_prefix \n\n"
 		if [ -z "$string_after_prefix" ]; then
-			echo -e "\033[0;35mNo changes \n \033[m"
+			echo -e "\033[0;35mNo changes after '${BASH_REMATCH[0]}' \n \033[m"
 			exit 1
 		fi
 	fi

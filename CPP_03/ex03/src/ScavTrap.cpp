@@ -2,6 +2,18 @@
 
 unsigned int ScavTrap::_MAX_HIT_POINTS = 100;
 
+// void ScavTrap::setRecoveryPoints(void)
+// {
+// 	_recoveryPoints = this->getMaxPoints() - _attackDamage;
+// }
+
+void ScavTrap::initialize()
+{
+	this->_hitPoints = getMaxPoints();
+	this->_energyPoints = 50;
+	setAttackDamage(20);
+}
+
 /**
  * @brief Constructs a new ScavTrap object with default values.
  * 
@@ -10,10 +22,12 @@ unsigned int ScavTrap::_MAX_HIT_POINTS = 100;
  * values. It also activates guard mode immediately upon creation.
  */
 ScavTrap::ScavTrap(void):
-ClapTrap("DefaultScavTrap", 100, 50 , 20)
+ClapTrap("DefaultScavTrap")
 {
+	initialize();
 	guardGate();
-};
+	printStatus();
+}
 
 /**
  * @brief Constructs a new ScavTrap object.
@@ -25,10 +39,12 @@ ClapTrap("DefaultScavTrap", 100, 50 , 20)
  * @param name The name for the ScavTrap object.
  */
 ScavTrap::ScavTrap(std::string const& name):
-ClapTrap(name, 100, 50 , 20)
+ClapTrap(name)
 {
+	initialize();
 	guardGate();
-};
+	printStatus();
+}
 
 /**
  * @brief Constructs a new ScavTrap object.
@@ -40,9 +56,11 @@ ClapTrap(name, 100, 50 , 20)
  * @param name The name for the ScavTrap object.
  */
 ScavTrap::ScavTrap(std::string const& name, unsigned int attackDamage):
-ClapTrap(name, 100 , 50 , attackDamage)
+ClapTrap(name, attackDamage)
 {
+	initialize();
 	guardGate();
+	printStatus();
 }
 
 /**
@@ -79,9 +97,8 @@ ScavTrap&::ScavTrap::operator=(ClapTrap const& rhs)
 {
 	if (this != &rhs)
 		ClapTrap::operator=(rhs);
-	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " " 
-	<< *this << setColor(" Copy was Created ", FGRAY, 0) << std::endl ;
-	return *this;
+	initialize();
+	return (*this);
 }
 /**
  * @brief Copy constructor for ScavTrap.
@@ -93,8 +110,7 @@ ScavTrap&::ScavTrap::operator=(ClapTrap const& rhs)
  */
 ScavTrap::ScavTrap(ClapTrap const& rhs): ClapTrap(rhs)
 {
-	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " " 
-	<< *this << setColor(" Copy was Created ", FGRAY, 0) << std::endl ;
+	initialize();
 }
 
 

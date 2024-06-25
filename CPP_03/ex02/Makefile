@@ -12,7 +12,7 @@ DIRS		:= $(abspath $(dir $(shell find $(PROJECT_ROOT) -name Makefile | sort)))
 CURRENT		:= $(shell basename $$PWD)
 DEBUG_FILES	:= debug
 #------ DEBUG FLAG ------#
-D			= 1
+D			= 0
 #------ Sanitizer Flag ------#
 S			= 0
 #------ DEBUG UTILS ------#
@@ -42,11 +42,10 @@ OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
 # The `vpath` directive in a Makefile is used to specify a list of directories
 # that `make` should search when it's looking for prerequisites.
 vpath %.cpp $(sort $(dir $(SRC)))
-# OBJS := $(patsubst $(SRC_DIR)%.cpp,$(nodir ($(BUILD_DIR)%.o)),$(SRC))
 DEPS		:= $(OBJS:.o=.d)
 #------ INCLUDE SANATIZER FLAGS ------#
 D_FLAGS		+= -O0 -g3
-D_FLAGS		+= -fsanitize=address,undefined
+D_FLAGS		+= -fsanitize=address,undefined,vptr
 endif
 #-------------------- RULES ----------------------------#
 all: $(NAME)
@@ -100,7 +99,6 @@ re: fclean all
 test:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
 	@./$(NAME) | cat
-#	@echo "-----\n"
 # ATTENTION !!!!!!!!!!!!!!  USE WITH S=0 !
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)  "\n"

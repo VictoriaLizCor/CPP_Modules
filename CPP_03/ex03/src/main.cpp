@@ -1,8 +1,15 @@
-#include "FragTrap.hpp"
-#include "ScavTrap.hpp"
+#include "DiamondTrap.hpp"
 
 #if (DEBUG == 0)
 
+std::string objName()
+{
+	static unsigned int num;
+
+	std::ostringstream os;
+	os << "Obj" << (++num);
+	return (os.str());
+}
 
 /**
  * @brief Executes an action based on the health and status of two ClapTrap objects.
@@ -64,10 +71,9 @@ static bool action(ClapTrap& o1, ClapTrap& o2, int amount)
 
 int main(void)
 {
-	std:: string obj = "Obj";
 	bool KO = 0;
-	ScavTrap o1(obj);
-	ScavTrap o2(obj);
+	DiamondTrap o1(objName());
+	DiamondTrap o2(objName());
 	int i = 0;
 	std::cout << "\n" << i << " ========== CLAPTRAP BEGINS ==========\n\n";
 	o1.printStatus();
@@ -85,11 +91,6 @@ int main(void)
 		o2.printStatus();
 	}
 	std::cout << "\n" << i << " ========== CLAPTRAP STOPS ==========\n\n";
-	{
-		ClapTrap c1;
-		FragTrap f1=c1;
-		f1.printStatus();
-	}
 	return (0);
 }
 
