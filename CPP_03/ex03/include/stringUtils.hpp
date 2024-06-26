@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:13:36 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/25 10:46:35 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/26 15:44:03 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef s_coloredName t_Name;
 void 		coutnl(std::ostream& os);
 std::string	toString(int value);
 std::string	setColor(const std::string& msg, unsigned int color, bool err);
+std::string	setColor(const std::string& msg, std::string const& color, bool err);
 std::string	getColorStr(t_Name const& name);
 std::string setRandomColor(int bold);
 bool		checkInput(const std::string& str, int (*check_type)(int));

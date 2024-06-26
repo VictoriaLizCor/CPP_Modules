@@ -6,12 +6,15 @@
 class FragTrap : public virtual ClapTrap
 {
 	protected:
-	// 	void				setRecoveryPoints(void);
+		void				setRecoveryPoints(void);
+
 	private:
 		static unsigned int	_MAX_HIT_POINTS;
-		// unsigned int		_recoveryPoints;
+		static unsigned int	_CLASS_COLOR;
+		unsigned int		_recoveryPoints;
 		void				initialize(void);
-		// void				setRecoveryPoints(void);
+		unsigned int		getClassColor(void);
+
 	public:
 
 		FragTrap(void);
@@ -23,6 +26,8 @@ class FragTrap : public virtual ClapTrap
 		~FragTrap();
 
 		unsigned int		getMaxPoints(void);
+		unsigned int		getRecoveryPoints(void);
+		virtual void		attack( std::string const& target );
 		void				highFivesGuys( void );
 };
 #endif

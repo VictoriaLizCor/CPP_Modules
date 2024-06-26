@@ -8,12 +8,12 @@ static unsigned int getRandomNum(int num)
 	return (static_cast<unsigned int>(rand() % num));
 }
 
-std::string objName()
+std::string objName(std::string const& name)
 {
 	static unsigned int num;
 
 	std::ostringstream os;
-	os << "Obj" << (++num);
+	os << name << (++num);
 	return (os.str());
 }
 
@@ -101,31 +101,30 @@ int main(void)
 {
 	srand(static_cast<unsigned int>(time(0)));
 	{
-			std::cout << "\n*****\n";
-			DiamondTrap d1(objName());
-			std::cout << "--\n";
-	}
-	{
-		// std::cout << "\n*****\n";
-		// FragTrap f1(objName());
-		// DiamondTrap d1(objName(), getRandomNum(static_cast<int>(d1.getMaxPoints()) - 1) + 1);
-		// startClapTrap(f1, d1);
+		std::cout << "--\n";
 		// {
 		// 	std::cout << "\n*****\n";
-		// 	ClapTrap c1(objName());
+		// 	ClapTrap c1(objName("c"));
 		// 	std::cout << "--\n";
 		// 	DiamondTrap d1(c1);
 		// 	std::cout << "--\n";
 		// }
+		// {
+		// 	std::cout << "\n*****\n";
+		// 	FragTrap f1(objName("f"));
+		// 	std::cout << "--\n";
+		// 	DiamondTrap d1=f1;
+		// 	std::cout << "--\n";
+		// }
+		FragTrap f1(objName("f"));
+		std::cout << "\n*****\n";
 		{
-			std::cout << "\n*****\n";
-			FragTrap f1(objName());
-			std::cout << "--\n";
-			DiamondTrap d1=f1;
+			DiamondTrap d1(objName("d"), getRandomNum(static_cast<int>(d1.getMaxPoints()) - 1) + 1);
+			startClapTrap(f1, d1);
 			std::cout << "--\n";
 		}
+		std::cout << "--\n";
 	}
-	std::cout << "--\n";
 	return (0);
 }
 #endif
@@ -211,10 +210,3 @@ int main(void)
  * appropriate to maintain correct object behavior and resource management.
  *  **/
 
-/*
-ScavTrap(), FragTrap()
-hp<-FragTrap(100)
-ep<-ScavTrap(50)
-ad<-FragTrap(30)
-attact<-Scavtrap()
-*/

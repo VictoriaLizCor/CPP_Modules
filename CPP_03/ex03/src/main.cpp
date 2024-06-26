@@ -73,24 +73,28 @@ int main(void)
 {
 	bool KO = 0;
 	DiamondTrap o1(objName());
-	DiamondTrap o2(objName());
-	int i = 0;
-	std::cout << "\n" << i << " ========== CLAPTRAP BEGINS ==========\n\n";
-	o1.printStatus();
-	o2.printStatus();
-	std::cout << "\n==============\n";
-	while (1)
 	{
-		if (++i % 2 == 1)
-			KO = action(o1, o2, o1.getAttackDamage());
-		else
-			KO = action(o2, o1, o2.getAttackDamage());
-		if (KO)
-			break ;
+
+		DiamondTrap o2(objName());
+		int i = 0;
+		std::cout << "\n" << i << " ========== CLAPTRAP BEGINS ==========\n\n";
 		o1.printStatus();
 		o2.printStatus();
+		std::cout << "\n==============\n";
+		while (1)
+		{
+			if (++i % 2 == 1)
+				KO = action(o1, o2, o1.getAttackDamage());
+			else
+				KO = action(o2, o1, o2.getAttackDamage());
+			if (KO)
+				break ;
+			o1.printStatus();
+			o2.printStatus();
+		}
+		std::cout << "\n" << i << " ========== CLAPTRAP STOPS ==========\n\n";
 	}
-	std::cout << "\n" << i << " ========== CLAPTRAP STOPS ==========\n\n";
+	std::cout << "--\n";
 	return (0);
 }
 

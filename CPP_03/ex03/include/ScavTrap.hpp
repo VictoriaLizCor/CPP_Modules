@@ -5,13 +5,15 @@
 class ScavTrap : public virtual ClapTrap
 {
 	protected:
-		unsigned int		_recoveryPoints;
 		void				setRecoveryPoints(void);
-	// 	void				setRecoveryPoints(void);
-	private:
+
+	private:	
 		static unsigned int	_MAX_HIT_POINTS;
-		// unsigned int		_recoveryPoints;
+		static unsigned int	_CLASS_COLOR;
+		unsigned int		_recoveryPoints;
 		void				initialize(void);
+		unsigned int		getClassColor(void);
+
 	public:
 
 		ScavTrap(void);
@@ -23,8 +25,8 @@ class ScavTrap : public virtual ClapTrap
 		~ScavTrap();
 
 		unsigned int		getMaxPoints(void);
-		void				attack( std::string const& target );
+		unsigned int		getRecoveryPoints(void);
+		virtual void		attack( std::string const& target );
 		void				guardGate( void );
-		void				setRecoveryPoints(void);
 };
 #endif

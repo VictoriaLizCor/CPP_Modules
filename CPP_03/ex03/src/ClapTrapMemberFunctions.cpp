@@ -1,15 +1,20 @@
 #include <ClapTrap.hpp>
 
 /**
- * @brief Copy constructor for ClapTrap.
+ * @brief Sets the name of the ClapTrap.
  * 
- * @param rhs The ClapTrap object to copy from.
+ * This method assigns a new name to the ClapTrap instance. If the ClapTrap's
+ * name is currently empty, it assigns a new color to the name based on the
+ * incremented _objectColor. Then, it sets the ClapTrap's name to the provided
+ * name.
+ * 
+ * @param name The new name to be assigned to the ClapTrap.
  */
 void ClapTrap::setName(std::string const& name)
 {
-	if(_name.str.empty())
-		_name.color = setColorName(++_objectColor);
-	_name.str = name;
+	if(this->_name.str.empty())
+		this->_name.color = setColorName(++_objectColor);
+	this->_name.str = name;
 }
 
 /**
@@ -23,17 +28,17 @@ void ClapTrap::setAttackDamage(unsigned int amount)
 		_attackDamage = _hitPoints - 1;
 	else
 	_attackDamage = amount;
-	setRecoveryPoints();
+	this->setRecoveryPoints();
 }
 
-/**
+/**X
  * @brief Sets the recovery points of the ClapTrap object.
  * 
  * Recovery points are calculated as the difference between hit points and attack damage.
  */
 void ClapTrap::setRecoveryPoints(void)
 {
-	_recoveryPoints = this->getMaxPoints() - _attackDamage;
+	this->_recoveryPoints = this->getMaxPoints() - _attackDamage;
 }
 
 /**
@@ -80,7 +85,7 @@ void ClapTrap::executaAttack(ClapTrap& o2, unsigned int amount)
  */
 void ClapTrap::attack(std::string const& target)
 {
-	std::cout << setColor(className(typeid(*this).name()), FGRAY, 0) << " " <<
+	std::cout << setColor(className(typeid(*this).name()), _CLASS_COLOR, 0) << " " <<
 	*this << " " << setColor("attacks", BRED, 0) << " " << target <<
 	", causing " << _attackDamage << " points of damage!";
 	_energyPoints--;
@@ -152,7 +157,12 @@ unsigned int ClapTrap::getEnergyPoints(void) const{return (_energyPoints);}
 
 unsigned int ClapTrap::getAttackDamage(void) const{return (_attackDamage);}
 
-unsigned int ClapTrap::getRecoveryPoints(void) const{return (_recoveryPoints);}
+unsigned int ClapTrap::getRecoveryPoints(void)
+{
+	unsigned int tmp;
+	tmp = this->_recoveryPoints;
+	return (tmp);
+}
 
 unsigned int ClapTrap::getMaxPoints(void)
 {
@@ -160,7 +170,23 @@ unsigned int ClapTrap::getMaxPoints(void)
 	tmp = this->_MAX_HIT_POINTS;
 	return (tmp);
 }
+
 unsigned int ClapTrap::getObjectColor(void){return (_objectColor);}
+
+/**
+ * @brief Retrieves the class color of the ClapTrap.
+ * 
+ * This function returns the class color of the ClapTrap instance, which is
+ * stored in the private member variable _CLASS_COLOR.
+ * 
+ * @return unsigned int The class color of the ClapTrap.
+ */
+unsigned int ClapTrap::getClassColor(void)
+{
+	unsigned int tmp;
+	tmp = this->_CLASS_COLOR;
+	return (tmp);
+}
 /**
  * @brief Gets the number of ClapTrap objects.
  * 
@@ -177,21 +203,22 @@ int ClapTrap::getObjects(void){return (static_cast<int>(_objectColor - FGRAY));}
  */
 void ClapTrap::printStatus(void)
 {
-	std::cout << "[" + setColor(className(className(typeid(*this).name())), FGRAY, 0) << " " << *this
+	std::cout << "[" + setColor(className(className(typeid(*this).name())), this->getClassColor(), 0)
+	<< " " << this->getName()
 	<< setColor(" HP:" + toString(static_cast<int>(getHitPoints())), FLGREEN, 0) << ", "
 	<< setColor("EP:" + toString(static_cast<int>(getEnergyPoints())), FLYELLOW, 0) << ", "
 	<< setColor("AD:" + toString(static_cast<int>(getAttackDamage())), FLMAGENTA, 0) << ", "
-	<< setColor("RP:" + toString(static_cast<int>(getRecoveryPoints())), FLCYAN, 0) << "]"
-	<< setColor(" MaxPoints: " + toString(static_cast<int>(getMaxPoints())), FGRAY, 0) << "\n";
+	<< setColor("RP:" + toString(static_cast<int>(this->getRecoveryPoints())), FLCYAN, 0) << "] "
+	<< setColor(" MaxPoints: " + toString(static_cast<int>(this->getMaxPoints())), FGRAY, 0) << "\n";
 }
-
+// 
 // std::string ClapTrap::getName(void){return (_name.color + _name.str + C_DEFAULT);}
 /**
  * @brief Gets the name of the ClapTrap object.
  * 
  * @return std::string The name of the ClapTrap object.
  */
-std::string ClapTrap::getName(void){return (_name.getName());}
+std::string ClapTrap::getName(void){return (this->_name.getName());}
 
 /**
  * @brief Overloads the << operator for the ClapTrap class.

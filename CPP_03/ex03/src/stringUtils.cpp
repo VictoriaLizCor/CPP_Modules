@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/25 10:35:16 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/26 15:43:41 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,23 @@ std::string	setColor(const std::string& msg, unsigned int color, bool err)
 	strColor << msg << C_DEFAULT;
 	return (strColor.str());
 }
+
+std::string	setColor(const std::string& msg, std::string const& color, bool err)
+{
+	std::ostringstream strColor;
+	std::string	fmt;
+
+	fmt = C_FMT;
+	if (err)
+		strColor << fmt << FRED << "m" << "ERROR:";
+	else
+		strColor << color;
+	if (msg.empty())
+		return (strColor.str());
+	strColor << msg << C_DEFAULT;
+	return (strColor.str());
+}
+
 
 /**
  * @brief Converts an integer value to a string.
