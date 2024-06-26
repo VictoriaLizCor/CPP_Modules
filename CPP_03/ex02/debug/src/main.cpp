@@ -86,7 +86,7 @@ int main(void)
 
 	std:: string obj = "Obj";
 
-	FragTrap o1(obj);
+	ScavTrap o1(obj);
 	FragTrap o2(obj, getRandomNum(o1.getMaxPoints() - 1) + 1);
 	startClapTrap(o1, o2);
 	{

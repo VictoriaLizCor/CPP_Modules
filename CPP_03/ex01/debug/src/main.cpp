@@ -85,7 +85,7 @@ int main(void)
 
 	std:: string obj = "Obj";
 
-	ScavTrap o1(obj, getRandomNum(o1.getMaxPoints() - 1) + 1);
+	ClapTrap o1(obj, getRandomNum(o1.getMaxPoints() - 1) + 1);
 	ScavTrap o2(obj, getRandomNum(o1.getMaxPoints() - 1) + 1);
 	startClapTrap(o1, o2);
 	{
