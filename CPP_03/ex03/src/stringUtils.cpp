@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/17 12:32:12 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/22 10:00:40 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/26 15:43:41 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void coutnl(std::ostream& os)
  * @param err A boolean flag indicating whether the message is an error message.
  * @return The formatted message string.
  */
-std::string	setColor(const std::string& msg, int color, bool err)
+std::string	setColor(const std::string& msg, unsigned int color, bool err)
 {
 	std::ostringstream strColor;
 	std::string	fmt;
@@ -71,6 +71,23 @@ std::string	setColor(const std::string& msg, int color, bool err)
 	strColor << msg << C_DEFAULT;
 	return (strColor.str());
 }
+
+std::string	setColor(const std::string& msg, std::string const& color, bool err)
+{
+	std::ostringstream strColor;
+	std::string	fmt;
+
+	fmt = C_FMT;
+	if (err)
+		strColor << fmt << FRED << "m" << "ERROR:";
+	else
+		strColor << color;
+	if (msg.empty())
+		return (strColor.str());
+	strColor << msg << C_DEFAULT;
+	return (strColor.str());
+}
+
 
 /**
  * @brief Converts an integer value to a string.
@@ -240,11 +257,13 @@ size_t	maxStringLength(int arraySize, std::string* arrayData)
  * @param width The total width of the field in which to center the string.
  * @return std::string The centered string, padded with spaces.
  */
-std::string	center(const std::string& s, int width)
+std::string	center(const std::string& s, std::string::size_type width)
 {
-	int padding = width - s.size();
-	int left = padding / 2 + padding % 2;
-	int right = padding / 2;
+	if (width <= s.size())
+		return s;
+	std::string::size_type padding = width - s.size();
+	std::string::size_type left = padding / 2 + padding % 2;
+	std::string::size_type right = padding / 2;
 	return (std::string(left, ' ') + s + std::string(right, ' '));
 }
 

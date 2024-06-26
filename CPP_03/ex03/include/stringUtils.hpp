@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/26 15:13:36 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/06/22 09:37:35 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/06/26 15:44:03 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef enum eColor
 	FMAGENTA		= 95,
 	FCYAN			= 96,
 	FWHITE			= 97,
-	BGRAY			= 100,
+	BGRAY			= 100
 } t_color;
 
 /**
@@ -81,13 +81,14 @@ struct s_coloredName
 typedef s_coloredName t_Name;
 void 		coutnl(std::ostream& os);
 std::string	toString(int value);
-std::string	setColor(const std::string& msg, int color, bool err);
+std::string	setColor(const std::string& msg, unsigned int color, bool err);
+std::string	setColor(const std::string& msg, std::string const& color, bool err);
 std::string	getColorStr(t_Name const& name);
 std::string setRandomColor(int bold);
 bool		checkInput(const std::string& str, int (*check_type)(int));
 bool		isOnlySpaces(const std::string& str);
 size_t		maxStringLength(int fieldSize, std::string* arrayData);
-std::string	center(const std::string& s, int width);
+std::string	center(const std::string& s, std::string::size_type width);
 std::string	className(const std::string& str);
 
 #endif

@@ -1,7 +1,7 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 -Werror #-Wunused
+D_FLAGS		= -Wall -Wextra -std=c++98 -Werror -Wno-unused-function -Wshadow -Wunused
 INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR		:= src/
@@ -12,13 +12,13 @@ DIRS		:= $(abspath $(dir $(shell find $(PROJECT_ROOT) -name Makefile | sort)))
 CURRENT		:= $(shell basename $$PWD)
 DEBUG_FILES	:= debug
 #------ DEBUG FLAG ------#
-D			= 1
+D			= 0
 #------ Sanitizer Flag ------#
 S			= 0
 #------ DEBUG UTILS ------#
-CC			:= c++
-MAKEFLAGS	+= --no-print-directory
-VALGRIND	:= valgrind -s --leak-check=yes --show-leak-kinds=all
+CXX			:= c++
+MAKEFLAGS	+= --no-print-directory #--jobs
+VALGRIND	:= valgrind -s --leak-check=yes --show-leak-kinds=all -q 
 HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
 BUILD_DIR	:= .build/
@@ -26,10 +26,12 @@ DEBUG_DIR	:= $(NAME).dSYM
 
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
-CC			= g++
+CXX			= g++
 SRC			+= $(shell find $(DEBUG_FILES) -name '*.cpp')
 INCLUDES	+= -I $(DEBUG_FILES)/include
 D_FLAGS		+= -DDEBUG=$(D)
+D_FLAGS		+= -Wconversion -Wsign-conversion -pedantic
+D_FLAGS		+= -fno-omit-frame-pointer
 else
 SRC			+= $(SRC_DIR)main.cpp
 endif
@@ -42,12 +44,12 @@ OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
 # The `vpath` directive in a Makefile is used to specify a list of directories
 # that `make` should search when it's looking for prerequisites.
 vpath %.cpp $(sort $(dir $(SRC)))
-# OBJS := $(patsubst $(SRC_DIR)%.cpp,$(nodir ($(BUILD_DIR)%.o)),$(SRC))
 DEPS		:= $(OBJS:.o=.d)
 #------ INCLUDE SANATIZER FLAGS ------#
-D_FLAGS		+= -O0 -g3
-D_FLAGS		+= -fsanitize=address,undefined
+D_FLAGS		+= -O0 -g3 #-Og optimization + good debuggin experience
+D_FLAGS		+= -fsanitize=address,undefined,vptr
 endif
+
 #-------------------- RULES ----------------------------#
 all: $(NAME)
 
@@ -58,14 +60,14 @@ endif
 	@printf "\n"
 	@printf "$(LF)📚 $(P_BLUE)Create $(P_GREEN)$@ 📚\n"
 	@echo $(GREEN)
-	@printf "$(CC) $(D_FLAGS) $(INCLUDES) $(P_YELLOW) $^ $(P_GREEN) -o $@ $(FG_TEXT) \n\n";
-	@$(CC) $(D_FLAGS) $(INCLUDES) $^ -o $(NAME)
+	@printf "$(CXX) $(D_FLAGS) $(INCLUDES) $(P_YELLOW) $^ $(P_GREEN) -o $@ $(FG_TEXT) \n\n";
+	@$(CXX) $(D_FLAGS) $(INCLUDES) $^ -o $(NAME)
 	@printf "\n$(LF)🎉 $(P_BLUE)Successfully Created $(P_GREEN)$@! 🎉\n$(P_NC)"
 	@echo $(BANNER)
 
 ifneq ($(S), 0)
 $(OBJS): $(BUILD_DIR)%.o : %.cpp | $(BUILD_DIR)
-	@$(CC) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
+	@$(CXX) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 	@printf "$(LF)🚧 $(P_BLUE)Creating $(P_YELLOW)$@ $(P_BLUE)from $(P_YELLOW) $< $(FG_TEXT)"
 
 $(BUILD_DIR):
@@ -95,12 +97,11 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all re fclean clean 
 #------------- TEST UTILS -----------------------------------#
 test:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
-	@./$(NAME) | cat
-#	@echo "-----\n"
+	@./$(NAME)
 # ATTENTION !!!!!!!!!!!!!!  USE WITH S=0 !
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)  "\n"

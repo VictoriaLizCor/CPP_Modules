@@ -9,7 +9,7 @@ std::string objName()
 	static unsigned int num;
 
 	std::ostringstream os;
-	os << "Obj_" << (++num);
+	os << "Obj" << (++num);
 	return (os.str());
 }
 

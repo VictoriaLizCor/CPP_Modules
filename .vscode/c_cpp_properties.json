@@ -5,7 +5,8 @@
             "includePath": [
 				"${workspaceFolder}/**",
                 // "${workspaceFolder}/CPP_03/ex00/include",
-				"${workspaceFolder}/CPP_03/ex01/include"
+				//"${workspaceFolder}/CPP_03/ex01/include"
+				"${workspaceFolder}/CPP_03/ex03/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

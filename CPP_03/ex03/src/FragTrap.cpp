@@ -1,6 +1,33 @@
 #include "FragTrap.hpp"
 
 unsigned int FragTrap::_MAX_HIT_POINTS = 100;
+unsigned int FragTrap::_CLASS_COLOR = FLWHITE;
+
+/**
+ * @brief Sets the recovery points for the FragTrap.
+ * 
+ * This method calculates the recovery points by subtracting the attack damage
+ * from the maximum points of the FragTrap and updates the _recoveryPoints
+ * member variable with this value.
+ */
+void FragTrap::setRecoveryPoints(void)
+{
+	_recoveryPoints = this->getMaxPoints() - this->_attackDamage;
+}
+
+/**
+ * @brief Initializes the FragTrap instance.
+ * 
+ * This method sets the initial state of a FragTrap instance by setting its
+ * hit points to the maximum points value, initializing energy points to 100,
+ * and setting the attack damage to 30.
+ */
+void FragTrap::initialize()
+{
+	this->_hitPoints = this->getMaxPoints();
+	this->_energyPoints = 100; 
+	setAttackDamage(30);
+}
 
 /**
  * @brief Constructs a new FragTrap object with default values.
@@ -10,10 +37,12 @@ unsigned int FragTrap::_MAX_HIT_POINTS = 100;
  * values. It also activates guard mode immediately upon creation.
  */
 FragTrap::FragTrap(void):
-ClapTrap("DefaultFragTrap", 100, 100 , 30)
+ClapTrap("Default_FragTrap")
 {
+	this->initialize();
 	highFivesGuys();
-};
+	printStatus();
+}
 
 /**
  * @brief Constructs a new FragTrap object.
@@ -25,10 +54,12 @@ ClapTrap("DefaultFragTrap", 100, 100 , 30)
  * @param name The name for the FragTrap object.
  */
 FragTrap::FragTrap(std::string const& name):
-ClapTrap(name, 100, 100 , 30)
+ClapTrap(name)
 {
+	this->initialize();
 	highFivesGuys();
-};
+	printStatus();
+}
 
 /**
  * @brief Constructs a new FragTrap object.
@@ -40,9 +71,11 @@ ClapTrap(name, 100, 100 , 30)
  * @param name The name for the FragTrap object.
  */
 FragTrap::FragTrap(std::string const& name, unsigned int attackDamage):
-ClapTrap(name, 100 , 100 , attackDamage)
+ClapTrap(name, attackDamage)
 {
+	initialize();
 	highFivesGuys();
+	printStatus();
 }
 
 /**
@@ -61,8 +94,10 @@ unsigned int energyPoints,
 unsigned int attackDamage):
 ClapTrap(name, hitPoints , energyPoints , attackDamage)
 {
+	initialize();
 	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0)<< " " <<
 	*this << setColor(" was Created", FGRAY, 0) << std::endl;
+	printStatus();
 }
 
 /**
@@ -80,9 +115,8 @@ FragTrap&::FragTrap::operator=(ClapTrap const& rhs)
 	if (this != &rhs) {
 		ClapTrap::operator=(rhs);
 	}
-	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " " 
-	<< *this << setColor(" Copy was Created ", FGRAY, 0) << std::endl ;
-	return *this;
+	printStatus();
+	return (*this);
 }
 /**
  * @brief Copy constructor for FragTrap.
@@ -94,8 +128,8 @@ FragTrap&::FragTrap::operator=(ClapTrap const& rhs)
  */
 FragTrap::FragTrap(ClapTrap const& rhs): ClapTrap(rhs)
 {
-	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " " 
-	<< *this << setColor(" Copy was Created ", FGRAY, 0) << std::endl ;
+	initialize();
+	printStatus();
 }
 
 /**
@@ -109,9 +143,28 @@ FragTrap::FragTrap(ClapTrap const& rhs): ClapTrap(rhs)
  */
 FragTrap::~FragTrap()
 {
-	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0)<< " " <<
+	std::cout << setColor(className(typeid(*this).name()), _CLASS_COLOR, 0)<< " " <<
 	*this << setColor(" was Destroyed", FGRAY, 0) << std::endl;
 }
+
+/**
+ * @brief Executes an attack on a target.
+ * 
+ * This function prints a message to the console indicating that the ScavTrap
+ * instance has attacked a target, specifying the target and the amount of
+ * damage dealt. It also decrements the energy points of the FragTrap instance
+ * by one.
+ * 
+ * @param target The name of the target being attacked.
+ */
+void FragTrap::attack(std::string const& target)
+{
+	std::cout << setColor(className(typeid(*this).name()), _CLASS_COLOR, 0) << " " <<
+	*this << " " << setColor("attacks", BRED, 0) << " ⚒️  " << target <<
+	", causing " << _attackDamage << " points of damage!" << std::endl;
+	_energyPoints--;
+}
+
 
 /**
  * @brief Retrieves the maximum hit points for ScavTrap.
@@ -126,6 +179,36 @@ FragTrap::~FragTrap()
 unsigned int FragTrap::getMaxPoints(void){return (_MAX_HIT_POINTS);}
 
 /**
+ * @brief Retrieves the class color of the FragTrap.
+ * 
+ * This function returns the class color of the FragTrap instance, which is
+ * stored in the private member variable _CLASS_COLOR.
+ * 
+ * @return unsigned int The class color of the FragTrap.
+ */
+unsigned int FragTrap::getClassColor(void)
+{
+	unsigned int tmp;
+	tmp = this->_CLASS_COLOR;
+	return (tmp);
+}
+
+/**
+ * @brief Retrieves the recovery points of the FragTrap.
+ * 
+ * This function returns the current recovery points of the FragTrap instance.
+ * The recovery points are stored in the private member variable _recoveryPoints.
+ * 
+ * @return unsigned int The current recovery points of the FragTrap.
+ */
+unsigned int FragTrap::getRecoveryPoints(void)
+{
+	unsigned int tmp;
+	tmp = _recoveryPoints;
+	return (tmp);
+}
+
+/**
  * @brief Requests high fives from guys.
  * 
  * This method prints a message to the console requesting high fives, 
@@ -134,6 +217,6 @@ unsigned int FragTrap::getMaxPoints(void){return (_MAX_HIT_POINTS);}
  */
 void FragTrap::highFivesGuys(void)
 {
-	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " "
+	std::cout << setColor(className(typeid(*this).name()), _CLASS_COLOR, 0) << " "
 	<< *this << " says High fives guys! 🙌 🙌 🙏\n";
 }

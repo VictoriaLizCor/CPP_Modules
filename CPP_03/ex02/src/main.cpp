@@ -87,6 +87,7 @@ int main(void)
 	std::cout << "\n" << i << " ========== CLAPTRAP STOPS ==========\n\n";
 	{
 		ClapTrap c1;
+		c1.printStatus();
 		FragTrap f1=c1;
 		f1.printStatus();
 	}
