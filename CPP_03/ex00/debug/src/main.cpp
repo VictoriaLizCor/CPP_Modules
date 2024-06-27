@@ -71,14 +71,14 @@ int main(void)
 	ClapTrap o2(objName());
 	o2.setAttackDamage(static_cast<unsigned int>(getRandomNum(o2.getMaxPoints() - 1) + 1));
 	startClapTrap(o1, o2);
-	{
-		ClapTrap o3(o1);
-		ClapTrap o4(o2);
-		std::cout << "*******************************************\n";
-		startClapTrap(o3, o4);
+	// {
+	// 	ClapTrap o3(o1);
+	// 	ClapTrap o4(o2);
+	// 	std::cout << "*******************************************\n";
+	// 	startClapTrap(o3, o4);
 
-		ClapTrap o5;
-	}
+	// 	ClapTrap o5;
+	// }
 	return (0);
 }
 #endif

@@ -65,7 +65,7 @@ int main(void)
 {
 	std:: string obj = "Obj";
 	bool KO = 0;
-	Trap o1(obj);
+	ScavTrap o1(obj);
 	ScavTrap o2(obj);
 	int i = 0;
 	std::cout << "\n" << i << " ========== CLAPTRAP BEGINS ==========\n\n";
