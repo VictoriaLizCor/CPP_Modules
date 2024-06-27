@@ -114,6 +114,24 @@ FragTrap::~FragTrap()
 }
 
 /**
+ * @brief Executes an attack on a target.
+ * 
+ * This function prints a message to the console indicating that the ScavTrap
+ * instance has attacked a target, specifying the target and the amount of
+ * damage dealt. It also decrements the energy points of the FragTrap instance
+ * by one.
+ * 
+ * @param target The name of the target being attacked.
+ */
+void FragTrap::attack(std::string const& target)
+{
+	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " " <<
+	*this << " " << setColor("attacks", BRED, 0) << " ⚒️  " << target <<
+	", causing " << _attackDamage << " points of damage!" << std::endl;
+	_energyPoints--;
+}
+
+/**
  * @brief Retrieves the maximum hit points for ScavTrap.
  * 
  * This function returns the maximum hit points value, defined by the

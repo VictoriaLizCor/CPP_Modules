@@ -126,7 +126,7 @@ ScavTrap::~ScavTrap()
 void ScavTrap::attack(std::string const& target)
 {
 	std::cout << setColor(className(typeid(*this).name()), FLWHITE, 0) << " " <<
-	*this << " " << setColor("attacks", BRED, 0) << " " << target <<
+	*this << " " << setColor("attacks", BRED, 0) << " ⚔️  " << target <<
 	", causing " << _attackDamage << " points of damage!" << std::endl;
 	_energyPoints--;
 }

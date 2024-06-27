@@ -208,6 +208,7 @@ unsigned int FragTrap::getRecoveryPoints(void)
 	return (tmp);
 }
 
+
 /**
  * @brief Requests high fives from guys.
  * 

@@ -20,6 +20,7 @@ class FragTrap : public ClapTrap
 		virtual ~FragTrap();
 
 		unsigned int	getMaxPoints(void);
+		void			attack( std::string const& target );
 		void			highFivesGuys( void );
 };
 #endif
