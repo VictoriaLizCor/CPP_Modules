@@ -1,9 +1,7 @@
-####################################
 * Fix: 
-#   In under 50 characters, description of the commit
+# In under 50 characters, description of the commit
 # Explain in detail what was done in this commit and after new line to be
 # recognized as commit body. Keep this section under 72 characters per line.
-
 ####################################
 # Use the prefix naming convention 
 ####################################
@@ -12,7 +10,8 @@
 # Refactor: refactored code that neither fixes a bug nor adds a feature 
 # Docs :  updates to documentation such as a the README or other markdown files
 # Build: changes that affect the build system or external dependencies 
-# Style: changes that do not affect the meaning of the code, likely related to code formatting such as white-space, missing semi-colons, and so on.
+# Style: changes that do not affect the meaning of the code, likely related to code 
+# formatting such as white-space, missing semi-colons, and so on.
 # Perf : improves code performance
 # CI   : continuous integration related
 # Test : including new or correcting previous tests 

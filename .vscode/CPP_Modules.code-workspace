@@ -1,8 +1,39 @@
 {
 	"folders": [
 		{
-			"path": ".."
+			"path": "..",
+			"name": "CPP_Modules"
 		},
+		{
+            "path": "CPP_00",
+            "name": "Module 00"
+        },
+		{
+            "path": "CPP_01",
+            "name": "Module 01"
+        },
+		{
+            "path": "CPP_02",
+            "name": "Module 02"
+        },
+		{
+            "path": "CPP_03",
+            "name": "Module 03"
+        },
+		// {
+        //     "path": "CPP_0",
+        //     "name": "Module 0"
+        // },
+		// {
+        //     "path": "CPP_0",
+        //     "name": "Module 0"
+        // },{
+        //     "path": "CPP_0",
+        //     "name": "Module 0"
+        // },{
+        //     "path": "CPP_0",
+        //     "name": "Module 0"
+        // },
 	],
 	"settings": {
 		"files.associations": {

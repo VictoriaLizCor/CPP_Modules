@@ -50,11 +50,12 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
-
+/*/*/.vscode
 # Ignored folders
 # test*/
 obj*/
 #.vscode*/
 msg_template
 #evals/
+/*/*/ex*
 *.DS_Store

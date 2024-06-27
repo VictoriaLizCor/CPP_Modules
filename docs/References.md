@@ -10,4 +10,7 @@
 
 ## Microsoft Explanation!
 * https://learn.microsoft.com/en-us/cpp/build/ieee-floating-point-representation?view=msvc-170
+## CROSS POINT
+https://www.baeldung.com/cs/check-if-point-is-in-2d-triangle
+
 <!-- CVb3d2023-->

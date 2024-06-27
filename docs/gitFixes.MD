@@ -35,7 +35,7 @@ git merge branch-to-merge
 ```
 ## Change merge default message
 ```bash
-git merge --edit branch-to-merge
+git merge --e branch-to-merge
 ```
 # Delete the merged branch locally
 ```bash
@@ -149,13 +149,28 @@ By default, the submodule will be added in a directory named after the repositor
 git submodule add https://github.com/username/repo.git path/to/submodule
 ```
 
-3. Commit and push the changes.
+After adding the submodule, you can directly initialize and update it (if necessary) with:
 
-```bash
-git commit -m "Added submodule"
+```sh
+git submodule update --init --recursive
+```
+
+However, to add and initialize in one go, you just use the `git submodule add` command, and initialization is implicitly done when you clone the repository with the `--recurse-submodules` option or when other users clone your repository.
+
+3. **Commit the changes** to save the addition of the submodule to your project:
+
+```sh
+git add .gitmodules <path-to-submodule>
+git commit -m "Added and initialized submodule at <path-to-submodule>"
+```
+
+4. **Push the changes** to your remote repository (if applicable):
+
+```sh
 git push
 ```
-4. UpdateSubmodule
+
+5. UpdateSubmodule
 
 ```bash
 git submodule sync

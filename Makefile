@@ -1,9 +1,9 @@
 MAKEFLAGS			+= --no-print-directory
 GIT_REPO				:= $(shell basename $$PWD)
 ROOT_CPP_MODULES	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/)
-DIRS				:= $(abspath $(dir ${shell find ./*/ -type d -name "CPP_02*" |sort}))
+DIRS				:= $(abspath $(dir ${shell find ./*/ -type d -name "CPP_03*" |sort}))
 #------ DEBUG ------#
-D			= 0
+D			= 1
 #------ Sanitizer ------#+
 S			= 0
 #--------------------UTILS----------------------------#
@@ -12,7 +12,12 @@ all:
 	@for mod in $(DIRS); do \
 		echo "\n"$(BLUE)$$(basename $$mod) $(E_NC) ; \
 		for subdir in $$(find $$mod -type d -name "ex0*" | sort); do \
+			echo $(MAG) "\n$(MAKE) -C $$subdir D=$(D) re test" $(E_NC); \
 			$(MAKE) -C $$subdir D=$(D) re test; \
+			r=$$?; \
+			if [ $$r -ne 0 ]; then \
+				echo $(RED) "ERROR in $$subdir" $(E_NC); \
+			fi \
 		done; \
 	done
 
@@ -33,67 +38,84 @@ dirs:
 	done;
 gAdd:
 	@echo $(CYAN) && git add $(ROOT_CPP_MODULES)
-
 gCommit:
-	@echo $(GREEN) && git commit -e
-
+	@echo $(GREEN) && git commit -e ; \
+	ret=$$? ; \
+	if [ $$ret -ne 0 ]; then \
+		echo $(RED) "Error in commit message"; \
+		exit 1; \
+	fi
 gPush:
-	@echo $(YELLOW) && git push > /dev/null || \
-	if [ $$? -ne 0 ]; then \
+	@echo $(YELLOW) && git push ; \
+	ret=$$? ; \
+	if [ $$ret -ne 0 ]; then \
 		echo $(RED) "git push failed, setting upstream branch\n" $(YELLOW) && \
 		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \
-			echo $(RED) "git push --set-upstream failed with error"; \
-		fi; \
-		echo $(E_NC); \
+			echo $(RED) "git push --set-upstream failed with error" $(E_NC); \
+		fi \
 	fi
 # @echo $(YELLOW) && git push > /dev/null || \
 # (echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
 # git push --set-upstream origin $(shell git branch --show-current))
 #make DIRS=$CPP/CPP_0* cleanAll
-git: cleanAll gAdd gCommit gPush
-# make log m=style
+git: cleanAll gAdd
+	@$(MAKE) -C . gCommit; \
+	ret=$$?; \
+	if [ $$ret -ne 0 ]; then \
+		exit 1; \
+	else \
+		$(MAKE) -C . gPush; \
+	fi
+
 mlog:
 	@git log -5 --pretty=format:"'%h'%m%s {%cd} %b" --date=format:'%Y-%m-%d %H:%M' | \
 	pygmentize -g -O  style=$$m | cut -d'|' -f1
 plog:
 	@git log -5 --pretty=format:"{%cd} (%h) %m %B" --date=format:'%Y-%m-%d %H:%M' |\
 	pygmentize -g -O  style=material
-#	git log -4 --abbrev-commit --no-color | pygmentize -g -O style=material
-
-# quick:cleanAll gAdd
-# # git commit --amend --no-edit 
-# 	@script -q /dev/null -c "git status --porcelain -b -s " > msg_template
-# 	@git status --porcelain -b -s > msg_template
-# 	@git commit -aF msg_template
-# 	@rm msg_template
-# 	$(MAKE) gPush
 
 quick: cleanAll
-	@echo $(GREEN) && \
-	git commit -am "* Update in files: '\
-	$(shell git diff --name-only --diff-filter=M | paste -sd ", " -)'"
-	@echo $(YELLOW) && git push
-
-# //avoid last commit message
+	@echo $(GREEN) && git commit -am "* Update in files: "; \
+	ret=$$? ; \
+	if [ $$ret -ne 0 ]; then \
+		exit 1; \
+	else \
+		$(MAKE) -C . gPush; \
+	fi
+#$(shell git diff --name-only --diff-filter=M | awk 'NR > 1 {print prev","} {prev=$$0} END {print $0}')"
+# Avoid last commit message
 soft:
-	@echo && echo $(GREEN) "Last 10 commits:" $(E_NC)
+	@echo $(GREEN) "\nLast 10 commits:" $(E_NC)
 	@$(MAKE) plog && echo 
 	@read -p "Do you want to reset the last commit? (y/n) " yn; \
 	case $$yn in \
 		[Yy]* ) git reset --soft HEAD~1;\
 		git push origin --force-with-lease $(shell git branch --show-current) ;\
 		echo $(RED) "Last commit reset" $(E_NC) ;; \
-		* ) echo $(YELLOW) "No changes made" $(E_NC) ;; \
+		* ) echo $(MAG) "No changes made" $(E_NC) ;; \
 	esac
 amend:
-	@git commit --amend
-	@echo $(YELLOW) && git push origin --force-with-lease $(shell git branch --show-current)
+	@echo $(CYAN) && git commit --amend; \
+	result=$$?; \
+	if [ $$result -ne 0 ]; then \
+		echo $(RED) "The amend commit message was not modified."; \
+		exit 1; \
+	else \
+		echo $(YELLOW) && git push origin --force-with-lease $(shell git branch --show-current); \
+		exit 0; \
+	fi
 template:
 	@git config --local commit.template .settings/.gitmessage
 pre-commit:
 	cp .settings/prepare-commit-msg .git/hooks/
 	chmod +x .git/hooks/prepare-commit-msg
+commit-msg:
+	cp .settings/commit-msg .git/hooks/
+	chmod +x .git/hooks/commit-msg
+post-merge:
+	cp .settings/post-merge .git/hooks/
+	chmod +x .git/hooks/post-merge
 showcolors:
 	@i=0; \
 	while [ $$i -le 255 ]; do \
@@ -121,37 +143,38 @@ colog:
 # git reset --soft HEAD~1 undoes the last commit and leaves your
 # files and staging area in the state they were in prior to the commit. This is
 # useful if you made a commit prematurely and need to add more changes or modify
-# the commit message.
+# the commit message. 
 .PHONY: gAdd gCommit gPush git gQuick fclean log norm test
 #--------------------COLORS---------------------------#
 # For print
-CL_BOLD = \e[1m
-RAN = \033[48;5;237m\033[38;5;255m
-NC = \033[m
-P_RED = \e[1;91m
-P_GREEN = \e[1;32m
-P_BLUE = \e[0;36m
+CL_BOLD  = \e[1m
+RAN      = \033[48;5;237m\033[38;5;255m
+NC       = \033[m
+P_RED    = \e[1;91m
+P_GREEN  = \e[1;32m
+P_BLUE   = \e[0;36m
 P_YELLOW = \e[1;33m
-P_CCYN = \e[0;1;36m
-P_NC = \e[0m
-LF = \e[1K\r$(P_NC)
-FG_TEXT = $(P_NC)\e[38;2;189;147;249m
+P_CCYN   = \e[0;1;36m
+P_NC     = \e[0m
+LF       = \e[1K\r$(P_NC)
+FG_TEXT  = $(P_NC)\e[38;2;189;147;249m
 # For bash echo
-CLEAR = "\033c"
-BOLD = "\033[1m"
-CROSS = "\033[8m"
-RED = "\033[1;91m"
-GREEN = "\033[1;32m"
-BLUE = "\033[1;34m"
+CLEAR  = "\033c"
+BOLD   = "\033[1m"
+CROSS  = "\033[8m"
+E_NC   = "\033[m"
+RED    = "\033[1;31m"
+GREEN  = "\033[1;32m"
 YELLOW = "\033[1;33m"
-E_NC	= "\033[m"
-CYAN = "\033[0;1;36m"
-GRAY = "\033[1;90m"
+BLUE   = "\033[1;34m"
+MAG    = "\033[1;35m"
+CYAN   = "\033[0;1;36m"
+GRAY   = "\033[1;90m"
 BANNER = "$$CPP"
 TRASH_BANNER = "$$TRASH"
 #------------- TEST UTILS -----------------------------------#
 list:
-	@ls -la ./*/*
+	@ls --color=auto -Rla $(DIRS)
 
 define CPP
 	   $(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢟⡋⣇⠧⣹⢰⡛⡻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
@@ -187,3 +210,5 @@ define TRASH
 
 endef
 export TRASH
+ 
+~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~

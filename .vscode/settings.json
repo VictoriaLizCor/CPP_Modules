@@ -20,8 +20,8 @@
 	], // Compiler options
 	"compiler-explorer.debug": true,
 	"compiler-explorer.include": [
-		"${workspaceFolder}/CPP_01/ex04/src/${workspaceFolder}/CPP_01/ex04/src/main.cpp",
-	//	"${workspaceFolder}/CPP_00/ex01/src/${workspaceFolder}/CPP_00/ex01/src/my_awesome_phonebook.cpp"
+		// "${workspaceFolder}/CPP_01/ex04/src/${workspaceFolder}/CPP_01/ex04/src/main.cpp",
+		//	"${workspaceFolder}/CPP_00/ex01/src/${workspaceFolder}/CPP_00/ex01/src/my_awesome_phonebook.cpp"
 	],
 	"window.customTitleBarVisibility": "auto",
 	"rewrap.wrappingColumn": 80,
@@ -79,7 +79,9 @@
 		"iomanip": "cpp",
 		"sstream": "cpp",
 		"fstream": "cpp",
-		"bitset": "cpp"
+		"bitset": "cpp",
+		"chrono": "cpp",
+		"ratio": "cpp"
 	},
 	"C_Cpp.dimInactiveRegions": false,
 	"doxdocgen.generic.commandSuggestionAddPrefix": true, // true indicates that the extension will print debug to its output channel.
@@ -87,7 +89,7 @@
 	{
 		"**/CPP_00": true,
 		"**/CPP_01": true,
-		// "**/CPP_02": true,
+		"**/CPP_02": true,
 	},
 	"accessibility.signalOptions": {
 		"volume": 0
