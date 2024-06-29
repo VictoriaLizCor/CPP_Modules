@@ -2,10 +2,10 @@
 
 Dog::Dog()
 {
-	// Constructor implementation
+
 }
 
 Dog::~Dog()
 {
-	// Destructor implementation
+
 }

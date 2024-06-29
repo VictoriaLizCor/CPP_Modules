@@ -2,10 +2,10 @@
 
 Animal::Animal()
 {
-	// Constructor implementation
+
 }
 
 Animal::~Animal()
 {
-	// Destructor implementation
+
 }

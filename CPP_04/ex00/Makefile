@@ -169,24 +169,25 @@ soft:
 		echo $(RED) GIT_REPO not found $(E_NC); \
 	fi
 cpp: # Usage: make cpp h=filename
+	@if [ ! -d "src" ]; then \
+		mkdir src; \
+		printf "#include <iostream>\n\nint main(void)\n {\n\n\treturn (0);\n}\n" > src/main.cpp; \
+		echo "src/main.cpp was created"; \
+	fi
 	@if [ ! -d "include" ]; then \
 		mkdir include; \
 	fi
-	@if [ ! -d "src" ]; then \
-		mkdir src; \
-		printf "#include <iostream>\n\nint main(void)\n {\n\t// Your code here\n\treturn (0);\n}\n" > src/main.cpp; \
-	fi
 	@if [ ! -f "include/$(h).hpp" ]; then \
 		printf "#ifndef $(shell echo $(h) | tr a-z A-Z)_HPP\n#define $(shell echo $(h) | tr a-z A-Z)_HPP\n\nclass $(h)\n{\n\tpublic:\n\t$(h)();\n\t~$(h)();\n};\n\n#endif // $(shell echo $(h) | tr a-z A-Z)_HPP\n" > include/$(h).hpp; \
+		echo "include/$(h).hpp was created"; \
 	fi
 	@for file in include/*.hpp; do \
 		if [ ! -f "src/$$(basename "$${file%.*}").cpp" ]; then \
-			printf "#include \"$${file}\"\n\n$(h)::$(h)()\n{\n\t// Constructor implementation\n}\n\n$(h)::~$(h)()\n{\n\t// Destructor implementation\n}\n" > src/$$(basename "$${file%.*}").cpp; \
-		else \
-			echo "src/$$(basename "$${file%.*}").cpp exists"; \
+			printf "#include \"$${file}\"\n\n$(h)::$(h)()\n{\n\n}\n\n$(h)::~$(h)()\n{\n\n}\n" > src/$$(basename "$${file%.*}").cpp; \
+			echo "src/$$(basename "$${file%.*}").cpp was created"; \
 		fi; \
 	done
-	@echo ; ls -R include src
+	@echo "Content:"; find . -type f \( -name "*.cpp" -o -name "*.hpp" \)
 #--------------------COLORS----------------------------#
 # For print
 CL_BOLD  = \e[1m
