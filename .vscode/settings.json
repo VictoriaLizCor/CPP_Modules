@@ -3,7 +3,7 @@
 	// "[osx]":
 	// "editor.fontSize": 13.5,
 	// "[linux]":
-	"editor.fontSize": 13.7,
+	"editor.fontSize": 13.5,
 	"window.zoomLevel": 0.3,
 	/*FOR BOTH*/
 	"makefile.makePath": "./Makefile",
