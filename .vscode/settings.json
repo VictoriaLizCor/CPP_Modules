@@ -6,6 +6,9 @@
 	"editor.fontSize": 13.7,
 	"window.zoomLevel": 0.3,
 	/*FOR BOTH*/
+	"makefile.makePath": "./Makefile",
+	"makefile.showOnStartup": false,
+	"terminal.integrated.shell.linux": "/bin/bash",
 	"workbench.startupEditor": "none",
 	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,

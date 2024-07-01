@@ -169,46 +169,48 @@ soft:
 		echo $(RED) GIT_REPO not found $(E_NC); \
 	fi
 cpp: # Usage: make cpp h=filename
+	@if [ ! -d "src" ]; then \
+		mkdir src; \
+		printf "#include <iostream>\n\nint main(void)\n {\n\n\treturn (0);\n}\n" > src/main.cpp; \
+		echo "src/main.cpp was created"; \
+	fi
 	@if [ ! -d "include" ]; then \
 		mkdir include; \
 	fi
-	@if [ ! -d "src" ]; then \
-		mkdir src; \
-		touch src/main.cpp; \
-	fi
-	@if [ ! -f "include/$(h)" ]; then \
-		touch include/$(h); \
+	@if [ ! -f "include/$(h).hpp" ]; then \
+		printf "#ifndef $(shell echo $(h) | tr a-z A-Z)_HPP\n#define $(shell echo $(h) | tr a-z A-Z)_HPP\n\nclass $(h)\n{\n\tpublic:\n\t$(h)();\n\t~$(h)();\n};\n\n#endif // $(shell echo $(h) | tr a-z A-Z)_HPP\n" > include/$(h).hpp; \
+		echo "include/$(h).hpp was created"; \
 	fi
 	@for file in include/*.hpp; do \
 		if [ ! -f "src/$$(basename "$${file%.*}").cpp" ]; then \
-			touch src/$$(basename "$${file%.*}").cpp; \
-		else \
-			echo "src/$$(basename "$${file%.*}").cpp"; \
+			printf "#include \"$${file}\"\n\n$(h)::$(h)()\n{\n\n}\n\n$(h)::~$(h)()\n{\n\n}\n" > src/$$(basename "$${file%.*}").cpp; \
+			echo "src/$$(basename "$${file%.*}").cpp was created"; \
 		fi; \
 	done
+	@echo "Content:"; find . -type f \( -name "*.cpp" -o -name "*.hpp" \)
 #--------------------COLORS----------------------------#
 # For print
 CL_BOLD  = \e[1m
-RAN      = \033[48;5;237m\033[38;5;255m
-NC       = \033[m
-P_RED    = \e[1;91m
+RAN	  = \033[48;5;237m\033[38;5;255m
+NC	   = \033[m
+P_RED	= \e[1;91m
 P_GREEN  = \e[1;32m
 P_BLUE   = \e[0;36m
 P_YELLOW = \e[1;33m
 P_CCYN   = \e[0;1;36m
-P_NC     = \e[0m
-LF       = \e[1K\r$(P_NC)
+P_NC	 = \e[0m
+LF	   = \e[1K\r$(P_NC)
 FG_TEXT  = $(P_NC)\e[38;2;189;147;249m
 # For bash echo
 CLEAR  = "\033c"
 BOLD   = "\033[1m"
 CROSS  = "\033[8m"
 E_NC   = "\033[m"
-RED    = "\033[1;31m"
+RED	= "\033[1;31m"
 GREEN  = "\033[1;32m"
 YELLOW = "\033[1;33m"
 BLUE   = "\033[1;34m"
-MAG    = "\033[1;35m"
+MAG	= "\033[1;35m"
 CYAN   = "\033[0;1;36m"
 GRAY   = "\033[1;90m"
 BANNER = "$$CPP"

@@ -1,4 +1,14 @@
+# Check files in remote branch
 
+```bash
+git ls-tree -r --name-only $(git rev-parse origin/remote-branch-name)
+```
+
+# Pull from another branch
+
+```bash
+git checkout origin/remote-branch-name -- path/to/file1 path/to/file2
+```
 # Creating new branches
 To create a new branch from another branch in Git, you first need to switch to
 the branch you want to base your new branch on using the `git checkout` command.
