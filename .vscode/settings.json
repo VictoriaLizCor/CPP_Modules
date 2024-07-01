@@ -4,7 +4,8 @@
 	// "editor.fontSize": 13.5,
 	// "[linux]":
 	"editor.fontSize": 13.5,
-	"window.zoomLevel": 0.3,
+	"window.zoomLevel": 0,
+	"terminal.integrated.fontSize": 13,
 	/*FOR BOTH*/
 	"makefile.makePath": "./Makefile",
 	"makefile.showOnStartup": false,

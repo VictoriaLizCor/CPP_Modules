@@ -12,9 +12,6 @@
     },
 	"workbench.iconTheme": "material-icon-theme",
     "terminal.integrated.allowChords": false,
-    "[html]": {
-        "editor.defaultFormatter": "HookyQR.beautify"
-    },
     "tabnine.experimentalAutoImports": true,
     "editor.bracketPairColorization.enabled": true,
     "editor.guides.bracketPairs": true,
