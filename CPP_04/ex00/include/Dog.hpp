@@ -11,10 +11,13 @@
 class Dog : public Animal
 {
 	private:
+
 	protected:
+
 	public:
 		explicit Dog();
-		virtual ~Dog();
+		~Dog();
+		void makeSound(void) const;
 };
 std::ostream& operator << (std::ostream & os, Dog& rhs);
 

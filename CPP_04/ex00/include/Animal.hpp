@@ -17,14 +17,14 @@ class Animal
 		static unsigned int		_CLASS_COLOR;
 	protected:
 		std::string			_type;
+		std::string			_color;
 		static unsigned int	_objectColor;
 
-
 	public:
-		explicit Animal();
+		explicit Animal(std::string const& type = "Animal");
 		virtual ~Animal();
 
-		virtual void makeSound(void);
+		virtual void makeSound(void) const;
 		std::string getType(void) const;
 
 };

@@ -11,10 +11,13 @@
 class Cat : public Animal
 {
 	private:
+		std::string			_type;
 	protected:
+
 	public:
 		explicit Cat();
-		virtual ~Cat();
+		~Cat();
+		void makeSound(void) const;
 };
 std::ostream& operator << (std::ostream & os, Cat& rhs);
 

@@ -29,6 +29,20 @@ void coutnl(std::ostream& os)
 }
 
 /**
+ * @brief Sets the color name based on the provided color code.
+ * 
+ * @param color The color code.
+ * @return std::string The color name.
+ */
+std::string setObjColor(unsigned int const& color)
+{
+	if (DEBUG == 0)
+		return (setColor("", color, 0));
+	else
+		return (setRandomColor(1));
+}
+
+/**
  * @brief Formats a string with color for console output.
  *
  * This function takes a message string, a color code, and a boolean error flag.

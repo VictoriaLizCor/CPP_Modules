@@ -5,6 +5,10 @@
 # include <sstream>
 # include <cstdlib>
 
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
+
 # define C_FMT "\033["
 # define C_DEFAULT "\033[0m"
 
@@ -69,6 +73,7 @@ struct s_coloredName
 typedef s_coloredName t_Name;
 void 		coutnl(std::ostream& os);
 std::string	toString(int value);
+std::string setObjColor(unsigned int const& color);
 std::string	setColor(const std::string& msg, unsigned int color, bool err);
 std::string	setColor(const std::string& msg, std::string const& color, bool err);
 std::string	getColorStr(t_Name const& name);
