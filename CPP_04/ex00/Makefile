@@ -168,23 +168,32 @@ soft:
 		if [ $$? -ne 0 ]; then \
 		echo $(RED) GIT_REPO not found $(E_NC); \
 	fi
+temp:
+	@printf '%b\n' "$${MAIN_CONTENT}\n" | pygmentize -l cpp
+	@printf '%b\n' "$${HEADER_CONTENT}\n" | pygmentize -l cpp
+	@printf '%b\n' "$${CPP_CONTENT}\n" | pygmentize -l cpp
 cpp: # Usage: make cpp h=filename
 	@if [ ! -d "src" ]; then \
 		mkdir src; \
-		printf "#include <iostream>\n\nint main(void)\n {\n\n\treturn (0);\n}\n" > src/main.cpp; \
+		printf "$${MAIN_CONTENT}" > src/main.cpp; \
 		echo "src/main.cpp was created"; \
 	fi
 	@if [ ! -d "include" ]; then \
 		mkdir include; \
 	fi
 	@if [ ! -f "include/$(h).hpp" ]; then \
-		printf "#ifndef $(shell echo $(h) | tr a-z A-Z)_HPP\n#define $(shell echo $(h) | tr a-z A-Z)_HPP\n\nclass $(h)\n{\n\tpublic:\n\t$(h)();\n\t~$(h)();\n};\n\n#endif // $(shell echo $(h) | tr a-z A-Z)_HPP\n" > include/$(h).hpp; \
-		echo "include/$(h).hpp was created"; \
+		UPPER_H=$$(echo $(h) | tr a-z A-Z)_HPP; \
+		HEADER_PATH="include/$(h).hpp"; \
+		printf "$${HEADER_CONTENT}" | sed -e 's/{{UPPER_H}}/'"$$UPPER_H"'/' \
+		-e 's/{{CLASS_NAME}}/$(h)/g' > $$HEADER_PATH; \
+		echo "$$HEADER_PATH was created"; \
 	fi
 	@for file in include/*.hpp; do \
-		if [ ! -f "src/$$(basename "$${file%.*}").cpp" ]; then \
-			printf "#include \"$${file}\"\n\n$(h)::$(h)()\n{\n\n}\n\n$(h)::~$(h)()\n{\n\n}\n" > src/$$(basename "$${file%.*}").cpp; \
-			echo "src/$$(basename "$${file%.*}").cpp was created"; \
+		cpp_file="src/$$(basename "$${file%.*}").cpp"; \
+		if [ ! -f "$$cpp_file" ]; then \
+			class_name="$$(basename "$${file%.*}")"; \
+			echo "$${CPP_CONTENT}" | sed -e "s/{{CLASS_NAME}}/$$class_name/g" > "$$cpp_file"; \
+			echo "$$cpp_file was created"; \
 		fi; \
 	done
 	@echo "Content:"; find . -type f \( -name "*.cpp" -o -name "*.hpp" \)
@@ -252,3 +261,58 @@ define TRASH
 		$(RAN)⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿$(NC)
 endef
 export TRASH
+define HEADER_CONTENT
+#ifndef {{UPPER_H}}
+# define {{UPPER_H}}
+
+# include <iostream>
+
+# ifndef DEBUG
+#  define DEBUG 0
+# endif
+
+class {{CLASS_NAME}}
+{
+	private:
+	protected:
+	public:
+		{{CLASS_NAME}}();
+		~{{CLASS_NAME}}();
+};
+std::ostream& operator << (std::ostream & os, {{CLASS_NAME}}& rhs);
+
+#endif // {{UPPER_H}}
+endef
+export HEADER_CONTENT
+define MAIN_CONTENT
+#include ".hpp"
+#if (DEBUG == 0)
+
+#include <iostream>
+
+int main(void)
+{
+	return (0);
+}
+
+#endif
+endef
+export MAIN_CONTENT
+
+define CPP_CONTENT
+#include "{{CLASS_NAME}}.hpp"
+
+{{CLASS_NAME}}::{{CLASS_NAME}}()
+{
+}
+
+{{CLASS_NAME}}::~{{CLASS_NAME}}()
+{
+}
+
+std::ostream& operator << (std::ostream & os, {{CLASS_NAME}}& rhs)
+{
+	return os;
+}
+endef
+export CPP_CONTENT
