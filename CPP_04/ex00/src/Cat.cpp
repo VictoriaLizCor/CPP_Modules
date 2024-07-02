@@ -1,14 +1,12 @@
 #include "Cat.hpp"
 
-Cat::Cat()
+Cat::Cat():Animal()
 {
+	
 }
 
 Cat::~Cat()
 {
+	std::cout << _type << setColor(" was Destroyed", FGRAY, 0) << std::endl ;
 }
 
-std::ostream& operator << (std::ostream & os, Cat& rhs)
-{
-	return os;
-}

@@ -1,19 +1,20 @@
 #ifndef CAT_HPP
 # define CAT_HPP
-
+# include "Animal.hpp"
 # include <iostream>
+# include <typeinfo>
 
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
 
-class Cat
+class Cat : public Animal
 {
 	private:
 	protected:
 	public:
-		Cat();
-		~Cat();
+		explicit Cat();
+		virtual ~Cat();
 };
 std::ostream& operator << (std::ostream & os, Cat& rhs);
 

@@ -2,6 +2,10 @@
 # define ANIMAL_HPP
 
 # include <iostream>
+# include <sstream>
+# include <string>
+# include <typeinfo>
+# include <stringUtils.hpp>
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -10,10 +14,19 @@
 class Animal
 {
 	private:
+		static unsigned int		_CLASS_COLOR;
 	protected:
+		std::string			_type;
+		static unsigned int	_objectColor;
+
+
 	public:
-		Animal();
-		~Animal();
+		explicit Animal();
+		virtual ~Animal();
+
+		virtual void makeSound(void);
+		std::string getType(void) const;
+
 };
 std::ostream& operator << (std::ostream & os, Animal& rhs);
 

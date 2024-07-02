@@ -8,7 +8,3 @@ Dog::~Dog()
 {
 }
 
-std::ostream& operator << (std::ostream & os, Dog& rhs)
-{
-	return os;
-}

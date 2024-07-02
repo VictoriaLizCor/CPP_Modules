@@ -1,7 +1,7 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 -Werror -Wno-unused-function -Wshadow -Wunused
+D_FLAGS		= -Wall -Wextra -std=c++98 -Wno-unused-function -Wshadow -Wunused #-Werror 
 INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR		:= src/
@@ -110,8 +110,7 @@ leaks: $(NAME)
 
 val: $(NAME)
 	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC) "\n"
-	@$(VALGRIND) ./$(NAME)
-	@echo "\n"
+	@$(VALGRIND) ./$(NAME) ; echo
 
 # #-------------------- GIT UTILS ----------------------------#
 dirs:
@@ -274,10 +273,13 @@ define HEADER_CONTENT
 class {{CLASS_NAME}}
 {
 	private:
+
 	protected:
+		
 	public:
 		{{CLASS_NAME}}();
 		~{{CLASS_NAME}}();
+
 };
 std::ostream& operator << (std::ostream & os, {{CLASS_NAME}}& rhs);
 
@@ -286,6 +288,7 @@ endef
 export HEADER_CONTENT
 define MAIN_CONTENT
 #include ".hpp"
+
 #if (DEBUG == 0)
 
 #include <iostream>
@@ -310,9 +313,9 @@ define CPP_CONTENT
 {
 }
 
-std::ostream& operator << (std::ostream & os, {{CLASS_NAME}}& rhs)
+std::ostream& operator << (std::ostream& os, {{CLASS_NAME}}& rhs)
 {
-	return os;
+	return (os);
 }
 endef
 export CPP_CONTENT

@@ -1,6 +1,6 @@
 #if (DEBUG == 0)
-
-#include <iostream>
+# include "Animal.hpp"
+# include <iostream>
 
 int main(void)
 {
