@@ -1,9 +1,8 @@
 #include "Cat.hpp"
 #include "Dog.hpp"
 #include "WrongCat.hpp"
-#if (DEBUG != 0)
 
-#include <iostream>
+#if (DEBUG != 0)
 
 int main(void)
 {
