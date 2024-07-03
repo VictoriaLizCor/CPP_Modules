@@ -2,7 +2,7 @@
 
 unsigned int WrongAnimal::_objectColor = FLBLACK;
 
-WrongAnimal::WrongAnimal(std::string const& type): _CLASS_ICON("🐾"), _type(type), _color(setObjColor(++_objectColor))
+WrongAnimal::WrongAnimal(std::string const& type): _CLASS_ICON("⛔"), _type(type), _color(setObjColor(++_objectColor))
 {
 	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" was Created", FGRAY, 0) << std::endl ;
 }

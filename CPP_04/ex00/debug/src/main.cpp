@@ -9,21 +9,22 @@ int main(void)
 {
 	{
 		std::cout << "---------------------\n";
-		WrongAnimal wrongAnimal;
-		const WrongAnimal* wrongCat = new WrongCat();
+		WrongAnimal wA;
+		WrongAnimal* wC = new WrongCat();
 		WrongCat wc;
 		std::cout << "---\n";
 		std::cout << std::endl;
-		std::cout << wrongAnimal.getType() << " " << std::endl;
-		std::cout << wrongCat->getType() << " " << std::endl;
+		std::cout << wA.getType() << " " << std::endl;
+		std::cout << wC->getType() << " " << std::endl;
 		std::cout << wc.getType() << " " << std::endl;
 		std::cout << std::endl;
-		wrongAnimal.makeSound(); // output wrong animal sound
-		wrongCat->makeSound();    // output wrong animal sound
-		wc.makeSound();           // output wrong cat    sound
-		std::cout << std::endl;
-		delete wrongCat;
+		wA.makeSound(); // will output wA sound!
+		wC->makeSound();    // will output wA sound!
+		wc.makeSound();           // will output wC sound!
+		std::cout << "---\n";
+		delete wC;
 	}
+	std::cout << "\n";
 	return (0);
 }
 
