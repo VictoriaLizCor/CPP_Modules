@@ -1,0 +1,21 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+name = lilizarr
+email = lilizarr@student.42wolfsburg.de
+
+[color]
+	ui = true
+	branch = true
+	diff = true
+	interactive = true
+	status = true
+[core]
+	autocrlf = input
+	pager = less -r
+#[commit]
+#	template = /home/lilizarr/.git_tmp/commit_template
+[log]
+	decorate = short
+
+

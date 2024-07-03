@@ -1,14 +1,13 @@
-#include "Animal.hpp"
+#include "WrongAnimal.hpp"
 
-unsigned int Animal::_objectColor = FGRAY;
+unsigned int WrongAnimal::_objectColor = FLBLACK;
 
-Animal::Animal(std::string const& type): _CLASS_ICON("🐾"), _type(type), _color(setObjColor(++_objectColor))
+WrongAnimal::WrongAnimal(std::string const& type): _CLASS_ICON("⛔"), _type(type), _color(setObjColor(++_objectColor))
 {
 	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" was Created", FGRAY, 0) << std::endl ;
 }
 
-
-Animal&::Animal::operator=(Animal const& rhs)
+WrongAnimal&::WrongAnimal::operator=(WrongAnimal const& rhs)
 {
 	if (this != &rhs)
 	{
@@ -19,30 +18,24 @@ Animal&::Animal::operator=(Animal const& rhs)
 	return (*this);
 }
 
-Animal::Animal(Animal const& rhs){*this=rhs;}
+WrongAnimal::WrongAnimal(WrongAnimal const& rhs){*this=rhs;}
 
-Animal::~Animal()
+WrongAnimal::~WrongAnimal()
 {
 	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" was Destroyed", FGRAY, 0) << std::endl ;
 }
 
-void Animal::makeSound(void) const
+void WrongAnimal::makeSound(void) const
 {
 	std::cout << "[ "+ _CLASS_ICON + " ]" + "\t     : ... " + "\n";
 }
 
-std::string Animal::getType(void) const
+std::string WrongAnimal::getType(void) const
 {
-	return (setColor(_type, _color, 0) + "\t" + getIcon());
+	return (setColor(_type, _color, 0) + "\t" + "[ "+ _CLASS_ICON + " ]");
 }
 
-std::string Animal::getIcon(void) const
-{
-	return ("[ "+ _CLASS_ICON + " ]");
-}
-
-
-std::ostream& operator << (std::ostream& os, Animal& rhs)
+std::ostream& operator << (std::ostream& os, WrongAnimal& rhs)
 {
 	os << typeid(rhs).name();
 	return (os);

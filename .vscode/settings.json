@@ -3,12 +3,13 @@
 	// "[osx]":
 	// "editor.fontSize": 13.5,
 	// "[linux]":
-	// {
-	// },
-	"editor.fontSize": 18,
-	"terminal.integrated.fontSize": 17,
-	"window.zoomLevel": -1,
+	"editor.fontSize": 14,
+	"window.zoomLevel": 0,
+	"terminal.integrated.fontSize": 13,
 	/*FOR BOTH*/
+	"makefile.makePath": "./Makefile",
+	"makefile.showOnStartup": false,
+	"terminal.integrated.shell.linux": "/bin/bash",
 	"workbench.startupEditor": "none",
 	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
@@ -97,5 +98,6 @@
 	},
 	"accessibility.signalOptions": {
 		"volume": 0
-	}
+	},
+	"github.copilot.editor.enableAutoCompletions": false
 }
