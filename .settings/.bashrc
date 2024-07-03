@@ -4,15 +4,17 @@ export SHELL=/usr/bin/bash
 #able to use colors in terminal
 export TERM=screen-256color
 ## Adding python to bash path to use pip
-export PATH="$(python -m site --user-base)/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+#export PATH="$(python -m site --user-base)/bin:$PATH"
 alias ls='ls --color=auto'
 alias lpyg='pygmentize -L styles'
 alias gs='git status'
+alias gb='git branch -a'
 #alias pig='pygmentize -g -O style=rainbow_dash'
 alias pyg='pygmentize -g -O style=material'
 alias glog='git log --abbrev-commit --no-color'
 alias log='git log -3 --abbrev-commit --no-color | pygmentize -g -O style=material'
-alias flog="git log -10 --pretty=format:'(%h)%m %s #%cd' --date=format:'%Y-%m-%d %H:%M'"
+alias flog="git log -10 --pretty=format:'(%h)%m %s %b #%cd' --date=format:'%Y-%m-%d %H:%M'"
 alias plog='flog | awk "
 {
     gsub(/\[[^\]]+\]/, \"&\n\")
@@ -43,7 +45,7 @@ BEGIN {
     print
 }"'
 
-alias llog='git log -4 --pretty=format:"#%cd (%h) %B " --date=format:"%Y-%m-%d %H:%M"| awk "
+alias llog='git log -4 --pretty=format:"#%cd (%h) %B" --date=format:"%Y-%m-%d %H:%M"| awk "
 BEGIN {
     RED=\"\033[0;31m\"
     YELLOW=\"\033[038;5;221m\"
@@ -53,17 +55,17 @@ BEGIN {
     LBLUE=\"\033[0;38;5;103m\"
     BDEFAULT=\"\033[1;39m\"
     RETURN=\"\033[1A\r\"
+    ignore=0
 }
 {
-    gsub(/~[^~]*~/, RETURN \"\")
-    gsub(/\[[^\]]+\]/, BDEFAULT \"&\" NO_COLOR)
-    gsub(/\([a-f0-9]+\)/, YELLOW \"-----&----->\" NO_COLOR)
-    gsub(/#[0-9\- :]+/, LBLUE \"&\" NO_COLOR)
-    gsub(/📝[^:]+: /, LGREEN \"&\" NO_COLOR)
-    gsub(/* [^:]+: /, LGREEN \"&\" NO_COLOR)
-    gsub(/\] [^:]+: /, LGREEN \"&\" NO_COLOR) 
-    sub(/\\n$/, \"\")
-    print
+        gsub(/\[[^\]]+\]/, BDEFAULT \"&\" NO_COLOR)
+        gsub(/\([a-f0-9]+\)/, YELLOW \"-----&----->\" NO_COLOR)
+        gsub(/#[0-9\- :]+/, LBLUE \"&\" NO_COLOR)
+        gsub(/📝[^:]+: /, LGREEN \"&\" NO_COLOR)
+        gsub(/* [^:]+: /, LGREEN \"&\" NO_COLOR)
+        gsub(/\] [^:]+: /, LGREEN \"&\" NO_COLOR) 
+        gsub(/~[^~]*~/, RETURN \"\")
+        print
 }"'
 alias vs='open ~/.config/Code/User/settings.json'
 alias bs='open ~/.bashrc' 
@@ -101,10 +103,14 @@ cpyg()
 {
 	pygmentize -g -O style=${!#}
 }
-# flatpak remote-ls --app
-# flatpak list --app --columns=application
+#flatpak remote-ls --app
+#flatpak list --app --columns=application
+#flatpak uninstall --user --all
 #flatpak remote-ls --app --columns=application | grep sublimetext
+#flatpak info --show-deps com.sublimetext.three
 #flatpak uninstall com.sublimetext.three
+#flatpak install --user  runtime/org.freedesktop.Sdk/x86_64/21.08
+#flatpak install --user flathub org.freedesktop.Sdk//21.08 -y
 sublime()
 {
 	SYSTEM_PATH=$(find /var/lib/flatpak/app/ -name sublime_text -type f 2>/dev/null | head -n 1)
@@ -114,7 +120,8 @@ sublime()
 			echo "Installing ..."
 			APP_ID=$(flatpak remote-ls flathub --user --app --columns=application | grep sublimetext)
 			flatpak remote-add --if-not-exists --user flathub https://flathub.org/repo/flathub.flatpakrepo
-			flatpak install --user flathub "$APP_ID" -y
+			flatpak install --user runtime/org.freedesktop.Sdk/x86_64/21.08
+			flatpak install --user --no-deps flathub "$APP_ID" -y
 		fi
 		USER_PATH=$(find $HOME/.local/share/flatpak/app -name sublime_text -type f 2>/dev/null | head -n 1)
 		#echo "User path = $USER_PATH"

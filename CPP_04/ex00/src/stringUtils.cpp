@@ -28,19 +28,6 @@ void coutnl(std::ostream& os)
 	os << std::endl;
 }
 
-/**
- * @brief Sets the color name based on the provided color code.
- * 
- * @param color The color code.
- * @return std::string The color name.
- */
-std::string setObjColor(unsigned int const& color)
-{
-	if (DEBUG == 0)
-		return (setColor("", color, 0));
-	else
-		return (setRandomColor(1));
-}
 
 /**
  * @brief Formats a string with color for console output.
@@ -137,7 +124,7 @@ static std::string	rColorRGB(int red, int green, int blue)
 {
 	std::ostringstream ss;
 
-	ss << C_FMT << "1;" << FLRGB << ";2;";
+	ss << FLRGB << ";2;";
 	ss << red << ";" << green << ";" << blue << "m";
 	return (ss.str());
 }
@@ -163,7 +150,7 @@ static int ft_rand(int min, int max)
  * @param bold Whether to apply bold formatting.
  * @return std::string The colored string.
  */
-std::string setRandomColor(int bold)
+std::string setRandomColor(bool bold)
 {
 	std::ostringstream strColor;
 	std::string	fmt;
@@ -174,6 +161,20 @@ std::string setRandomColor(int bold)
 	strColor << fmt
 	<< rColorRGB(ft_rand(80, 150), ft_rand(80, 200), ft_rand(80, 200));
 	return (strColor.str());
+}
+
+/**
+ * @brief Sets the color name based on the provided color code.
+ * 
+ * @param color The color code.
+ * @return std::string The color name.
+ */
+std::string setObjColor(unsigned int const& color)
+{
+	if (DEBUG == 0)
+		return (setColor("", color, 0));
+	else
+		return (setRandomColor(1));
 }
 
 /**

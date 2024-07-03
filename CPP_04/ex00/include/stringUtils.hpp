@@ -73,11 +73,11 @@ struct s_coloredName
 typedef s_coloredName t_Name;
 void 		coutnl(std::ostream& os);
 std::string	toString(int value);
-std::string setObjColor(unsigned int const& color);
 std::string	setColor(const std::string& msg, unsigned int color, bool err);
 std::string	setColor(const std::string& msg, std::string const& color, bool err);
 std::string	getColorStr(t_Name const& name);
-std::string setRandomColor(int bold);
+std::string setRandomColor(bool bold);
+std::string setObjColor(unsigned int const& color);
 bool		checkInput(const std::string& str, int (*check_type)(int));
 bool		isOnlySpaces(const std::string& str);
 size_t		maxStringLength(int fieldSize, std::string* arrayData);

@@ -195,7 +195,9 @@ cpp: # Usage: make cpp h=filename
 			echo "$$cpp_file was created"; \
 		fi; \
 	done
-	@echo "Content:"; find . -type f \( -name "*.cpp" -o -name "*.hpp" \)
+	@echo "Recently Created/Modified files:"; find . -type f \( -name "*.cpp" -o -name "*.hpp" \) -mmin -5 | sort -r
+content:
+	@find . -type f \( -name "*.cpp" -o -name "*.hpp" \) | sort
 #--------------------COLORS----------------------------#
 # For print
 CL_BOLD  = \e[1m
@@ -265,6 +267,10 @@ define HEADER_CONTENT
 # define {{UPPER_H}}
 
 # include <iostream>
+# include <sstream>
+# include <string>
+# include <typeinfo>
+# include <stringUtils.hpp>
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -278,7 +284,7 @@ class {{CLASS_NAME}}
 		
 	public:
 		{{CLASS_NAME}}();
-		~{{CLASS_NAME}}();
+		virtual ~{{CLASS_NAME}}();
 
 };
 std::ostream& operator << (std::ostream & os, {{CLASS_NAME}}& rhs);

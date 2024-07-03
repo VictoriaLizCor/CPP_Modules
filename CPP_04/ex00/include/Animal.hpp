@@ -14,18 +14,22 @@
 class Animal
 {
 	private:
-		static unsigned int		_CLASS_COLOR;
+		
 	protected:
+		std::string			_CLASS_ICON;
 		std::string			_type;
 		std::string			_color;
 		static unsigned int	_objectColor;
+		virtual	std::string getIcon() 
+		const;
 
 	public:
 		explicit Animal(std::string const& type = "Animal");
+		Animal& operator=(Animal const& rhs);
+		Animal(Animal const& rhs);
 		virtual ~Animal();
-
 		virtual void makeSound(void) const;
-		std::string getType(void) const;
+		virtual std::string getType(void) const;
 
 };
 std::ostream& operator << (std::ostream & os, Animal& rhs);

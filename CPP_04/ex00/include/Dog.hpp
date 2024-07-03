@@ -8,9 +8,12 @@
 #  define DEBUG 0
 # endif
 
-class Dog : public Animal
+class Dog : virtual public Animal
 {
 	private:
+		private:
+		std::string	_CLASS_ICON;
+		std::string getIcon(void) const;
 
 	protected:
 
@@ -18,7 +21,7 @@ class Dog : public Animal
 		explicit Dog();
 		~Dog();
 		void makeSound(void) const;
+
 };
-std::ostream& operator << (std::ostream & os, Dog& rhs);
 
 #endif // DOG_HPP

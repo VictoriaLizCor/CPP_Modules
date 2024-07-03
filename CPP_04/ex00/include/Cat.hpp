@@ -1,17 +1,17 @@
 #ifndef CAT_HPP
 # define CAT_HPP
 # include "Animal.hpp"
-# include <iostream>
-# include <typeinfo>
 
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
 
-class Cat : public Animal
+class Cat : virtual public Animal
 {
 	private:
-		std::string			_type;
+		private:
+		std::string	_CLASS_ICON;
+		std::string getIcon(void) const;
 	protected:
 
 	public:
@@ -19,6 +19,5 @@ class Cat : public Animal
 		~Cat();
 		void makeSound(void) const;
 };
-std::ostream& operator << (std::ostream & os, Cat& rhs);
 
 #endif // CAT_HPP
