@@ -99,5 +99,6 @@
 	"accessibility.signalOptions": {
 		"volume": 0
 	},
-	"github.copilot.editor.enableAutoCompletions": false
+	"github.copilot.editor.enableAutoCompletions": false,
+	"pdf-preview.default.sidebar": false
 }
