@@ -2,12 +2,12 @@
 
 Dog::Dog():Animal(className(typeid(*this).name())), _CLASS_ICON("🐶")
 {
-	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" was Created", FGRAY, 0) << std::endl ;
+	std::cout << *this << getColorStr(FGRAY, " was Created") << std::endl;
 }
 
 Dog::~Dog()
 {
-	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" was Destroyed", FGRAY, 0) << std::endl ;
+	std::cout << *this << getColorStr(FGRAY, " was Destroyed") << std::endl;
 }
 
 void Dog::makeSound(void) const
@@ -19,4 +19,9 @@ void Dog::makeSound(void) const
 std::string Dog::getIcon(void) const
 {
 	return ("[ "+ _CLASS_ICON + " ]");
+}
+
+std::string Dog::getClass(void)
+{
+	return (_color + className(typeid(*this).name()) + std::string(C_DEFAULT));
 }

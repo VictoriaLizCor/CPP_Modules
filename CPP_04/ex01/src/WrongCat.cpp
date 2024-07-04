@@ -3,7 +3,7 @@
 
 WrongCat::WrongCat():WrongAnimal(className(typeid(*this).name())), _CLASS_ICON("🐯")
 {
-	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" was Created", FGRAY, 0) << std::endl ;
+	std::cout << *this << getColorStr(FGRAY, " was Created") << std::endl;
 }
 
 void WrongCat::makeSound(void) const
@@ -14,5 +14,10 @@ void WrongCat::makeSound(void) const
 
 WrongCat::~WrongCat()
 {
-	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" was Destroyed", FGRAY, 0) << std::endl ;
+	std::cout << *this << getColorStr(FGRAY, " was Destroyed") << std::endl;
+}
+
+std::string WrongCat::getClass(void)
+{
+	return (_color + className(typeid(*this).name()) + std::string(C_DEFAULT));
 }

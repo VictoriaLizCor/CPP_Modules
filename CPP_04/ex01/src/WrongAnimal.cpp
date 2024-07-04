@@ -1,10 +1,10 @@
 #include "WrongAnimal.hpp"
 
-unsigned int WrongAnimal::_objectColor = FLBLACK;
+int WrongAnimal::_objectColor = FLBLACK;
 
 WrongAnimal::WrongAnimal(std::string const& type): _CLASS_ICON("⛔"), _type(type), _color(setObjColor(++_objectColor))
 {
-	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" was Created", FGRAY, 0) << std::endl ;
+	std::cout << *this << getColorStr(FGRAY, " was Created") << std::endl;
 }
 
 WrongAnimal&::WrongAnimal::operator=(WrongAnimal const& rhs)
@@ -14,7 +14,7 @@ WrongAnimal&::WrongAnimal::operator=(WrongAnimal const& rhs)
 		_type = rhs._type;
 		_color = setObjColor(++_objectColor);
 	}
-	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" Copy was Created", FGRAY, 0) << std::endl ;
+	std::cout << *this << getColorStr(FGRAY, " Copy was Created") << std::endl;
 	return (*this);
 }
 
@@ -22,7 +22,7 @@ WrongAnimal::WrongAnimal(WrongAnimal const& rhs){*this=rhs;}
 
 WrongAnimal::~WrongAnimal()
 {
-	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" was Destroyed", FGRAY, 0) << std::endl ;
+	std::cout << *this << getColorStr(FGRAY, " was Destroyed") << std::endl;
 }
 
 void WrongAnimal::makeSound(void) const
@@ -32,11 +32,16 @@ void WrongAnimal::makeSound(void) const
 
 std::string WrongAnimal::getType(void) const
 {
-	return (setColor(_type, _color, 0) + "\t" + "[ "+ _CLASS_ICON + " ]");
+	return (_color + _type + std::string(C_DEFAULT) + "\t" + "[ "+ _CLASS_ICON + " ]");
+}
+
+std::string WrongAnimal::getClass(void)
+{
+	return (_color + className(typeid(*this).name()) + std::string(C_DEFAULT));
 }
 
 std::ostream& operator << (std::ostream& os, WrongAnimal& rhs)
 {
-	os << typeid(rhs).name();
+	os << rhs.getClass();
 	return (os);
 }

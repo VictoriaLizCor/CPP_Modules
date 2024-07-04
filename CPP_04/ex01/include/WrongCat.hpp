@@ -18,7 +18,8 @@ class WrongCat : virtual public WrongAnimal
 	public:
 		WrongCat();
 		virtual ~WrongCat();
-		void makeSound(void) const;
+		std::string	getClass(void);
+		void		makeSound(void) const;
 
 };
 

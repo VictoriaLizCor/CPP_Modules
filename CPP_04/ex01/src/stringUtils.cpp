@@ -7,7 +7,7 @@
  */
 std::string s_coloredName::getName() const
 {
-	return (color + str + C_DEFAULT);
+	return (colorStr + str + C_DEFAULT);
 }
 
 /**
@@ -43,40 +43,31 @@ void coutnl(std::ostream& os)
  * @param err A boolean flag indicating whether the message is an error message.
  * @return The formatted message string.
  */
-std::string	setColor(const std::string& msg, unsigned int color, bool err)
+std::string	getColorFmt(int eColor)
 {
 	std::ostringstream strColor;
 	std::string	fmt;
 
 	fmt = C_FMT;
-	if (color > FGRAY)
+	if (eColor < 0)
+		eColor = DEFAULT;
+	if (eColor > FGRAY)
 		fmt += "1;";
-	if (err)
-		strColor << fmt << FRED << "m" << "ERROR:";
-	else
-		strColor << fmt << color << "m";
-	if (msg.empty())
-		return (strColor.str());
-	strColor << msg << C_DEFAULT;
+	strColor << fmt << eColor << "m";
 	return (strColor.str());
 }
 
-std::string	setColor(const std::string& msg, std::string const& color, bool err)
+std::string error(std::string str, bool bold)
 {
 	std::ostringstream strColor;
 	std::string	fmt;
 
 	fmt = C_FMT;
-	if (err)
-		strColor << fmt << FRED << "m" << "ERROR:";
-	else
-		strColor << color;
-	if (msg.empty())
-		return (strColor.str());
-	strColor << msg << C_DEFAULT;
+	if (bold)
+		fmt += "1;";
+	strColor << fmt << FRED << "m" << "ERROR: " << str;
 	return (strColor.str());
 }
-
 
 /**
  * @brief Converts an integer value to a string.
@@ -104,8 +95,19 @@ std::string toString(int value)
  */
 std::string	getColorStr(t_Name const& name)
 {
-	return (name.color + name.str + C_DEFAULT);
+	return (name.colorStr + name.str + C_DEFAULT);
 }
+
+std::string	getColorStr(int eColor, std::string const& str)
+{
+	return (getColorFmt(eColor) + str + std::string(C_DEFAULT));
+}
+
+std::string	getColorStr(std::string& eColor, std::string const& str)
+{
+	return (eColor + str + std::string(C_DEFAULT));
+}
+
 
 /**
  * @brief Generates an RGB color string for terminal output.
@@ -152,7 +154,7 @@ static int ft_rand(int min, int max)
  * strColor << fmt
 	<< rColorRGB(ft_rand(80, 200), ft_rand(80, 200), ft_rand(80, 200));
  */
-std::string setRandomColor(bool bold)
+std::string getRandomColorFmt(bool bold)
 {
 	std::ostringstream strColor;
 	std::string	fmt;
@@ -171,16 +173,16 @@ std::string setRandomColor(bool bold)
  * @param color The color code.
  * @return std::string The color name.
  */
-std::string setObjColor(unsigned int const& color)
+std::string setObjColor(int const& color)
 {
 	if (DEBUG == 0)
 	{
-		if (color > FWHITE && color < BGRAY || color > 107)
-			return(setRandomColor(1));
-		return (setColor("", color, 0));
+		if ((color > FWHITE && color < BGRAY ) || color > 107)
+			return(getRandomColorFmt(1));
+		return (getColorFmt(color));
 	}
 	else
-		return (setRandomColor(1));
+		return (getRandomColorFmt(1));
 }
 
 /**

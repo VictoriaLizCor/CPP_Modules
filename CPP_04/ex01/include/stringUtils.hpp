@@ -49,7 +49,7 @@ typedef enum eColor
 	FCYAN			= 96,
 	FWHITE			= 97,
 	BGRAY			= 100
-} t_color;
+}	t_color;
 
 /**
  * @struct s_coloredName
@@ -64,20 +64,22 @@ typedef enum eColor
 struct s_coloredName
 {
 	std::string		str;
-	std::string		color;
+	std::string		colorStr;
 
 	std::string getName() const;
 	
 };
 
 typedef s_coloredName t_Name;
+std::string error(std::string str, bool bold);
 void 		coutnl(std::ostream& os);
 std::string	toString(int value);
-std::string	setColor(const std::string& msg, unsigned int color, bool err);
-std::string	setColor(const std::string& msg, std::string const& color, bool err);
-std::string	getColorStr(t_Name const& name);
-std::string setRandomColor(bool bold);
-std::string setObjColor(unsigned int const& color);
+std::string	getColorFmt(int eColor);
+// std::string	getColorStr(t_Name const& name);
+std::string	getColorStr(std::string& eColor, std::string const& str);
+std::string	getColorStr(int eColor, std::string const& str);
+std::string	getRandomColorFmt(bool bold);
+std::string	setObjColor(int const& color);
 bool		checkInput(const std::string& str, int (*check_type)(int));
 bool		isOnlySpaces(const std::string& str);
 size_t		maxStringLength(int fieldSize, std::string* arrayData);

@@ -6,7 +6,7 @@
 
 int main(void)
 {
-	size_t const size = 100;
+	size_t const size = 4;
 	// size_t const size = Brain::getSize();
 	size_t i;
 	{

@@ -21,15 +21,14 @@ int main(void)
 		std::cout << "---\n";
 		std::cout << Brain::getSize() << "\n";
 		std::cout << "---\n";
-		 for( i = 0; i < size; ++i )
-		 {
+		for( i = 0; i < size; ++i )
+		{
 			if( i < size / 2 )
 				animals[i] = new Cat();
 			else
 				animals[i] = new Dog();
-
-			std::cout << std::endl;
 		}
+		std::cout << "---\n";
 		for( i = 0; i < size; ++i )
 		{
 			animals[i]->makeSound();
@@ -39,7 +38,6 @@ int main(void)
 		{
 			delete animals[i];
 		}
-		// delete[] animal;
 	}
 	std::cout << "\n";
 	return (0);

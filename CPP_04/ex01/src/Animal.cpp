@@ -1,10 +1,10 @@
 #include "Animal.hpp"
 
-unsigned int Animal::_objectColor = FGRAY;
+int Animal::_objectColor = FGRAY;
 
 Animal::Animal(std::string const& type): _CLASS_ICON("🐾"), _type(type), _color(setObjColor(++_objectColor))
 {
-	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" was Created", FGRAY, 0) << std::endl ;
+	std::cout << *this << getColorStr(FGRAY, " was Created") << std::endl;
 }
 
 
@@ -15,7 +15,7 @@ Animal&::Animal::operator=(Animal const& rhs)
 		_type = rhs._type;
 		_color = setObjColor(++_objectColor);
 	}
-	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" Copy was Created", FGRAY, 0) << std::endl ;
+	std::cout << *this << getColorStr(FGRAY, " Copy was Created") << std::endl;
 	return (*this);
 }
 
@@ -23,7 +23,7 @@ Animal::Animal(Animal const& rhs){*this=rhs;}
 
 Animal::~Animal()
 {
-	std::cout << setColor(className(typeid(*this).name()), _color, 0) << setColor(" was Destroyed", FGRAY, 0) << std::endl;
+	std::cout << *this << getColorStr(FGRAY, " was Destroyed") << std::endl;
 }
 
 void Animal::makeSound(void) const
@@ -33,7 +33,7 @@ void Animal::makeSound(void) const
 
 std::string Animal::getType(void) const
 {
-	return (setColor(_type, _color, 0) + "\t" + getIcon());
+	return (_color + _type + "\t" + getIcon());
 }
 
 std::string Animal::getIcon(void) const
@@ -41,9 +41,13 @@ std::string Animal::getIcon(void) const
 	return ("[ "+ _CLASS_ICON + " ]");
 }
 
+std::string Animal::getClass(void)
+{
+	return (_color + className(typeid(*this).name()) + std::string(C_DEFAULT));
+}
 
 std::ostream& operator << (std::ostream& os, Animal& rhs)
 {
-	os << typeid(rhs).name();
+	os << rhs.getClass();
 	return (os);
 }

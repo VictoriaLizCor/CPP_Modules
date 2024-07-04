@@ -7,10 +7,6 @@
 # include <typeinfo>
 # include <stringUtils.hpp>
 
-# ifndef DEBUG
-#  define DEBUG 0
-# endif
-
 class Animal
 {
 	private:
@@ -19,16 +15,17 @@ class Animal
 		std::string			_CLASS_ICON;
 		std::string			_type;
 		std::string			_color;
-		static unsigned int	_objectColor;
-		virtual	std::string getIcon() 
+		static int			_objectColor;
+		virtual	std::string	getIcon() 
 		const;
 
 	public:
 		explicit Animal(std::string const& type = "Animal");
 		Animal& operator=(Animal const& rhs);
 		Animal(Animal const& rhs);
-		virtual ~Animal();
-		virtual void makeSound(void) const;
+		virtual ~Animal(void);
+		virtual std::string		getClass(void);
+		virtual void	makeSound(void) const;
 		virtual std::string getType(void) const;
 
 };

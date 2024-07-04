@@ -12,15 +12,17 @@ class Cat : virtual public Animal
 	private:
 		private:
 		std::string	_CLASS_ICON;
-		std::string getIcon(void) const;
 		Brain*		_brain;
+
+		std::string	getIcon(void) const;
 
 	protected:
 
 	public:
-		explicit Cat();
-		~Cat();
-		void makeSound(void) const;
+		explicit Cat(void);
+		~Cat(void);
+		std::string	getClass(void);
+		void 		makeSound(void) const;
 };
 
 #endif // CAT_HPP

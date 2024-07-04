@@ -22,7 +22,8 @@ class Dog : virtual public Animal
 	public:
 		explicit Dog();
 		~Dog();
-		void makeSound(void) const;
+		std::string	getClass(void);
+		void		makeSound(void) const;
 
 };
 

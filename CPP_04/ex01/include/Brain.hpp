@@ -7,19 +7,19 @@
 # include <typeinfo>
 # include <stringUtils.hpp>
 
-# ifndef DEBUG
-#  define DEBUG 0
-# endif
-
 class Brain
 {
 	private:
-		static size_t const _size = 50;
+		static size_t const _size = 6;
+		std::string			_ideas[_size];
 	protected:
 		
 	public:
 		Brain();
+		Brain& operator=(Brain const& rhs);
+		Brain(Brain const& rhs);
 		virtual ~Brain();
+		std::string		getClass(void);
 		static size_t	getSize();
 
 };
