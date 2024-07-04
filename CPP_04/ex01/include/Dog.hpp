@@ -16,12 +16,16 @@ class Dog : virtual public Animal
 		std::string	_CLASS_ICON;
 		std::string getIcon(void) const;
 		Brain*		_brain;
-
+		static const std::string thoughts[20]; 
 	protected:
 
 	public:
 		explicit Dog();
+		Dog& operator=(Dog const& rhs);
+		Dog(Dog const& rhs);
 		~Dog();
+
+		
 		std::string	getClass(void);
 		void		makeSound(void) const;
 

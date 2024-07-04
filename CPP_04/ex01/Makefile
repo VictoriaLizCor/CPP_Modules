@@ -285,9 +285,10 @@ class {{CLASS_NAME}}
 		
 	public:
 		{{CLASS_NAME}}();
-		virtual ~{{CLASS_NAME}}();
+		virtual ~{{CLASS_NAME}}(void);
 
 };
+
 std::ostream& operator << (std::ostream& os, {{CLASS_NAME}}& rhs);
 
 #endif // {{UPPER_H}}
@@ -317,7 +318,7 @@ define CPP_CONTENT
 {
 }
 
-{{CLASS_NAME}}::~{{CLASS_NAME}}()
+{{CLASS_NAME}}::~{{CLASS_NAME}}(void)
 {
 }
 

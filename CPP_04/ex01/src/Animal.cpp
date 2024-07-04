@@ -7,19 +7,18 @@ Animal::Animal(std::string const& type): _CLASS_ICON("🐾"), _type(type), _colo
 	std::cout << *this << getColorStr(FGRAY, " was Created") << std::endl;
 }
 
-
 Animal&::Animal::operator=(Animal const& rhs)
 {
 	if (this != &rhs)
 	{
-		_type = rhs._type;
+		_type = rhs._type; // Do i need it?
 		_color = setObjColor(++_objectColor);
 	}
 	std::cout << *this << getColorStr(FGRAY, " Copy was Created") << std::endl;
 	return (*this);
 }
 
-Animal::Animal(Animal const& rhs){*this=rhs;}
+Animal::Animal(Animal const& rhs){*this = rhs;}
 
 Animal::~Animal()
 {

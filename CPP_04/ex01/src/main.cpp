@@ -16,8 +16,6 @@ int main(void)
 	size_t i;
 	{
 		const Animal* animals[size];
-		// const Animal* dog = new Dog();
-		// const Animal* cat = new Cat();
 		std::cout << "---\n";
 		std::cout << Brain::getSize() << "\n";
 		std::cout << "---\n";
@@ -31,13 +29,12 @@ int main(void)
 		std::cout << "---\n";
 		for( i = 0; i < size; ++i )
 		{
+			std::cout << i << "-";
 			animals[i]->makeSound();
 		}
 		std::cout << "---\n";
 		for (i = 0; i < size; ++i)
-		{
 			delete animals[i];
-		}
 	}
 	std::cout << "\n";
 	return (0);
