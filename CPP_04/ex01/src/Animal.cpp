@@ -1,10 +1,10 @@
 #include "Animal.hpp"
 
-int Animal::_objectColor = FGRAY;
+int Animal::_objectColor = 0;
 
-Animal::Animal(std::string const& type): _CLASS_ICON("🐾"), _type(type), _color(setObjColor(++_objectColor))
+Animal::Animal(std::string const& type): _CLASS_ICON("🐾"), _type(type), _color(setObjColor(FGRAY + ++_objectColor))
 {
-	std::cout << *this << getColorStr(FGRAY, " was Created") << std::endl;
+	std::cout << *this << getColorStr(FGRAY, " was Created\n");
 }
 
 Animal&::Animal::operator=(Animal const& rhs)
@@ -12,9 +12,9 @@ Animal&::Animal::operator=(Animal const& rhs)
 	if (this != &rhs)
 	{
 		_type = rhs._type; // Do i need it?
-		_color = setObjColor(++_objectColor);
+		_color = setObjColor(FGRAY + ++_objectColor);
 	}
-	std::cout << *this << getColorStr(FGRAY, " Copy was Created") << std::endl;
+	std::cout << *this << getColorStr(FGRAY, " Copy was Created\n");
 	return (*this);
 }
 
@@ -22,12 +22,12 @@ Animal::Animal(Animal const& rhs){*this = rhs;}
 
 Animal::~Animal()
 {
-	std::cout << *this << getColorStr(FGRAY, " was Destroyed") << std::endl;
+	std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
 }
 
 void Animal::makeSound(void) const
 {
-	std::cout << "[ "+ _CLASS_ICON + " ]" + "\t     : ... " + "\n";
+	std::cout << getIcon() + "\t     : ... " + "\n";
 }
 
 std::string Animal::getType(void) const

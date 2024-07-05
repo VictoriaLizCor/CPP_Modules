@@ -1,49 +1,56 @@
 #include "Cat.hpp"
 
-const std::string Cat::thoughts[20] = {
-	"I need to sleep more.",
-	"Is that a mouse?",
-	"I wonder what's outside.",
-	"Time to knock some glasses off.",
-	"Why do humans pet me and then stop?",
-	"I could go for some fish right now.",
-	"I'm the king/queen of this house.",
-	"That spot of sunlight looks perfect for a nap.",
-	"Why is my human not understanding me?",
-	"I'm bored, time to cause some chaos."
-	"Is it time for my next meal yet?",
-	"That sunbeam looks like a perfect spot for a nap.",
-	"Why do humans find it necessary to bother me with their petting?",
-	"I wonder what's outside that window.",
-	"I should knock that glass off the table to see what happens.",
-	"What if I can actually catch my tail this time?",
-	"These humans don't appreciate my early morning serenades.",
-	"If I fit, I sit.",
-	"The dog's bed looks more comfortable; I'll sleep there.",
-	"Why does the red dot always elude me?"
+const std::string Cat::_THOUGHTS[_IDEAS] = {
+	"I need to sleep more.", //0
+	"Is that a mouse?", //1
+	"I wonder what's outside.", //2
+	"Time to knock something off.", //3
+	"Why do humans pet me and then stop?", //4
+	"I could go for some fish right now.", //5
+	"I'm the king/queen of this house.", //6
+	"That spot of sunlight looks perfect for a nap.", //7
+	"Why is my human not understanding me?", //8
+	"I'm bored, time to cause some chaos." //9
+	"Is it time for my next meal yet?", //10
+	"That sunbeam looks like a perfect spot for a nap.", //11
+	"Why do humans find it necessary to bother me with their petting?", //12
+	"I wonder what's outside that window.", //13
+	"I should knock that glass off the table to see what happens.", //14
+	"What if I can actually catch my tail this time?", //15
+	"These humans don't appreciate my early morning serenades.", //16
+	"If I fit, I sit.", //17
+	"The dog's bed looks more comfortable; I'll sleep there.", //18
+	"Why does the red dot always elude me?" //19
 };
 
 Cat::Cat():Animal(className(typeid(*this).name())),
-_CLASS_ICON("🐱"), _brain(new Brain())
-{
-	for (size_t i = 0 ; i < 20 ; i++)
-		_brain->setIdea(thoughts[i]);
-	
-	std::cout << *this << getColorStr(FGRAY, " was Created") << std::endl;
+_CLASS_ICON("🐱"),_brain(0)
+{	
+	std::cout << *this << getColorStr(FGRAY, " Copy was Created\n");
+	_brain = new Brain(getClass());
+	for (size_t i = 0 ; i < Brain::getSize() ; i++)
+	{
+		if (i < _IDEAS)
+			_brain->setIdea(_THOUGHTS[i]);
+		else
+			_brain->setIdea(_THOUGHTS[_brain->getRandomIdea(_IDEAS)]);
+	}
 }
 
 Cat&::Cat::operator=(Cat const& rhs)
 {
+	std::cout << *this << getColorStr(FGRAY, " Copy was Created\n");
 	if (this != &rhs)
 	{
-		_color = setObjColor(++_objectColor);
+		if (_brain != NULL)
+			delete _brain;
+		_brain = new Brain(getClass());
 		*_brain = *(rhs._brain);
 	} 
-	std::cout << *this << getColorStr(FGRAY, " Copy was Created") << std::endl;
 	return (*this);
 }
 
-Cat::Cat(Cat const& rhs):Animal(className(typeid(*this).name())), _CLASS_ICON("🐱"), _brain(new Brain())
+Cat::Cat(Cat const& rhs):Animal(className(typeid(*this).name())), _CLASS_ICON("🐱"), _brain(0)
 {
 	*this = rhs;
 }
@@ -52,21 +59,24 @@ Cat::~Cat()
 {
 	if (_brain)
 		delete _brain;
-	std::cout << *this << getColorStr(FGRAY, " was Destroyed") << std::endl;
+	std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
 }
 
 void Cat::makeSound(void) const
 {
-	std::cout << this->Animal::getIcon();
-	std::cout << "[ "+ _CLASS_ICON + " ]" + " : Meows " + "\n";
+	std::cout  << getIcon() + " : Meows : ";
+	{
+		size_t i = _brain->getRandomIdea(Brain::getSize());
+		std::cout << "(" << i << ")- "<< _brain->getIdea(i);
+	}
 }
 
 std::string Cat::getIcon(void) const
 {
-	return ("[ "+ _CLASS_ICON + " ]");
+	return ("[ "+ getClass() + " " + _CLASS_ICON + " ]");
 }
 
-std::string Cat::getClass(void)
+std::string Cat::getClass(void) const
 {
 	return (_color + className(typeid(*this).name()) + std::string(C_DEFAULT));
 }

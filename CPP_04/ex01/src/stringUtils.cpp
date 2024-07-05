@@ -140,6 +140,12 @@ static std::string	rColorRGB(int red, int green, int blue)
  */
 static int ft_rand(int min, int max)
 {
+	static bool seeded = false;
+	if (!seeded)
+	{
+		srand(static_cast<unsigned int>(time(0)));
+		seeded = true;
+	}
 	if (min < 0 || min > 256|| max < 0 || max > 256)
 		return (255);
 	return (rand() % (max - min + 1) + min);
@@ -297,4 +303,23 @@ std::string className(const std::string& str)
 		return str.substr(pos);
 	else
 		return "";
+}
+
+std::string getRandString()
+{
+	static bool seeded = false;
+	std::string randomStr= "";
+	size_t strLen = 10;
+
+	if (!seeded)
+	{
+		srand(static_cast<unsigned int>(time(0)));
+		seeded = true;
+	}
+	for(size_t i = 0; i < strLen; i++)
+	{
+		char random_char = 'a' + static_cast<char>(rand() % 26); // random character between 'a' and 'z'
+		randomStr += random_char;
+	}
+	return (randomStr);
 }

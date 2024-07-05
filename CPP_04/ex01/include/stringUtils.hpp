@@ -85,5 +85,5 @@ bool		isOnlySpaces(const std::string& str);
 size_t		maxStringLength(int fieldSize, std::string* arrayData);
 std::string	center(const std::string& s, std::string::size_type width);
 std::string	className(const std::string& str);
-
+std::string	getRandString();
 #endif

@@ -16,7 +16,8 @@ class Dog : virtual public Animal
 		std::string	_CLASS_ICON;
 		std::string getIcon(void) const;
 		Brain*		_brain;
-		static const std::string thoughts[20]; 
+		static size_t const _IDEAS = 20;
+		static const std::string _THOUGHTS[_IDEAS]; 
 	protected:
 
 	public:
@@ -25,8 +26,7 @@ class Dog : virtual public Animal
 		Dog(Dog const& rhs);
 		~Dog();
 
-		
-		std::string	getClass(void);
+		std::string	getClass(void) const;
 		void		makeSound(void) const;
 
 };

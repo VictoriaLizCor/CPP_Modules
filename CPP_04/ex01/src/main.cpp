@@ -17,8 +17,6 @@ int main(void)
 	{
 		const Animal* animals[size];
 		std::cout << "---\n";
-		std::cout << Brain::getSize() << "\n";
-		std::cout << "---\n";
 		for( i = 0; i < size; ++i )
 		{
 			if( i < size / 2 )
@@ -29,8 +27,9 @@ int main(void)
 		std::cout << "---\n";
 		for( i = 0; i < size; ++i )
 		{
-			std::cout << i << "-";
+			// std::cout << i << "-";
 			animals[i]->makeSound();
+			std::cout << "\n";
 		}
 		std::cout << "---\n";
 		for (i = 0; i < size; ++i)
