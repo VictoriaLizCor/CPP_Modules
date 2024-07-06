@@ -140,10 +140,10 @@ gPush:
 	@echo $(YELLOW) && git push ; \
 	ret=$$? ; \
 	if [ $$ret -ne 0 ]; then \
-		echo $(RED)"git push failed, setting upstream branch" $(CYAN) && \
+		echo $(RED) "git push failed, setting upstream branch" $(YELLOW) && \
 		git push --set-upstream origin $(shell git branch --show-current) || \
 		if [ $$? -ne 0 ]; then \
-			echo $(RED)"git push --set-upstream failed with error" $(E_NC); \
+			echo $(RED) "git push --set-upstream failed with error" $(E_NC); \
 			exit 1; \
 		fi \
 	fi
