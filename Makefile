@@ -223,5 +223,3 @@ define TRASH
 
 endef
 export TRASH
- 
-~ Autor: Victoria Lizarraga (@VictoriaLizCor / @lilizarr) ~
