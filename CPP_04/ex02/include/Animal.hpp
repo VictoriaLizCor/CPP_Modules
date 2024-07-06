@@ -24,8 +24,9 @@ class Animal
 		Animal& operator=(Animal const& rhs);
 		Animal(Animal const& rhs);
 		virtual ~Animal(void);
-		virtual std::string		getClass(void) const;
-		virtual void		makeSound(void) const;
+
+		virtual std::string	getClass(void) const;
+		virtual void		makeSound(void) const = 0;
 		int					getId() const;
 		virtual std::string getType(void) const;
 

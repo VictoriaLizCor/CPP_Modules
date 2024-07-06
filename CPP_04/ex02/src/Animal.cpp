@@ -66,7 +66,7 @@ void Animal::makeSound(void) const
  */
 std::string Animal::getType(void) const
 {
-	return (_color + _type + "\t" + getIcon());
+	return (getClass() + "\t" + getIcon());
 }
 
 /**
