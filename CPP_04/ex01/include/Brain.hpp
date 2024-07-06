@@ -10,7 +10,7 @@
 class Brain
 {
 	private:
-		static size_t const _size = 4;
+		static size_t const _size = 100;
 		size_t				_index;
 		std::string			_ideas[_size];
 		std::string 		_animal;

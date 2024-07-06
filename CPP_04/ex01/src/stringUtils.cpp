@@ -57,6 +57,14 @@ std::string	getColorFmt(int eColor)
 	return (strColor.str());
 }
 
+/**
+ * Generates an error message with optional formatting.
+ *
+ * @param str The error message to be displayed.
+ * @param bold A boolean value indicating whether the error message should be
+ * displayed in bold.
+ * @return The formatted error message.
+ */
 std::string error(std::string str, bool bold)
 {
 	std::ostringstream strColor;
@@ -98,11 +106,25 @@ std::string	getColorStr(t_Name const& name)
 	return (name.colorStr + name.str + C_DEFAULT);
 }
 
+/**
+ * Returns a string with the specified color formatting applied.
+ *
+ * @param eColor The color code to apply to the string.
+ * @param str The input string.
+ * @return The formatted string with the specified color.
+ */
 std::string	getColorStr(int eColor, std::string const& str)
 {
 	return (getColorFmt(eColor) + str + std::string(C_DEFAULT));
 }
 
+/**
+ * Concatenates the given color string with the input string and the default color string.
+ * 
+ * @param eColor The color string to be concatenated.
+ * @param str The input string to be concatenated.
+ * @return The concatenated string with the color string and the default color string.
+ */
 std::string	getColorStr(std::string& eColor, std::string const& str)
 {
 	return (eColor + str + std::string(C_DEFAULT));
@@ -305,6 +327,11 @@ std::string className(const std::string& str)
 		return "";
 }
 
+/**
+ * Generates a random string of length 10.
+ * 
+ * @return The randomly generated string.
+ */
 std::string getRandString()
 {
 	static bool seeded = false;

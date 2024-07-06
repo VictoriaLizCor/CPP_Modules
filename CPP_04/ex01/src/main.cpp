@@ -1,10 +1,6 @@
-#include "Animal.hpp"
 #include "Brain.hpp"
 #include "Cat.hpp"
 #include "Dog.hpp"
-#include "WrongAnimal.hpp"
-#include "WrongCat.hpp"
-#include "stringUtils.hpp"
 
 #if (DEBUG == 0)
 
@@ -12,7 +8,7 @@
 
 int main(void)
 {
-	size_t const size = Brain::getSize();
+	size_t const size = 10;
 	size_t i;
 	{
 		const Animal* animals[size];
@@ -25,14 +21,15 @@ int main(void)
 				animals[i] = new Dog();
 		}
 		std::cout << "---\n";
+		std::cout << "Total Animals created: "
+		<< animals[i - 1]->getId() << "/" << i << "\n";
+		std::cout << "---\n";
 		for( i = 0; i < size; ++i )
 		{
-			// std::cout << i << "-";
 			animals[i]->makeSound();
-			std::cout << "\n";
 		}
 		std::cout << "---\n";
-		for (i = 0; i < size; ++i)
+		while (--i <= size)
 			delete animals[i];
 	}
 	std::cout << "\n";

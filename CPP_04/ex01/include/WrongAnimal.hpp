@@ -19,7 +19,7 @@ class WrongAnimal
 		std::string		_CLASS_ICON;
 		std::string		_type;
 		std::string		_color;
-		static int		_objectColor;
+		static int		_Id;
 
 	public:
 		explicit WrongAnimal(std::string const& type = "WrongAnimal");

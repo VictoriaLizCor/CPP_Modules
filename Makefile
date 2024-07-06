@@ -21,6 +21,19 @@ all:
 		done; \
 	done
 
+allVal:
+	@for mod in $(DIRS); do \
+		echo "\n"$(BLUE)$$(basename $$mod) $(E_NC) ; \
+		for subdir in $$(find $$mod -type d -name "ex0*" | sort); do \
+			echo $(MAG) "\n$(MAKE) -C $$subdir D=$(D) re test" $(E_NC); \
+			$(MAKE) -C $$subdir D=$(D) re val; \
+			r=$$?; \
+			if [ $$r -ne 0 ]; then \
+				echo $(RED) "ERROR in $$subdir" $(E_NC); \
+			fi \
+		done; \
+	done
+
 cleanAll:
 	@for mod in $(DIRS); do \
 		echo "\n"$(BLUE)*******************$$(basename $$mod)*******************$(E_NC) ; \

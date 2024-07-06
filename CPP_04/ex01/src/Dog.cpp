@@ -23,7 +23,17 @@ const std::string Dog::_THOUGHTS[_IDEAS] = {
 	"Why does the vacuum cleaner exist? I hate it." // 19
 };
 
-Dog::Dog():Animal(className(typeid(*this).name())), _CLASS_ICON("🐶") ,_brain(0)
+/**
+ * @brief Default constructor for the Dog class.
+ *
+ * This constructor initializes a Dog object with a unique ID, class name, and a
+ * brain. It also sets the class icon to "🐶" and assigns random thoughts to the
+ * brain.
+ *
+ * @param None
+ * @return None
+ */
+Dog::Dog():Animal(className(typeid(*this).name())), _Id(Animal::_Id),_CLASS_ICON("🐶") ,_brain(0)
 {
 	std::cout << *this << getColorStr(FGRAY, " was Created\n");
 	_brain = new Brain(getClass());
@@ -36,6 +46,15 @@ Dog::Dog():Animal(className(typeid(*this).name())), _CLASS_ICON("🐶") ,_brain(
 	}
 }
 
+/**
+ * @brief Assignment operator for Dog class.
+ *
+ * This operator assigns the values of the right-hand side object to the
+ * left-hand side object. It performs a deep copy of the _brain member variable.
+ *
+ * @param rhs The right-hand side object to be assigned.
+ * @return A reference to the left-hand side object after assignment.
+ */
 Dog&::Dog::operator=(Dog const& rhs)
 {
 	std::cout << *this << getColorStr(FGRAY, " Copy was Created\n");
@@ -49,11 +68,23 @@ Dog&::Dog::operator=(Dog const& rhs)
 	return (*this);
 }
 
-Dog::Dog(Dog const& rhs):Animal(className(typeid(*this).name())), _CLASS_ICON("🐶"),_brain(0)
+/**
+ * @brief Constructs a new Dog object by copying another Dog object.
+ *
+ * @param rhs The Dog object to be copied.
+ */
+Dog::Dog(Dog const& rhs):Animal(className(typeid(*this).name())), _Id(Animal::_Id), _CLASS_ICON("🐶"),_brain(0)
 {
 	*this = rhs;
 }
 
+/**
+ * @brief Destructor for the Dog class.
+ *
+ * This destructor is responsible for cleaning up the memory allocated for the
+ * Dog object. It deletes the _brain object if it exists and prints a message
+ * indicating that the Dog object has been destroyed.
+ */
 Dog::~Dog()
 {
 	if (_brain)
@@ -61,21 +92,58 @@ Dog::~Dog()
 	std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
 }
 
+/**
+ * @brief Makes the dog sound and prints a random idea from its brain.
+ *
+ * This function prints the dog's icon followed by the message "Barks: " and a
+ * random idea from its brain. If the DEBUG flag is not set, a random idea is
+ * selected from the brain. If the DEBUG flag is set, the function will cycle
+ * through all the ideas in the brain.
+ *
+ * @note The function assumes that the dog has a brain object associated with
+ * it.
+ *
+ * @return void
+ */
 void Dog::makeSound(void) const
 {
-	std::cout << getIcon() + ": Barks : ";
+	std::cout << getIcon() + ": Barks: ";
 	{
-		size_t i = _brain->getRandomIdea(Brain::getSize());
-		std::cout << "(" << i << ")- "<<_brain->getIdea(i);
+		static size_t i;
+		if (DEBUG != 0)
+			i = _brain->getRandomIdea(Brain::getSize() + 10);
+		else if (i >= _brain->getSize())
+			i = 0;
+		std::cout << "(" << i << ")- " 
+		<< _brain->getIdea(i) << "\n";
+		i++;
 	}
 }
 
+/**
+ * @brief Get the icon representation of the Dog class.
+ *
+ * @return std::string The icon representation of the Dog class.
+ */
 std::string Dog::getIcon(void) const
 {
 	return ("[ "+ getClass() + " " + _CLASS_ICON + " ]");
 }
 
+/**
+ * @brief Get the class name and color of the Dog object.
+ *
+ * This function returns a string that represents the class name and color of
+ * the Dog object. The class name is obtained using the `typeid` operator, and
+ * the color is stored in the `_color` member variable.
+ *
+ * @return std::string The class name and color of the Dog object.
+ */
 std::string Dog::getClass(void) const
 {
-	return (_color + className(typeid(*this).name()) + std::string(C_DEFAULT));
+	std::ostringstream os;
+
+	os << _color + className(typeid(*this).name()) 
+	<< _Id << std::string(C_DEFAULT);
+	return (os.str());
 }

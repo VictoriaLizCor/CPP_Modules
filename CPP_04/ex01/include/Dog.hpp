@@ -13,11 +13,14 @@ class Dog : virtual public Animal
 {
 	private:
 		private:
-		std::string	_CLASS_ICON;
+		int							_Id;
+		std::string					_CLASS_ICON;
+		Brain*						_brain;
+		static size_t const			_IDEAS = 20;
+		static const std::string	_THOUGHTS[_IDEAS]; 
+
 		std::string getIcon(void) const;
-		Brain*		_brain;
-		static size_t const _IDEAS = 20;
-		static const std::string _THOUGHTS[_IDEAS]; 
+
 	protected:
 
 	public:

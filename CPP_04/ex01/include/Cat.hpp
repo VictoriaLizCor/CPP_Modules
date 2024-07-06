@@ -11,10 +11,12 @@ class Cat : virtual public Animal
 {
 	private:
 		private:
-		std::string	_CLASS_ICON;
-		Brain*		_brain;
-		static size_t const _IDEAS = 20;
-		static std::string const _THOUGHTS[_IDEAS];
+		int							_Id;
+		std::string					_CLASS_ICON;
+		Brain*						_brain;
+		static size_t const 		_IDEAS = 20;
+		static std::string const	_THOUGHTS[_IDEAS];
+		
 		std::string	getIcon(void) const;
 
 	protected:
