@@ -1,6 +1,6 @@
 #include "Character.hpp"
 
-Character::Character()
+Character::Character(std::string const& name)
 {
 }
 

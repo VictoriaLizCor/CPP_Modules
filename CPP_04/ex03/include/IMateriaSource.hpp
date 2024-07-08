@@ -6,6 +6,7 @@
 # include <string>
 # include <typeinfo>
 # include <stringUtils.hpp>
+# include "AMateria.hpp"
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -19,7 +20,9 @@ class IMateriaSource
 		
 	public:
 		IMateriaSource();
-		virtual ~IMateriaSource(void);
+		virtual ~IMateriaSource() {}
+		virtual void		learnMateria(AMateria*) = 0;
+		virtual AMateria*	createMateria(std::string const & type) = 0;
 
 };
 

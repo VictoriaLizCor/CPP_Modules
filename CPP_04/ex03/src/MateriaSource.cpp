@@ -4,6 +4,11 @@ MateriaSource::MateriaSource()
 {
 }
 
+MateriaSource&::MateriaSource::operator=(MateriaSource const& rhs)
+{
+	
+}
+
 MateriaSource::~MateriaSource(void)
 {
 }

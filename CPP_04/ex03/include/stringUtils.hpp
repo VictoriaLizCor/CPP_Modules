@@ -10,7 +10,7 @@
 # endif
 
 # define C_FMT "\033["
-# define C_DEFAULT "\033[0m"
+# define C_END "\033[0m"
 
 /*
 	FL is light foreground color
@@ -58,7 +58,7 @@ typedef enum eColor
  * This struct stores a name and its associated color.
  * inline std::string getName() const
  * {
- * 	return (color + str + C_DEFAULT);
+ * 	return (color + str + C_END);
  * }
  */
 struct s_coloredName

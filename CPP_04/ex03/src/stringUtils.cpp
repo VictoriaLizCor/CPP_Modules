@@ -7,7 +7,7 @@
  */
 std::string s_coloredName::getName() const
 {
-	return (colorStr + str + C_DEFAULT);
+	return (colorStr + str + C_END);
 }
 
 /**
@@ -103,7 +103,7 @@ std::string toString(int value)
  */
 std::string	getColorStr(t_Name const& name)
 {
-	return (name.colorStr + name.str + C_DEFAULT);
+	return (name.colorStr + name.str + C_END);
 }
 
 /**
@@ -115,7 +115,7 @@ std::string	getColorStr(t_Name const& name)
  */
 std::string	getColorStr(int eColor, std::string const& str)
 {
-	return (getColorFmt(eColor) + str + std::string(C_DEFAULT));
+	return (getColorFmt(eColor) + str + std::string(C_END));
 }
 
 /**
@@ -127,7 +127,7 @@ std::string	getColorStr(int eColor, std::string const& str)
  */
 std::string	getColorStr(std::string& eColor, std::string const& str)
 {
-	return (eColor + str + std::string(C_DEFAULT));
+	return (eColor + str + std::string(C_END));
 }
 
 

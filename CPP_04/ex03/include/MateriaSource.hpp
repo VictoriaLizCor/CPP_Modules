@@ -6,12 +6,12 @@
 # include <string>
 # include <typeinfo>
 # include <stringUtils.hpp>
-
+# include "IMateriaSource.hpp"
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
 
-class MateriaSource
+class MateriaSource : public IMateriaSource
 {
 	private:
 
@@ -19,10 +19,12 @@ class MateriaSource
 		
 	public:
 		MateriaSource();
+		MateriaSource& operator=(MateriaSource const& rhs);
 		virtual ~MateriaSource(void);
 
-};
+		void		learnMateria(AMateria* aMateria) = 0;
+		AMateria*	createMateria(std::string const & type) = 0;
 
-std::ostream& operator << (std::ostream& os, MateriaSource& rhs);
+};
 
 #endif // MATERIASOURCE_HPP

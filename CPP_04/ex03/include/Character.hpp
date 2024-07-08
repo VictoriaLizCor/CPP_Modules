@@ -6,19 +6,21 @@
 # include <string>
 # include <typeinfo>
 # include <stringUtils.hpp>
+# include "AMateria.hpp"
+# include "ICharacter.hpp"
 
-# ifndef DEBUG
-#  define DEBUG 0
-# endif
 
-class Character
+class Character : public ICharacter
 {
 	private:
+		AMateria *_inventory[4];
 
 	protected:
 		
 	public:
-		Character();
+		Character(std::string const& name);
+		Character& operator=(Character const& rhs);
+		Character(Character const& rhs);
 		virtual ~Character(void);
 
 };
