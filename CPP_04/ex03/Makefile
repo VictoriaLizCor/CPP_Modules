@@ -99,6 +99,9 @@ re: fclean all
 
 .PHONY: all re fclean clean 
 #------------- TEST UTILS -----------------------------------#
+#make check f=file
+check:
+	@g++ $(D_FLAGS) $(INCLUDES) -fsyntax-only $(f).cpp
 test:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
 	@./$(NAME)
