@@ -100,4 +100,7 @@ int main(void)
  * when creating instances, using member functions, or accessing
  * member variables). In such cases, a full class definition is
  * required, and the corresponding header file must be included.
+ * 
+ * NOTES:
+ * pure virtual function member can not be called in contructors
  *  */

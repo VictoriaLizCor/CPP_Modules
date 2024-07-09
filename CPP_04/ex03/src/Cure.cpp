@@ -1,13 +1,12 @@
 #include "Cure.hpp"
 #include "ICharacter.hpp"
 
-std::string const Cure::_colorIdStr = getColorFmt(FGREEN);
 
 Cure::Cure():
-AMateria(getColorStr(_colorIdStr, "cure"))
+AMateria("cure")
 {
 	if (DEBUG)
-		std::cout << this << getColorStr(FGRAY, " was Created\n");
+		std::cout << *this << getColorStr(FGRAY, " was Created\n");
 }
 
 
@@ -40,11 +39,15 @@ Cure *Cure::clone(void) const
 
 void Cure::use(ICharacter& target)
 {
-	std::cout << this << " type use on " << target.getName() << "\n";
+	std::cout << *this << " type use on " << target.getName() << "\n";
 }
 
 std::string Cure::getInfo(void) const
 {
-	return (this->_colorIdStr + this->getType() + toString(_objId) + std::string(C_END));
+	std::ostringstream os;
+
+	os << _colorIdStr << className(typeid(*this).name()) << "::"
+	<< _type << toString(_objId) << std::string(C_END);
+	return (os.str());
 }
 

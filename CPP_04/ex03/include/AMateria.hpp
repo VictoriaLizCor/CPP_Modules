@@ -17,7 +17,7 @@ class AMateria
 
 	protected:
 		static int			_objId;
-		std::string const	_colorIdStr;
+		std::string 		_colorIdStr;
 		std::string			_type;
 
 	public:
@@ -31,7 +31,7 @@ class AMateria
 		virtual void		use(ICharacter& target);
 
 		//*aditional function members
-		virtual std::string	getInfo(void) const = 0;
+		virtual std::string	getInfo(void) const;
 };
 
 std::ostream& operator << (std::ostream& os, AMateria& rhs);

@@ -7,6 +7,10 @@ AMateria::AMateria(std::string const & type):
 _type(type)
 {
 	_objId++;
+	if (_type == "cure")
+		_colorIdStr = getColorFmt(FGREEN);
+	else if (_type == "ice")
+		_colorIdStr = getColorFmt(FBLUE);
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
 }
@@ -30,7 +34,10 @@ AMateria::~AMateria(void)
 }
 
 
-std::string const& AMateria::getType() const{return (_type);}
+std::string const& AMateria::getType() const
+{
+	return (_type);
+}
 
 
 void AMateria::use(ICharacter& target)
@@ -40,8 +47,13 @@ void AMateria::use(ICharacter& target)
 
 std::string AMateria::getInfo(void) const
 {
-	return ("");
+	std::ostringstream os;
+
+	os << _colorIdStr << className(typeid(*this).name()) << "::"
+	<< _type << toString(_objId) << std::string(C_END);
+	return (os.str());
 }
+
 
 
 std::ostream& operator << (std::ostream& os, AMateria& rhs)

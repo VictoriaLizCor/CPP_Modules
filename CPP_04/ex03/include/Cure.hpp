@@ -16,7 +16,7 @@ class ICharacter;
 class Cure: public AMateria
 {
 	private:
-		static std::string const	_colorIdStr;
+		// static std::string const	_colorIdStr;
 	protected:
 
 	public:
