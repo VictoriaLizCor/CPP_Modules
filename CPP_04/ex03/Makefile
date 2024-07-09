@@ -10,7 +10,7 @@ PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir $(shell find $(PROJECT_ROOT) -name Makefile | sort)))
 CURRENT		:= $(shell basename $$PWD)
-DEBUG_FILES	:= debug
+DEBUG_PATH	:= debug
 #------ DEBUG FLAG ------#
 D			= 0
 #------ Sanitizer Flag ------#
@@ -27,8 +27,9 @@ DEBUG_DIR	:= $(NAME).dSYM
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 CXX			= g++
-SRC			+= $(shell find $(DEBUG_FILES) -name '*.cpp')
-INCLUDES	+= -I $(DEBUG_FILES)/include
+DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
+SRC			+= $(DEBUG_SRC)
+INCLUDES	+= -I $(DEBUG_PATH)/include
 D_FLAGS		+= -DDEBUG=$(D)
 D_FLAGS		+= -Wconversion -Wsign-conversion -pedantic
 D_FLAGS		+= -fno-omit-frame-pointer
@@ -101,7 +102,19 @@ re: fclean all
 #------------- TEST UTILS -----------------------------------#
 #make check f=file
 check:
-	@g++ $(D_FLAGS) $(INCLUDES) -fsyntax-only $(f).cpp
+	@g++ $(D_FLAGS) $(INCLUDES) -fsyntax-only $(f)
+# make D=1 checkMain f=file
+checkMain:
+	@includeFiles="include/Cure.hpp include/AMateria.hpp include/stringUtils.hpp"; \
+	cpp_files=""; \
+	for file in $$includeFiles; do \
+		cpp_file="src/$$(basename $${file%.*}).cpp"; \
+		cpp_files="$$cpp_files $$cpp_file"; \
+	done; \
+	cpp_files="$$cpp_files $(DEBUG_SRC)"; \
+	printf "\n$(P_GREEN) $(CXX) $(D_FLAGS) $(INCLUDES) $(P_YELLOW) $$cpp_files $(P_GREEN) -o ex03 $(FG_TEXT) \n" ; \
+	$(CXX) $(D_FLAGS) $(INCLUDES) $$cpp_files -o ex03
+	./$(NAME)
 test:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
 	@./$(NAME)

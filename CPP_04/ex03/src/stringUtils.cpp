@@ -106,6 +106,19 @@ std::string	getColorStr(t_Name const& name)
 	return (name.colorStr + name.str + C_END);
 }
 
+
+/**
+ * Concatenates the given color string with the input string and the default color string.
+ * 
+ * @param eColor The color string to be concatenated.
+ * @param str The input string to be concatenated.
+ * @return The concatenated string with the color string and the default color string.
+ */
+std::string	getColorStr(std::string const& eColor, std::string const& str)
+{
+	return (eColor + str + std::string(C_END));
+}
+
 /**
  * Returns a string with the specified color formatting applied.
  *
@@ -117,19 +130,6 @@ std::string	getColorStr(int eColor, std::string const& str)
 {
 	return (getColorFmt(eColor) + str + std::string(C_END));
 }
-
-/**
- * Concatenates the given color string with the input string and the default color string.
- * 
- * @param eColor The color string to be concatenated.
- * @param str The input string to be concatenated.
- * @return The concatenated string with the color string and the default color string.
- */
-std::string	getColorStr(std::string& eColor, std::string const& str)
-{
-	return (eColor + str + std::string(C_END));
-}
-
 
 /**
  * @brief Generates an RGB color string for terminal output.

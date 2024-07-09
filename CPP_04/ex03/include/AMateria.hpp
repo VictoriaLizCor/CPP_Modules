@@ -14,22 +14,24 @@ class ICharacter;
 class AMateria
 {
 	private:
-		std::string			_type;
-		std::string const	_colorIdStr;
+
 	protected:
-		
+		static int			_objId;
+		std::string const	_colorIdStr;
+		std::string			_type;
+
 	public:
 		AMateria(std::string const & type);
 		AMateria& operator=(AMateria const& rhs);
+		AMateria(AMateria const& rhs);
 		virtual ~AMateria();
 
-		std::string const& getType() const; //Returns the materia type
-		virtual AMateria* clone() const = 0;
-		virtual void use(ICharacter& target);
+		std::string const&	getType(void) const;
+		virtual AMateria*	clone(void) const = 0;
+		virtual void		use(ICharacter& target);
 
 		//*aditional function members
-		std::string getClass(void) const;
-
+		virtual std::string	getInfo(void) const = 0;
 };
 
 std::ostream& operator << (std::ostream& os, AMateria& rhs);

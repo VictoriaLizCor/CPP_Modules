@@ -76,7 +76,7 @@ void 		coutnl(std::ostream& os);
 std::string	toString(int value);
 std::string	getColorFmt(int eColor);
 // std::string	getColorStr(t_Name const& name);
-std::string	getColorStr(std::string& eColor, std::string const& str);
+std::string	getColorStr(std::string const& eColor, std::string const& str);
 std::string	getColorStr(int eColor, std::string const& str);
 std::string	getRandomColorFmt(bool bold);
 std::string	setObjColor(int const& color);

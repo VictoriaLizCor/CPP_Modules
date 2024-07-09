@@ -1,6 +1,6 @@
 // #include "Character.hpp"
 // #include "Ice.hpp"
-// #include "Cure.hpp"
+#include "Cure.hpp"
 // #include "MateriaSource.hpp"
 #include <iomanip>
 #include <iostream>
@@ -10,7 +10,7 @@ static void printTitle(std::string title)
 	const int size = 60;
 	std::string toPrint = " " + title + " "; 
 	
-	int len = toPrint.size();
+	int len = static_cast<int>(toPrint.size());
 	int padding = (size - len) / 2;
 
 	if (len % 2 != 0 && size % 2 == 0)
@@ -84,9 +84,10 @@ static void printTitle(std::string title)
 // 	delete ice;
 // }
 
-// static void	testMateriaSource()
-// {
-// 	printTitle("MATERIA SOURCE");
+static void	testMateriaSource()
+{
+	printTitle("MATERIA SOURCE");
+	Cure c1;
 // 	IMateriaSource	*matSource = new MateriaSource();
 // 	ICharacter		*c1 = new Character("Char1");
 // 	ICharacter		*c2 = new Character("Char2");
@@ -112,14 +113,12 @@ static void printTitle(std::string title)
 // 	delete matSource;
 // 	delete c1;
 // 	delete c2;
-// }
+}
 
 int	main(void)
 {
-	printTitle("MATERIA SOURCE");
-	printTitle("CHARACTER");
 	// testSubject();
 	// testCharacter();
-	// testMateriaSource();
+	testMateriaSource();
 	return (0);
 }

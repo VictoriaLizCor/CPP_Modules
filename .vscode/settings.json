@@ -3,8 +3,9 @@
 	// "[osx]":
 	// "editor.fontSize": 13.5,
 	// "[linux]":
-	"editor.fontSize": 14,
-	"window.zoomLevel": 0,
+	"editor.fontSize": 13.6,
+	"window.zoomLevel": 0.4,
+	// "debug.console.fontSize": 20,
 	"terminal.integrated.fontSize": 13,
 	/*FOR BOTH*/
 	"makefile.makePath": "./Makefile",
@@ -29,7 +30,7 @@
 		//	"${workspaceFolder}/CPP_00/ex01/src/${workspaceFolder}/CPP_00/ex01/src/my_awesome_phonebook.cpp"
 	],
 	"window.customTitleBarVisibility": "auto",
-	"rewrap.wrappingColumn": 80,
+	"rewrap.wrappingColumn": 70,
 	"files.associations": {
 		"array": "cpp",
 		"atomic": "cpp",
