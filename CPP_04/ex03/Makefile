@@ -29,7 +29,7 @@ ifneq ($(D), 0)
 CXX			= g++
 DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
 SRC			+= $(DEBUG_SRC)
-INCLUDES	+= -I $(DEBUG_PATH)/include
+# INCLUDES	+= -I $(DEBUG_PATH)/include
 D_FLAGS		+= -DDEBUG=$(D)
 D_FLAGS		+= -Wconversion -Wsign-conversion -pedantic
 D_FLAGS		+= -fno-omit-frame-pointer
@@ -104,26 +104,26 @@ re: fclean all
 #make check f=file
 check:
 	@g++ $(D_FLAGS) $(INCLUDES) -fsyntax-only $(f)
-# make D=1 checkMain f=file
+# make D=1 checkMain
 checkMain:
-	main="";\
-	if [ "$(D)" eq "0"]; then \
-		main=$(MAIN); \
-	else ; \
-		main=$(DEBUG_SRC); \
-	endif
-	echo $$main
-	main ="$$main"; \
-	includeFiles="include/Cure.hpp include/AMateria.hpp include/stringUtils.hpp" ; \
+	@main="";\
+	if [ "$(D)" = "0" ]; then \
+		main="$(MAIN)"; \
+	else \
+		main="$(DEBUG_SRC)"; \
+	fi ; \
+	main="$$main"; \
+	includeFiles="include/Ice.hpp include/Cure.hpp include/AMateria.hpp include/stringUtils.hpp" ; \
 	cpp_files=""; \
 	for file in $$includeFiles; do \
 		cpp_file="src/$$(basename $${file%.*}).cpp"; \
 		cpp_files="$$cpp_files $$cpp_file"; \
 	done ; \
 	cpp_files="$$cpp_files $$main" ; \
-	printf "\n$(P_GREEN) $(CXX) $(D_FLAGS) $(INCLUDES) $(P_YELLOW) $$cpp_files $(P_GREEN) -o ex03 $(FG_TEXT) \n" ; \
-	$(CXX) $(D_FLAGS) $(INCLUDES) $$cpp_files -o ex03 ; \
-	./$(NAME)
+	printf "\n$(P_GREEN) $(CXX) $(D_FLAGS) $(INCLUDES) $(P_YELLOW) $$cpp_files $(P_GREEN) -o ex03 $(FG_TEXT)" ; echo; \
+	$(CXX) $(D_FLAGS) $(INCLUDES) $$cpp_files -o ex03
+	@echo $(E_NC);./$(NAME)
+
 test:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
 	@./$(NAME)
@@ -314,7 +314,7 @@ class {{CLASS_NAME}}
 
 };
 
-std::ostream& operator << (std::ostream& os, {{CLASS_NAME}}& rhs);
+// std::ostream& operator << (std::ostream& os, {{CLASS_NAME}}& rhs);
 
 #endif // {{UPPER_H}}
 endef

@@ -1,5 +1,5 @@
 // #include "Character.hpp"
-// #include "Ice.hpp"
+#include "Ice.hpp"
 #include "Cure.hpp"
 // #include "MateriaSource.hpp"
 #include <iomanip>
@@ -86,8 +86,6 @@ static void printTitle(std::string title)
 
 static void	testMateriaSource()
 {
-	printTitle("MATERIA SOURCE");
-	Cure c1;
 // 	IMateriaSource	*matSource = new MateriaSource();
 // 	ICharacter		*c1 = new Character("Char1");
 // 	ICharacter		*c2 = new Character("Char2");
@@ -115,10 +113,59 @@ static void	testMateriaSource()
 // 	delete c2;
 }
 
+static void	testAMateria()
+{
+	{
+		printTitle("AMATERIA Copy assigment operator");
+		Cure c1;
+		{
+			std::cerr << "----\n";
+			Cure c2 = c1;
+			std::cerr << "----\n";
+		}
+		printTitle("AMATERIA Copy constructor");
+		{
+			std::cerr << "----\n";
+			Cure c2(c1);
+			std::cerr << "----\n";
+		}
+		printTitle("AMATERIA Cloning");
+		{
+			AMateria *ptr = c1.clone();
+			std::cout << "Info: " <<*ptr << "\n";
+			std::cerr << "----\n";
+			delete ptr;
+		}
+		printTitle("AMATERIA Copy assigment operator");
+		Ice i1;
+		{
+			std::cerr << "----\n";
+			Ice i2 = i1;
+			std::cerr << "----\n";
+		}
+		printTitle("AMATERIA Copy constructor");
+		{
+			std::cerr << "----\n";
+			Ice i2(i1);
+			std::cerr << "----\n";
+		}
+		printTitle("AMATERIA Cloning");
+		{
+			AMateria *ptr = i1.clone();
+			std::cout << "Info: " <<*ptr << "\n";
+			std::cerr << "----\n";
+			delete ptr;
+		}
+		// std::cerr << "----\n";
+	}
+	printTitle("| END TEST AMATERIA |");
+}
+
 int	main(void)
 {
 	// testSubject();
 	// testCharacter();
-	testMateriaSource();
+	// testMateriaSource();
+	testAMateria();
 	return (0);
 }

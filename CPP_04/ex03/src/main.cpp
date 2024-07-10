@@ -1,17 +1,41 @@
-#include "AMateria.hpp"
-#include "Character.hpp"
+// #include "AMateria.hpp"
+// #include "Character.hpp"
 #include "Cure.hpp"
-#include "ICharacter.hpp"
-#include "IMateriaSource.hpp"
-#include "Ice.hpp"
-#include "MateriaSource.hpp"
+// #include "ICharacter.hpp"
+// #include "IMateriaSource.hpp"
+// #include "Ice.hpp"
+// #include "MateriaSource.hpp"
+#include <iostream>
+#include <iomanip>
 
 #if (DEBUG == 0)
 
-#include <iostream>
+static void printTitle(std::string title)
+{
+	const int size = 60;
+	std::string toPrint = " " + title + " "; 
+	
+	int len = static_cast<int>(toPrint.size());
+	int padding = (size - len) / 2;
+
+	if (len % 2 != 0 && size % 2 == 0)
+		padding++;
+
+	std::cout << std::setfill('=') << std::setw(padding) << "";
+	std::cout << toPrint;
+	std::cout << std::setfill('=') << std::setw(size - len - padding)
+	<< "" << std::endl;
+}
 
 int main(void)
 {
+	printTitle("MATERIA SOURCE");
+	Cure c1;
+	{
+		std::cerr << "----\n";
+		Cure c2 = c1;
+		std::cerr << "----\n";
+	} 
 	// {
 	// 	IMateriaSource* src = new MateriaSource();
 	// 	src->learnMateria(new Ice());

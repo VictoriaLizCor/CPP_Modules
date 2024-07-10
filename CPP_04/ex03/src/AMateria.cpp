@@ -3,14 +3,19 @@
 
 int AMateria::_objId = 0;
 
-AMateria::AMateria(std::string const & type):
-_type(type)
+void AMateria::initColor(void)
 {
-	_objId++;
 	if (_type == "cure")
 		_colorIdStr = getColorFmt(FGREEN);
 	else if (_type == "ice")
 		_colorIdStr = getColorFmt(FBLUE);
+}
+
+AMateria::AMateria(std::string const & type):
+_type(type)
+{
+	_objId++;
+	initColor();
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
 }
@@ -18,7 +23,14 @@ _type(type)
 AMateria&::AMateria::operator=(AMateria const& rhs)
 {
 	if (this != &rhs)
+	{
+		if (_colorIdStr.empty())
+		{
+			_objId++;
+			_colorIdStr = rhs._colorIdStr;
+		}
 		this->_type = rhs._type;
+	}
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " Copy was Created\n");
 	return (*this);

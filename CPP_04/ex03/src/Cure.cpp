@@ -1,23 +1,22 @@
 #include "Cure.hpp"
 #include "ICharacter.hpp"
 
-
-Cure::Cure():
-AMateria("cure")
+Cure::Cure(std::string const& type):
+AMateria(type)
 {
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
 }
 
 
-Cure&::Cure::operator=(AMateria const& rhs)
+Cure&::Cure::operator=(Cure const& rhs)
 {
 	if (this != &rhs)
 		AMateria::operator=(rhs);
 	return (*this);
 }
 
-Cure::Cure(AMateria const&rhs):AMateria(rhs)
+Cure::Cure(Cure const& rhs): AMateria(rhs)
 {
 	*this = rhs;
 }
@@ -34,6 +33,11 @@ std::string const& Cure::getType() const{return (_type);}
 
 Cure *Cure::clone(void) const
 {
+	if (DEBUG)
+	{
+		std::cout << getInfo() << " " + std::string(__func__) + "()"
+		<< getColorStr(FGRAY," used\n");
+	}
 	return (new Cure(*this));
 }
 

@@ -31,6 +31,7 @@ class AMateria
 		virtual void		use(ICharacter& target);
 
 		//*aditional function members
+		void initColor(void);
 		virtual std::string	getInfo(void) const;
 };
 

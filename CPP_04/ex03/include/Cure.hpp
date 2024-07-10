@@ -16,13 +16,13 @@ class ICharacter;
 class Cure: public AMateria
 {
 	private:
-		// static std::string const	_colorIdStr;
+		
 	protected:
 
 	public:
-		explicit Cure(void);
-		Cure& operator=(AMateria const& rhs);
-		Cure(AMateria const& rhs);
+		explicit Cure(std::string const& type = "cure");
+		Cure& operator=(Cure const& rhs);
+		Cure(Cure const& rhs);
 		virtual ~Cure();
 
 		std::string const&	getType(void) const;
