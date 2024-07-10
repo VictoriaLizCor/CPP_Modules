@@ -30,7 +30,13 @@ CXX			= g++
 DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
 SRC			+= $(DEBUG_SRC)
 # INCLUDES	+= -I $(DEBUG_PATH)/include
+DEBUG_FLAG	:= $(D)
+ifeq ($(DEBUG_FLAG),)
+D_FLAGS		+= -DDEBUG=1
+else
 D_FLAGS		+= -DDEBUG=$(D)
+endif
+
 D_FLAGS		+= -Wconversion -Wsign-conversion -pedantic
 D_FLAGS		+= -fno-omit-frame-pointer
 else
@@ -138,13 +144,15 @@ val: $(NAME)
 	@$(VALGRIND) ./$(NAME) ; echo
 
 # #-------------------- GIT UTILS ----------------------------#
-dirs:
+info:
 	@echo GIT_REPO:  $(CYAN) $(GIT_REPO) $(E_NC)
 	@echo PROJECT_ROOT: $(CYAN) $(PROJECT_ROOT) $(E_NC)
 	@echo DIRS: $(BOLD) $(DIRS) "\n" $(E_NC)
 	@echo CURRENT: $(GREEN) $(CURRENT) $(E_NC)
 	@echo SRC: $(YELLOW) $(SRC) $(E_NC)
 	@echo OBJS: $(GRAY) $(OBJS) $(E_NC)
+	@echo $(BLUE)"D = $(D)" $(E_NC)
+	@echo $(BLUE)"S = $(S)" $(E_NC)
 testAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir D=$(D) test; \

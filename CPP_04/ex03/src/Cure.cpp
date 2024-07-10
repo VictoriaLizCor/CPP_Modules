@@ -1,6 +1,7 @@
 #include "Cure.hpp"
 #include "ICharacter.hpp"
 
+
 Cure::Cure(std::string const& type):
 AMateria(type)
 {
@@ -11,12 +12,15 @@ AMateria(type)
 
 Cure&::Cure::operator=(Cure const& rhs)
 {
-	if (this != &rhs)
-		AMateria::operator=(rhs);
+	(void)rhs;
+	// if (this != &rhs)
+	// 	AMateria::operator=(rhs);
+	if (DEBUG)
+		std::cout << *this << getColorStr(FGRAY, " was Created\n");
 	return (*this);
 }
 
-Cure::Cure(Cure const& rhs): AMateria(rhs)
+Cure::Cure(Cure const& rhs): AMateria(rhs.getType())
 {
 	*this = rhs;
 }
@@ -43,7 +47,7 @@ Cure *Cure::clone(void) const
 
 void Cure::use(ICharacter& target)
 {
-	std::cout << *this << " type use on " << target.getName() << "\n";
+	std::cout << "* shoots an ice bolt at " << target.getName() << "\n";
 }
 
 std::string Cure::getInfo(void) const

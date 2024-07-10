@@ -20,6 +20,7 @@ class Cure: public AMateria
 	protected:
 
 	public:
+		// Cure(void);
 		explicit Cure(std::string const& type = "cure");
 		Cure& operator=(Cure const& rhs);
 		Cure(Cure const& rhs);

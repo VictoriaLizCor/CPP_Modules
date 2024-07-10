@@ -131,3 +131,20 @@ sublime()
 	fi
 }
 sublime
+split_terminal() {
+    if [ -z "$TMUX" ]; then
+        # Not inside a tmux session, start a new session and split vertically
+        tmux new-session \; split-window -v
+    else
+        # Inside a tmux session, just split the current window vertically
+        tmux split-window -v
+    fi
+}
+#creating a new tab
+#dbus-send --type=method_call --dest=net.tenshu.Terminator20x1a6021154d881c /net/tenshu/Terminator2/Window1 net.tenshu.Terminator.Window.new_tab
+
+alias split='split_terminal'
+alias cf="find . -name '*.cpp' -exec pygmentize -g -O style=material {} \;"
+alias hf="find . -name '*.hpp' -exec pygmentize -g -O style=material {} \;"
+alias e1="cd $ECPP; cd cpp04_lle-briq/ex03;"
+alias e2="cd $ECPP; cd cpp_clemedon/module04/ex03;"

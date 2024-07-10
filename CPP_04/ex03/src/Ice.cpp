@@ -11,8 +11,11 @@ AMateria(type)
 
 Ice&::Ice::operator=(Ice const& rhs)
 {
-	if (this != &rhs)
-		AMateria::operator=(rhs);
+	(void)rhs;
+	// if (this != &rhs)
+	// 	AMateria::operator=(rhs);
+	if (DEBUG)
+		std::cout << *this << getColorStr(FGRAY, " was Created\n");
 	return (*this);
 }
 
@@ -43,7 +46,7 @@ Ice *Ice::clone(void) const
 
 void Ice::use(ICharacter& target)
 {
-	std::cout << *this << " type use on " << target.getName() << "\n";
+	std::cout << "* heals " << target.getName() << "'s wounds*\n";
 }
 
 std::string Ice::getInfo(void) const
