@@ -124,47 +124,47 @@ static void	testAMateria()
 				Cure c2 = c1;
 				std::cerr << "----\n";
 			}
-			// printTitle("AMATERIA Copy constructor");
-			// {
-			// 	std::cerr << "----\n";
-			// 	Cure c2(c1);
-			// 	std::cerr << "----\n";
-			// }
-			// printTitle("AMATERIA Cloning");
-			// {
-			// 	AMateria *ptr = c1.clone();
-			// 	std::cerr << "----\n";
-			// 	std::cout << "Info: " <<*ptr << "\n";
-			// 	std::cerr << "----\n";
-			// 	delete ptr;
-			// 	std::cerr << "----\n";
-			// }
+			printTitle("AMATERIA Copy constructor");
+			{
+				std::cerr << "----\n";
+				Cure c2(c1);
+				std::cerr << "----\n";
+			}
+			printTitle("AMATERIA Cloning");
+			{
+				AMateria *ptr = c1.clone();
+				std::cerr << "----\n";
+				std::cout << "Info: " <<*ptr << "\n";
+				std::cerr << "----\n";
+				delete ptr;
+				std::cerr << "----\n";
+			}
 			std::cerr << "----\n";
 		}
 		{
-			// printTitle("AMATERIA Copy assigment operator");
-			// Ice i1;
-			// {
-			// 	std::cerr << "----\n";
-			// 	Ice i2 = i1;
-			// 	std::cerr << "----\n";
-			// }
-			// printTitle("AMATERIA Copy constructor");
-			// {
-			// 	std::cerr << "----\n";
-			// 	Ice i2(i1);
-			// 	std::cerr << "----\n";
-			// }
-			// printTitle("AMATERIA Cloning");
-			// {
-			// 	AMateria *ptr = i1.clone();
-			// 	std::cerr << "----\n";
-			// 	std::cout << "Info: " <<*ptr << "\n";
-			// 	std::cerr << "----\n";
-			// 	delete ptr;
-			// 	std::cerr << "----\n";
+			printTitle("AMATERIA Copy assigment operator");
+			Ice i1;
+			{
+				std::cerr << "----\n";
+				Ice i2 = i1;
+				std::cerr << "----\n";
+			}
+			printTitle("AMATERIA Copy constructor");
+			{
+				std::cerr << "----\n";
+				Ice i2(i1);
+				std::cerr << "----\n";
+			}
+			printTitle("AMATERIA Cloning");
+			{
+				AMateria *ptr = i1.clone();
+				std::cerr << "----\n";
+				std::cout << "Info: " <<*ptr << "\n";
+				std::cerr << "----\n";
+				delete ptr;
+				std::cerr << "----\n";
 		
-			// }
+			}
 		}
 	}
 	printTitle("| END TEST AMATERIA |");

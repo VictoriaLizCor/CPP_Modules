@@ -18,13 +18,15 @@ class Character : public ICharacter
 	protected:
 		
 	public:
-		Character(std::string const& name);
+		explicit Character(std::string const& name);
 		Character& operator=(Character const& rhs);
 		Character(Character const& rhs);
 		virtual ~Character(void);
 
+		void equip(AMateria* m);
+		void unequip(int idx);
+		void use(int idx, ICharacter& target);
 };
 
-std::ostream& operator << (std::ostream& os, Character& rhs);
 
 #endif // CHARACTER_HPP
