@@ -111,6 +111,7 @@ re: fclean all
 check:
 	@g++ $(D_FLAGS) $(INCLUDES) -fsyntax-only $(f)
 # make D=1 checkMain
+#includeFiles="include/Ice.hpp include/Cure.hpp include/AMateria.hpp include/stringUtils.hpp"
 checkMain:
 	@main="";\
 	if [ "$(D)" = "0" ]; then \

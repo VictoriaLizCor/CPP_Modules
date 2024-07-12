@@ -19,13 +19,13 @@ class IMateriaSource
 	protected:
 		
 	public:
-		IMateriaSource();
+		// IMateriaSource();
 		virtual ~IMateriaSource() {}
 		virtual void		learnMateria(AMateria*) = 0;
 		virtual AMateria*	createMateria(std::string const & type) = 0;
 
 };
 
-std::ostream& operator << (std::ostream& os, IMateriaSource& rhs);
+// std::ostream& operator << (std::ostream& os, IMateriaSource const& rhs);
 
 #endif // IMATERIASOURCE_HPP

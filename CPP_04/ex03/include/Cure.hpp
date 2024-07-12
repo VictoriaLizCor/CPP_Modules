@@ -16,7 +16,8 @@ class ICharacter;
 class Cure: public AMateria
 {
 	private:
-		
+		static int		_cureInstanceCount;
+		int				_instanceId;
 	protected:
 
 	public:
@@ -27,11 +28,11 @@ class Cure: public AMateria
 		virtual ~Cure();
 
 		std::string const&	getType(void) const;
-		Cure*		clone(void) const;
-		void		use(ICharacter& target);
+		Cure*				clone(void) const;
+		void				use(ICharacter& target);
 
 		//*aditional function members
-		std::string	getInfo(void) const;
+		std::string			getInfo(void) const;
 
 };
 

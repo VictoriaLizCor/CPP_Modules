@@ -3,7 +3,7 @@
 #include "Cure.hpp"
 // #include "ICharacter.hpp"
 // #include "IMateriaSource.hpp"
-// #include "Ice.hpp"
+#include "Ice.hpp"
 // #include "MateriaSource.hpp"
 #include <iostream>
 #include <iomanip>
@@ -29,13 +29,32 @@ static void printTitle(std::string title)
 
 int main(void)
 {
-	printTitle("MATERIA SOURCE");
-	Cure c1;
 	{
+		printTitle("MATERIA SOURCE");
+		Cure c1;
 		std::cerr << "----\n";
-		Cure c2 = c1;
+		std::cout << c1 << std::endl;
+		{
+			Cure c2 = c1;
+			std::cerr << "----\n";
+			std::cout << c2 << std::endl;
+			std::cerr << "----\n";
+		}
 		std::cerr << "----\n";
-	} 
+	}
+	{
+		printTitle("MATERIA SOURCE");
+		Ice i1;
+		std::cerr << "----\n";
+		std::cout << i1 << std::endl;
+		{
+			Ice i2 = i1;
+			std::cerr << "----\n";
+			std::cout << i2 << std::endl;
+			std::cerr << "----\n";
+		}
+		std::cerr << "----\n";
+	}
 	// {
 	// 	IMateriaSource* src = new MateriaSource();
 	// 	src->learnMateria(new Ice());
@@ -128,3 +147,4 @@ int main(void)
  * NOTES:
  * pure virtual function member can not be called in contructors
  *  */
+

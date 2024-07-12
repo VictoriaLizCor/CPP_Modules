@@ -15,7 +15,8 @@
 class Ice: public AMateria
 {
 	private:
-		
+		static int		_iceInstanceCount;
+		int				_instanceId;
 	protected:
 
 	public:
@@ -25,11 +26,11 @@ class Ice: public AMateria
 		virtual ~Ice();
 
 		std::string const&	getType(void) const;
-		Ice*		clone(void) const;
-		void		use(ICharacter& target);
+		Ice*				clone(void) const;
+		void				use(ICharacter& target);
 
 		//*aditional function members
-		std::string	getInfo(void) const;
+		std::string			getInfo(void) const;
 
 };
 

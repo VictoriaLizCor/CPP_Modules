@@ -1,7 +1,7 @@
 #include "AMateria.hpp"
 #include "ICharacter.hpp"
 
-int AMateria::_objId = 0;
+int AMateria::_instanceCount = 0;
 
 /**
  * @brief Initializes the color of the AMateria object based on its
@@ -30,7 +30,7 @@ void AMateria::initColor(void)
 AMateria::AMateria(std::string const & type):
 _type(type)
 {
-	_objId++;
+	_instanceCount++;
 	initColor();
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
@@ -48,10 +48,10 @@ AMateria&::AMateria::operator=(AMateria const& rhs)
 	{
 		if (_colorIdStr.empty())
 		{
-			_objId++;
+			_instanceCount++;
 			_colorIdStr = rhs._colorIdStr;
 		}
-		// this->_type = rhs._type;
+		this->_type = rhs._type;
 	}
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " Copy was Created\n");
@@ -73,7 +73,7 @@ AMateria::~AMateria(void)
 {
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
-	--_objId;
+	--_instanceCount;
 }
 
 
@@ -113,8 +113,8 @@ std::string AMateria::getInfo(void) const
 
 	os << _colorIdStr;
 	if (DEBUG)
-		os << className(typeid(*this).name()) << "::"
-	<< _type << toString(_objId);
+		os << className(typeid(*this).name()) << _instanceCount << "::"
+	<< _type;
 	else 
 		os << _type;
 	os << std::string(C_END);

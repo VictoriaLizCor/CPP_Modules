@@ -1,14 +1,15 @@
 #include "Cure.hpp"
 #include "ICharacter.hpp"
 
-
+int		Cure::_cureInstanceCount = 0;
 /**
  * @brief Constructs a new instance of the Cure class.
  *
  * @param type The type of the Cure materia.
  */
 Cure::Cure(std::string const& type):
-AMateria(type)
+AMateria(type),
+_instanceId(++_cureInstanceCount)
 {
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
@@ -36,7 +37,13 @@ Cure&::Cure::operator=(Cure const& rhs)
  *
  * @param rhs The Cure object to be copied.
  */
-Cure::Cure(Cure const& rhs): AMateria(rhs.getType()){*this = rhs;}
+Cure::Cure(Cure const& rhs):
+AMateria(rhs.getType()),
+_instanceId(++_cureInstanceCount)
+{
+	*this = rhs;
+}
+
 
 
 /**
@@ -50,6 +57,7 @@ Cure::~Cure(void)
 {
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
+	_cureInstanceCount--;
 }
 
 
@@ -105,8 +113,8 @@ std::string Cure::getInfo(void) const
 
 	os << _colorIdStr;
 	if (DEBUG)
-		os << className(typeid(*this).name()) << "::"
-	<< _type << toString(_objId);
+		os << className(typeid(*this).name()) << _cureInstanceCount << "::"
+	<< _type << _instanceId;
 	else 
 		os << _type;
 	os << std::string(C_END);

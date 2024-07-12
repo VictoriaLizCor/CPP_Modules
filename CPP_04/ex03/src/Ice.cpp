@@ -1,14 +1,15 @@
 #include "Ice.hpp"
 #include "ICharacter.hpp"
 
-
+int		Ice::_iceInstanceCount = 0;
 /**
  * @brief Constructs a new instance of the Ice class.
  *
  * @param type The type of the Ice materia.
  */
 Ice::Ice(std::string const& type):
-AMateria(type)
+AMateria(type),
+_instanceId(++_iceInstanceCount)
 {
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
@@ -36,8 +37,12 @@ Ice&::Ice::operator=(Ice const& rhs)
  *
  * @param rhs The Ice object to be copied.
  */
-Ice::Ice(Ice const& rhs): AMateria(rhs.getType()){*this = rhs;}
-
+Ice::Ice(Ice const& rhs):
+AMateria(rhs.getType()),
+_instanceId(++_iceInstanceCount)
+{
+	*this = rhs;
+}
 
 /**
  * @brief Destructor for the Ice class.
@@ -50,6 +55,7 @@ Ice::~Ice(void)
 {
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
+	--_iceInstanceCount;
 }
 
 
@@ -105,8 +111,8 @@ std::string Ice::getInfo(void) const
 
 	os << _colorIdStr;
 	if (DEBUG)
-		os << className(typeid(*this).name()) << "::"
-	<< _type << toString(_objId);
+		os << className(typeid(*this).name()) << _iceInstanceCount << "::"
+	<< _type << _instanceId;
 	else 
 		os << _type;
 	os << std::string(C_END);
