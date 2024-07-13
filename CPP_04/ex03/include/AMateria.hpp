@@ -17,6 +17,7 @@ class AMateria
 
 	protected:
 		static int			_instanceCount;
+		int					_instanceAMateria;
 		std::string 		_colorIdStr;
 		std::string			_type;
 

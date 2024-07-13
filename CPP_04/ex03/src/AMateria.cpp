@@ -18,8 +18,6 @@ void AMateria::initColor(void)
 		_colorIdStr = getColorFmt(FGREEN);
 	else if (_type == "ice")
 		_colorIdStr = getColorFmt(FBLUE);
-	else
-		_colorIdStr = getColorFmt(FWHITE);
 }
 
 /**
@@ -28,9 +26,9 @@ void AMateria::initColor(void)
  * @param type The type of the materia.
  */
 AMateria::AMateria(std::string const & type):
+_instanceAMateria (++_instanceCount),
 _type(type)
 {
-	_instanceCount++;
 	initColor();
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
@@ -46,11 +44,6 @@ AMateria&::AMateria::operator=(AMateria const& rhs)
 {
 	if (this != &rhs)
 	{
-		if (_colorIdStr.empty())
-		{
-			_instanceCount++;
-			_colorIdStr = rhs._colorIdStr;
-		}
 		this->_type = rhs._type;
 	}
 	if (DEBUG)
@@ -58,7 +51,10 @@ AMateria&::AMateria::operator=(AMateria const& rhs)
 	return (*this);
 }
 
-AMateria::AMateria(AMateria const&rhs){*this = rhs;}
+AMateria::AMateria(AMateria const&rhs):
+_instanceAMateria(++_instanceCount),
+_type(rhs.getType())
+{*this = rhs;}
 
 /**
  * @brief Destructor for the AMateria class.

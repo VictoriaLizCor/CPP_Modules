@@ -6,9 +6,7 @@
 # include <string>
 # include <typeinfo>
 # include <stringUtils.hpp>
-# include "AMateria.hpp"
 # include "ICharacter.hpp"
-
 
 class Character : public ICharacter
 {
@@ -34,8 +32,8 @@ class Character : public ICharacter
 		void				use(int idx, ICharacter& target);
 
 		// Aditional member function
-		std::string			getInfo( void ) const;
-		static size_t		getInvetorySize();
+		std::string			getInfo(void) const;
+		static size_t		getInvetorySize(void);
 		void				getInventory(size_t idx) const;
 };
 

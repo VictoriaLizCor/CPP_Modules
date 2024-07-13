@@ -5,7 +5,9 @@ D_FLAGS		= -Wall -Wextra -std=c++98 -Wno-unused-function -Wshadow -Wunused #-Wer
 INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR		:= src/
-SRC			:=  $(shell find $(SRC_DIR) -name '*.cpp' ! -name 'main.cpp')
+SRC			:= $(shell find $(SRC_DIR) -name '*.cpp' ! -name 'main.cpp')
+MAIN		:= $(shell find $(SRC_DIR) -name 'main.cpp')
+SRC			+= $(MAIN)
 PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir $(shell find $(PROJECT_ROOT) -name Makefile | sort)))
@@ -27,8 +29,8 @@ DEBUG_DIR	:= $(NAME).dSYM
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 CXX			= g++
-DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
-SRC			+= $(DEBUG_SRC)
+# DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
+# SRC			+= $(DEBUG_SRC)
 # INCLUDES	+= -I $(DEBUG_PATH)/include
 DEBUG_FLAG	:= $(D)
 ifeq ($(DEBUG_FLAG),)
@@ -36,12 +38,11 @@ D_FLAGS		+= -DDEBUG=1
 else
 D_FLAGS		+= -DDEBUG=$(D)
 endif
-
 D_FLAGS		+= -Wconversion -Wsign-conversion -pedantic
 D_FLAGS		+= -fno-omit-frame-pointer
-else
-MAIN		:= $(SRC_DIR)main.cpp
-SRC			+= $(MAIN)
+# else
+# MAIN		:= $(SRC_DIR)main.cpp
+# SRC			+= $(MAIN)
 endif
 ifeq ($(S), 0)
 #MAKEFLAGS	+= --debug
@@ -112,37 +113,37 @@ check:
 	@g++ $(D_FLAGS) $(INCLUDES) -fsyntax-only $(f)
 # make D=1 checkMain
 #includeFiles="include/Ice.hpp include/Cure.hpp include/AMateria.hpp include/stringUtils.hpp"
+#Use: make D=0 S=0 i=1 checkMain;
 checkMain:
-	@main="";\
-	if [ "$(D)" = "0" ]; then \
-		main="$(MAIN)"; \
-	else \
-		main="$(DEBUG_SRC)"; \
-	fi ; \
-	main="$$main"; \
-	includeFiles="include/Ice.hpp include/Cure.hpp include/AMateria.hpp include/stringUtils.hpp" ; \
+	@includeFiles="include/Ice.hpp include/Cure.hpp include/ICharacter.hpp include/Character.hpp include/AMateria.hpp include/stringUtils.hpp" ; \
 	cpp_files=""; \
 	for file in $$includeFiles; do \
 		cpp_file="src/$$(basename $${file%.*}).cpp"; \
-		cpp_files="$$cpp_files $$cpp_file"; \
+		if [ -f $$cpp_file ]; then \
+			cpp_files="$$cpp_files $$cpp_file"; \
+		fi; \
 	done ; \
-	cpp_files="$$cpp_files $$main" ; \
+	cpp_files="$$cpp_files $(MAIN)" ; \
 	printf "\n$(P_GREEN) $(CXX) $(D_FLAGS) $(INCLUDES) $(P_YELLOW) $$cpp_files $(P_GREEN) -o ex03 $(FG_TEXT)" ; echo; \
-	$(CXX) $(D_FLAGS) $(INCLUDES) $$cpp_files -o ex03
-	@echo $(E_NC);./$(NAME)
+	$(CXX) $(D_FLAGS) $(INCLUDES) $$cpp_files -o ex03; \
+	echo $(E_NC); $(MAKE) -C . test;
 
 test:$(NAME)
-	@echo $(BOLD) $(CYAN) ./$(NAME) $(E_NC) "\n"
-	@./$(NAME)
+	@echo $(BOLD) $(CYAN) ./$(NAME) $$i $(E_NC) "\n"
+	@if [ "$(S)" = "0" ]; then \
+		echo $(E_NC); $(MAKE) -C . val; \
+	else \
+		echo $(E_NC); ./$(NAME) $$i; \
+	fi
 # ATTENTION !!!!!!!!!!!!!!  USE WITH S=0 !
 leaks: $(NAME)
-	@echo $(RED)$(MAC_LEAKS) ./$(NAME) $(E_NC)  "\n"
+	@echo $(RED)$(MAC_LEAKS) ./$(NAME) "$i" $(E_NC)  "\n"
 	@$(MAC_LEAKS) ./$(NAME)
 	@echo "\n"
 
 val: $(NAME)
-	@echo $(RED) $(VALGRIND) ./$(NAME) $(E_NC) "\n"
-	@$(VALGRIND) ./$(NAME) ; echo
+	@echo $(RED) $(VALGRIND) ./$(NAME) "$i" $(E_NC) "\n"
+	@$(VALGRIND) ./$(NAME) $$i; echo
 
 # #-------------------- GIT UTILS ----------------------------#
 info:

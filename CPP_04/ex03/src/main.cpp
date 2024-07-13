@@ -1,14 +1,43 @@
-// #include "AMateria.hpp"
-// #include "Character.hpp"
-#include "Cure.hpp"
-// #include "ICharacter.hpp"
-// #include "IMateriaSource.hpp"
+#include "Character.hpp"
 #include "Ice.hpp"
-// #include "MateriaSource.hpp"
-#include <iostream>
+#include "Cure.hpp"
+#include "MateriaSource.hpp"
 #include <iomanip>
+#include <iostream>
 
-#if (DEBUG == 0)
+static int getRandomNum(int num){return (rand() % num);}
+
+static AMateria *createRandomMateria(size_t i)
+{
+	AMateria	*m;
+	std::string color;
+	if (getRandomNum(2) == 0)
+	{
+		m = new Ice();
+		color = getColorFmt(FLBLUE);
+	}
+	else
+	{
+		m = new Cure();
+		color = getColorFmt(FLGREEN);
+	}
+	std::cout << getColorFmt(FMAGENTA)
+	<< "[" << i + 1 << "] ";
+	std::cout << color << *m;
+	if (DEBUG)
+		std::cout << " (" << m << ")\n";
+	std::cout << std::string (C_END)<< "\n";
+	return (m);
+}
+
+static void fillInventory(Character& c, size_t size)
+{
+	for (size_t i = 0 ; i <= size ; ++i)
+	{
+		c.equip(createRandomMateria(i));
+		std::cerr << "----\n";
+	}
+}
 
 static void printTitle(std::string title)
 {
@@ -27,62 +56,215 @@ static void printTitle(std::string title)
 	<< "" << std::endl;
 }
 
-int main(void)
+static void testSubject(void)
+{
+	printTitle("SUBJECT");
+	// IMateriaSource* src = new MateriaSource();
+
+	// src->learnMateria(new Ice());
+	// src->learnMateria(new Cure());
+
+	// ICharacter*	me = new Character("me");
+	// AMateria*	tmp;
+
+	// tmp = src->createMateria("ice");
+	// me->equip(tmp);
+	// tmp = src->createMateria("cure");
+	// me->equip(tmp);
+	// tmp = src->createMateria("unknown");
+	// ICharacter* bob = new Character("bob");
+	// me->use(0, *bob);
+	// me->use(1, *bob);
+
+	// delete bob;
+	// delete me;
+	// delete src;
+}
+
+static void	testCharacter(void)
+{
+	size_t size = Character::getInvetorySize();
+	{
+		{
+			Character c1("");
+			printTitle("CHARACTER Copy assigment operator");
+			std::cerr << "----\n";
+			c1.getInventory(size);
+			fillInventory(c1, size);
+			c1.getInventory(size);
+			// std::cerr << "----\n";
+			// {
+			// 	Character c2 = c1;
+			// 	std::cerr << "----\n";
+			// 	c2.getInventory(size);
+			// 	std::cerr << "----\n";
+			// }
+			// printTitle("AMATERIA Copy constructor");
+			// {
+			// 	Character c2(c1);
+			// 	std::cerr << "----\n";
+			// 	c2.getInventory(size);
+			// 	std::cerr << "----\n";
+			// }
+			std::cerr << "----\n";
+		}	
+// 	ICharacter	*c1 = new Character("Char1");
+// 	ICharacter	*c2 = new Character("Char2");
+// 	AMateria	*ice = new Ice();
+
+// 	c1->equip(new Ice());
+// 	c1->equip(ice);
+// 	c1->equip(new Cure());
+// 	c1->equip(new Ice());
+// 	c1->equip(new Ice());
+// 	c2->equip(new Cure());
+// 	c2->equip(new Cure());
+// 	c2->equip(new Cure());
+
+// 	c1->printInventory();
+// 	c2->printInventory();
+
+// 	c1->use(0, *c2);
+// 	c1->use(1, *c2);
+// 	c1->use(3, *c2);
+// 	c2->use(2, *c1);
+
+// 	c1->unequip(1);
+// 	c1->printInventory();
+// 	c1->use(1, *c2);
+
+// 	c1->equip(new Cure());
+// 	c1->printInventory();
+// 	c1->use(1, *c2);
+
+// 	delete c1;
+// 	delete c2;
+// 	delete ice;
+	}
+	printTitle("| END TEST CHARACTER |");
+	std::cerr << "\n";
+}
+
+static void	testMateriaSource()
+{
+	printTitle("MATERIA_SOURCE Copy assigment operator");
+	// IMateriaSource	*matSource = new MateriaSource();
+	// ICharacter		*c1 = new Character("Char1");
+	// ICharacter		*c2 = new Character("Char2");
+	
+	// matSource->learnMateria(new Ice());
+	// matSource->learnMateria(new Cure());
+	// matSource->learnMateria(new Cure());
+	// matSource->learnMateria(new Cure());
+	// matSource->learnMateria(new Cure());
+
+	// c1->printInventory();
+	// c1->equip(matSource->createMateria("ice"));
+	// c1->equip(matSource->createMateria("cure"));
+	// c1->equip(matSource->createMateria("cure"));
+	// c1->equip(matSource->createMateria("ice"));
+	// c1->printInventory();
+	// c1->equip(matSource->createMateria("cure"));
+	// c1->printInventory();
+
+	// c1->use(0, *c2);
+	// c1->use(2, *c2);
+
+	// delete matSource;
+	// delete c1;
+	// delete c2;
+}
+
+static void	testAMateria()
 {
 	{
-		printTitle("MATERIA SOURCE");
-		Cure c1;
-		std::cerr << "----\n";
-		std::cout << c1 << std::endl;
 		{
-			Cure c2 = c1;
-			std::cerr << "----\n";
-			std::cout << c2 << std::endl;
+			printTitle("AMATERIA Copy assigment operator");
+			Cure c1;
+			{
+				std::cerr << "----\n";
+				Cure c2 = c1;
+				std::cerr << "----\n";
+			}
+			printTitle("AMATERIA Copy constructor");
+			{
+				std::cerr << "----\n";
+				Cure c2(c1);
+				std::cerr << "----\n";
+			}
+			printTitle("AMATERIA Cloning");
+			{
+				AMateria *ptr = c1.clone();
+				std::cerr << "----\n";
+				std::cout << "Info: " <<*ptr << "\n";
+				std::cerr << "----\n";
+				delete ptr;
+				std::cerr << "----\n";
+			}
 			std::cerr << "----\n";
 		}
-		std::cerr << "----\n";
-	}
-	{
-		printTitle("MATERIA SOURCE");
-		Ice i1;
-		std::cerr << "----\n";
-		std::cout << i1 << std::endl;
 		{
-			Ice i2 = i1;
-			std::cerr << "----\n";
-			std::cout << i2 << std::endl;
-			std::cerr << "----\n";
-		}
-		std::cerr << "----\n";
-	}
-	// {
-	// 	IMateriaSource* src = new MateriaSource();
-	// 	src->learnMateria(new Ice());
-	// 	src->learnMateria(new Cure());
-
-	// 	ICharacter* me = new Character("me");
-	// 	AMateria* tmp;
-
-	// 	tmp = src->createMateria("ice");
-	// 	me->equip(tmp);
-	// 	tmp = src->createMateria("cure");
-	// 	me->equip(tmp);
+			printTitle("AMATERIA Copy assigment operator");
+			Ice i1;
+			{
+				std::cerr << "----\n";
+				Ice i2 = i1;
+				std::cerr << "----\n";
+			}
+			printTitle("AMATERIA Copy constructor");
+			{
+				std::cerr << "----\n";
+				Ice i2(i1);
+				std::cerr << "----\n";
+			}
+			printTitle("AMATERIA Cloning");
+			{
+				AMateria *ptr = i1.clone();
+				std::cerr << "----\n";
+				std::cout << "Info: " <<*ptr << "\n";
+				std::cerr << "----\n";
+				delete ptr;
+				std::cerr << "----\n";
 		
-	// 	ICharacter* bob = new Character("bob");
-	// 	me->use(0, *bob);
-	// 	me->use(1, *bob);
-	// 	delete bob;
-	// 	delete me;
-	// 	delete src;
-	// }
-	std::cout << "----\n";
+			}
+		}
+	}
+	printTitle("| END TEST AMATERIA |");
+	std::cerr << "\n";
+}
+
+int	main(int ac, char* arg[])
+{
+	std::cout << "ac : " << ac;
+	if (ac == 2)
+	{	
+		std::cout <<" | arg[1] : " << arg[1] << std::endl;
+		switch (std::atoi(arg[1]))
+		{
+			case 1:
+				testCharacter();
+				break;
+			case 2:
+				testMateriaSource();
+				break;
+			case 3:
+				testAMateria();
+				break;
+			default:
+				testSubject();
+		}
+	}
+	else
+	{
+		std::cout << std::endl;
+		testSubject();
+	}
 	return (0);
 }
 
-#endif
 
 /**
- * NOTES: Forward declaration in C++ is a technique where you declare
+ * @note: Forward declaration in C++ is a technique where you declare
  * a class, function, or variable without providing its definition.
  * It's used to inform the compiler about the existence of an entity
  * before it is fully defined. This technique is particularly
@@ -143,8 +325,4 @@ int main(void)
  * when creating instances, using member functions, or accessing
  * member variables). In such cases, a full class definition is
  * required, and the corresponding header file must be included.
- * 
- * NOTES:
- * pure virtual function member can not be called in contructors
- *  */
-
+*/

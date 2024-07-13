@@ -113,7 +113,7 @@ std::string Cure::getInfo(void) const
 
 	os << _colorIdStr;
 	if (DEBUG)
-		os << className(typeid(*this).name()) << _cureInstanceCount << "::"
+		os << "AM" << _instanceAMateria << "::"
 	<< _type << _instanceId;
 	else 
 		os << _type;

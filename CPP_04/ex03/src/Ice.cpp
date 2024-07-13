@@ -111,7 +111,7 @@ std::string Ice::getInfo(void) const
 
 	os << _colorIdStr;
 	if (DEBUG)
-		os << className(typeid(*this).name()) << _iceInstanceCount << "::"
+		os << "AM" << _instanceAMateria << "::"
 	<< _type << _instanceId;
 	else 
 		os << _type;
