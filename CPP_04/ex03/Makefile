@@ -29,6 +29,7 @@ DEBUG_DIR	:= $(NAME).dSYM
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 CXX			= g++
+# ASAN_OPTIONS=detect_leaks=1 # in case platform leaks detections is not enable
 # DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
 # SRC			+= $(DEBUG_SRC)
 # INCLUDES	+= -I $(DEBUG_PATH)/include

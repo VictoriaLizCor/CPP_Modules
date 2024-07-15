@@ -93,7 +93,12 @@ Ice *Ice::clone(void) const
  */
 void Ice::use(ICharacter& target)
 {
-	std::cout << "* shoots an ice bolt at " << target.getName() << "*\n";
+	if (DEBUG)
+		std::cout << "* shoots an " << *this << 
+		" bolt at " << target.getInfo() << " *\n";
+	else
+		std::cout << "* shoots an " << *this << 
+		" bolt at " << target.getName() << " *\n";
 }
 
 /**
@@ -115,7 +120,7 @@ std::string Ice::getInfo(void) const
 	<< _type << _instanceId;
 	else 
 		os << _type;
-	os << std::string(C_END);
+	os << C_END;
 
 	return (os.str());
 }

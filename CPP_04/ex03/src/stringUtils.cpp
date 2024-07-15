@@ -160,7 +160,7 @@ static std::string	rColorRGB(int red, int green, int blue)
  * @param max The maximum value for the random number (inclusive).
  * @return A random integer between the minimum and maximum values.
  */
-static int ft_rand(int min, int max)
+int ft_rand(int min, int max)
 {
 	static bool seeded = false;
 	if (!seeded)

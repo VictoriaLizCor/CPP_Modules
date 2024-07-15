@@ -29,7 +29,7 @@ class MateriaSource : public IMateriaSource
 		void			learnMateria(AMateria* aMateria);
 		AMateria*		createMateria(std::string const & type);
 
-		// Aditional memer function
+		// Aditional member function
 		std::string		getInfo(void) const;
 		static size_t	getInvetorySize(void);
 		void			getInventory(size_t idx) const;

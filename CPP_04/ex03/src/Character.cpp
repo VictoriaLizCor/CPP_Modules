@@ -67,30 +67,35 @@ Character::~Character(void)
 	_instanceCount--;
 }
 
-std::string const& Character::getName(void) const {return(_name);}
+std::string const& Character::getName(void) const{return(_name);}
 
 void Character::equip(AMateria* m)
 {
-	std::cout << *this;
+	if (DEBUG)
+		std::cout << *this;
 	for (size_t i = 0; i < getInvetorySize(); ++i)
 	{
 		if (_inventory[i] == NULL)
 		{
 			_inventory[i] = m;
-			std::cout << " equips inventory slot ["
-			<< i << "] " << *_inventory[i] << "\n";
 			if (DEBUG)
+			{
+				std::cout << " equips inventory slot ["
+				<< i + 1 << "] " << *_inventory[i] << "\n";
 				getInventory(_inventorySize);
+			}
 			return ;
 		}
 	}
+	if (DEBUG)
+	{
 		std::cout << getColorFmt(FYELLOW)
 		<< "\tInventory full. Materia "<< *m
 		<< getColorFmt(FYELLOW) <<" can't be equiped.\n"
 		<< "\tUse 'unequip' to have space.\n"
 		<< getColorFmt(FRED) << "Deleting " << *m;
-		if (DEBUG)
-			std::cout << " (" << m << ")\n";
+		std::cout << " (" << m << ")\n";
+	}
 		std::cout<< "\n";
 		delete m;
 }
@@ -99,8 +104,9 @@ void Character::unequip(int idx)
 {
 	if (static_cast<size_t>(idx) < _inventorySize)
 	{
-		std::cout << *this << " unequips inventory slot [ "
-		<< idx << "] " << _inventory[idx];
+		if (DEBUG)
+			std::cout << *this << " unequips inventory slot [ "
+			<< idx << "] " << _inventory[idx];
 	}
 	if (DEBUG)
 		getInventory(_inventorySize);
@@ -108,14 +114,15 @@ void Character::unequip(int idx)
 
 void Character::use(int idx, ICharacter& target)
 {
-	std::cout << *this << " ";
+	if (DEBUG)
+		std::cout << *this << " ";
 	if (static_cast<size_t>(idx) < _inventorySize && _inventory[idx])
 		_inventory[idx]->use(target);
 	else
 	{
-		std::cout << getColorFmt(FYELLOW)
-		<< "can't use Materia. Slot empty"
-		<< std::string(C_END);
+		if (DEBUG)
+			std::cout << getColorFmt(FYELLOW)
+			<< "can't use Materia. Slot empty" << C_END;
 	}
 }
 
@@ -123,6 +130,8 @@ size_t Character::getInvetorySize(void){return (_inventorySize);}
 
 void Character::getInventory(size_t idx) const
 {
+	if (DEBUG == 0)
+		return ;
 	std::cout << *this << " |";
 	if (idx == getInvetorySize())
 	{ 
@@ -165,15 +174,14 @@ std::string Character::getInfo(void) const
 	os << _colorIdStr;
 	if (DEBUG == 2)
 		os << className(typeid(*this).name())
-		<< _instanceCount << "::"<< getName()
-		<< _instanceId;
+		<< _instanceId << "::"<< getName();
 	else if (DEBUG == 1)
 	{
-		os << getName() << _instanceId;
+		os << "Char" << _instanceId << "::" << getName();
 	}
 	else 
 		os << getName();
-	os << std::string(C_END);
+	os << C_END;
 
 	return (os.str());
 }

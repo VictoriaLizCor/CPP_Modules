@@ -5,36 +5,52 @@
 #include <iomanip>
 #include <iostream>
 
-static int getRandomNum(int num){return (rand() % num);}
+static int getRandomNum(int num)
+{
+	static bool seeded = false;
+	if (!seeded)
+	{
+		srand(static_cast<unsigned int>(time(0)));
+		seeded = true;
+	}
+	return (rand() % num);
+}
 
 static AMateria *createRandomMateria(size_t i)
 {
 	AMateria	*m;
 	std::string color;
 	if (getRandomNum(2) == 0)
-	{
 		m = new Ice();
-		color = getColorFmt(FLBLUE);
-	}
 	else
-	{
 		m = new Cure();
-		color = getColorFmt(FLGREEN);
-	}
 	std::cout << getColorFmt(FMAGENTA)
 	<< "[" << i + 1 << "] ";
-	std::cout << color << *m;
+	std::cout << *m;
 	if (DEBUG)
 		std::cout << " (" << m << ")\n";
 	std::cout << std::string (C_END)<< "\n";
 	return (m);
 }
 
-static void fillInventory(Character& c, size_t size)
+template<typename T>
+void fillInventory(T& obj, size_t size, void (T::*action)(AMateria*))
+{
+	for (size_t i = 0 ; i <= size ; ++i)
+	{	
+		(obj.*action)(createRandomMateria(i));
+		std::cerr << "----\n";
+	}
+}
+
+static void fillInventory(void* obj, size_t size, std::string const& name)
 {
 	for (size_t i = 0 ; i <= size ; ++i)
 	{
-		c.equip(createRandomMateria(i));
+		if (name == "Character")
+			static_cast<Character*>(obj)->equip(createRandomMateria(i));
+		else if(name == "MateriaSource")
+			static_cast<MateriaSource*>(obj)->learnMateria(createRandomMateria(i));
 		std::cerr << "----\n";
 	}
 }
@@ -56,126 +72,83 @@ static void printTitle(std::string title)
 	<< "" << std::endl;
 }
 
-static void testSubject(void)
+static void testSubject(void) // Default
 {
-	printTitle("SUBJECT");
-	// IMateriaSource* src = new MateriaSource();
-
-	// src->learnMateria(new Ice());
-	// src->learnMateria(new Cure());
-
-	// ICharacter*	me = new Character("me");
-	// AMateria*	tmp;
-
-	// tmp = src->createMateria("ice");
-	// me->equip(tmp);
-	// tmp = src->createMateria("cure");
-	// me->equip(tmp);
-	// tmp = src->createMateria("unknown");
-	// ICharacter* bob = new Character("bob");
-	// me->use(0, *bob);
-	// me->use(1, *bob);
-
-	// delete bob;
-	// delete me;
-	// delete src;
+	size_t size = Character::getInvetorySize();
+	printTitle("SUBJECT CODE");
+	IMateriaSource* src = new MateriaSource();
+	std::cerr << "----\n";
+	src->learnMateria(new Ice());
+	std::cerr << "----\n";
+	src->learnMateria(new Cure());
+	std::cerr << "----\n";
+	{
+		ICharacter*	me = new Character("me");
+		std::cerr << "----\n";
+		AMateria*	tmp;
+		std::cerr << "----\n";
+		tmp = src->createMateria("ice");
+		me->equip(tmp);
+		std::cerr << "----\n";
+		tmp = src->createMateria("cure");
+		me->equip(tmp);
+		std::cerr << "----\n";
+		tmp = src->createMateria("unknown");
+		std::cerr << "----\n";
+		ICharacter* bob = new Character("bob");
+		bob->getInventory(size);
+		std::cerr << "----\n";
+		me->use(0, *bob);
+		me->use(1, *bob);
+		std::cerr << "----\n";
+		delete bob;
+		delete me;
+	}
+	std::cerr << "----\n";
+	delete src;
+	std::cerr << "----\n";
 }
 
-static void	testCharacter(void)
+static void	testCharacter(void) // 1
 {
 	size_t size = Character::getInvetorySize();
 	{
 		{
-			Character c1("");
+			Character *c1 = new Character("");
 			printTitle("CHARACTER Copy assigment operator");
 			std::cerr << "----\n";
-			c1.getInventory(size);
-			fillInventory(c1, size);
-			c1.getInventory(size);
-			// std::cerr << "----\n";
-			// {
-			// 	Character c2 = c1;
-			// 	std::cerr << "----\n";
-			// 	c2.getInventory(size);
-			// 	std::cerr << "----\n";
-			// }
-			// printTitle("AMATERIA Copy constructor");
-			// {
-			// 	Character c2(c1);
-			// 	std::cerr << "----\n";
-			// 	c2.getInventory(size);
-			// 	std::cerr << "----\n";
-			// }
+			c1->getInventory(size);
+			if (DEBUG)
+				fillInventory(*c1, size, &Character::equip);
+			else
+				fillInventory(&c1, size, className(typeid(c1).name()));
+			c1->getInventory(size);
 			std::cerr << "----\n";
+			{
+				Character c2 = *c1;
+				std::cerr << "----\n";
+				c2.getInventory(size);
+				std::cerr << "----\n";
+			}
+			printTitle("AMATERIA Copy constructor");
+			{
+				Character c2(*c1);
+				std::cerr << "----\n";
+				c2.getInventory(size);
+				std::cerr << "----\n";
+				c1->use(0, c2);
+				c2.use(1, *c1);
+				std::cerr << "----\n";
+			}
+			std::cerr << "----\n";
+			delete c1;
 		}	
-// 	ICharacter	*c1 = new Character("Char1");
-// 	ICharacter	*c2 = new Character("Char2");
-// 	AMateria	*ice = new Ice();
-
-// 	c1->equip(new Ice());
-// 	c1->equip(ice);
-// 	c1->equip(new Cure());
-// 	c1->equip(new Ice());
-// 	c1->equip(new Ice());
-// 	c2->equip(new Cure());
-// 	c2->equip(new Cure());
-// 	c2->equip(new Cure());
-
-// 	c1->printInventory();
-// 	c2->printInventory();
-
-// 	c1->use(0, *c2);
-// 	c1->use(1, *c2);
-// 	c1->use(3, *c2);
-// 	c2->use(2, *c1);
-
-// 	c1->unequip(1);
-// 	c1->printInventory();
-// 	c1->use(1, *c2);
-
-// 	c1->equip(new Cure());
-// 	c1->printInventory();
-// 	c1->use(1, *c2);
-
-// 	delete c1;
-// 	delete c2;
-// 	delete ice;
 	}
 	printTitle("| END TEST CHARACTER |");
 	std::cerr << "\n";
 }
 
-static void	testMateriaSource()
-{
-	printTitle("MATERIA_SOURCE Copy assigment operator");
-	// IMateriaSource	*matSource = new MateriaSource();
-	// ICharacter		*c1 = new Character("Char1");
-	// ICharacter		*c2 = new Character("Char2");
-	
-	// matSource->learnMateria(new Ice());
-	// matSource->learnMateria(new Cure());
-	// matSource->learnMateria(new Cure());
-	// matSource->learnMateria(new Cure());
-	// matSource->learnMateria(new Cure());
-
-	// c1->printInventory();
-	// c1->equip(matSource->createMateria("ice"));
-	// c1->equip(matSource->createMateria("cure"));
-	// c1->equip(matSource->createMateria("cure"));
-	// c1->equip(matSource->createMateria("ice"));
-	// c1->printInventory();
-	// c1->equip(matSource->createMateria("cure"));
-	// c1->printInventory();
-
-	// c1->use(0, *c2);
-	// c1->use(2, *c2);
-
-	// delete matSource;
-	// delete c1;
-	// delete c2;
-}
-
-static void	testAMateria()
+static void	testAMateria() //2
 {
 	{
 		{
@@ -196,7 +169,7 @@ static void	testAMateria()
 			{
 				AMateria *ptr = c1.clone();
 				std::cerr << "----\n";
-				std::cout << "Info: " <<*ptr << "\n";
+				std::cout << "Type AMateria: " << *ptr << "\n";
 				std::cerr << "----\n";
 				delete ptr;
 				std::cerr << "----\n";
@@ -221,7 +194,7 @@ static void	testAMateria()
 			{
 				AMateria *ptr = i1.clone();
 				std::cerr << "----\n";
-				std::cout << "Info: " <<*ptr << "\n";
+				std::cout << "Type AMateria: " << *ptr << "\n";
 				std::cerr << "----\n";
 				delete ptr;
 				std::cerr << "----\n";
@@ -233,6 +206,62 @@ static void	testAMateria()
 	std::cerr << "\n";
 }
 
+static void	testMateriaSource() //3
+{
+	size_t size = Character::getInvetorySize();
+	printTitle("MATERIA_SOURCE Copy assigment operator");
+	IMateriaSource	*ms = new MateriaSource();
+	std::cout << "----\n";
+	if (DEBUG)
+		fillInventory(*ms, size, &IMateriaSource::learnMateria);
+	else
+		fillInventory(&*ms, size, className(typeid(*ms).name()));
+	std::cout << "----\n";
+	ms->getInventory(size);
+	std::cout << "----\n";
+	{
+		printTitle("MATERIA_SOURCE Copy assigment operator");
+		/* Downcasting to derived class from Base class with pointer */
+		MateriaSource* derived = dynamic_cast<MateriaSource*>(ms);
+		if (derived != 0)
+		{
+			MateriaSource newMS = *derived;
+			std::cout << "----\n";
+			newMS.getInventory(size);
+			std::cout << "----\n";
+		}
+		std::cout << "----\n";
+		std::cout << "----\n";
+	}
+	std::cout << "********************\n";
+	{
+		Character		*c1 = new Character("Char1");
+		if (DEBUG)
+			fillInventory(*c1, size, &Character::equip);
+		else
+			fillInventory(&c1, size, className(typeid(c1).name()));
+		ICharacter		*c2 = new Character("Char2");
+		std::cout << "****\n";
+		if (DEBUG)
+			c1->getInventory(size);
+		c1->use(0, *c2);
+		c1->use(1, *c2);
+		delete c1;
+		delete c2;
+	}
+	delete ms;
+}
+
+/*
+To run main from terminal
+$> make D=0 S=1 re test i=#
+or
+$> make D=0 S=1 re test
+where
+	D-> debug information
+	S-> sanatizer information
+	i-> switch case [1-4]
+*/
 int	main(int ac, char* arg[])
 {
 	std::cout << "ac : " << ac;
@@ -245,10 +274,10 @@ int	main(int ac, char* arg[])
 				testCharacter();
 				break;
 			case 2:
-				testMateriaSource();
+				testAMateria();
 				break;
 			case 3:
-				testAMateria();
+				testMateriaSource();
 				break;
 			default:
 				testSubject();
@@ -271,53 +300,53 @@ int	main(int ac, char* arg[])
  * important and necessary in several scenarios:
  *
  * 1. **Resolving Circular Dependencies**: Circular dependencies occur
- *    when two or more classes depend on each other. For instance, if
- *    class A has a member that is a pointer or reference to class B,
- *    and class B, in turn, needs to refer to class A. Without forward
- *    declarations, this situation would result in a compilation error
- *    because each class's full definition requires the other to be
- *    defined first. By forward declaring one of the classes, you
- *    break this cycle, allowing both classes to be compiled
- *    successfully.
+ *	when two or more classes depend on each other. For instance, if
+ *	class A has a member that is a pointer or reference to class B,
+ *	and class B, in turn, needs to refer to class A. Without forward
+ *	declarations, this situation would result in a compilation error
+ *	because each class's full definition requires the other to be
+ *	defined first. By forward declaring one of the classes, you
+ *	break this cycle, allowing both classes to be compiled
+ *	successfully.
  *
- *    ```cpp
- *    // Forward declaration of class B
- *    class B;
+ *	```cpp
+ *	// Forward declaration of class B
+ *	class B;
  *
- *    class A {
- *        B* b; // Pointer to B is allowed with forward declaration
- *    };
+ *	class A {
+ *		B* b; // Pointer to B is allowed with forward declaration
+ *	};
  *
- *    class B {
- *        A a; // B can now include A without issues
- *    };
- *    ```
+ *	class B {
+ *		A a; // B can now include A without issues
+ *	};
+ *	```
  *
  * 2. **Reducing Compilation Time**: Including header files increases
- *    compilation time because the compiler has to process more
- *    information. If a header file changes, every source file that
- *    includes it must be recompiled. By using forward declarations,
- *    you can avoid including headers in other headers when full class
- *    definitions are not needed, thus reducing compilation time.
+ *	compilation time because the compiler has to process more
+ *	information. If a header file changes, every source file that
+ *	includes it must be recompiled. By using forward declarations,
+ *	you can avoid including headers in other headers when full class
+ *	definitions are not needed, thus reducing compilation time.
  *
- *    ```cpp
- *    // Forward declaration of class MyClass
- *    class MyClass;
+ *	```cpp
+ *	// Forward declaration of class MyClass
+ *	class MyClass;
  *
- *    void functionTakingPointer(MyClass* mc);
- *    ```
+ *	void functionTakingPointer(MyClass* mc);
+ *	```
  *
- *    In this example, the full definition of `MyClass` is not needed
- *    by `functionTakingPointer`, so we can forward declare `MyClass`
- *    instead of including its header file. This reduces the need to
- *    recompile files that include this header whenever `MyClass` is
- *    modified.
+ *	In this example, the full definition of `MyClass` is not needed
+ *	by `functionTakingPointer`, so we can forward declare `MyClass`
+ *	instead of including its header file. This reduces the need to
+ *	recompile files that include this header whenever `MyClass` is
+ *	modified.
  *
  * 3. **Hiding Implementation Details**: Forward declarations can be
- *    used to hide the implementation details of a class from the
- *    users of a header file. This can make the interface of a library
- *    cleaner and reduce the risk of breaking user code when internal
- *    implementations change.
+ *	used to hide the implementation details of a class from the
+ *	users of a header file. This can make the interface of a library
+ *	cleaner and reduce the risk of breaking user code when internal
+ *	implementations change.
  *
  * Forward declarations are a powerful tool in C++, but they should be
  * used judiciously. They are not suitable for all situations,

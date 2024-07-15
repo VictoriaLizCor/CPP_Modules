@@ -10,6 +10,8 @@
 # endif
 
 # define C_FMT "\033["
+# define C_FMT256 "\033[0;38;5;"
+# define C_FMT256B "\033[1;38;5;"
 # define C_END "\033[0m"
 
 /*
@@ -78,6 +80,7 @@ std::string	getColorFmt(int eColor);
 // std::string	getColorStr(t_Name const& name);
 std::string	getColorStr(std::string const& eColor, std::string const& str);
 std::string	getColorStr(int eColor, std::string const& str);
+int			ft_rand(int min, int max);
 std::string	getRandomColorFmt(bool bold);
 std::string	setObjColor(int const& color);
 bool		checkInput(const std::string& str, int (*check_type)(int));

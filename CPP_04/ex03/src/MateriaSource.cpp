@@ -1,9 +1,16 @@
 #include "MateriaSource.hpp"
+#include "AMateria.hpp"
 
 int MateriaSource::_instanceCount = 0;
 
-MateriaSource::MateriaSource()
+MateriaSource::MateriaSource():
+_instanceId(++_instanceCount),
+_colorIdStr(std::string(C_FMT256B) + "50" + "m")
 {
+	for (size_t i = 0; i < getInvetorySize(); ++i)
+		_inventory[i] = NULL;
+	if (DEBUG)
+		std::cout << *this << getColorStr(FGRAY, " was Created\n");
 }
 
 MateriaSource&::MateriaSource::operator=(MateriaSource const& rhs)
@@ -25,6 +32,16 @@ MateriaSource&::MateriaSource::operator=(MateriaSource const& rhs)
 	return (*this);
 }
 
+MateriaSource::MateriaSource(MateriaSource const&rhs):
+_instanceId(++_instanceCount),
+_colorIdStr(std::string(C_FMT256B) + "50" + "m")
+{
+	for (size_t i = 0; i < getInvetorySize(); ++i)
+		_inventory[i] = NULL;
+	*this = rhs;
+}
+
+
 MateriaSource::~MateriaSource(void)
 {
 	size_t i = getInvetorySize();
@@ -35,8 +52,7 @@ MateriaSource::~MateriaSource(void)
 	}
 	if (DEBUG)
 	{
-		std::cout << _colorIdStr << *this
-		<< getColorStr(FGRAY, " was Destroyed\n");
+		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
 	}
 	_instanceCount--;
 }
@@ -48,14 +64,23 @@ void MateriaSource::learnMateria(AMateria* aMateria)
 		if (_inventory[i] == NULL)
 		{
 			_inventory[i] = aMateria;
+			if (DEBUG)
+			{
+				std::cout << *this << " learns in slot ["
+				<< i + 1 << "] " << *_inventory[i] << "\n";
+				getInventory(_inventorySize);
+			}
+			return ;
 		}
 	}
-	std::cout << getColorFmt(FYELLOW)
-	<< "\tInventory full. Materia "<< *aMateria
-	<< getColorFmt(FYELLOW) <<" can't be learn.\n"
-	<< getColorFmt(FRED) << "Deleting " << *aMateria;
 	if (DEBUG)
+	{
+		std::cout << *this << "\t" << getColorFmt(FYELLOW)
+		<< "Inventory full. Materia "<< *aMateria
+		<< getColorFmt(FYELLOW) <<" can't be learn.\n"
+		<< getColorFmt(FRED) << "Deleting " << *aMateria;
 		std::cout << " (" << aMateria << ")\n";
+	}
 	std::cout<< "\n";
 	delete aMateria;
 }
@@ -64,13 +89,17 @@ AMateria* MateriaSource::createMateria(const std::string &type)
 {
 	for (size_t i = 0; i < getInvetorySize(); ++i)
 	{
-		if (_inventory[i] != NULL && \
-		_inventory[i]->getType() == type)
+		if (_inventory[i] != NULL && _inventory[i]->getType() == type)
 			return (_inventory[i]->clone());
 
 	}
-	std::cout << *this 
-	<< " unknown materia. Not found in inventory" << "\n";
+	if (DEBUG)
+	{
+		std::cout << *this
+		<< getColorStr(FYELLOW, " can not create materia '")
+		<< getColorStr(FLWHITE, type )
+		<< getColorStr(FYELLOW, "', not found in inventory") << "\n";
+	}
 	return (NULL);
 }
 
@@ -79,6 +108,8 @@ size_t MateriaSource::getInvetorySize(void){return (_inventorySize);}
 
 void MateriaSource::getInventory(size_t idx) const
 {
+	if (DEBUG == 0)
+		return ;
 	std::cout << *this << " |";
 	if (idx == getInvetorySize())
 	{ 
@@ -119,17 +150,11 @@ std::string MateriaSource::getInfo(void) const
 	std::ostringstream os;
 
 	os << _colorIdStr;
-	if (DEBUG == 2)
-		os << className(typeid(*this).name())
-		<< _instanceCount << "::"<< className(typeid(*this).name())
-		<< _instanceId;
-	else if (DEBUG == 1)
-	{
+	if (DEBUG == 1)
 		os <<  className(typeid(*this).name()) << _instanceId;
-	}
 	else 
 		os <<  className(typeid(*this).name());
-	os << std::string(C_END);
+	os << C_END;
 
 	return (os.str());
 }

@@ -90,7 +90,10 @@ std::string const& AMateria::getType() const{return (_type);}
  */
 void AMateria::use(ICharacter& target)
 {
-	std::cout << *this << " type use on " << target.getName() << "\n";
+	if (DEBUG)
+		std::cout << *this << " type use on " << target.getInfo() << "\n";
+	else
+		std::cout << *this << " type use on " << target.getName() << "\n";
 }
 
 
@@ -109,11 +112,13 @@ std::string AMateria::getInfo(void) const
 
 	os << _colorIdStr;
 	if (DEBUG)
-		os << className(typeid(*this).name()) << _instanceCount << "::"
-	<< _type;
+	{
+		os << className(typeid(*this).name())
+		<< _instanceCount << "::" << _type;
+	}
 	else 
 		os << _type;
-	os << std::string(C_END);
+	os << C_END;
 
 	return (os.str());
 }
