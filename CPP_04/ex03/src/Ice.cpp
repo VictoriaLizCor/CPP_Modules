@@ -93,12 +93,8 @@ Ice *Ice::clone(void) const
  */
 void Ice::use(ICharacter& target)
 {
-	if (DEBUG)
-		std::cout << "* shoots an " << *this << 
-		" bolt at " << target.getInfo() << " *\n";
-	else
-		std::cout << "* shoots an " << *this << 
-		" bolt at " << target.getName() << " *\n";
+	std::cout << "* shoots an " << *this << 
+	" bolt at " << target.getName() << " *\n";
 }
 
 /**

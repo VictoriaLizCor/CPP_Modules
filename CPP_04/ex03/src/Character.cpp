@@ -9,7 +9,12 @@ _instanceId(++_instanceCount), _colorIdStr(getRandomColorFmt(1))
 	if (name.empty())
 		_name = "Anon";
 	else
-		_name = name;
+	{
+		if (DEBUG == 0)
+			_name = name;
+		else
+			_name = getColorStr(_colorIdStr, name);
+	}
 	for (size_t i = 0; i < getInvetorySize(); ++i)
 		_inventory[i] = NULL;
 	if (DEBUG)

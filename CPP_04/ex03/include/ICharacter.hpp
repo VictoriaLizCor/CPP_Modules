@@ -29,8 +29,8 @@ class ICharacter
 
 
 		// additional function members for DEBUG=1;
-		virtual void				getInventory(size_t idx) const = 0;
-		virtual std::string 		getInfo() const = 0;
+		// virtual void				getInventory(size_t idx) const = 0;
+		// virtual std::string 		getInfo() const = 0;
 };
 
 

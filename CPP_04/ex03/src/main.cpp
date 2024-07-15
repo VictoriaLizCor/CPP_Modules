@@ -75,6 +75,7 @@ static void printTitle(std::string title)
 static void testSubject(void) // Default
 {
 	size_t size = Character::getInvetorySize();
+	std::cout << "Character inventory size:" << size << "\n";
 	printTitle("SUBJECT CODE");
 	IMateriaSource* src = new MateriaSource();
 	std::cerr << "----\n";
@@ -96,7 +97,7 @@ static void testSubject(void) // Default
 		tmp = src->createMateria("unknown");
 		std::cerr << "----\n";
 		ICharacter* bob = new Character("bob");
-		bob->getInventory(size);
+		// bob->getInventory(size);
 		std::cerr << "----\n";
 		me->use(0, *bob);
 		me->use(1, *bob);
@@ -209,6 +210,7 @@ static void	testAMateria() //2
 static void	testMateriaSource() //3
 {
 	size_t size = Character::getInvetorySize();
+	std::cout << "Character inventory size:" << size << "\n";
 	printTitle("MATERIA_SOURCE Copy assigment operator");
 	IMateriaSource	*ms = new MateriaSource();
 	std::cout << "----\n";
@@ -217,7 +219,8 @@ static void	testMateriaSource() //3
 	else
 		fillInventory(&*ms, size, className(typeid(*ms).name()));
 	std::cout << "----\n";
-	ms->getInventory(size);
+	if (DEBUG)
+		dynamic_cast<MateriaSource*>(ms)->getInventory(size);
 	std::cout << "----\n";
 	{
 		printTitle("MATERIA_SOURCE Copy assigment operator");
@@ -235,12 +238,12 @@ static void	testMateriaSource() //3
 	}
 	std::cout << "********************\n";
 	{
-		Character		*c1 = new Character("Char1");
+		Character		*c1 = new Character("c1");
 		if (DEBUG)
 			fillInventory(*c1, size, &Character::equip);
 		else
 			fillInventory(&c1, size, className(typeid(c1).name()));
-		ICharacter		*c2 = new Character("Char2");
+		ICharacter		*c2 = new Character("c2");
 		std::cout << "****\n";
 		if (DEBUG)
 			c1->getInventory(size);

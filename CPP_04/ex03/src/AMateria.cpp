@@ -90,10 +90,7 @@ std::string const& AMateria::getType() const{return (_type);}
  */
 void AMateria::use(ICharacter& target)
 {
-	if (DEBUG)
-		std::cout << *this << " type use on " << target.getInfo() << "\n";
-	else
-		std::cout << *this << " type use on " << target.getName() << "\n";
+	std::cout << *this << " type use on " << target.getName() << "\n";
 }
 
 

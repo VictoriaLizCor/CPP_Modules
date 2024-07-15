@@ -25,7 +25,7 @@ class IMateriaSource
 		virtual AMateria*	createMateria(std::string const & type) = 0;
 
 		// additional function members for DEBUG=1;
-		virtual void getInventory(size_t idx) const = 0;
+		// virtual void getInventory(size_t idx) const = 0;
 };
 
 #endif // IMATERIASOURCE_HPP

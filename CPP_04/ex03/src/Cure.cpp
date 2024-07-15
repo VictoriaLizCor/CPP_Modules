@@ -95,12 +95,7 @@ Cure *Cure::clone(void) const
  */
 void Cure::use(ICharacter& target)
 {
-	if (DEBUG)
-	{
-		std::cout << "* " << getColorStr(_colorIdStr, "heals ") << target.getInfo() << "'s wounds*\n";
-	}
-	else
-		std::cout << "* " << getColorStr(_colorIdStr, "heals ") << target.getName() << "'s wounds*\n";
+	std::cout << "* " << getColorStr(_colorIdStr, "heals ") << target.getName() << "'s wounds*\n";
 }
 
 /**

@@ -1,7 +1,7 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 -Wno-unused-function -Wshadow -Wunused #-Werror 
+D_FLAGS		= -Wall -Wextra -std=c++98 -Wno-unused-function -Wshadow -Wunused -Werror 
 INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR		:= src/
