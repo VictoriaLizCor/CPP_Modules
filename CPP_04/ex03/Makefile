@@ -24,10 +24,10 @@ VALGRIND	:= valgrind -s --leak-check=yes --show-leak-kinds=all -q
 HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
 BUILD_DIR	:= .build/
+DEBUG_DIR	:= $(NAME).dSYM
 
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
-DEBUG_DIR	:= $(NAME).dSYM
 CXX			= g++
 OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
 #------ CODE FOR OBJECT FILES ------#
