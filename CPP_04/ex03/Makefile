@@ -23,11 +23,12 @@ MAKEFLAGS	+= --no-print-directory #--jobs
 VALGRIND	:= valgrind -s --leak-check=yes --show-leak-kinds=all -q 
 HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
-BUILD_DIR	:= .build/
-DEBUG_DIR	:= $(NAME).dSYM
+
 
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
+BUILD_DIR	:= .build/
+DEBUG_DIR	:= $(NAME).dSYM
 CXX			= g++
 OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
 #------ CODE FOR OBJECT FILES ------#
@@ -35,7 +36,8 @@ OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
 # that `make` should search when it's looking for prerequisites.
 vpath %.cpp $(sort $(dir $(SRC)))
 DEPS		:= $(OBJS:.o=.d)
--include $(DEPS)
+DEPENDENCIES := $(shell find $(BUILD_DIR) -name '*.d')
+-include $(DEPS) # to include in compilation
 D_FLAGS		+= -O0 -g3 #-Og optimization + good debuggin experience
 # ASAN_OPTIONS=detect_leaks=1 # in case platform leaks detections is not enable
 # DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
@@ -164,10 +166,10 @@ info:
 	@echo CURRENT: $(GREEN) $(CURRENT) $(E_NC)
 	@echo SRC: $(YELLOW) $(SRC) $(E_NC)
 	@echo OBJS: $(GRAY) $(OBJS) $(E_NC)
-	@echo $(BLUE)"D = $(D)" $(E_NC)
+	@echo $(BLUE)"\nD = $(D)" $(E_NC)
 	@echo $(BLUE)"S = $(S)" $(E_NC)
 	@echo $(BLUE)"V = $(V)" $(E_NC)
-	@echo $(BLUE)"DEPENDENCIES = $(DEPS)" $(E_NC)
+	@echo $(BLUE)"DEPENDENCIES =" $(DEPENDENCIES) $(E_NC)
 testAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir D=$(D) test; \
