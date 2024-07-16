@@ -1,7 +1,7 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 -Wno-unused-function -Wshadow -Wunused -Werror 
+D_FLAGS		= -Wall -Wextra -std=c++98 -Wshadow -Werror #-Wno-unused-function -Wunused
 INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR		:= src/
@@ -16,7 +16,7 @@ DEBUG_PATH	:= debug
 #------ DEBUG FLAG ------#
 D			= 0
 #------ Sanitizer Flag ------#
-S			= 0
+S			= -1
 #------ DEBUG UTILS ------#
 CXX			:= c++
 MAKEFLAGS	+= --no-print-directory #--jobs
@@ -45,10 +45,9 @@ D_FLAGS		+= -fno-omit-frame-pointer
 # MAIN		:= $(SRC_DIR)main.cpp
 # SRC			+= $(MAIN)
 endif
-ifeq ($(S), 0)
 #MAKEFLAGS	+= --debug
 OBJS		:= $(SRC)
-else
+ifeq ($(S), 1)
 #------ CODE FOR OBJECT FILES ------#
 OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
 # The `vpath` directive in a Makefile is used to specify a list of directories
@@ -59,12 +58,19 @@ DEPS		:= $(OBJS:.o=.d)
 D_FLAGS		+= -O0 -g3 #-Og optimization + good debuggin experience
 D_FLAGS		+= -fsanitize=address,undefined,vptr
 endif
-
+# To enable verbose output during compilation Make V=1
+V ?= 0
+ifeq ($(V),1)
+VERBOSE = @
+# D_FLAGS		+= -ftime-report
+else
+VERBOSE =
+endif
 #-------------------- RULES ----------------------------#
-all: $(NAME)
+all:$(NAME)
 
 $(NAME): $(OBJS)
-ifneq ($(S), 0)
+ifeq ($(S), 1)
 	@printf "$(LF)\n$(P_BLUE)☑️  Successfully Created $(P_YELLOW)$(NAME)'s Object files ☑️$(FG_TEXT)\n"
 endif
 	@printf "\n"
@@ -74,8 +80,8 @@ endif
 	@$(CXX) $(D_FLAGS) $(INCLUDES) $^ -o $(NAME)
 	@printf "\n$(LF)✅ $(P_BLUE)Successfully Created $(P_GREEN)$@! ✅\n$(P_NC)"
 	@echo $(CYAN) "$$CPP" $(E_NC)
-
-ifneq ($(S), 0)
+	@echo $(PURPLE) "$$MANUAL" $(E_NC)
+ifeq ($(S), 1)
 $(OBJS): $(BUILD_DIR)%.o : %.cpp | $(BUILD_DIR)
 	@$(CXX) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 	@printf "$(LF)🚧 $(P_BLUE)Creating $(P_YELLOW)$@ $(P_BLUE)from $(P_YELLOW) $< $(FG_TEXT)"
@@ -156,6 +162,7 @@ info:
 	@echo OBJS: $(GRAY) $(OBJS) $(E_NC)
 	@echo $(BLUE)"D = $(D)" $(E_NC)
 	@echo $(BLUE)"S = $(S)" $(E_NC)
+	@echo $(BLUE)"V = $(V)" $(E_NC)
 testAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir D=$(D) test; \
@@ -242,9 +249,11 @@ main:
 #--------------------COLORS----------------------------#
 # For print
 CL_BOLD  = \e[1m
-RAN	  = \033[48;5;237m\033[38;5;255m
-NC	   = \033[m
-P_RED	= \e[1;91m
+RAN	 	 = \033[48;5;237m\033[38;5;255m
+D_PURPLE = \033[1;38;2;189;147;249m
+D_WHITE  = \033[1;37m
+NC	  	 = \033[m
+P_RED	 = \e[1;91m
 P_GREEN  = \e[1;32m
 P_BLUE   = \e[0;36m
 P_YELLOW = \e[1;33m
@@ -265,6 +274,7 @@ WHITE  = "\033[1;37m"
 MAG	= "\033[1;35m"
 CYAN   = "\033[0;1;36m"
 GRAY   = "\033[1;90m"
+PURPLE = "\033[1;38;2;189;147;249m"
 
 define CPP
 
@@ -299,6 +309,31 @@ define TRASH
 			⠀⠀⠀⠀⠀⠀⠈⠙⠛⠛⠛⠛⠛⠋⠁⠀⠀⠀⠀⠀⠀
 endef
 export TRASH
+
+define MANUAL
+$(D_PURPLE)
+FLAGS:
+	D -> debug information     (default: 0)
+	S -> sanatizer information (default: -1)
+	i -> switch case 
+		* 1.- Character
+		* 2.- AMateria
+		* 3.- MateriaSource
+		* 4.- ICharacter
+		* Defautl Subject
+
+Example:
+
+$(D_WHITE)[show character test]
+$(D_PURPLE)$> make test i=1
+$(D_WHITE)[show debug information and run character test with valgrind]
+$(D_PURPLE)$> make D=1 S=0 re test i=1
+$(D_WHITE)[run subject test]
+$(D_PURPLE)$> make test
+
+endef
+export MANUAL
+
 define HEADER_CONTENT
 #ifndef {{UPPER_H}}
 # define {{UPPER_H}}

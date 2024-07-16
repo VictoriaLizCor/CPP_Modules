@@ -1,10 +1,9 @@
 #include "Character.hpp"
-# include "AMateria.hpp"
+#include "AMateria.hpp"
 
 int Character::_instanceCount = 0;
 
-Character::Character(std::string const& name):
-_instanceId(++_instanceCount), _colorIdStr(getRandomColorFmt(1))
+Character::Character(std::string const &name) : _instanceId(++_instanceCount), _colorIdStr(getRandomColorFmt(1))
 {
 	if (name.empty())
 		_name = "Anon";
@@ -19,12 +18,12 @@ _instanceId(++_instanceCount), _colorIdStr(getRandomColorFmt(1))
 		_inventory[i] = NULL;
 	if (DEBUG)
 	{
-		std::cout << _colorIdStr <<  *this
-		<< getColorStr(FGRAY, " was Created\n");
+		std::cout << _colorIdStr << *this
+				  << getColorStr(FGRAY, " was Created\n");
 	}
 }
 
-Character&::Character::operator=(Character const& rhs)
+Character & ::Character::operator=(Character const &rhs)
 {
 	if (this != &rhs)
 	{
@@ -52,9 +51,10 @@ Character&::Character::operator=(Character const& rhs)
 	return (*this);
 }
 
-Character::Character(Character const&rhs):
-_instanceId(++_instanceCount), _colorIdStr(getRandomColorFmt(1))
-{*this = rhs;}
+Character::Character(Character const &rhs) : _instanceId(++_instanceCount), _colorIdStr(getRandomColorFmt(1))
+{
+	*this = rhs;
+}
 
 Character::~Character(void)
 {
@@ -67,14 +67,14 @@ Character::~Character(void)
 	if (DEBUG)
 	{
 		std::cout << _colorIdStr << *this
-		<< getColorStr(FGRAY, " was Destroyed\n");
+				  << getColorStr(FGRAY, " was Destroyed\n");
 	}
 	_instanceCount--;
 }
 
-std::string const& Character::getName(void) const{return(_name);}
+std::string const &Character::getName(void) const { return (_name); }
 
-void Character::equip(AMateria* m)
+void Character::equip(AMateria *m)
 {
 	if (DEBUG)
 		std::cout << *this;
@@ -86,23 +86,23 @@ void Character::equip(AMateria* m)
 			if (DEBUG)
 			{
 				std::cout << " equips inventory slot ["
-				<< i + 1 << "] " << *_inventory[i] << "\n";
+						  << i + 1 << "] " << *_inventory[i] << "\n";
 				getInventory(_inventorySize);
 			}
-			return ;
+			return;
 		}
 	}
 	if (DEBUG)
 	{
 		std::cout << getColorFmt(FYELLOW)
-		<< "\tInventory full. Materia "<< *m
-		<< getColorFmt(FYELLOW) <<" can't be equiped.\n"
-		<< "\tUse 'unequip' to have space.\n"
-		<< getColorFmt(FRED) << "Deleting " << *m;
+				  << "\tInventory full. Materia " << *m
+				  << getColorFmt(FYELLOW) << " can't be equiped.\n"
+				  << "\tUse 'unequip' to have space.\n"
+				  << getColorFmt(FRED) << "Deleting " << *m;
 		std::cout << " (" << m << ")\n";
 	}
-		std::cout<< "\n";
-		delete m;
+	std::cout << "\n";
+	delete m;
 }
 
 void Character::unequip(int idx)
@@ -111,13 +111,13 @@ void Character::unequip(int idx)
 	{
 		if (DEBUG)
 			std::cout << *this << " unequips inventory slot [ "
-			<< idx << "] " << _inventory[idx];
+					  << idx << "] " << _inventory[idx];
 	}
 	if (DEBUG)
 		getInventory(_inventorySize);
 }
 
-void Character::use(int idx, ICharacter& target)
+void Character::use(int idx, ICharacter &target)
 {
 	if (DEBUG)
 		std::cout << *this << " ";
@@ -125,21 +125,23 @@ void Character::use(int idx, ICharacter& target)
 		_inventory[idx]->use(target);
 	else
 	{
+		std::cout << getColorFmt(FYELLOW)
+				  << "can't use Materia. Slot empty or out fo range" << C_END;
 		if (DEBUG)
-			std::cout << getColorFmt(FYELLOW)
-			<< "can't use Materia. Slot empty" << C_END;
+			std::cout << " " << idx << "/" << _inventorySize << std::flush;
+		std::cout << std::endl;
 	}
 }
 
-size_t Character::getInvetorySize(void){return (_inventorySize);}
+size_t Character::getInvetorySize(void) { return (_inventorySize); }
 
 void Character::getInventory(size_t idx) const
 {
 	if (DEBUG == 0)
-		return ;
+		return;
 	std::cout << *this << " |";
 	if (idx == getInvetorySize())
-	{ 
+	{
 		for (size_t i = 0; i < getInvetorySize(); ++i)
 		{
 			std::cout << "[" << (i + 1) << "] ";
@@ -156,10 +158,10 @@ void Character::getInventory(size_t idx) const
 			for (size_t i = 0; i < getInvetorySize(); ++i)
 			{
 				std::cout << "[" << (i + 1) << "] "
-				<< _inventory[i];
+						  << _inventory[i];
 				std::cout << " |";
 			}
-		}	
+		}
 	}
 	else if (idx < getInvetorySize())
 	{
@@ -169,7 +171,7 @@ void Character::getInventory(size_t idx) const
 			std::cout << "NULL";
 	}
 
-	std::cout << std::endl;
+	std::cout << std::endl << std::flush;
 }
 
 std::string Character::getInfo(void) const
@@ -179,19 +181,19 @@ std::string Character::getInfo(void) const
 	os << _colorIdStr;
 	if (DEBUG == 2)
 		os << className(typeid(*this).name())
-		<< _instanceId << "::"<< getName();
+		   << _instanceId << "::" << getName();
 	else if (DEBUG == 1)
 	{
 		os << "Char" << _instanceId << "::" << getName();
 	}
-	else 
+	else
 		os << getName();
-	os << C_END;
+	os << C_END << std::flush;
 
 	return (os.str());
 }
 
-std::ostream& operator << (std::ostream& os, Character const& rhs)
+std::ostream &operator<<(std::ostream &os, Character const &rhs)
 {
 	os << rhs.getInfo();
 	return (os);

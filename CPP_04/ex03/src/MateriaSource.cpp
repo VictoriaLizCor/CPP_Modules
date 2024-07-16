@@ -73,14 +73,11 @@ void MateriaSource::learnMateria(AMateria* aMateria)
 			return ;
 		}
 	}
-	if (DEBUG)
-	{
-		std::cout << *this << "\t" << getColorFmt(FYELLOW)
-		<< "Inventory full. Materia "<< *aMateria
-		<< getColorFmt(FYELLOW) <<" can't be learn.\n"
-		<< getColorFmt(FRED) << "Deleting " << *aMateria;
-		std::cout << " (" << aMateria << ")\n";
-	}
+	std::cout << *this << "\t" << getColorFmt(FYELLOW)
+	<< "Inventory full. Materia "<< *aMateria
+	<< getColorFmt(FYELLOW) <<" can't be learn.\n"
+	<< getColorFmt(FRED) << "Deleting " << *aMateria;
+	std::cout << " (" << aMateria << ")";
 	std::cout<< "\n";
 	delete aMateria;
 }
@@ -108,8 +105,6 @@ size_t MateriaSource::getInvetorySize(void){return (_inventorySize);}
 
 void MateriaSource::getInventory(size_t idx) const
 {
-	if (DEBUG == 0)
-		return ;
 	std::cout << *this << " |";
 	if (idx == getInvetorySize())
 	{ 

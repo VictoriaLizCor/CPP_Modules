@@ -33,6 +33,7 @@ static AMateria *createRandomMateria(size_t i)
 	return (m);
 }
 
+// Debug != 0
 template<typename T>
 void fillInventory(T& obj, size_t size, void (T::*action)(AMateria*))
 {
@@ -43,10 +44,12 @@ void fillInventory(T& obj, size_t size, void (T::*action)(AMateria*))
 	}
 }
 
+// Debug == 0
 static void fillInventory(void* obj, size_t size, std::string const& name)
 {
 	for (size_t i = 0 ; i <= size ; ++i)
 	{
+		std::cout << "Class: " << name << std::endl;
 		if (name == "Character")
 			static_cast<Character*>(obj)->equip(createRandomMateria(i));
 		else if(name == "MateriaSource")
@@ -143,7 +146,7 @@ static void	testCharacter(void) // 1
 			}
 			std::cerr << "----\n";
 			delete c1;
-		}	
+		}
 	}
 	printTitle("| END TEST CHARACTER |");
 	std::cerr << "\n";
@@ -219,8 +222,7 @@ static void	testMateriaSource() //3
 	else
 		fillInventory(&*ms, size, className(typeid(*ms).name()));
 	std::cout << "----\n";
-	if (DEBUG)
-		dynamic_cast<MateriaSource*>(ms)->getInventory(size);
+	dynamic_cast<MateriaSource*>(ms)->getInventory(size);
 	std::cout << "----\n";
 	{
 		printTitle("MATERIA_SOURCE Copy assigment operator");
@@ -236,25 +238,37 @@ static void	testMateriaSource() //3
 		std::cout << "----\n";
 		std::cout << "----\n";
 	}
-	std::cout << "********************\n";
-	{
-		Character		*c1 = new Character("c1");
-		if (DEBUG)
-			fillInventory(*c1, size, &Character::equip);
-		else
-			fillInventory(&c1, size, className(typeid(c1).name()));
-		ICharacter		*c2 = new Character("c2");
-		std::cout << "****\n";
-		if (DEBUG)
-			c1->getInventory(size);
-		c1->use(0, *c2);
-		c1->use(1, *c2);
-		delete c1;
-		delete c2;
-	}
 	delete ms;
 }
 
+static void testICharacter(void)
+{
+	size_t size = Character::getInvetorySize();
+	std::cout << "********************\n";
+	{
+		printTitle("ICHARACTER Copy assigment operator");
+		ICharacter		*c1 = new Character("c1");
+		ICharacter		*c2;
+		if (DEBUG)
+			fillInventory(*c1, size, &ICharacter::equip);
+		else
+			fillInventory(&*c1, size, className(typeid(*c1).name()));
+		std::cout << "****\n";
+		c2 = new Character(*(dynamic_cast<Character*>(c1)));
+		{
+			std::cout << "****\n\n";
+			dynamic_cast<Character*>(c1)->getInventory(size);
+			dynamic_cast<Character*>(c2)->getInventory(size);
+			std::cout << "----\n";
+		}
+		c1->use(0, *c2);
+		c2->use(2, *c1);
+		c2->use(6, *c1);
+		std::cout << "----\n";
+		delete c2;
+		delete c1;
+	}
+}
 /*
 To run main from terminal
 $> make D=0 S=1 re test i=#
@@ -281,6 +295,9 @@ int	main(int ac, char* arg[])
 				break;
 			case 3:
 				testMateriaSource();
+				break;
+			case 4:
+				testICharacter();
 				break;
 			default:
 				testSubject();
