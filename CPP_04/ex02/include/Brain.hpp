@@ -6,19 +6,19 @@
 # include <string>
 # include <typeinfo>
 # include <stringUtils.hpp>
-
+#include "Animal.hpp"
 class Brain
 {
 	private:
 		static size_t const _size = 100;
 		size_t				_index;
 		std::string			_ideas[_size];
-		std::string 		_animal;
+		Animal*				_animal;
 	protected:
 		
 	public:
 		Brain();
-		explicit Brain(std::string const& animal);
+		explicit Brain(Animal *animal);
 		Brain& operator=(Brain const& rhs);
 		Brain(Brain const& rhs);
 		virtual ~Brain();

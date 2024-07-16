@@ -6,7 +6,7 @@
  * This constructor initializes the `_index` member variable to 0.
  * It also outputs a message indicating that a Brain object was created.
  */
-Brain::Brain(): _index(0)
+Brain::Brain(): _index(0), _animal(0)
 {
 	std::cout << *this << getColorStr(FGRAY, " was Created") << std::endl;
 }
@@ -16,7 +16,7 @@ Brain::Brain(): _index(0)
  * 
  * @param animal The name of the animal.
  */
-Brain::Brain(std::string const& animal):_index(0), _animal(animal)
+Brain::Brain(Animal *animal):_index(0), _animal(animal)
 {
 	std::cout << *this << getColorStr(FGRAY, " was Created") << std::endl;
 }
@@ -46,7 +46,7 @@ Brain&::Brain::operator=(Brain const& rhs)
  * 
  * @param rhs The Brain object to be copied.
  */
-Brain::Brain(Brain const& rhs){*this = rhs;}
+Brain::Brain(Brain const& rhs):_animal(0){*this = rhs;}
 
 /**
  * @brief Destructor for the Brain class.
@@ -137,10 +137,13 @@ size_t Brain::getRandomIdea(size_t size) const
 std::string Brain::getClass(void) const
 {
 	std::string str(getColorStr(FLMAGENTA, className(typeid(*this).name())));
-	if (_animal.empty())
+	if (_animal == 0)
 		return (str);
-	str = _animal + getColorStr(FGRAY, "'s ") + str;
-	return (str);
+	else
+	{
+		str = _animal->getClass() + getColorStr(FGRAY, "'s ") + str;
+		return (str);
+	}
 }
 
 /**

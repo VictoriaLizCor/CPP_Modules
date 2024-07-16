@@ -2,6 +2,7 @@ MAKEFLAGS			+= --no-print-directory
 GIT_REPO				:= $(shell basename $$PWD)
 ROOT_CPP_MODULES	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/)
 DIRS				:= $(abspath $(dir ${shell find ./*/ -type d -name "CPP_04*" |sort}))
+# DIRS				:= $(abspath $(dir ${shell find ./*/ -type d -name "CPP_0*" |sort}))
 #------ DEBUG ------#
 D			= 1
 #------ Sanitizer ------#+
@@ -183,6 +184,7 @@ BLUE   = "\033[1;34m"
 MAG    = "\033[1;35m"
 CYAN   = "\033[0;1;36m"
 GRAY   = "\033[1;90m"
+PURPLE = "\033[1;38;2;189;147;249m"
 BANNER = "$$CPP"
 TRASH_BANNER = "$$TRASH"
 #------------- TEST UTILS -----------------------------------#

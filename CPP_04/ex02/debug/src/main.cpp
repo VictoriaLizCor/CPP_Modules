@@ -112,29 +112,29 @@ static void testRandom(void)
 	std::cout << "\n";
 }
 
-static void testAnimal(void)
-{
-	// test abstract class
-	const Animal *abstract = new Animal();
+// static void testAnimal(void)
+// {
+// 	// test abstract class
+// 	const Animal *abstract = new Animal();
 	
-	std::cout << "Hi, I am class " << abstract->getType() << std::endl;
-	abstract->makeSound();
-	std::cout << "---\n";
-	delete abstract;
-	std::cout << "---\n";
-	const Cat* j = new Dog();
-	const Dog* i = new Cat();
-	std::cout << "---\n";
-	i->makeSound();
-	j->makeSound();
-}
+// 	std::cout << "Hi, I am class " << abstract->getType() << std::endl;
+// 	abstract->makeSound();
+// 	std::cout << "---\n";
+// 	delete abstract;
+// 	std::cout << "---\n";
+// 	const Cat* j = new Dog();
+// 	const Dog* i = new Cat();
+// 	std::cout << "---\n";
+// 	i->makeSound();
+// 	j->makeSound();
+// }
 
 int main(void)
 {
-	// size_t const size = 10;
-	testAnimal();
-	// testBrain(size);
-	// testCat(size);
+	size_t const size = 10;
+	// testAnimal();
+	testBrain(size);
+	testCat(size);
 	// testDog(size);
 	// testRandom();
 	// {

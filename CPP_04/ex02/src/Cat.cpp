@@ -35,7 +35,7 @@ const std::string Cat::_THOUGHTS[_IDEAS] = {
 Cat::Cat():Animal(className(typeid(*this).name())), _Id(Animal::_Id), _CLASS_ICON("🐱"),_brain(0)
 {	
 	std::cout << *this << getColorStr(FGRAY, " Copy was Created\n");
-	_brain = new Brain(getClass());
+	_brain = new Brain(this);
 	for (size_t i = 0 ; i < Brain::getSize() ; i++)
 	{
 		if (i < _IDEAS)
@@ -64,7 +64,7 @@ Cat&::Cat::operator=(Cat const& rhs)
 	{
 		if (_brain != NULL)
 			delete _brain;
-		_brain = new Brain(getClass());
+		_brain = new Brain(this);
 		*_brain = *(rhs._brain);
 	} 
 	return (*this);
