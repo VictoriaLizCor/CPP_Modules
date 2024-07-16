@@ -23,11 +23,10 @@ MAKEFLAGS	+= --no-print-directory #--jobs
 VALGRIND	:= valgrind -s --leak-check=yes --show-leak-kinds=all -q 
 HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
-
+BUILD_DIR	:= .build/
 
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
-BUILD_DIR	:= .build/
 DEBUG_DIR	:= $(NAME).dSYM
 CXX			= g++
 OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
@@ -112,7 +111,7 @@ fclean: clean
 	@if [ -f "$(NAME)" ]; then	\
 		printf "$(LF)🧹 $(P_RED) Clean $(P_GREEN) $(CURRENT)/$(NAME)\n";	\
 		rm -rf $(NAME);														\
-		echo $(WHITE) "$$TRASH" $(E_NC);													\
+		echo $(WHITE) "$$TRASH" $(E_NC);									\
 	else																	\
 		printf "$(LF)🧹$(P_RED) Clean $(P_GREEN) $(CURRENT)\n";			\
 	fi
