@@ -49,7 +49,8 @@ static void fillInventory(void* obj, size_t size, std::string const& name)
 {
 	for (size_t i = 0 ; i <= size ; ++i)
 	{
-		std::cout << "Class: " << name << std::endl;
+		if (DEBUG)
+			std::cout << "Class: " << name << std::endl;
 		if (name == "Character")
 			static_cast<Character*>(obj)->equip(createRandomMateria(i));
 		else if(name == "MateriaSource")
