@@ -209,3 +209,34 @@ Here's a step-by-step explanation of how `dynamic_cast` works and what it means 
    - For references: `DerivedClass& ref = dynamic_cast<DerivedClass&>(baseRef);`
 
 6. **Requirements**: For `dynamic_cast` to work, the base class must have at least one virtual function, which is usually the virtual destructor if no other virtual functions are present. This requirement is necessary for the runtime type information (RTTI) to be available.
+
+
+<!-- To erase Visual Studio Code (VS Code) cache data on a Linux machine, you can follow these steps. This process involves deleting or renaming directories where VS Code stores its cache and workspace data. Please note that doing this might reset some of your VS Code preferences and extensions.
+
+1. **Close VS Code** to ensure that no instances are running.
+
+2. **Clear the Editor Cache**: The cache data for VS Code is stored in the `~/.config/Code` directory. You can remove this directory to clear the cache. Open a terminal and run:
+   ```bash
+   rm -rf ~/.config/Code
+   ```
+
+3. **Clear the Extensions**: Extensions and their data are stored in `~/.vscode`. If you want to clear extensions along with the cache, run:
+   ```bash
+   rm -rf ~/.vscode
+   ```
+
+4. **Workspace Storage**: VS Code also stores workspace-specific data (like recently opened files and workspaces) in `~/.config/Code - User/workspaceStorage`. To clear this data, run:
+   ```bash
+   rm -rf ~/.config/Code\ -\ User/workspaceStorage
+   ```
+
+5. **Restart VS Code** after clearing the desired data. VS Code will recreate necessary files and directories but you might need to reinstall your extensions and reconfigure your settings.
+
+**Important**: Be cautious when using `rm -rf` commands, as they can permanently delete data. Consider backing up your settings and extensions list before proceeding.
+
+This process will help in resetting VS Code to a "clean" state by removing cached data, extensions, and workspace information.
+ -->
+
+
+
+

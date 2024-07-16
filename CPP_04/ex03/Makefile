@@ -116,6 +116,7 @@ fclean: clean
 	@printf "\n$(P_NC)"
 
 re: fclean all
+
 #------------- TEST UTILS -----------------------------------#
 #make check f=file
 check:

@@ -110,7 +110,7 @@ static void testSubject(void) // Default
 	}
 	std::cerr << "----\n";
 	delete src;
-	std::cerr << "----\n";
+	std::cerr << "----\n" << std::flush;
 }
 
 static void	testCharacter(void) // 1
@@ -149,7 +149,7 @@ static void	testCharacter(void) // 1
 		}
 	}
 	printTitle("| END TEST CHARACTER |");
-	std::cerr << "\n";
+	std::cerr << "\n" << std::flush;
 }
 
 static void	testAMateria() //2
@@ -207,7 +207,7 @@ static void	testAMateria() //2
 		}
 	}
 	printTitle("| END TEST AMATERIA |");
-	std::cerr << "\n";
+	std::cerr << "\n" << std::flush;
 }
 
 // compiler slows down as it runs safety check
@@ -238,9 +238,10 @@ static void	testMateriaSource() //3
 			std::cout << "----\n";
 		}
 		std::cout << "----\n";
-		std::cout << "----\n";
+		std::cout << "----\n" << std::flush;
 	}
 	delete ms;
+	std::cerr << "\n" << std::flush;
 }
 
 static void testICharacter(void)
@@ -270,6 +271,7 @@ static void testICharacter(void)
 		delete c2;
 		delete c1;
 	}
+	std::cerr << "\n" << std::flush;
 }
 /*
 To run main from terminal
@@ -304,10 +306,11 @@ int	main(int ac, char* arg[])
 			default:
 				testSubject();
 		}
+		std::cout << std::endl << std::flush;
 	}
 	else
 	{
-		std::cout << std::endl;
+		std::cout << std::endl << std::flush;
 		testSubject();
 	}
 	return (0);
