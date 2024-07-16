@@ -32,7 +32,7 @@ CXX			= g++
 OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
 #------ CODE FOR OBJECT FILES ------#
 # The `vpath` directive in a Makefile is used to specify a list of directories
-# that `make` should search when it's looking for prerequisites.
+# that `make` should search when it's looking for prerequisites. 
 vpath %.cpp $(sort $(dir $(SRC)))
 DEPS		:= $(OBJS:.o=.d)
 DEPENDENCIES := $(shell find $(BUILD_DIR) -name '*.d')
