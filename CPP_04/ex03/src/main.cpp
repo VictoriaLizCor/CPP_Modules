@@ -125,7 +125,7 @@ static void	testCharacter(void) // 1
 			if (DEBUG)
 				fillInventory(*c1, size, &Character::equip);
 			else
-				fillInventory(&c1, size, className(typeid(c1).name()));
+				fillInventory(c1, size, className(typeid(*c1).name()));
 			c1->getInventory(size);
 			std::cerr << "----\n";
 			{
@@ -210,6 +210,8 @@ static void	testAMateria() //2
 	std::cerr << "\n";
 }
 
+// compiler slows down as it runs safety check
+//dynamic_cast<MateriaSource*>(ms)->getInventory(size);
 static void	testMateriaSource() //3
 {
 	size_t size = Character::getInvetorySize();
@@ -222,12 +224,12 @@ static void	testMateriaSource() //3
 	else
 		fillInventory(&*ms, size, className(typeid(*ms).name()));
 	std::cout << "----\n";
-	dynamic_cast<MateriaSource*>(ms)->getInventory(size);
+	static_cast<MateriaSource*>(ms)->getInventory(size);
 	std::cout << "----\n";
 	{
 		printTitle("MATERIA_SOURCE Copy assigment operator");
 		/* Downcasting to derived class from Base class with pointer */
-		MateriaSource* derived = dynamic_cast<MateriaSource*>(ms);
+		MateriaSource* derived = static_cast<MateriaSource*>(ms);
 		if (derived != 0)
 		{
 			MateriaSource newMS = *derived;
@@ -254,11 +256,11 @@ static void testICharacter(void)
 		else
 			fillInventory(&*c1, size, className(typeid(*c1).name()));
 		std::cout << "****\n";
-		c2 = new Character(*(dynamic_cast<Character*>(c1)));
+		c2 = new Character(*(static_cast<Character*>(c1)));
 		{
 			std::cout << "****\n\n";
-			dynamic_cast<Character*>(c1)->getInventory(size);
-			dynamic_cast<Character*>(c2)->getInventory(size);
+			static_cast<Character*>(c1)->getInventory(size);
+			static_cast<Character*>(c2)->getInventory(size);
 			std::cout << "----\n";
 		}
 		c1->use(0, *c2);

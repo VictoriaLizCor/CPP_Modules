@@ -29,6 +29,13 @@ DEBUG_DIR	:= $(NAME).dSYM
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 CXX			= g++
+OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
+#------ CODE FOR OBJECT FILES ------#
+# The `vpath` directive in a Makefile is used to specify a list of directories
+# that `make` should search when it's looking for prerequisites.
+vpath %.cpp $(sort $(dir $(SRC)))
+DEPS		:= $(OBJS:.o=.d)
+D_FLAGS		+= -O0 -g3 #-Og optimization + good debuggin experience
 # ASAN_OPTIONS=detect_leaks=1 # in case platform leaks detections is not enable
 # DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
 # SRC			+= $(DEBUG_SRC)
@@ -44,25 +51,19 @@ D_FLAGS		+= -fno-omit-frame-pointer
 # else
 # MAIN		:= $(SRC_DIR)main.cpp
 # SRC			+= $(MAIN)
-endif
-#MAKEFLAGS	+= --debug
+else
 OBJS		:= $(SRC)
+endif
+# MAKEFLAGS	+= -j4 #--debug
 ifeq ($(S), 1)
-#------ CODE FOR OBJECT FILES ------#
-OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
-# The `vpath` directive in a Makefile is used to specify a list of directories
-# that `make` should search when it's looking for prerequisites.
-vpath %.cpp $(sort $(dir $(SRC)))
-DEPS		:= $(OBJS:.o=.d)
 #------ INCLUDE SANATIZER FLAGS ------#
-D_FLAGS		+= -O0 -g3 #-Og optimization + good debuggin experience
 D_FLAGS		+= -fsanitize=address,undefined,vptr
 endif
 # To enable verbose output during compilation Make V=1
 V ?= 0
 ifeq ($(V),1)
 VERBOSE = @
-# D_FLAGS		+= -ftime-report
+D_FLAGS		+= -ftime-report
 else
 VERBOSE =
 endif
@@ -70,7 +71,7 @@ endif
 all:$(NAME)
 
 $(NAME): $(OBJS)
-ifeq ($(S), 1)
+ifneq ($(D), 0)
 	@printf "$(LF)\n$(P_BLUE)☑️  Successfully Created $(P_YELLOW)$(NAME)'s Object files ☑️$(FG_TEXT)\n"
 endif
 	@printf "\n"
@@ -80,8 +81,9 @@ endif
 	@$(CXX) $(D_FLAGS) $(INCLUDES) $^ -o $(NAME)
 	@printf "\n$(LF)✅ $(P_BLUE)Successfully Created $(P_GREEN)$@! ✅\n$(P_NC)"
 	@echo $(CYAN) "$$CPP" $(E_NC)
-	@echo $(PURPLE) "$$MANUAL" $(E_NC)
-ifeq ($(S), 1)
+	@echo "$$MANUAL" $(E_NC)
+
+ifneq ($(D), 0)
 $(OBJS): $(BUILD_DIR)%.o : %.cpp | $(BUILD_DIR)
 	@$(CXX) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
 	@printf "$(LF)🚧 $(P_BLUE)Creating $(P_YELLOW)$@ $(P_BLUE)from $(P_YELLOW) $< $(FG_TEXT)"
@@ -89,6 +91,8 @@ $(OBJS): $(BUILD_DIR)%.o : %.cpp | $(BUILD_DIR)
 $(BUILD_DIR):
 	@mkdir -p $@
 endif
+
+.PHONY: clean fclean re test val leaks
 
 clean:
 	@echo $(RED)
@@ -112,8 +116,6 @@ fclean: clean
 	@printf "\n$(P_NC)"
 
 re: fclean all
-
-.PHONY: all re fclean clean 
 #------------- TEST UTILS -----------------------------------#
 #make check f=file
 check:
@@ -275,6 +277,8 @@ MAG	= "\033[1;35m"
 CYAN   = "\033[0;1;36m"
 GRAY   = "\033[1;90m"
 PURPLE = "\033[1;38;2;189;147;249m"
+MANUAL = "$$MANUAL"
+CPP    = "$$CPP"
 
 define CPP
 

@@ -200,7 +200,7 @@ Here's a step-by-step explanation of how `dynamic_cast` works and what it means 
 
 2. **Downcasting**: Downcasting refers to casting a pointer or reference from a base class to a derived class. This is the opposite of upcasting, which is always safe and implicit in C++. Downcasting is not inherently safe because not all base class pointers may actually point to a derived class object.
 
-3. **Runtime Check**: When you use `dynamic_cast` to downcast a pointer, if the object pointed to is not actually of the target derived type (or a type derived from the target type), the result of the cast will be `nullptr`. For references, if the cast fails, a [`std::bad_cast`](command:_github.copilot.openSymbolFromReferences?%5B%7B%22%24mid%22%3A1%2C%22external%22%3A%22file%3A%2F%2F%2Fusr%2Finclude%2Fc%252B%252B%2F10%2Farray%22%2C%22path%22%3A%22%2Fusr%2Finclude%2Fc%2B%2B%2F10%2Farray%22%2C%22scheme%22%3A%22file%22%7D%2C%7B%22line%22%3A42%2C%22character%22%3A10%7D%5D "../../../../usr/include/c++/10/array") exception is thrown.
+3. **Runtime Check**: When you use `dynamic_cast` to downcast a pointer, if the object pointed to is not actually of the target derived type (or a type derived from the target type), the result of the cast will be `nullptr`. For references, if the cast fails, a [`std::bad_cast`] exception is thrown.
 
 4. **Usage**: `dynamic_cast` is used in situations where the type of the object is not known at compile time and you need to perform operations specific to its derived type. It's commonly used in polymorphic class hierarchies.
 

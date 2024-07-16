@@ -19,7 +19,7 @@ Character::Character(std::string const &name) : _instanceId(++_instanceCount), _
 	if (DEBUG)
 	{
 		std::cout << _colorIdStr << *this
-				  << getColorStr(FGRAY, " was Created\n");
+		<< getColorStr(FGRAY, " was Created\n");
 	}
 }
 

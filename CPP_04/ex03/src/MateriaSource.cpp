@@ -77,7 +77,8 @@ void MateriaSource::learnMateria(AMateria* aMateria)
 	<< "Inventory full. Materia "<< *aMateria
 	<< getColorFmt(FYELLOW) <<" can't be learn.\n"
 	<< getColorFmt(FRED) << "Deleting " << *aMateria;
-	std::cout << " (" << aMateria << ")";
+	if (DEBUG)
+		std::cout << " (" << aMateria << ")";
 	std::cout<< "\n";
 	delete aMateria;
 }
