@@ -286,10 +286,12 @@ where
 */
 int	main(int ac, char* arg[])
 {
-	std::cout << "ac : " << ac;
+	if (DEBUG)
+		std::cout << "ac : " << ac;
 	if (ac == 2)
 	{	
-		std::cout <<" | arg[1] : " << arg[1] << std::endl;
+		if (DEBUG)
+			std::cout <<" | arg[1] : " << arg[1] << std::endl;
 		switch (std::atoi(arg[1]))
 		{
 			case 1:

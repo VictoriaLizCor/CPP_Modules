@@ -35,6 +35,7 @@ OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
 # that `make` should search when it's looking for prerequisites.
 vpath %.cpp $(sort $(dir $(SRC)))
 DEPS		:= $(OBJS:.o=.d)
+-include $(DEPS)
 D_FLAGS		+= -O0 -g3 #-Og optimization + good debuggin experience
 # ASAN_OPTIONS=detect_leaks=1 # in case platform leaks detections is not enable
 # DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
@@ -166,6 +167,7 @@ info:
 	@echo $(BLUE)"D = $(D)" $(E_NC)
 	@echo $(BLUE)"S = $(S)" $(E_NC)
 	@echo $(BLUE)"V = $(V)" $(E_NC)
+	@echo $(BLUE)"DEPENDENCIES = $(DEPS)" $(E_NC)
 testAll:
 	@for dir in $(DIRS); do \
 		$(MAKE) -C $$dir D=$(D) test; \
