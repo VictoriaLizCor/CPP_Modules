@@ -187,7 +187,7 @@ GRAY   = "\033[1;90m"
 PURPLE = "\033[1;38;2;189;147;249m"
 BANNER = "$$CPP"
 TRASH_BANNER = "$$TRASH"
-#------------- TEST UTILS -----------------------------------#
+#------------- TEST UTILS ------------------------------- ----#
 list:
 	@ls --color=auto -Rla $(DIRS)
 
