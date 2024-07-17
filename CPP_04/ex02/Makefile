@@ -133,6 +133,7 @@ gAdd:
 gCommit:
 	@echo $(GREEN) && git commit -e ; \
 	ret=$$?; \
+	if [ $$ret -ne 0 ]; then \
 		echo $(RED) "Error in commit message"; \
 		exit 1; \
 	fi
