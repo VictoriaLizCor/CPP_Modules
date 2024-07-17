@@ -1,6 +1,10 @@
 #include "AMateria.hpp"
 #include "ICharacter.hpp"
 
+AMateria::t_list* AMateria::_head = NULL;
+
+
+
 int AMateria::_instanceCount = 0;
 
 /**
@@ -30,6 +34,9 @@ _instanceAMateria (++_instanceCount),
 _type(type)
 {
 	initColor();
+	t_list newNode = *this;
+	newNode->next = head;
+	head = new_node;
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
 }
@@ -138,3 +145,27 @@ std::ostream& operator << (std::ostream& os, AMateria& rhs)
 	os << rhs.getInfo();
 	return (os);
 }
+
+
+// void AMateria::addInstance(AMateria* instance)
+// {
+// 	Node* newNode = new Node(instance);
+// 	newNode->next = head;
+// 	head = newNode;
+// }
+
+// void AMateria::removeInstance(AMateria* instance)
+// {
+// 	Node **ptr = &head;
+// 	while (*ptr)
+// 	{
+// 		if ((*ptr)->instance == instance)
+// 		{
+// 			Node* temp = *ptr;
+// 			*ptr = (*ptr)->next;
+// 			delete temp;
+// 			break;
+// 		}
+// 		ptr = &((*ptr)->next);
+// 	}
+// }

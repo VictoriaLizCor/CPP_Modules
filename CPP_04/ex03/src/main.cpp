@@ -145,6 +145,7 @@ static void	testCharacter(void) // 1
 				c2.use(1, *c1);
 				std::cerr << "----\n";
 			}
+			c1->unequip(0);
 			std::cerr << "----\n";
 			delete c1;
 		}

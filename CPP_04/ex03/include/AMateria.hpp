@@ -11,9 +11,16 @@
 # endif
 
 class ICharacter;
+
 class AMateria
 {
 	private:
+		struct t_list
+		{
+			AMateria* instance = 0;
+			t_list* next = 0;
+		};
+		static t_list* _head;
 
 	protected:
 		static int			_instanceCount;
@@ -21,6 +28,7 @@ class AMateria
 		std::string 		_colorIdStr;
 		std::string			_type;
 
+		void initColor(void);
 	public:
 		AMateria(std::string const & type);
 		AMateria& operator=(AMateria const& rhs);
@@ -31,8 +39,6 @@ class AMateria
 		virtual AMateria*	clone(void) const = 0;
 		virtual void		use(ICharacter& target);
 
-		//*aditional function members
-		void initColor(void);
 		virtual std::string	getInfo(void) const; // Do not declare as pure virtual. Read notes */
 };
 
@@ -77,9 +83,9 @@ std::ostream& operator << (std::ostream& os, AMateria& rhs);
  *   leading again to undefined behavior.
 
  *  * Doing so would risk invoking it when the object's vtable is not
- *    fully formed, causing the runtime error you encountered. This is
- *    a fundamental rule in C++ to ensure type safety and object
- *    integrity during construction and destruction phases.
+ *	fully formed, causing the runtime error you encountered. This is
+ *	a fundamental rule in C++ to ensure type safety and object
+ *	integrity during construction and destruction phases.
  *
  *
  */

@@ -109,6 +109,7 @@ void Character::unequip(int idx)
 {
 	if (static_cast<size_t>(idx) < _inventorySize)
 	{
+		_inventory[idx] = NULL;
 		if (DEBUG)
 			std::cout << *this << " unequips inventory slot [ "
 					  << idx << "] " << _inventory[idx];
