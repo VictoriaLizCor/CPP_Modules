@@ -14,12 +14,15 @@
 class Bureaucrat
 {
 	private:
-
+		std::string const	_name;
 	protected:
 		
 	public:
 		Bureaucrat();
 		virtual ~Bureaucrat(void);
+
+		std::string getName();
+		int 		getGrade();
 
 };
 
