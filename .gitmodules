@@ -6,4 +6,7 @@
 	url = git@vogsphere.42wolfsburg.de:vogsphere/intra-uuid-4b7114ed-8557-40d9-a5fc-5d132562e7f1-5693786-lilizarr
 [submodule "evals/cpp03"]
 	path = evals/cpp03
-	url = git@vogsphere.42wolfsburg.de:vogsphere/intra-uuid-518ecfcf-2c2b-4dd4-bc3f-c999e55136d4-5730665-lilizarr 
+	url = git@vogsphere.42wolfsburg.de:vogsphere/intra-uuid-518ecfcf-2c2b-4dd4-bc3f-c999e55136d4-5730665-lilizarr
+[submodule "evals/cpp04"]
+	path = evals/cpp04
+	url = git@vogsphere.42wolfsburg.de:vogsphere/intra-uuid-c2d3f4ad-3966-450d-81d4-681ba74407a9-5761467-lilizarr

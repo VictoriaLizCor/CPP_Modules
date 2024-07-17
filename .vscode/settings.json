@@ -4,8 +4,14 @@
 	// "editor.fontSize": 13.5,
 	// "[linux]":
 	"editor.fontSize": 13.7,
-	"window.zoomLevel": 0.3,
+	"window.zoomLevel": 0.40,
+	// "debug.console.fontSize": 20,
+	"terminal.integrated.fontSize": 13,
 	/*FOR BOTH*/
+	"makefile.makePath": "./Makefile",
+	"makefile.showOnStartup": false,
+	"terminal.integrated.shell.linux": "/bin/bash",
+	"terminal.integrated.defaultProfile.linux": "bash",
 	"workbench.startupEditor": "none",
 	"editor.detectIndentation": false,
 	"editor.insertSpaces": false,
@@ -24,7 +30,7 @@
 		//	"${workspaceFolder}/CPP_00/ex01/src/${workspaceFolder}/CPP_00/ex01/src/my_awesome_phonebook.cpp"
 	],
 	"window.customTitleBarVisibility": "auto",
-	"rewrap.wrappingColumn": 80,
+	"rewrap.wrappingColumn": 70,
 	"files.associations": {
 		"array": "cpp",
 		"atomic": "cpp",
@@ -90,8 +96,8 @@
 		"**/CPP_00": true,
 		"**/CPP_01": true,
 		"**/CPP_02": true,
+		"**/CPP_03": true,
 	},
-	"accessibility.signalOptions": {
-		"volume": 0
-	}
+	"github.copilot.editor.enableAutoCompletions": false,
+	"pdf-preview.default.sidebar": false
 }
