@@ -1,9 +1,8 @@
 #include "AMateria.hpp"
 #include "ICharacter.hpp"
+#include "DoubleLinkedList.hpp"
 
-AMateria::t_list* AMateria::_head = NULL;
-
-
+DoubleLinkedList<AMateria*> AMateria::_list;
 
 int AMateria::_instanceCount = 0;
 
@@ -34,11 +33,9 @@ _instanceAMateria (++_instanceCount),
 _type(type)
 {
 	initColor();
-	t_list newNode = *this;
-	newNode->next = head;
-	head = new_node;
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
+	_list.addNode(this);
 }
 
 /**
@@ -61,7 +58,10 @@ AMateria&::AMateria::operator=(AMateria const& rhs)
 AMateria::AMateria(AMateria const&rhs):
 _instanceAMateria(++_instanceCount),
 _type(rhs.getType())
-{*this = rhs;}
+{
+	_list.addNode(this);
+	*this = rhs;
+}
 
 /**
  * @brief Destructor for the AMateria class.
@@ -74,9 +74,17 @@ _type(rhs.getType())
  */
 AMateria::~AMateria(void)
 {
+	if (_list.deleteNode(this))
+	{
+		std::cout << *this << " node was deleted from "
+		<< getColorStr(_colorIdStr, className((typeid(*this).name())))
+		<< " list\n";
+	}
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
 	--_instanceCount;
+	if (_instanceCount == 0)
+		_list.clearList(this);
 }
 
 
@@ -145,27 +153,3 @@ std::ostream& operator << (std::ostream& os, AMateria& rhs)
 	os << rhs.getInfo();
 	return (os);
 }
-
-
-// void AMateria::addInstance(AMateria* instance)
-// {
-// 	Node* newNode = new Node(instance);
-// 	newNode->next = head;
-// 	head = newNode;
-// }
-
-// void AMateria::removeInstance(AMateria* instance)
-// {
-// 	Node **ptr = &head;
-// 	while (*ptr)
-// 	{
-// 		if ((*ptr)->instance == instance)
-// 		{
-// 			Node* temp = *ptr;
-// 			*ptr = (*ptr)->next;
-// 			delete temp;
-// 			break;
-// 		}
-// 		ptr = &((*ptr)->next);
-// 	}
-// }

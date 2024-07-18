@@ -4,6 +4,7 @@
 # include <string>
 # include <sstream>
 # include <cstdlib>
+# include <iomanip>
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -89,4 +90,5 @@ size_t		maxStringLength(int fieldSize, std::string* arrayData);
 std::string	center(const std::string& s, std::string::size_type width);
 std::string	className(const std::string& str);
 std::string	getRandString();
+void		printTitle(std::string title);
 #endif

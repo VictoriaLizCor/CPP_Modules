@@ -138,8 +138,6 @@ size_t Character::getInvetorySize(void) { return (_inventorySize); }
 
 void Character::getInventory(size_t idx) const
 {
-	if (DEBUG == 0)
-		return;
 	std::cout << *this << " |";
 	if (idx == getInvetorySize())
 	{

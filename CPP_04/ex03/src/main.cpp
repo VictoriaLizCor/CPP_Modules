@@ -2,7 +2,7 @@
 #include "Ice.hpp"
 #include "Cure.hpp"
 #include "MateriaSource.hpp"
-#include <iomanip>
+#include "stringUtils.hpp"
 #include <iostream>
 
 static int getRandomNum(int num)
@@ -57,23 +57,6 @@ static void fillInventory(void* obj, size_t size, std::string const& name)
 			static_cast<MateriaSource*>(obj)->learnMateria(createRandomMateria(i));
 		std::cerr << "----\n";
 	}
-}
-
-static void printTitle(std::string title)
-{
-	const int size = 60;
-	std::string toPrint = " " + title + " "; 
-	
-	int len = static_cast<int>(toPrint.size());
-	int padding = (size - len) / 2;
-
-	if (len % 2 != 0 && size % 2 == 0)
-		padding++;
-
-	std::cout << std::setfill('=') << std::setw(padding) << "";
-	std::cout << toPrint;
-	std::cout << std::setfill('=') << std::setw(size - len - padding)
-	<< "" << std::endl;
 }
 
 static void testSubject(void) // Default
@@ -145,7 +128,6 @@ static void	testCharacter(void) // 1
 				c2.use(1, *c1);
 				std::cerr << "----\n";
 			}
-			c1->unequip(0);
 			std::cerr << "----\n";
 			delete c1;
 		}
@@ -275,6 +257,32 @@ static void testICharacter(void)
 	}
 	std::cerr << "\n" << std::flush;
 }
+
+static void	testCharacterUnequip(void) // 5
+{
+	size_t size = Character::getInvetorySize();
+	{
+		{
+			Character c1("");
+			printTitle("CHARACTER UNEQUIP");
+			std::cerr << "----\n";
+			c1.getInventory(size);
+			// if (DEBUG)
+			// 	fillInventory(c1, size, &Character::equip);
+			// else
+			// 	fillInventory(&c1, size, className(typeid(c1).name()));
+			c1.equip(new Ice());
+			c1.equip(new Cure());
+			c1.equip(new Ice());
+			c1.getInventory(size);
+			c1.unequip(0);
+			c1.getInventory(size);
+			c1.equip(createRandomMateria(0));
+			c1.getInventory(size);
+		}
+	}
+}
+
 /*
 To run main from terminal
 $> make D=0 S=1 re test i=#
@@ -306,6 +314,9 @@ int	main(int ac, char* arg[])
 				break;
 			case 4:
 				testICharacter();
+				break;
+			case 5:
+				testCharacterUnequip();
 				break;
 			default:
 				testSubject();

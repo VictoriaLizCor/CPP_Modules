@@ -350,3 +350,20 @@ std::string getRandString()
 	}
 	return (randomStr);
 }
+
+void printTitle(std::string title)
+{
+	const int size = 60;
+	std::string toPrint = " " + title + " "; 
+	
+	int len = static_cast<int>(toPrint.size());
+	int padding = (size - len) / 2;
+
+	if (len % 2 != 0 && size % 2 == 0)
+		padding++;
+
+	std::cout << std::setfill('=') << std::setw(padding) << "";
+	std::cout << toPrint;
+	std::cout << std::setfill('=') << std::setw(size - len - padding)
+	<< "" << std::endl;
+}

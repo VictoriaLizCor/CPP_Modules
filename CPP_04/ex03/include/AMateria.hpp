@@ -5,24 +5,22 @@
 # include <sstream>
 # include <string>
 # include <typeinfo>
-# include <stringUtils.hpp>
+# include "stringUtils.hpp"
+
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
+
+template<typename T> class DoubleLinkedList;
 
 class ICharacter;
 
 class AMateria
 {
 	private:
-		struct t_list
-		{
-			AMateria* instance = 0;
-			t_list* next = 0;
-		};
-		static t_list* _head;
-
+		
 	protected:
+		static DoubleLinkedList<AMateria*> _list;
 		static int			_instanceCount;
 		int					_instanceAMateria;
 		std::string 		_colorIdStr;
@@ -39,7 +37,9 @@ class AMateria
 		virtual AMateria*	clone(void) const = 0;
 		virtual void		use(ICharacter& target);
 
-		virtual std::string	getInfo(void) const; // Do not declare as pure virtual. Read notes */
+		// Do not declare getInfo as pure virtual. Read notes
+		virtual std::string	getInfo(void) const; 
+
 };
 
 std::ostream& operator << (std::ostream& os, AMateria& rhs);
