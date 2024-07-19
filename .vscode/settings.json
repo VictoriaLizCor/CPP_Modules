@@ -97,7 +97,7 @@
 		"**/CPP_01": true,
 		"**/CPP_02": true,
 		"**/CPP_03": true,
-		// "**/CPP_04": true,
+		"**/CPP_04": true,
 		// "**/CPP_05": true,
 	},
 	"github.copilot.editor.enableAutoCompletions": false,
