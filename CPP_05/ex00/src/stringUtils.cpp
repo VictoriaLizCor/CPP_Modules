@@ -32,7 +32,6 @@ void coutnl(std::ostream& os)
 /**
  * @brief Formats a string with color for console output.
  *
- * This function takes a message string, a color code, and a boolean
  * error flag. It returns the message string formatted with the
  * specified color. If the error flag is true, it prepends "ERROR:" to
  * the message and sets the color to red, regardless of the specified

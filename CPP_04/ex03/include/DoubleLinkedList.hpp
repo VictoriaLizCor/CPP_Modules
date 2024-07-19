@@ -32,7 +32,6 @@ class DoubleLinkedList
 		~DoubleLinkedList();
 
 		void addNode(T data);
-		bool deleteNode(T data);
 		void clearList(T data);
 		void print() const;
 };
