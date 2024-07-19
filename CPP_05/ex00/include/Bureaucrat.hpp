@@ -15,6 +15,8 @@ class Bureaucrat
 {
 	private:
 		std::string const	_name;
+		size_t				_grade;
+
 	protected:
 		
 	public:
