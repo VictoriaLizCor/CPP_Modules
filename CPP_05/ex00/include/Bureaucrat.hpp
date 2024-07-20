@@ -5,7 +5,7 @@
 # include <sstream>
 # include <string>
 # include <typeinfo>
-# include <stringUtils.hpp>
+# include <Utils.hpp>
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -14,6 +14,9 @@
 class Bureaucrat
 {
 	private:
+		static int			_instanceCount;
+		int					_instanceId;
+		std::string const	_colorIdStr;
 		std::string const	_name;
 		size_t				_grade;
 
@@ -21,16 +24,25 @@ class Bureaucrat
 		
 	public:
 		explicit Bureaucrat(std::string const& name, size_t grade);
-		Bureaucrat& opertator=(Bureaucrat const& rhs);
+		Bureaucrat& operator=(Bureaucrat const& rhs);
 		Bureaucrat(Bureaucrat const& rhs);
 		virtual ~Bureaucrat();
 
-		std::string		getName();
-		size_t 			getGrade();
+		std::string const&		getName() const;
+		size_t const&			getGrade() const;
+		void					upGrade(void);
+		void					downGrade(void);
 
+		void					checkGrade(size_t grade);
+		std::string 			getInfo() const;
 		class GradeTooHighException: public std::exception
 		{
-			
+			public:
+				virtual const char *what() const throw()
+				{
+					return ("Bureaucrat::exception : Grade is too high");
+				}
+
 		};
 		class GradeTooLowException: public std::exception
 		{
