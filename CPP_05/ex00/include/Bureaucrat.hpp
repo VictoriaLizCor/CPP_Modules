@@ -6,7 +6,7 @@
 # include <string>
 # include <typeinfo>
 # include <Utils.hpp>
-
+# include <exception>
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
@@ -30,23 +30,29 @@ class Bureaucrat
 
 		std::string const&		getName() const;
 		size_t const&			getGrade() const;
-		void					upGrade(void);
-		void					downGrade(void);
+		void					incrementGrade(void);
+		void					decrementGrade(void);
 
 		void					checkGrade(size_t grade);
 		std::string 			getInfo() const;
-		class GradeTooHighException: public std::exception
+		class GradeTooHighException: virtual public std::exception
 		{
+			private:
+				std::string _msg;
 			public:
-				virtual const char *what() const throw()
-				{
-					return ("Bureaucrat::exception : Grade is too high");
-				}
+				GradeTooHighException(std::string const& msg);
+				virtual ~GradeTooHighException() throw() {}
+				virtual const char* what() const throw();
 
 		};
-		class GradeTooLowException: public std::exception
+		class GradeTooLowException: virtual public std::exception
 		{
-
+			private:
+				std::string _msg;
+			public:
+				GradeTooLowException(std::string const& msg);
+				virtual ~GradeTooLowException() throw() {}
+				virtual const char* what() const throw();
 		};
 };
 

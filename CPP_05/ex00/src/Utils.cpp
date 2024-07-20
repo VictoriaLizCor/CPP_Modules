@@ -73,7 +73,8 @@ std::string error(std::string str, bool bold)
 	fmt = C_FMT;
 	if (bold)
 		fmt += "1;";
-	strColor << fmt << FRED << "m" << "ERROR: " << str;
+	strColor << fmt << FRED << "m"
+	<< "ERROR: " << str << C_END;
 	return (strColor.str());
 }
 

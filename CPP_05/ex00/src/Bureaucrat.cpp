@@ -12,7 +12,7 @@ static std::string checkName(std::string const&name)
 
 Bureaucrat::Bureaucrat(std::string const& name, size_t grade):
 _instanceId(++_instanceCount),
-_colorIdStr(std::string(C_FMT256B) + "50" + "m"),
+_colorIdStr(getRandomColorFmt(1)),
 _name(checkName(name))
 {
 	checkGrade(grade);
@@ -33,7 +33,7 @@ Bureaucrat&::Bureaucrat::operator=(Bureaucrat const& rhs)
 
 Bureaucrat::Bureaucrat(Bureaucrat const& rhs):
 _instanceId(++_instanceCount),
-_colorIdStr(std::string(C_FMT256B) + toStr(50) + "m"),
+_colorIdStr(getRandomColorFmt(1)),
 _name(checkName(rhs.getName()))
 {
 	checkGrade(rhs.getGrade());
@@ -49,10 +49,19 @@ Bureaucrat::~Bureaucrat(void)
 
 void Bureaucrat::checkGrade(size_t grade)
 {
-	if (grade < 1)
-		throw GradeTooHighException();
+	std::ostringstream os;
+
+	os << getInfo() << ": ";
+	if (grade == 0)
+	{
+		os << "Grade over range, Max value should be 1\n";
+		throw GradeTooHighException(os.str());
+	}
 	if (grade > 150)
-		throw GradeTooLowException();
+	{
+		os << "Grade under range, Min value should be 150\n";
+		throw GradeTooLowException(os.str());
+	}
 }
 
 std::string const& Bureaucrat::getName() const
@@ -64,14 +73,20 @@ size_t const& Bureaucrat::getGrade() const
 {
 	return (_grade);
 }
-void Bureaucrat::upGrade(void)
+void Bureaucrat::incrementGrade(void)
 {
-	checkGrade(--_grade);
+	--_grade;
+	if (DEBUG)
+		std::cout << "\tAfter increment: " << _grade << "\n";
+	checkGrade(_grade);
 }
 
-void Bureaucrat::downGrade(void)
+void Bureaucrat::decrementGrade(void)
 {
-	checkGrade(++_grade);
+	++_grade;
+	if (DEBUG)
+		std::cout << "\tAfter decrement: " << _grade << "\n";
+	checkGrade(_grade);
 }
 
 std::string Bureaucrat::getInfo() const
@@ -92,4 +107,18 @@ std::ostream& operator << (std::ostream& os, Bureaucrat const& rhs)
 {
 	os << rhs.getInfo();
 	return (os);
+}
+
+Bureaucrat::GradeTooHighException::GradeTooHighException(const std::string& msg)
+: _msg(msg) {}
+
+const char* Bureaucrat::GradeTooHighException::what() const throw(){
+	return _msg.c_str();
+}
+
+Bureaucrat::GradeTooLowException::GradeTooLowException(const std::string& msg)
+: _msg(msg) {}
+
+const char* Bureaucrat::GradeTooLowException::what() const throw() {
+	return _msg.c_str();
 }

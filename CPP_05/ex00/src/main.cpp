@@ -3,81 +3,84 @@
 
 void	testBasic(void)
 {
-	Bureaucrat	bob("bob", 6);
+	Bureaucrat	test("test", 6);
 
-	std::cout << bob << std::endl;
-	bob.downGrade();
-	std::cout << bob << std::endl;
-	bob.upGrade();
-	bob.upGrade();
-	bob.upGrade();
-	bob.upGrade();
-	std::cout << bob << std::endl;
+	std::cout << test << " Grade: " << test.getGrade() << std::endl;
+	test.decrementGrade();
+	std::cout << test << " Grade: " << test.getGrade() << std::endl;
+	test.incrementGrade();
+	test.incrementGrade();
+	test.incrementGrade();
+	test.incrementGrade();
+	std::cout << test << " Grade: " << test.getGrade() << std::endl;
 }
 
 void	testExceptionLow(void)
 {
-	Bureaucrat	bob("Low", 151);
+	Bureaucrat	Low("Low", 151);
 }
 
 void	testExceptionHigh(void)
 {
-	Bureaucrat	bob("High", 0);
+	Bureaucrat	High("High", 0);
 }
 
-void	testUpGrade(void)
+void	testIncrementGrade(void)
 {
-	Bureaucrat	bob("UpGrade", 2);
-	bob.upGrade();
-	std::cout << bob << std::endl;
-	bob.upGrade();
+	Bureaucrat	UpGrade("UpGrade", 2);
+	UpGrade.incrementGrade();
+	std::cout << UpGrade << " Grade: " << UpGrade.getGrade() << std::endl;
+	UpGrade.incrementGrade();
 }
 
-void	testDownGrade(void)
+void	testDecrementGrade(void)
 {
-	Bureaucrat	bob("DownGrade", 149);
-	bob.downGrade();
-	std::cout << bob << std::endl;
-	bob.downGrade();
+	Bureaucrat	DownGrade("DownGrade", 149);
+	DownGrade.decrementGrade();
+	std::cout << DownGrade  << " Grade: " << DownGrade.getGrade() << std::endl;
+	DownGrade.decrementGrade();
 }
 
 int main(void)
 {
-	bool eFlag = 0;
+	std::ostringstream os;
 	try{ testBasic();} catch (std::exception &e)
 	{
 		std::cerr << e.what() << std::endl;
-		eFlag = 1;
+		os << e.what();
 	}
 
 	std::cout << std::endl;
 	try{ testExceptionLow();} catch (std::exception &e)
 	{
 		std::cerr << e.what() << std::endl;
-		eFlag = 1;
+		os << e.what();
 	}
 
 	std::cout << std::endl;
 	try{ testExceptionHigh();} catch (std::exception &e)
 	{
 		std::cerr << e.what() << std::endl;
-		eFlag = 1;
+		os << e.what();
 	}
 
 	std::cout << std::endl;
-	try{ testDownGrade();} catch (std::exception &e)
+	try{ testDecrementGrade();} catch (std::exception &e)
 	{
 		std::cerr << e.what() << std::endl;
-		eFlag = 1;
+		os << e.what();
 	}
 
 	std::cout << std::endl;
-	try{ testUpGrade();} catch (std::exception &e)
+	try{ testIncrementGrade();} catch (std::exception &e)
 	{
 		std::cerr << e.what() << std::endl;
-		eFlag = 1;
+		os << e.what();
 	}
-	if (eFlag)
-		std::cerr << "\n" << error("A problem happened during Object creation\n", 0);
-	return (eFlag ?  1 : 0);
+	if (!os.str().empty())
+	{
+		std::cerr << "\n" << error("Problems during Object creation\n", 1) << os.str();
+
+	}
+	return (0);
 }
