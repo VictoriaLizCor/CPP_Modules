@@ -20,14 +20,24 @@ class Bureaucrat
 	protected:
 		
 	public:
-		Bureaucrat();
-		virtual ~Bureaucrat(void);
+		explicit Bureaucrat(std::string const& name, size_t grade);
+		Bureaucrat& opertator=(Bureaucrat const& rhs);
+		Bureaucrat(Bureaucrat const& rhs);
+		virtual ~Bureaucrat();
 
-		std::string getName();
-		int 		getGrade();
+		std::string		getName();
+		size_t 			getGrade();
 
+		class GradeTooHighException: public std::exception
+		{
+			
+		};
+		class GradeTooLowException: public std::exception
+		{
+
+		};
 };
 
-// std::ostream& operator << (std::ostream& os, Bureaucrat const& rhs);
+std::ostream& operator << (std::ostream& os, Bureaucrat const& rhs);
 
 #endif // BUREAUCRAT_HPP

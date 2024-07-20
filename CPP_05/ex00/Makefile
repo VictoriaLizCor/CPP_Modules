@@ -400,7 +400,7 @@ define CPP_CONTENT
 {
 }
 
-std::ostream& operator << (std::ostream& os, {{CLASS_NAME}}& rhs)
+std::ostream& operator << (std::ostream& os, {{CLASS_NAME}} const& rhs)
 {
 	return (os);
 }
