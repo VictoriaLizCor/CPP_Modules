@@ -336,9 +336,9 @@ FLAGS:
 
 Example:
 
-$(D_WHITE)[show character test]
+$(D_WHITE)[Character test]
 $(D_PURPLE)$> make test i=1
-$(D_WHITE)[show debug information and run character test with valgrind]
+$(D_WHITE)[Debug information and run character test with Valgrind]
 $(D_PURPLE)$> make D=1 S=0 re test i=1
 $(D_WHITE)[run subject test]
 $(D_PURPLE)$> make test

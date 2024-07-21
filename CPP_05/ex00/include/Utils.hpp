@@ -91,5 +91,5 @@ std::string	center(const std::string& s, std::string::size_type width);
 std::string	className(const std::string& str);
 std::string	getRandString();
 size_t		getRandomNum(size_t num);
-void		printTitle(std::string title);
+void		printTitle(std::string title, int n);
 #endif

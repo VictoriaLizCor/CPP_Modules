@@ -51,6 +51,7 @@ void Bureaucrat::checkGrade(size_t grade)
 {
 	std::ostringstream os;
 
+	os << getColorStr(FRED, "Atenttion! ");
 	os << getInfo() << ": ";
 	if (grade == 0)
 	{
