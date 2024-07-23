@@ -12,11 +12,11 @@ void	testBasic(void)
 		test.decrementGrade();
 		std::cout << test << " Grade: " << test.getGrade() << std::endl;
 		printTitle("Increment", 20);
-		test.incrementGrade();
-		test.incrementGrade();
-		test.incrementGrade();
-		test.incrementGrade();
-		std::cout << test << " Grade: " << test.getGrade() << std::endl;
+		for (int i = 6; i > 0; --i)
+		{
+			test.incrementGrade();
+			std::cout << test << " Grade: " << test.getGrade() << std::endl;
+		}
 	}
 }
 
@@ -38,29 +38,40 @@ void	testExceptionHigh(void)
 	}
 }
 
-void	testIncrementGrade(void)
-{
-	{
-		printTitle("testExceptionAfterIncrement", 60);
-		Bureaucrat	UpGrade("UpGrade", 2);
-		UpGrade.incrementGrade();
-		std::cout << UpGrade << " Grade: " 
-		<< UpGrade.getGrade() << std::endl;
-		UpGrade.incrementGrade();
-	}
-	printTitle("------", 60);
-}
 
 void	testDecrementGrade(void)
 {
 	{
 		printTitle("testExceptionAfterDecrement", 60);
-		Bureaucrat	DownGrade("DownGrade", 149);
-		DownGrade.decrementGrade();
-		std::cout << DownGrade << " Grade: " 
-		<< DownGrade.getGrade() << std::endl;
-		DownGrade.decrementGrade();
+		Bureaucrat	downGrade("DownGrade", 149);
+		std::cout << downGrade << " Grade: " 
+		<< downGrade.getGrade() << std::endl;
+		printTitle("Decrement", 20);
+		for (int i = 6; i > 0; --i)
+		{
+			std::cout << downGrade << " Grade: " 
+			<< downGrade.getGrade() << std::endl;
+			downGrade.decrementGrade();
+		}
 	}
+}
+
+void	testIncrementGrade(void)
+{
+	{
+		printTitle("testExceptionAfterIncrement", 60);
+		Bureaucrat	upGrade("UpGrade", 2);
+		std::cout << upGrade << " Grade: " 
+		<< upGrade.getGrade() << std::endl;
+		printTitle("Increment", 20);
+		for (int i = 6; i > 0; --i)
+		{
+			std::cout << upGrade << " Grade: " 
+			<< upGrade.getGrade() << std::endl;
+			upGrade.incrementGrade();
+		}
+	}
+	printTitle("------", 60);
 }
 
 void tryCatch(void (*test)(), std::ostringstream& os)
