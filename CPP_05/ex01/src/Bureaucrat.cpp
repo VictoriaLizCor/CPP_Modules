@@ -77,6 +77,7 @@ size_t const& Bureaucrat::getGrade() const
 {
 	return (_grade);
 }
+
 void Bureaucrat::incrementGrade(void)
 {
 	--_grade;
@@ -91,6 +92,11 @@ void Bureaucrat::decrementGrade(void)
 	if (DEBUG)
 		std::cout << "After decrement: " << _grade << "\n";
 	checkGrade(_grade);
+}
+
+void signForm(Form& form)
+{
+	
 }
 
 std::string Bureaucrat::getInfo() const
@@ -109,25 +115,6 @@ std::string Bureaucrat::getInfo() const
 
 std::ostream& operator << (std::ostream& os, Bureaucrat const& rhs)
 {
-	os << rhs.getInfo();
+	os << rhs.getInfo() << " grade: " << rhs.getGrade();
 	return (os);
-}
-
-Bureaucrat::GradeTooHighException::GradeTooHighException(const std::string& msg)
-: _msg(msg) {}
-
-Bureaucrat::GradeTooHighException::~GradeTooHighException() throw() {}
-Bureaucrat::GradeTooLowException::~GradeTooLowException() throw() {}
-
-const char* Bureaucrat::GradeTooHighException::what() const throw()
-{
-	return _msg.c_str();
-}
-
-Bureaucrat::GradeTooLowException::GradeTooLowException(const std::string& msg)
-: _msg(msg) {}
-
-const char* Bureaucrat::GradeTooLowException::what() const throw()
-{
-	return _msg.c_str();
 }

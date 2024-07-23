@@ -13,6 +13,7 @@
 		"editor.fontSize": 13.7,
 		"window.zoomLevel": 0.45,
 	},
+	// "window.zoomLevel": 0.45,
 	// "debug.console.fontSize": 20,
 	"terminal.integrated.fontSize": 13,
 	/*FOR BOTH*/

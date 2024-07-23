@@ -5,11 +5,14 @@
 # include <sstream>
 # include <string>
 # include <typeinfo>
-# include <Utils.hpp>
-# include <exception>
+# include "Utils.hpp"
+# include "GradeExceptions.hpp"
+
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
+
+class Form;
 
 class Bureaucrat
 {
@@ -34,28 +37,13 @@ class Bureaucrat
 		size_t const&			getGrade() const;
 		void					incrementGrade(void);
 		void					decrementGrade(void);
+		void					signForm();
 
 		void					checkGrade(size_t grade);
 		std::string 			getInfo() const;
-		class GradeTooHighException: virtual public std::exception
-		{
-			private:
-				std::string _msg;
-			public:
-				GradeTooHighException(std::string const& msg);
-				virtual ~GradeTooHighException() throw();
-				virtual const char* what() const throw();
-
-		};
-		class GradeTooLowException: virtual public std::exception
-		{
-			private:
-				std::string _msg;
-			public:
-				GradeTooLowException(std::string const& msg);
-				virtual ~GradeTooLowException() throw();
-				virtual const char* what() const throw();
-		};
+		
+		typedef TooHighException GradeTooHighException;
+		typedef TooHighException GradeTooLowException;
 };
 
 std::ostream& operator << (std::ostream& os, Bureaucrat const& rhs);
