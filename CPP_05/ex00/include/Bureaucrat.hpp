@@ -14,9 +14,11 @@
 class Bureaucrat
 {
 	private:
+		// Debug attributes
 		static int			_instanceCount;
 		int					_instanceId;
 		std::string const	_colorIdStr;
+		// Subject specific
 		std::string const	_name;
 		size_t				_grade;
 

@@ -51,16 +51,19 @@ void Bureaucrat::checkGrade(size_t grade)
 {
 	std::ostringstream os;
 
-	os << getColorStr(FRED, "Atenttion! ");
-	os << getInfo() << ": ";
+	os << getInfo();
 	if (grade == 0)
 	{
-		os << "Grade over range, Max value should be 1\n";
+		std::cout << getColorStr(FRED, "Atenttion! \n");
+		os << ", grade [" << grade
+		<< "] over range. Max value should be 1\n";
 		throw GradeTooHighException(os.str());
 	}
 	if (grade > 150)
 	{
-		os << "Grade under range, Min value should be 150\n";
+		std::cout << getColorStr(FRED, "Atenttion! \n");
+		os << ", grade [" << grade
+		<< "] under range. Min value should be 150\n";
 		throw GradeTooLowException(os.str());
 	}
 }

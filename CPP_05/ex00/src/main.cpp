@@ -18,7 +18,6 @@ void	testBasic(void)
 		test.incrementGrade();
 		std::cout << test << " Grade: " << test.getGrade() << std::endl;
 	}
-	printTitle("------", 30);
 }
 
 void	testExceptionLow(void)
@@ -28,8 +27,6 @@ void	testExceptionLow(void)
 		std::cout << std::endl;
 		Bureaucrat	Low("Low", 151);
 	}
-	printTitle("------", 60);
-	
 }
 
 void	testExceptionHigh(void)
@@ -39,7 +36,6 @@ void	testExceptionHigh(void)
 		std::cout << std::endl;
 		Bureaucrat	High("High", 0);
 	}
-	printTitle("------", 60);
 }
 
 void	testIncrementGrade(void)
@@ -110,20 +106,19 @@ int	main(int ac, char* arg[])
 				break;
 		}
 	}
-	else
-		jump = true;
-	if (jump)
+	if (jump || ac != 2)
 	{
 		tryCatch(&testBasic, os);
 		tryCatch(&testExceptionLow, os);
 		tryCatch(&testExceptionHigh, os);
 		tryCatch(&testDecrementGrade, os);
 		tryCatch(&testIncrementGrade, os);
-		std::cout << std::endl << std::flush;
+		std::cout << std::flush;
 	}
 	if (!os.str().empty())
 	{
-		std::cerr << "\n" << error("Problems during Object creation\n", 1) << os.str();
+		std::cerr << error("Problems during Object creation / handle\n\n", 1)
+		<< os.str();
 
 	}
 	std::cout << std::endl << std::flush;
