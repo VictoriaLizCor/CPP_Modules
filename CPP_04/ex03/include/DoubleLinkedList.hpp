@@ -43,6 +43,7 @@ DoubleLinkedList<T>::DoubleLinkedList():head(0), tail(0)
 template<typename T>
 DoubleLinkedList<T>::~DoubleLinkedList()
 {
+	// clearList();
 	std::cout<< getColorStr(FGRAY, "Empty list\n");
 }
 

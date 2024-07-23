@@ -1,10 +1,18 @@
 {
 	//***************************************************//
+	// Add this to your settings.json
+	"[windows]":
+	{
+		"editor.fontSize": 17.7,
+		"window.zoomLevel": 1,
+	},
 	// "[osx]":
 	// "editor.fontSize": 13.5,
-	// "[linux]":
-	"editor.fontSize": 13.7,
-	"window.zoomLevel": 0.40,
+	"[linux]":
+	{
+		"editor.fontSize": 13.7,
+		"window.zoomLevel": 0.45,
+	},
 	// "debug.console.fontSize": 20,
 	"terminal.integrated.fontSize": 13,
 	/*FOR BOTH*/

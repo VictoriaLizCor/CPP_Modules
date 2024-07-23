@@ -1,4 +1,4 @@
-#include "stringUtils.hpp"
+#include "Utils.hpp"
 
 /**
  * @brief Get the colored name.
@@ -32,17 +32,15 @@ void coutnl(std::ostream& os)
 /**
  * @brief Formats a string with color for console output.
  *
- * This function takes a message string, a color code, and a boolean
- * error flag. It returns the message string formatted with the
- * specified color. If the error flag is true, it prepends "ERROR:" to
- * the message and sets the color to red, regardless of the specified
- * color code.
+ * This function takes a message string, a color code, and a boolean error flag.
+ * It returns the message string formatted with the specified color. If the error
+ * flag is true, it prepends "ERROR:" to the message and sets the color to red,
+ * regardless of the specified color code.
  *
  * @param msg The message string to be formatted.
- * @param color The color code for the message. This should be a value
- *              from the t_color enum.
- * @param err A boolean flag indicating whether the message is an
- * error message.
+ * @param color The color code for the message. This should be a value from the
+ *              t_color enum.
+ * @param err A boolean flag indicating whether the message is an error message.
  * @return The formatted message string.
  */
 std::string	getColorFmt(int eColor)
@@ -75,7 +73,8 @@ std::string error(std::string str, bool bold)
 	fmt = C_FMT;
 	if (bold)
 		fmt += "1;";
-	strColor << fmt << FRED << "m" << "ERROR: " << str;
+	strColor << fmt << FRED << "m"
+	<< "ERROR: " << str << C_END;
 	return (strColor.str());
 }
 
@@ -85,7 +84,7 @@ std::string error(std::string str, bool bold)
  * @param value The integer value to be converted.
  * @return std::string The string representation of the integer value.
  */
-std::string toString(int value)
+std::string toStr(int value)
 {
 	std::ostringstream ss;
 	ss << value;
@@ -351,4 +350,39 @@ std::string getRandString()
 		randomStr += random_char;
 	}
 	return (randomStr);
+}
+
+/**
+ * Prints a title surrounded by equal signs.
+ * 
+ * @param title The title to be printed.
+ */
+void printTitle(std::string title, int n)
+{
+	int size = n;
+	std::string toPrint = " " + title + " "; 
+
+	if (size <= 0 || size > 60)
+		size = 60;
+	int len = static_cast<int>(toPrint.size());
+	int padding = (size - len) / 2;
+
+	if (len % 2 != 0 && size % 2 == 0)
+		padding++;
+
+	std::cout << std::setfill('=') << std::setw(padding) << "";
+	std::cout << toPrint;
+	std::cout << std::setfill('=') << std::setw(size - len - padding)
+	<< "" << std::endl;
+}
+
+size_t getRandomNum(size_t num)
+{
+	static bool seeded = false;
+	if (!seeded)
+	{
+		srand(static_cast<unsigned int>(time(0)));
+		seeded = true;
+	}
+	return (static_cast<size_t>(rand()) % num);
 }

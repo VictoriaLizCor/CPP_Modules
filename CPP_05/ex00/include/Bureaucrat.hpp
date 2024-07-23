@@ -5,8 +5,8 @@
 # include <sstream>
 # include <string>
 # include <typeinfo>
-# include <stringUtils.hpp>
-
+# include <Utils.hpp>
+# include <exception>
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
@@ -14,18 +14,50 @@
 class Bureaucrat
 {
 	private:
+		// Debug attributes
+		static int			_instanceCount;
+		int					_instanceId;
+		std::string const	_colorIdStr;
+		// Subject specific
 		std::string const	_name;
+		size_t				_grade;
+
 	protected:
 		
 	public:
-		Bureaucrat();
-		virtual ~Bureaucrat(void);
+		explicit Bureaucrat(std::string const& name, size_t grade);
+		Bureaucrat& operator=(Bureaucrat const& rhs);
+		Bureaucrat(Bureaucrat const& rhs);
+		virtual ~Bureaucrat();
 
-		std::string getName();
-		int 		getGrade();
+		std::string const&		getName() const;
+		size_t const&			getGrade() const;
+		void					incrementGrade(void);
+		void					decrementGrade(void);
 
+		void					checkGrade(size_t grade);
+		std::string 			getInfo() const;
+		class GradeTooHighException: virtual public std::exception
+		{
+			private:
+				std::string _msg;
+			public:
+				GradeTooHighException(std::string const& msg);
+				virtual ~GradeTooHighException() throw() {}
+				virtual const char* what() const throw();
+
+		};
+		class GradeTooLowException: virtual public std::exception
+		{
+			private:
+				std::string _msg;
+			public:
+				GradeTooLowException(std::string const& msg);
+				virtual ~GradeTooLowException() throw() {}
+				virtual const char* what() const throw();
+		};
 };
 
-// std::ostream& operator << (std::ostream& os, Bureaucrat const& rhs);
+std::ostream& operator << (std::ostream& os, Bureaucrat const& rhs);
 
 #endif // BUREAUCRAT_HPP

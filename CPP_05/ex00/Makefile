@@ -120,14 +120,19 @@ fclean: clean
 re: fclean all
 
 #------------- TEST UTILS -----------------------------------#
-#make check f=file
+
+#make check f=file -> check file syntax
 check:
-	@g++ $(D_FLAGS) $(INCLUDES) -fsyntax-only $(f)
+	@g++ $(D_FLAGS) $(INCLUDES) -fsyntax-only $(f); \
+	ret=$$? ; \
+	if [ $$ret = 0 ]; then \
+		echo  $(f) [$(GREEN) OK $(E_NC)]; \
+	fi
 # make D=1 checkMain
-#includeFiles="include/Ice.hpp include/Cure.hpp include/AMateria.hpp include/stringUtils.hpp"
+#includeFiles="include/Ice.hpp include/Cure.hpp include/AMateria.hpp include/Utils.hpp"
 #Use: make D=0 S=0 i=1 checkMain;
 checkMain:
-	@includeFiles="include/Ice.hpp include/Cure.hpp include/ICharacter.hpp include/Character.hpp include/AMateria.hpp include/stringUtils.hpp" ; \
+	@includeFiles="include/Ice.hpp include/Cure.hpp include/ICharacter.hpp include/Character.hpp include/AMateria.hpp include/Utils.hpp" ; \
 	cpp_files=""; \
 	for file in $$includeFiles; do \
 		cpp_file="src/$$(basename $${file%.*}).cpp"; \
@@ -251,7 +256,7 @@ main:
 		printf "$${MAIN_CONTENT}" > src/main.cpp; \
 		echo "src/main.cpp was created"; \
 	fi
-#	find . -type f \( -name "*.hpp" ! -name "stringUtils.hpp" \) -exec basename {} \;
+#	find . -type f \( -name "*.hpp" ! -name "Utils.hpp" \) -exec basename {} \;
 
 #--------------------COLORS----------------------------#
 # For print
@@ -320,20 +325,20 @@ export TRASH
 define MANUAL
 $(D_PURPLE)
 FLAGS:
-	D -> debug information     (default: 0)
+	D -> debug information	 (default: 0)
 	S -> sanatizer information (default: -1)
 	i -> switch case 
-		* 1.- Character
-		* 2.- AMateria
-		* 3.- MateriaSource
-		* 4.- ICharacter
+		* 1.- 
+		* 2.- 
+		* 3.- 
+		* 4.- 
 		* Defautl Subject
 
 Example:
 
-$(D_WHITE)[show character test]
+$(D_WHITE)[Character test]
 $(D_PURPLE)$> make test i=1
-$(D_WHITE)[show debug information and run character test with valgrind]
+$(D_WHITE)[Debug information and run character test with Valgrind]
 $(D_PURPLE)$> make D=1 S=0 re test i=1
 $(D_WHITE)[run subject test]
 $(D_PURPLE)$> make test
@@ -349,7 +354,7 @@ define HEADER_CONTENT
 # include <sstream>
 # include <string>
 # include <typeinfo>
-# include <stringUtils.hpp>
+# include <Utils.hpp>
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -376,7 +381,6 @@ define MAIN_CONTENT
 $(shell for file in include/*.hpp; do \
 	printf '#include "'$$(basename $$file)'"\\n';\
 done)
-#if (DEBUG == 0)
 
 #include <iostream>
 
@@ -384,8 +388,6 @@ int main(void)
 {
 	return (0);
 }
-
-#endif
 endef
 export MAIN_CONTENT
 
@@ -400,9 +402,11 @@ define CPP_CONTENT
 {
 }
 
-std::ostream& operator << (std::ostream& os, {{CLASS_NAME}}& rhs)
+std::ostream& operator << (std::ostream& os, {{CLASS_NAME}} const& rhs)
 {
 	return (os);
 }
 endef
 export CPP_CONTENT
+
+#find . -type f -name "*.*pp" -print | sort -r |  xargs cat | pygmentize -g -O style=material

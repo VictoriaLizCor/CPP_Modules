@@ -4,6 +4,7 @@
 # include <string>
 # include <sstream>
 # include <cstdlib>
+# include <iomanip>
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -75,7 +76,7 @@ struct s_coloredName
 typedef s_coloredName t_Name;
 std::string error(std::string str, bool bold);
 void 		coutnl(std::ostream& os);
-std::string	toString(int value);
+std::string	toStr(int value);
 std::string	getColorFmt(int eColor);
 // std::string	getColorStr(t_Name const& name);
 std::string	getColorStr(std::string const& eColor, std::string const& str);
@@ -89,4 +90,6 @@ size_t		maxStringLength(int fieldSize, std::string* arrayData);
 std::string	center(const std::string& s, std::string::size_type width);
 std::string	className(const std::string& str);
 std::string	getRandString();
+size_t		getRandomNum(size_t num);
+void		printTitle(std::string title, int n);
 #endif
