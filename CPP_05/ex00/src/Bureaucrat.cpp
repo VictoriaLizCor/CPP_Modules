@@ -54,16 +54,16 @@ void Bureaucrat::checkGrade(size_t grade)
 	os << getInfo();
 	if (grade == 0)
 	{
-		std::cout << getColorStr(FRED, "Atenttion! \n");
+		std::cout << getColorStr(FRED, "Attention! \n");
 		os << ", grade [" << grade
-		<< "] over range. Max value should be 1\n";
+		<< "] is too high. Maximum value should be 1.\n";
 		throw GradeTooHighException(os.str());
 	}
 	if (grade > 150)
 	{
-		std::cout << getColorStr(FRED, "Atenttion! \n");
+		std::cout << getColorStr(FRED, "Attention! \n");
 		os << ", grade [" << grade
-		<< "] under range. Min value should be 150\n";
+		<< "] is too low. Minimum value should be 150.\n";
 		throw GradeTooLowException(os.str());
 	}
 }
@@ -81,7 +81,7 @@ void Bureaucrat::incrementGrade(void)
 {
 	--_grade;
 	if (DEBUG)
-		std::cout << "\tAfter increment: " << _grade << "\n";
+		std::cout << "After increment: " << _grade << "\n";
 	checkGrade(_grade);
 }
 
@@ -89,7 +89,7 @@ void Bureaucrat::decrementGrade(void)
 {
 	++_grade;
 	if (DEBUG)
-		std::cout << "\tAfter decrement: " << _grade << "\n";
+		std::cout << "After decrement: " << _grade << "\n";
 	checkGrade(_grade);
 }
 

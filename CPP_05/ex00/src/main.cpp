@@ -41,7 +41,7 @@ void	testExceptionHigh(void)
 void	testIncrementGrade(void)
 {
 	{
-		printTitle("testtExceptionAfterIncrement", 60);
+		printTitle("testExceptionAfterIncrement", 60);
 		Bureaucrat	UpGrade("UpGrade", 2);
 		UpGrade.incrementGrade();
 		std::cout << UpGrade << " Grade: " 
@@ -54,10 +54,11 @@ void	testIncrementGrade(void)
 void	testDecrementGrade(void)
 {
 	{
-		printTitle("testtExceptionAfterDecrement", 60);
+		printTitle("testExceptionAfterDecrement", 60);
 		Bureaucrat	DownGrade("DownGrade", 149);
 		DownGrade.decrementGrade();
-		std::cout << DownGrade  << " Grade: " << DownGrade.getGrade() << std::endl;
+		std::cout << DownGrade << " Grade: " 
+		<< DownGrade.getGrade() << std::endl;
 		DownGrade.decrementGrade();
 	}
 }
