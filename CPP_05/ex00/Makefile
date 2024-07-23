@@ -128,23 +128,6 @@ check:
 	if [ $$ret = 0 ]; then \
 		echo  $(f) [$(GREEN) OK $(E_NC)]; \
 	fi
-# make D=1 checkMain
-#includeFiles="include/Ice.hpp include/Cure.hpp include/AMateria.hpp include/Utils.hpp"
-#Use: make D=0 S=0 i=1 checkMain;
-checkMain:
-	@includeFiles="include/Ice.hpp include/Cure.hpp include/ICharacter.hpp include/Character.hpp include/AMateria.hpp include/Utils.hpp" ; \
-	cpp_files=""; \
-	for file in $$includeFiles; do \
-		cpp_file="src/$$(basename $${file%.*}).cpp"; \
-		if [ -f $$cpp_file ]; then \
-			cpp_files="$$cpp_files $$cpp_file"; \
-		fi; \
-	done ; \
-	cpp_files="$$cpp_files $(MAIN)" ; \
-	printf "\n$(P_GREEN) $(CXX) $(D_FLAGS) $(INCLUDES) $(P_YELLOW) $$cpp_files $(P_GREEN) -o ex03 $(FG_TEXT)" ; echo; \
-	$(CXX) $(D_FLAGS) $(INCLUDES) $$cpp_files -o ex03; \
-	echo $(E_NC); $(MAKE) -C . test;
-
 test:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) $$i $(E_NC) "\n"
 	@if [ "$(S)" = "0" ]; then \
