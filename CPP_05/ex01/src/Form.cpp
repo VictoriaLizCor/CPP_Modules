@@ -11,10 +11,10 @@ static std::string checkName(std::string const&name)
 		return (name);
 }
 
-static size_t initMinimumGradeToExecute(size_t grade)
+size_t Form::initMinimumGradeToExecute(size_t grade)
 {
-	if (grade > 150)
-		return 150;
+	checkGrade(grade);
+	return (grade);
 }
 
 Form::Form(std::string const& name, size_t const& minimumGradeToSign, size_t const& minimumGradeToExecute):
@@ -28,6 +28,27 @@ _signed(0)
 	checkGrade(_minimumGradeToSign);
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
+	if (DEBUG)
+		printStatus();
+}
+
+Form& Form::operator=(Form const& rhs)
+{
+	if (this != &rhs)
+		_signed = rhs._signed;
+	if (DEBUG)
+		std::cout << *this << getColorStr(FGRAY, " Copy was Created\n");
+	return (*this);
+}
+
+Form::Form(Form const& rhs):
+_instanceId(++_instanceCount),
+_colorIdStr(getRandomColorFmt(1)),
+_name(checkName(rhs.getName())),
+_minimumGradeToSign(rhs.getMinimumGradeToSign()),
+_minimumGradeToExecute(rhs.getMinimumGradeToExecute())
+{
+	*this = rhs;
 }
 
 Form::~Form(void)
@@ -61,17 +82,18 @@ void Form::checkGrade(size_t grade)
 
 void Form::beSigned(Bureaucrat const& bureaucrat)
 {
-	(void)bureaucrat;
-	if (_signed)
-	{
-		std::cout << *this << " form already signed." << std::endl;
-		return; //?
-	}
 	if (bureaucrat.getGrade() > _minimumGradeToSign)
-		throw Form::GradeTooLowException();
-	// _signed = true;
-	// if (bureaucrat.getGrade() <= getGrade)
-	// bureaucrat.signForm(this);
+	{
+		std::string str;
+		str = "privilege level is lower than required";
+		throw Form::GradeTooLowException(str);
+	}
+	_signed = true;
+}
+
+bool const& Form::getSigned()
+{
+	return (_signed);
 }
 
 std::string const& Form::getName() const
@@ -86,7 +108,17 @@ size_t const& Form::getMinimumGradeToSign() const
 
 size_t const& Form::getMinimumGradeToExecute() const
 {
-	return (_minimumGradeToSign);
+	return (_minimumGradeToExecute);
+}
+
+void Form::printStatus(void)
+{
+	std::cout << getInfo()
+	<< " [ Signed: " 
+	<< (getSigned() ? getColorStr(FGREEN,"1") : getColorStr(FLGREEN, "0"))
+	<< ", MinGrade: " << getColorStr(FLCYAN, (lsi)getMinimumGradeToSign())
+	<< ", ExeGrade: " << getColorStr(FLYELLOW, (lsi)getMinimumGradeToExecute())
+	<< " ]\n";
 }
 
 std::string Form::getInfo() const
@@ -109,3 +141,9 @@ std::ostream& operator << (std::ostream& os, Form const& rhs)
 	os << rhs.getInfo();
 	return (os);
 }
+
+Form::GradeTooHighException::GradeTooHighException(const std::string& msg)
+: GradeException(msg) {}
+
+Form::GradeTooLowException::GradeTooLowException(const std::string& msg)
+: GradeException(msg) {}

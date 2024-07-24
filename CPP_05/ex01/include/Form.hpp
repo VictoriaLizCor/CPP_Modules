@@ -6,7 +6,7 @@
 # include <string>
 # include <typeinfo>
 # include "Utils.hpp"
-# include "GradeExceptions.hpp"
+# include "GradeException.hpp"
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -27,6 +27,8 @@ class Form
 		size_t const		_minimumGradeToExecute;
 		bool				_signed;
 
+		 size_t initMinimumGradeToExecute(size_t grade);
+
 	protected:
 		
 	public:
@@ -38,15 +40,31 @@ class Form
 		std::string const&		getName() const;
 		size_t const&			getMinimumGradeToSign() const;
 		size_t const&			getMinimumGradeToExecute() const;
+		bool const&				getSigned();
 		void					beSigned(Bureaucrat const& bureaucrat);
 
+		void					printStatus();
 		void					checkGrade(size_t grade);
 		std::string 			getInfo() const;
 		
-		typedef TooHighException GradeTooHighException;
-		typedef TooHighException GradeTooLowException;
+		class GradeTooHighException : public GradeException
+		{
+			public:
+				explicit GradeTooHighException(const std::string& msg);
+		};
+		class GradeTooLowException : public GradeException
+		{
+			public:
+				explicit GradeTooLowException(const std::string& msg);
+		};
+
 };
 
 std::ostream& operator << (std::ostream& os, Form const& rhs);
 
 #endif // FORM_HPP
+
+/**
+ * @note: if the constructor is defined inline and does not have a
+ * body, it is not considered a full function implementation.
+ */

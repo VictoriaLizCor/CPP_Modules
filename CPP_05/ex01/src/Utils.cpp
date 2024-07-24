@@ -132,6 +132,13 @@ std::string	getColorStr(int eColor, std::string const& str)
 	return (getColorFmt(eColor) + str + std::string(C_END));
 }
 
+std::string	getColorStr(int eColor, lsi num)
+{
+	std::ostringstream os;
+	os << getColorFmt(eColor) << num << C_END;
+	return (os.str());
+}
+
 /**
  * @brief Generates an RGB color string for terminal output.
  *

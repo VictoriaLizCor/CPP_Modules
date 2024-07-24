@@ -6,7 +6,7 @@
 # include <string>
 # include <typeinfo>
 # include "Utils.hpp"
-# include "GradeExceptions.hpp"
+# include "GradeException.hpp"
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -37,13 +37,21 @@ class Bureaucrat
 		size_t const&			getGrade() const;
 		void					incrementGrade(void);
 		void					decrementGrade(void);
-		void					signForm();
+		void					signForm(Form& form);
 
 		void					checkGrade(size_t grade);
 		std::string 			getInfo() const;
 		
-		typedef TooHighException GradeTooHighException;
-		typedef TooHighException GradeTooLowException;
+		class GradeTooHighException : public GradeException
+		{
+			public:
+				explicit GradeTooHighException(const std::string& msg);
+		};
+		class GradeTooLowException : public GradeException
+		{
+			public:
+				explicit GradeTooLowException(const std::string& msg);
+		};
 };
 
 std::ostream& operator << (std::ostream& os, Bureaucrat const& rhs);

@@ -1,75 +1,45 @@
 #include "Bureaucrat.hpp"
+#include "Form.hpp"
 #include "Utils.hpp"
 
-void	testBasic(void)
+static void testBasic()
 {
-	{
-		printTitle("testBasic", 60);
-		Bureaucrat	test("test", 6);
+	Form 		f("", 10, 4);
+	Bureaucrat	test("Bureaucrat", 11);
 
-		printTitle("Decrement", 20);
-		std::cout << test << std::endl;
-		test.decrementGrade();
-		std::cout << test << std::endl;
-		printTitle("Increment", 20);
-		for (int i = 6; i > 0; --i)
-		{
-			test.incrementGrade();
-			std::cout << test << std::endl;
-		}
-	}
+	std::cout << f << std::endl;
+	std::cout << test << std::endl;
+	
+	test.signForm(f);
+	printTitle("BureaucratIncrement", 27);
+	test.incrementGrade();
+	test.signForm(f);
+	test.signForm(f);
+	std::cout << std::endl << f << std::endl;
+
 }
 
-void	testExceptionLow(void)
+static void testManyForms()
 {
-	printTitle("testExceptionLow", 60);
+	Bureaucrat	test("Bureaucrat", 11);
+	Form f1("Anmeldung", 10, 10);
+	Form f2("Visa", 1, 3);
+
+	std::cout << f1 << std::endl;
+	std::cout << test << std::endl;
+	
+	test.signForm(f1);
+	printTitle("BureaucratIncrement", 27);
+	test.incrementGrade();
+	test.signForm(f1);
+	printTitle("BureaucratIncrement", 27);
+	for (size_t i = 0; i <= 150; ++i)
 	{
-		std::cout << std::endl;
-		Bureaucrat	Low("Low", 151);
+		test.incrementGrade();
+		test.signForm(f2);
 	}
+
 }
-
-void	testExceptionHigh(void)
-{
-	printTitle("testExceptionHigh", 60);
-	{
-		std::cout << std::endl;
-		Bureaucrat	High("High", 0);
-	}
-}
-
-
-void	testDecrementGrade(void)
-{
-	{
-		printTitle("testExceptionAfterDecrement", 60);
-		Bureaucrat	downGrade("DownGrade", 149);
-		std::cout << downGrade << std::endl;
-		printTitle("Decrement", 20);
-		for (int i = 6; i > 0; --i)
-		{
-			std::cout << downGrade << std::endl;
-			downGrade.decrementGrade();
-		}
-	}
-}
-
-void	testIncrementGrade(void)
-{
-	{
-		printTitle("testExceptionAfterIncrement", 60);
-		Bureaucrat	upGrade("UpGrade", 2);
-		std::cout << upGrade;
-		printTitle("Increment", 20);
-		for (int i = 6; i > 0; --i)
-		{
-			std::cout << upGrade << std::endl;
-			upGrade.incrementGrade();
-		}
-	}
-	printTitle("------", 60);
-}
-
 static void output(std::exception const &e, std::ostringstream& os)
 {
 	std::cerr << e.what() << std::endl;
@@ -81,9 +51,13 @@ void tryCatch(void (*test)(), std::ostringstream& os)
 	try{ test();}
 	catch (Bureaucrat::GradeTooHighException const &e){output(e, os);}
 	catch (Bureaucrat::GradeTooLowException const &e){output(e, os);}
-	// catch (Form::GradeTooHighException const &e){output(e, os);}
-	// catch (Form::GradeTooLowException const &e){output(e, os);}
-	std::cout << std::endl;
+	catch (Form::GradeTooHighException const &e){output(e, os);}
+	catch (Form::GradeTooLowException const &e){output(e, os);}
+	catch(...)
+	{
+		std::cerr << error("Problems during what() message formatting\n", 1);
+		std::cout << std::endl;
+	}
 }
 
 
@@ -92,28 +66,15 @@ int	main(int ac, char* arg[])
 	std::ostringstream	os;
 	bool				jump = false;
 
-	if (DEBUG)
-		std::cout << "ac : " << ac;
 	if (ac == 2)
 	{
-		if (DEBUG)
-			std::cout <<" | arg[1] : " << arg[1] << std::endl;
 		switch (std::atoi(arg[1]))
 		{
 			case 1:
 				tryCatch(&testBasic, os);
 				break;
 			case 2:
-				tryCatch(&testExceptionLow, os);
-				break;
-			case 3:
-				tryCatch(&testExceptionHigh, os);
-				break;
-			case 4:
-				tryCatch(&testDecrementGrade, os);
-				break;
-			case 5:
-				tryCatch(&testIncrementGrade, os);
+				tryCatch(&testManyForms, os);
 				break;
 			default:
 				jump = true;
@@ -123,10 +84,6 @@ int	main(int ac, char* arg[])
 	if (jump || ac != 2)
 	{
 		tryCatch(&testBasic, os);
-		tryCatch(&testExceptionLow, os);
-		tryCatch(&testExceptionHigh, os);
-		tryCatch(&testDecrementGrade, os);
-		tryCatch(&testIncrementGrade, os);
 		std::cout << std::flush;
 	}
 	if (!os.str().empty())

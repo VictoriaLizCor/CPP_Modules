@@ -73,6 +73,7 @@ struct s_coloredName
 	
 };
 
+typedef long signed int lsi;
 typedef s_coloredName t_Name;
 std::string error(std::string str, bool bold);
 void 		coutnl(std::ostream& os);
@@ -81,6 +82,7 @@ std::string	getColorFmt(int eColor);
 // std::string	getColorStr(t_Name const& name);
 std::string	getColorStr(std::string const& eColor, std::string const& str);
 std::string	getColorStr(int eColor, std::string const& str);
+std::string	getColorStr(int eColor, lsi num);
 int			ft_rand(int min, int max);
 std::string	getRandomColorFmt(bool bold);
 std::string	setObjColor(int const& color);

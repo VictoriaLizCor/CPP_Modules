@@ -1,4 +1,5 @@
 #include "Bureaucrat.hpp"
+#include "Form.hpp"
 
 int Bureaucrat::_instanceCount = 0;
 
@@ -57,14 +58,14 @@ void Bureaucrat::checkGrade(size_t grade)
 		std::cout << getColorStr(FRED, "Attention! \n");
 		os << ", grade [" << grade
 		<< "] is too high. Maximum value should be 1.\n";
-		throw GradeTooHighException(os.str());
+		throw Bureaucrat::GradeTooHighException(os.str());
 	}
 	if (grade > 150)
 	{
 		std::cout << getColorStr(FRED, "Attention! \n");
 		os << ", grade [" << grade
 		<< "] is too low. Minimum value should be 150.\n";
-		throw GradeTooLowException(os.str());
+		throw  Bureaucrat::GradeTooLowException(os.str());
 	}
 }
 
@@ -81,22 +82,36 @@ size_t const& Bureaucrat::getGrade() const
 void Bureaucrat::incrementGrade(void)
 {
 	--_grade;
-	if (DEBUG)
-		std::cout << "After increment: " << _grade << "\n";
 	checkGrade(_grade);
 }
 
 void Bureaucrat::decrementGrade(void)
 {
 	++_grade;
-	if (DEBUG)
-		std::cout << "After decrement: " << _grade << "\n";
 	checkGrade(_grade);
 }
 
-void signForm(Form& form)
+void Bureaucrat::signForm(Form& form)
 {
-	
+	if (form.getSigned())
+	{
+		std::cout << *this << " form already signed." << std::endl;
+		return;
+	}
+	try
+	{
+		form.beSigned(*this);
+		std::cout << *this << " signs "
+		<<form.getInfo() << std::endl;
+		if (DEBUG)
+			form.printStatus();
+	}
+	catch(const std::exception &e)
+	{
+		std::cout << this->getInfo() << " couldn't sign " 
+		<< form <<  " because "
+		<< e.what() << std::endl;
+	}
 }
 
 std::string Bureaucrat::getInfo() const
@@ -115,6 +130,12 @@ std::string Bureaucrat::getInfo() const
 
 std::ostream& operator << (std::ostream& os, Bureaucrat const& rhs)
 {
-	os << rhs.getInfo() << " grade: " << rhs.getGrade();
+	os << rhs.getInfo() << "( grade: " << rhs.getGrade() << " )";
 	return (os);
 }
+
+Bureaucrat::GradeTooHighException::GradeTooHighException(const std::string& msg)
+: GradeException(msg) {}
+
+Bureaucrat::GradeTooLowException::GradeTooLowException(const std::string& msg)
+: GradeException(msg) {}
