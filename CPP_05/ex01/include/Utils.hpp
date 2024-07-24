@@ -5,7 +5,7 @@
 # include <sstream>
 # include <cstdlib>
 # include <iomanip>
-
+# include <cxxabi.h>
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
@@ -75,6 +75,7 @@ struct s_coloredName
 
 typedef long signed int lsi;
 typedef s_coloredName t_Name;
+
 std::string error(std::string str, bool bold);
 void 		coutnl(std::ostream& os);
 std::string	toStr(int value);
@@ -91,6 +92,8 @@ bool		isOnlySpaces(const std::string& str);
 size_t		maxStringLength(int fieldSize, std::string* arrayData);
 std::string	center(const std::string& s, std::string::size_type width);
 std::string	className(const std::string& str);
+std::string	classFunctionStr(std::string const& c, std::string const& f);
+std::string	demangle(const char* mangled_name);
 std::string	getRandString();
 size_t		getRandomNum(size_t num);
 void		printTitle(std::string title, int n);

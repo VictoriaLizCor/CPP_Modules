@@ -11,25 +11,19 @@ static std::string checkName(std::string const&name)
 		return (name);
 }
 
-size_t Form::initMinimumGradeToExecute(size_t grade)
-{
-	checkGrade(grade);
-	return (grade);
-}
 
 Form::Form(std::string const& name, size_t const& minimumGradeToSign, size_t const& minimumGradeToExecute):
 _instanceId(++_instanceCount),
 _colorIdStr(getRandomColorFmt(1)),
 _name(checkName(name)),
 _minimumGradeToSign(minimumGradeToSign),
-_minimumGradeToExecute(initMinimumGradeToExecute(minimumGradeToExecute)),
+_minimumGradeToExecute(minimumGradeToExecute),
 _signed(0)
 {
 	checkGrade(_minimumGradeToSign);
+	checkGrade(_minimumGradeToExecute);
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
-	if (DEBUG)
-		printStatus();
 }
 
 Form& Form::operator=(Form const& rhs)
@@ -65,17 +59,25 @@ void Form::checkGrade(size_t grade)
 	os << getInfo();
 	if (grade == 0)
 	{
-		std::cout << getColorStr(FRED, "Attention! \n");
+		std::cout << getColorStr(FLRED, "\nAttention! \n");
 		os << ", grade [" << grade
 		<< "] is too high. Maximum value should be 1.\n";
-		throw GradeTooHighException(os.str());
+		throw (GradeTooHighException(os.str()));
 	}
-	if (grade > 150)
+	else if (grade > 150)
 	{
-		std::cout << getColorStr(FRED, "Attention! \n");
+		std::cout << getColorStr(FLRED, "\nAttention! \n");
 		os << ", grade [" << grade
 		<< "] is too low. Minimum value should be 150.\n";
-		throw GradeTooLowException(os.str());
+		throw (GradeTooLowException(os.str()));
+	}
+	else if (_minimumGradeToExecute < _minimumGradeToSign)
+	{	
+		std::cout << getColorStr(FLRED, "\nAttention!\n");
+		os << " Sign grade [ " << _minimumGradeToSign << " ] "
+		<< "must be higher than Execution grade [ " 
+		<< _minimumGradeToExecute << " ] \n";
+		throw (GradeTooLowException(os.str()));
 	}
 }
 
@@ -86,12 +88,12 @@ void Form::beSigned(Bureaucrat const& bureaucrat)
 	{
 		std::string str;
 		str = "privilege level is lower than required";
-		throw Form::GradeTooLowException(str);
+		throw (Form::GradeTooLowException(str));
 	}
 	_signed = true;
 }
 
-bool const& Form::getSigned()
+bool const& Form::getSigned() const
 {
 	return (_signed);
 }
@@ -111,14 +113,15 @@ size_t const& Form::getMinimumGradeToExecute() const
 	return (_minimumGradeToExecute);
 }
 
-void Form::printStatus(void)
+std::string Form::printStatus(void) const
 {
-	std::cout << getInfo()
-	<< " [ Signed: " 
+	std::ostringstream os;
+	os << std::string(C_END) << " [ Signed: " 
 	<< (getSigned() ? getColorStr(FGREEN,"1") : getColorStr(FLGREEN, "0"))
 	<< ", MinGrade: " << getColorStr(FLCYAN, (lsi)getMinimumGradeToSign())
 	<< ", ExeGrade: " << getColorStr(FLYELLOW, (lsi)getMinimumGradeToExecute())
-	<< " ]\n";
+	<< " ]";
+	return (os.str());
 }
 
 std::string Form::getInfo() const
@@ -127,11 +130,10 @@ std::string Form::getInfo() const
 
 	os << _colorIdStr;
 	if (DEBUG == 1)
-		os << getName() << _instanceId;
+		os << getName() << _instanceId << printStatus();
 	else 
-		os << getName();
+		os << getName() << printStatus();
 	os << C_END;
-
 	return (os.str());
 }
 
@@ -147,3 +149,4 @@ Form::GradeTooHighException::GradeTooHighException(const std::string& msg)
 
 Form::GradeTooLowException::GradeTooLowException(const std::string& msg)
 : GradeException(msg) {}
+//"Form::" + std::string(__func__) + 

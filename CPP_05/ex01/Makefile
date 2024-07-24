@@ -323,9 +323,9 @@ Example:
 
 $(D_WHITE)[Character test]
 $(D_PURPLE)$> make test i=1
-$(D_WHITE)[Debug information and run character test with Valgrind]
+$(D_WHITE)[Debug information and run Basic test with Valgrind]
 $(D_PURPLE)$> make D=1 S=0 re test i=1
-$(D_WHITE)[run subject test]
+$(D_WHITE)[run all tests]
 $(D_PURPLE)$> make test
 
 endef

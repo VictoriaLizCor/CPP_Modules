@@ -25,6 +25,7 @@ class Bureaucrat
 		std::string const	_name;
 		size_t				_grade;
 
+		void					checkGrade(size_t grade);
 	protected:
 		
 	public:
@@ -39,7 +40,6 @@ class Bureaucrat
 		void					decrementGrade(void);
 		void					signForm(Form& form);
 
-		void					checkGrade(size_t grade);
 		std::string 			getInfo() const;
 		
 		class GradeTooHighException : public GradeException

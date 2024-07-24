@@ -55,17 +55,17 @@ void Bureaucrat::checkGrade(size_t grade)
 	os << getInfo();
 	if (grade == 0)
 	{
-		std::cout << getColorStr(FRED, "Attention! \n");
+		std::cout << getColorStr(FLRED, "\nAttention! \n");
 		os << ", grade [" << grade
 		<< "] is too high. Maximum value should be 1.\n";
-		throw Bureaucrat::GradeTooHighException(os.str());
+		throw (Bureaucrat::GradeTooHighException(os.str()));
 	}
 	if (grade > 150)
 	{
-		std::cout << getColorStr(FRED, "Attention! \n");
+		std::cout << getColorStr(FLRED, "\nAttention! \n");
 		os << ", grade [" << grade
 		<< "] is too low. Minimum value should be 150.\n";
-		throw  Bureaucrat::GradeTooLowException(os.str());
+		throw  (Bureaucrat::GradeTooLowException(os.str()));
 	}
 }
 
@@ -93,26 +93,27 @@ void Bureaucrat::decrementGrade(void)
 
 void Bureaucrat::signForm(Form& form)
 {
-	if (form.getSigned())
-	{
-		std::cout << *this << " form already signed." << std::endl;
-		return;
-	}
+	std:: ostringstream os;
+	os << *this << " couldn't sign " << form <<  " because ";
 	try
 	{
+		if (form.getSigned())
+		{
+			std::cout << os.str() 
+			<< "it's already signed." << std::endl;
+			return;
+		}
 		form.beSigned(*this);
-		std::cout << *this << " signs "
-		<<form.getInfo() << std::endl;
+		std::cout << *this << " signs " << form << std::endl;
 		if (DEBUG)
 			form.printStatus();
 	}
 	catch(const std::exception &e)
 	{
-		std::cout << this->getInfo() << " couldn't sign " 
-		<< form <<  " because "
-		<< e.what() << std::endl;
+		std::cout << os.str()  << e.what() << std::endl;
 	}
 }
+
 
 std::string Bureaucrat::getInfo() const
 {
@@ -130,12 +131,15 @@ std::string Bureaucrat::getInfo() const
 
 std::ostream& operator << (std::ostream& os, Bureaucrat const& rhs)
 {
-	os << rhs.getInfo() << "( grade: " << rhs.getGrade() << " )";
+	os << rhs.getInfo() << "(grade:" << rhs.getGrade() << ")";
 	return (os);
 }
+
 
 Bureaucrat::GradeTooHighException::GradeTooHighException(const std::string& msg)
 : GradeException(msg) {}
 
 Bureaucrat::GradeTooLowException::GradeTooLowException(const std::string& msg)
 : GradeException(msg) {}
+
+//"Bureaucrat::" + std::string(__func__) + " \n" 

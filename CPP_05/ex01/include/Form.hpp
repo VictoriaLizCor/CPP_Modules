@@ -27,7 +27,7 @@ class Form
 		size_t const		_minimumGradeToExecute;
 		bool				_signed;
 
-		 size_t initMinimumGradeToExecute(size_t grade);
+		void					checkGrade(size_t grade);
 
 	protected:
 		
@@ -40,13 +40,12 @@ class Form
 		std::string const&		getName() const;
 		size_t const&			getMinimumGradeToSign() const;
 		size_t const&			getMinimumGradeToExecute() const;
-		bool const&				getSigned();
+		bool const&				getSigned() const;
 		void					beSigned(Bureaucrat const& bureaucrat);
 
-		void					printStatus();
-		void					checkGrade(size_t grade);
+		std::string				printStatus() const;
 		std::string 			getInfo() const;
-		
+
 		class GradeTooHighException : public GradeException
 		{
 			public:

@@ -39,7 +39,7 @@ void coutnl(std::ostream& os)
  *
  * @param msg The message string to be formatted.
  * @param color The color code for the message. This should be a value from the
- *              t_color enum.
+ *			  t_color enum.
  * @param err A boolean flag indicating whether the message is an error message.
  * @return The formatted message string.
  */
@@ -335,6 +335,24 @@ std::string className(const std::string& str)
 		return "";
 }
 
+std::string demangle(const char* mangled_name)
+{
+	int status = 0;
+	size_t length = 1024;
+	char buffer[1024];
+
+	char* demangled = abi::__cxa_demangle(mangled_name, buffer, &length, &status);
+
+	if (status != 0 || !demangled)
+		return (std::string(mangled_name));
+	std::string result(buffer);
+	return (result);
+}
+
+std::string classFunctionStr(std::string const& c, std::string const& f)
+{
+	return (c + "::" + f + " ");
+}
 /**
  * Generates a random string of length 10.
  * 
