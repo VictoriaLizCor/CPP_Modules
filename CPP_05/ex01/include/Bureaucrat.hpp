@@ -5,11 +5,14 @@
 # include <sstream>
 # include <string>
 # include <typeinfo>
-# include <Utils.hpp>
-# include <exception>
+# include "Utils.hpp"
+# include "GradeException.hpp"
+
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
+
+class Form;
 
 class Bureaucrat
 {
@@ -22,6 +25,7 @@ class Bureaucrat
 		std::string const	_name;
 		size_t				_grade;
 
+		void					checkGrade(size_t grade);
 	protected:
 		
 	public:
@@ -34,27 +38,19 @@ class Bureaucrat
 		size_t const&			getGrade() const;
 		void					incrementGrade(void);
 		void					decrementGrade(void);
+		void					signForm(Form& form);
 
-		void					checkGrade(size_t grade);
 		std::string 			getInfo() const;
-		class GradeTooHighException: virtual public std::exception
+		
+		class GradeTooHighException : public GradeException
 		{
-			private:
-				std::string _msg;
 			public:
-				GradeTooHighException(std::string const& msg);
-				virtual ~GradeTooHighException() throw();
-				virtual const char* what() const throw();
-
+				explicit GradeTooHighException(const std::string& msg);
 		};
-		class GradeTooLowException: virtual public std::exception
+		class GradeTooLowException : public GradeException
 		{
-			private:
-				std::string _msg;
 			public:
-				GradeTooLowException(std::string const& msg);
-				virtual ~GradeTooLowException() throw();
-				virtual const char* what() const throw();
+				explicit GradeTooLowException(const std::string& msg);
 		};
 };
 

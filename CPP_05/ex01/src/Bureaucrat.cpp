@@ -1,4 +1,5 @@
 #include "Bureaucrat.hpp"
+#include "Form.hpp"
 
 int Bureaucrat::_instanceCount = 0;
 
@@ -54,17 +55,17 @@ void Bureaucrat::checkGrade(size_t grade)
 	os << getInfo();
 	if (grade == 0)
 	{
-		std::cout << getColorStr(FRED, "Attention! \n");
+		std::cout << getColorStr(FLRED, "\nAttention! \n");
 		os << ", grade [" << grade
 		<< "] is too high. Maximum value should be 1.\n";
-		throw GradeTooHighException(os.str());
+		throw (Bureaucrat::GradeTooHighException(os.str()));
 	}
 	if (grade > 150)
 	{
-		std::cout << getColorStr(FRED, "Attention! \n");
+		std::cout << getColorStr(FLRED, "\nAttention! \n");
 		os << ", grade [" << grade
 		<< "] is too low. Minimum value should be 150.\n";
-		throw GradeTooLowException(os.str());
+		throw  (Bureaucrat::GradeTooLowException(os.str()));
 	}
 }
 
@@ -77,21 +78,42 @@ size_t const& Bureaucrat::getGrade() const
 {
 	return (_grade);
 }
+
 void Bureaucrat::incrementGrade(void)
 {
 	--_grade;
-	if (DEBUG)
-		std::cout << "After increment: " << _grade << "\n";
 	checkGrade(_grade);
 }
 
 void Bureaucrat::decrementGrade(void)
 {
 	++_grade;
-	if (DEBUG)
-		std::cout << "After decrement: " << _grade << "\n";
 	checkGrade(_grade);
 }
+
+void Bureaucrat::signForm(Form& form)
+{
+	std:: ostringstream os;
+	os << *this << " couldn't sign " << form <<  " because ";
+	try
+	{
+		if (form.getSigned())
+		{
+			std::cout << os.str() 
+			<< "it's already signed." << std::endl;
+			return;
+		}
+		form.beSigned(*this);
+		std::cout << *this << " signs " << form << std::endl;
+		if (DEBUG)
+			form.printStatus();
+	}
+	catch(const std::exception &e)
+	{
+		std::cout << os.str()  << e.what() << std::endl;
+	}
+}
+
 
 std::string Bureaucrat::getInfo() const
 {
@@ -109,25 +131,15 @@ std::string Bureaucrat::getInfo() const
 
 std::ostream& operator << (std::ostream& os, Bureaucrat const& rhs)
 {
-	os << rhs.getInfo();
+	os << rhs.getInfo() << "(grade:" << rhs.getGrade() << ")";
 	return (os);
 }
 
+
 Bureaucrat::GradeTooHighException::GradeTooHighException(const std::string& msg)
-: _msg(msg) {}
-
-Bureaucrat::GradeTooHighException::~GradeTooHighException() throw() {}
-Bureaucrat::GradeTooLowException::~GradeTooLowException() throw() {}
-
-const char* Bureaucrat::GradeTooHighException::what() const throw()
-{
-	return _msg.c_str();
-}
+: GradeException(msg) {}
 
 Bureaucrat::GradeTooLowException::GradeTooLowException(const std::string& msg)
-: _msg(msg) {}
+: GradeException(msg) {}
 
-const char* Bureaucrat::GradeTooLowException::what() const throw()
-{
-	return _msg.c_str();
-}
+//"Bureaucrat::" + std::string(__func__) + " \n" 

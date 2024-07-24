@@ -31,17 +31,15 @@ ifneq ($(D), 0)
 CXX			= g++
 OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
 #------ CODE FOR OBJECT FILES ------#
-# The `vpath` directive in a Makefile is used to specify a list of directories
-# that `make` should search when it's looking for prerequisites. 
+# The `vpath` directive in a Makefile is used to specify a list of
+# directories that `make` should search when it's looking for
+# prerequisites. 
 vpath %.cpp $(sort $(dir $(SRC)))
 DEPS		:= $(OBJS:.o=.d)
 DEPENDENCIES := $(shell find $(BUILD_DIR) -name '*.d')
 -include $(DEPS) # to include in compilation
 D_FLAGS		+= -O0 -g3 #-Og optimization + good debuggin experience
 # ASAN_OPTIONS=detect_leaks=1 # in case platform leaks detections is not enable
-# DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
-# SRC			+= $(DEBUG_SRC)
-# INCLUDES	+= -I $(DEBUG_PATH)/include
 DEBUG_FLAG	:= $(D)
 ifeq ($(DEBUG_FLAG),)
 D_FLAGS		+= -DDEBUG=1
@@ -50,13 +48,17 @@ D_FLAGS		+= -DDEBUG=$(D)
 endif
 D_FLAGS		+= -Wconversion -Wsign-conversion -pedantic
 D_FLAGS		+= -fno-omit-frame-pointer
+# /// When debug folder is availabe///
+# DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
+# SRC			+= $(DEBUG_SRC)
+# INCLUDES	+= -I $(DEBUG_PATH)/include
 # else
 # MAIN		:= $(SRC_DIR)main.cpp
 # SRC			+= $(MAIN)
 else
 OBJS		:= $(SRC)
 endif
-# MAKEFLAGS	+= -j4 #--debug
+# MAKEFLAGS	+= -j4 #--debug #// -j for multinodes
 ifeq ($(S), 1)
 #------ INCLUDE SANATIZER FLAGS ------#
 D_FLAGS		+= -fsanitize=address,undefined,vptr
@@ -321,9 +323,9 @@ Example:
 
 $(D_WHITE)[Character test]
 $(D_PURPLE)$> make test i=1
-$(D_WHITE)[Debug information and run character test with Valgrind]
+$(D_WHITE)[Debug information and run Basic test with Valgrind]
 $(D_PURPLE)$> make D=1 S=0 re test i=1
-$(D_WHITE)[run subject test]
+$(D_WHITE)[run all tests]
 $(D_PURPLE)$> make test
 
 endef
