@@ -131,6 +131,9 @@ static void	testCharacter(void) // 1
 			std::cerr << "----\n";
 			delete c1;
 		}
+		{
+			//Character c1;
+		}
 	}
 	printTitle("| END TEST CHARACTER |");
 	std::cerr << "\n" << std::flush;

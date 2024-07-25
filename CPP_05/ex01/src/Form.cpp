@@ -6,7 +6,7 @@ int Form::_instanceCount = 0;
 static std::string checkName(std::string const&name)
 {	
 	if (name.empty())
-		return ("EmptyForm");
+		return ("emptyForm");
 	else
 		return (name);
 }
@@ -71,7 +71,7 @@ void Form::checkGrade(size_t grade)
 		<< "] is too low. Minimum value should be 150.\n";
 		throw (GradeTooLowException(os.str()));
 	}
-	else if (_minimumGradeToExecute < _minimumGradeToSign)
+	if (_minimumGradeToExecute < _minimumGradeToSign)
 	{	
 		std::cout << getColorStr(FLRED, "\nAttention!\n");
 		os << " Sign grade [ " << _minimumGradeToSign << " ] "

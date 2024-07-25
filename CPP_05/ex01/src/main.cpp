@@ -97,6 +97,36 @@ static void testExceptionBureaucrat()
 	std::cout << "\n\n";
 }
 
+static void emptyBureaucrat()
+{
+	{
+		Bureaucrat	test;
+	}
+	{
+		Bureaucrat	test("Buro", 30);
+	}
+	{
+		Bureaucrat	test("", 2);
+	}
+}
+
+
+static void emptyForm()
+{
+	{
+		Form	test;
+	}
+	{
+		Form	test("Form", 30);
+	}
+	{
+		Form	test("");
+	}
+	{
+		Form	test("", 10, 30);
+	}
+}
+
 static void fill(std::exception const &e, std::ostringstream& os)
 {
 	if (os.str().empty())
@@ -169,6 +199,12 @@ int	main(int ac, char* arg[])
 				break;
 			case 7:
 				tryCatch(&testBureaucratExceptionLow, os);
+				break;
+			case 8:
+				tryCatch(&emptyBureaucrat, os);
+				break;
+			case 9:
+				tryCatch(&emptyForm, os);
 				break;
 			default:
 				jump = true;

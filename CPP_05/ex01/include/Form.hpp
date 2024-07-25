@@ -32,7 +32,9 @@ class Form
 	protected:
 		
 	public:
-		explicit Form(std::string const& name, size_t const& minimumGradeToSign, size_t const& minimumGradeToExecute);
+		explicit Form(	std::string const& name="EmtyForm",
+						size_t const& minimumGradeToSign=150,
+						size_t const& minimumGradeToExecute=150);
 		Form& operator=(Form const& rhs);
 		Form(Form const& rhs);
 		virtual ~Form(void);

@@ -29,7 +29,7 @@ class Bureaucrat
 	protected:
 		
 	public:
-		explicit Bureaucrat(std::string const& name, size_t grade);
+		explicit Bureaucrat(std::string const& name ="Anon", size_t grade = 150);
 		Bureaucrat& operator=(Bureaucrat const& rhs);
 		Bureaucrat(Bureaucrat const& rhs);
 		virtual ~Bureaucrat();

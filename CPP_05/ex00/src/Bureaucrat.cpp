@@ -10,6 +10,16 @@ static std::string checkName(std::string const&name)
 		return (name);
 }
 
+// Bureaucrat::Bureaucrat(std::string const& name ="Anon", size_t grade = 150):
+// _instanceId(++_instanceCount),
+// _colorIdStr(getRandomColorFmt(1))
+// {
+// 	checkGrade(_grade);
+// 	_grade = grade;
+// 	if (DEBUG)
+// 		std::cout << *this << getColorStr(FGRAY, " was Created with Default Constructor\n");
+// }
+
 Bureaucrat::Bureaucrat(std::string const& name, size_t grade):
 _instanceId(++_instanceCount),
 _colorIdStr(getRandomColorFmt(1)),
