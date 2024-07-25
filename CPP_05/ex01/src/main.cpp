@@ -64,7 +64,7 @@ static void testLowExceptionGradeSign()
 {
 	printTitle("testLowExceptionGradeSign", 60);
 	{
-		Form f2("", 151, 151);
+		Form f2("", 150, 151);
 	}
 }
 
@@ -151,6 +151,7 @@ static void orderException(std::exception const &e, std::ostringstream& os)
 	else if (typeid(e) == typeid(Form::GradeTooLowException))
 		fill(e, FL);
 	os.str("");
+	os.clear();
 	os << BH.str() << "\n"
 	<< BL.str() << "\n"
 	<< FH.str() << "\n"
