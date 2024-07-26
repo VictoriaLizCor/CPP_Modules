@@ -130,7 +130,7 @@ commit-msg:
 post-merge:
 	cp .settings/post-merge .git/hooks/
 	chmod +x .git/hooks/post-merge
-showcolors:
+colors:
 	@i=0; \
 	while [ $$i -le 255 ]; do \
 		printf "\e[1;38;5;$$i""m%3d " "$$i"; \

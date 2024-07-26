@@ -86,6 +86,7 @@ std::string	getColorStr(int eColor, std::string const& str);
 std::string	getColorStr(int eColor, lsi num);
 int			ft_rand(int min, int max);
 std::string	getRandomColorFmt(bool bold);
+std::string	getColorShade(int eColor);
 std::string	setObjColor(int const& color);
 bool		checkInput(const std::string& str, int (*check_type)(int));
 bool		isOnlySpaces(const std::string& str);

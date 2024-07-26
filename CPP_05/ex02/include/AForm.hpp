@@ -5,6 +5,7 @@
 # include <sstream>
 # include <string>
 # include <typeinfo>
+# include <fstream>
 # include "Utils.hpp"
 
 # ifndef DEBUG
@@ -15,11 +16,16 @@ class Bureaucrat;
 
 class AForm
 {
-	private:
+	protected:
 		// Debug attributes:
 		static int			_instanceCount;
-		int					_instanceId;
-		std::string const	_colorIdStr;
+		int					_instanceBase;
+
+		void						checkGrade(size_t grade);
+
+	private:
+		// Debug attributes:
+		// std::string const	_colorIdStr;
 		// Subject specific:
 		std::string const	_name;
 		size_t const		_minimumGradeToSign;
@@ -29,27 +35,26 @@ class AForm
 		static size_t const	_maxGradeLimit;
 		static size_t const	_minGradeLimit;
 
-	protected:
-		void		checkGrade(size_t grade);
 	public:
-		explicit AForm(	std::string const& name="EmtyForm",
+		explicit AForm(	std::string const& name,
 						size_t const& minimumGradeToSign=_maxGradeLimit,
 						size_t const& minimumGradeToExecute=_maxGradeLimit);
 		AForm& operator=(AForm const& rhs);
 		AForm(AForm const& rhs);
 		virtual ~AForm(void);
 
-		std::string const&		getName() const;
-		size_t const&			getMinimumGradeToSign() const;
-		size_t const&			getMinimumGradeToExecute() const;
-		bool const&				getSigned() const;
-		virtual void			beSigned(Bureaucrat const& bureaucrat);
+		std::string const&			getName() const;
+		size_t const&				getMinimumGradeToSign() const;
+		size_t const&				getMinimumGradeToExecute() const;
+		bool const&					getSigned() const;
+		virtual void				execute( Bureaucrat const& executor ) const = 0;
+		virtual void				beSigned(Bureaucrat const& bureaucrat);
 
-		std::string				printStatus() const;
-		std::string 			getInfo() const;
+		virtual std::string			printStatus() const;
+		virtual std::string 		getInfo() const = 0;
 
-		// virtual void execute( Bureaucrat const& executor ) const = 0;
-		// virtual void execute( Bureaucrat const& executor );
+		void						checkExeStatus(Bureaucrat const& bureaucrat);
+		//Class Exeptions
 		class GradeTooHighException : public std::out_of_range
 		{
 			public:
@@ -65,7 +70,6 @@ class AForm
 			public:
 				explicit NoPrivilege();
 		};
-		//"can't execute, form is not signed"
 		class FormStatus : public std::runtime_error
 		{
 			public:

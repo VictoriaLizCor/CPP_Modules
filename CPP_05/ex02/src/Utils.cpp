@@ -193,13 +193,52 @@ int ft_rand(int min, int max)
 std::string getRandomColorFmt(bool bold)
 {
 	std::ostringstream strColor;
-	std::string	fmt;
 
-	fmt = C_FMT;
+	strColor << C_FMT;
 	if (bold)
-		fmt = fmt + "1;";
-	strColor << fmt
-	<< rColorRGB(ft_rand(60, 255), ft_rand(60, 255), ft_rand(60, 255));
+		strColor << + "1;";
+	strColor << rColorRGB(ft_rand(60, 255), ft_rand(60, 255), ft_rand(60, 255));
+	return (strColor.str());
+}
+
+std::string	getColorShade(int eColor)
+{
+	std::ostringstream strColor;
+	int randomShade = 0;
+	int baseColor = 0;
+	int shadeRange = 0;
+
+	switch (eColor)
+	{
+		case FLRED:
+			baseColor = 160;
+			shadeRange = 5;
+			break;
+		case FLGREEN:
+			baseColor = 34;
+			shadeRange = 5;
+			break;
+		case FLBLUE:
+			baseColor = 19;
+			shadeRange = 5;
+			break;
+		case FLYELLOW:
+			baseColor = 226;
+			shadeRange = 5;
+			break;
+		case FLCYAN:
+			baseColor = 51;
+			shadeRange = 5;
+			break;
+		case FLMAGENTA:
+			baseColor = 201;
+			shadeRange = 5;
+			break;
+		default:
+			return (C_END);
+	}
+	randomShade = ft_rand(baseColor, baseColor + shadeRange - 1);
+	strColor << C_FMT256 << randomShade << "m";
 	return (strColor.str());
 }
 

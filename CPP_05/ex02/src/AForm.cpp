@@ -5,19 +5,11 @@ int AForm::_instanceCount = 0;
 size_t const AForm::_maxGradeLimit = 150;
 size_t const AForm::_minGradeLimit = 1;
 
-static std::string checkName(std::string const&name)
-{	
-	if (name.empty())
-		return ("emptyForm");
-	else
-		return (name);
-}
 
 
 AForm::AForm(std::string const& name, size_t const& minimumGradeToSign, size_t const& minimumGradeToExecute):
-_instanceId(++_instanceCount),
-_colorIdStr(getRandomColorFmt(1)),
-_name(checkName(name)),
+_instanceBase(++_instanceCount),
+_name(name),
 _minimumGradeToSign(minimumGradeToSign),
 _minimumGradeToExecute(minimumGradeToExecute),
 _signed(0)
@@ -38,9 +30,8 @@ AForm& AForm::operator=(AForm const& rhs)
 }
 
 AForm::AForm(AForm const& rhs):
-_instanceId(++_instanceCount),
-_colorIdStr(getRandomColorFmt(1)),
-_name(checkName(rhs.getName())),
+_instanceBase(++_instanceCount),
+_name(rhs.getName()),
 _minimumGradeToSign(rhs.getMinimumGradeToSign()),
 _minimumGradeToExecute(rhs.getMinimumGradeToExecute())
 {
@@ -77,19 +68,26 @@ void AForm::checkGrade(size_t grade)
 	}
 }
 
+static void throwExeption(std::exception const& exception)
+{
+	std::cout << getColorStr(FLRED, "Action failed\n");
+	throw (exception);
+}
+
+void AForm::checkExeStatus(Bureaucrat const& bureaucrat)
+{
+	if (!getSigned())
+		throwExeption(AForm::FormStatus("Form is not signed"));
+	if (bureaucrat.getGrade() < getMinimumGradeToExecute())
+		throwExeption(AForm::NoPrivilege());
+}
 
 void AForm::beSigned(Bureaucrat const& bureaucrat)
 {
-	if (bureaucrat.getGrade() > _minimumGradeToSign)
-	{
-		std::cout << getColorStr(FLRED, "Action failed\n");
-		throw (AForm::NoPrivilege());
-	}
+	if (bureaucrat.getGrade() > getMinimumGradeToSign())
+		throwExeption(AForm::NoPrivilege());
 	if (_signed)
-	{
-		std::cout << getColorStr(FLRED, "Action failed\n");
-		throw (AForm::FormStatus("Form already signed"));
-	}
+		throwExeption(AForm::FormStatus("Form already signed"));
 	_signed = true;
 	std::cout << getColorStr(FLGREEN, "Action succesful:\n");
 }
@@ -124,20 +122,6 @@ std::string AForm::printStatus(void) const
 	<< " ]";
 	return (os.str());
 }
-
-std::string AForm::getInfo() const
-{
-	std::ostringstream os;
-
-	os << _colorIdStr;
-	if (DEBUG == 1)
-		os << getName() << _instanceId << printStatus();
-	else 
-		os << getName() << printStatus();
-	os << C_END;
-	return (os.str());
-}
-
 
 std::ostream& operator << (std::ostream& os, AForm const& rhs)
 {

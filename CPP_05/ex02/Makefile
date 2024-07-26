@@ -353,7 +353,7 @@ class {{CLASS_NAME}}
 		
 	public:
 		{{CLASS_NAME}}();
-		virtual ~{{CLASS_NAME}}(void);
+		virtual ~{{CLASS_NAME}}();
 
 };
 
