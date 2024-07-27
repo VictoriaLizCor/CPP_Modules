@@ -204,41 +204,17 @@ std::string getRandomColorFmt(bool bold)
 std::string	getColorShade(int eColor)
 {
 	std::ostringstream strColor;
-	int randomShade = 0;
-	int baseColor = 0;
-	int shadeRange = 0;
+	static int pattern = 10;
 
-	switch (eColor)
-	{
-		case FLRED:
-			baseColor = 160;
-			shadeRange = 5;
-			break;
-		case FLGREEN:
-			baseColor = 34;
-			shadeRange = 5;
-			break;
-		case FLBLUE:
-			baseColor = 19;
-			shadeRange = 5;
-			break;
-		case FLYELLOW:
-			baseColor = 226;
-			shadeRange = 5;
-			break;
-		case FLCYAN:
-			baseColor = 51;
-			shadeRange = 5;
-			break;
-		case FLMAGENTA:
-			baseColor = 201;
-			shadeRange = 5;
-			break;
-		default:
-			return (C_END);
-	}
-	randomShade = ft_rand(baseColor, baseColor + shadeRange - 1);
-	strColor << C_FMT256 << randomShade << "m";
+	pattern--;
+	if (toStr(pattern).find_first_of("68") != std::string::npos)
+		pattern--;
+	strColor << C_FMT << eColor;
+	if (pattern != 0)
+		strColor << ";" << pattern;
+	strColor << "m";
+	if (pattern < 1)
+		pattern = 10;
 	return (strColor.str());
 }
 

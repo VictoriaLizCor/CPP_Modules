@@ -222,3 +222,23 @@ There are several standard exceptions in C++ that can take a string as an argume
 5. **std::out_of_range**: Indicates that an argument is out of the allowable range.
 6. **std::logic_error**: Represents errors in the program logic, such as violations of logical preconditions or class invariants.
 
+# COLOR PATTERN MODIFIERS
+The ANSI escape code `\033[34;im` is used to set the text color in the terminal. The `34` part of the code specifies the base color (blue in this case), and the [`i`]part can be used to modify the intensity or style of the color.
+
+1. **0**: Normal intensity (default)
+2. **1**: Bold or increased intensity
+3. **2**: Faint, decreased intensity (not widely supported)
+4. **3**: Italic (not widely supported)
+5. **4**: Underline
+6. **5**: Slow blink (less than 150 per minute)
+7. **6**: Rapid blink (MS-DOS ANSI.SYS; 150+ per minute)
+8. **7**: Reverse video (swap foreground and background colors)
+9. **8**: Conceal (not widely supported)
+10. **9**: Crossed-out (not widely supported)
+
+### Example Patterns
+- `\033[34;0m`: Normal blue
+- `\033[34;1m`: Bold blue
+- `\033[34;4m`: Underlined blue
+- `\033[34;7m`: Reverse video blue
+

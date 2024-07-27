@@ -1,7 +1,7 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 -Wshadow -Werror #-Wno-unused-function -Wunused
+D_FLAGS		= -Wall -Wextra -std=c++98 -Wshadow #-Werror #-Wno-unused-function -Wunused
 INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR		:= src/
@@ -57,6 +57,7 @@ D_FLAGS		+= -fno-omit-frame-pointer
 # SRC			+= $(MAIN)
 else
 OBJS		:= $(SRC)
+# D_FLAGS		+= -Werror 
 endif
 # MAKEFLAGS	+= -j4 #--debug #// -j for multinodes
 ifeq ($(S), 1)

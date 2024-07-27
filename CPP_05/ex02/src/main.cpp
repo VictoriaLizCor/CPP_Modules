@@ -2,21 +2,35 @@
 #include "ShrubberyCreationForm.hpp"
 #include "Utils.hpp"
 
-static void testBasic()
+static void testShrubberyBasic()
 {
-	printTitle("testBasic", 60);
+	printTitle("testShrubberyBasic", 60);
+	ShrubberyCreationForm f;
 	{
-		ShrubberyCreationForm f;
-		Bureaucrat	test("Bureaucrat", 11);
-
 		std::cout << "------\n";
+		Bureaucrat	b1("BureaucratA", 146);
 		
-		test.signForm(f);
+		b1.signForm(f);
 		printTitle("BureaucratIncrement", 40);
-		test.incrementGrade();
-
-		test.signForm(f);
-		test.signForm(f);
+		b1.incrementGrade();
+		b1.signForm(f);
+		{
+			std::cout << "\n";
+			printTitle("BureaucratB", 40);
+			Bureaucrat	b2("BureaucratB", 138);
+			printTitle("BureaucratB_TestGrade", 40);
+			b2.executeForm(f);
+		}
+		{
+			ShrubberyCreationForm f2;
+			Bureaucrat	b2("BureaucratB", 1);
+			printTitle("BureaucratB_TestSign", 40);
+			b2.executeForm(f2);
+			printTitle("BureaucratB_Sign", 40);
+			b2.signForm(f2);
+			b2.executeForm(f2);
+			std::cout << "------\n";
+		}
 		std::cout << "------\n";
 	}
 	std::cout << "\n\n";
@@ -92,17 +106,23 @@ static void emptyBureaucrat()
 {
 	printTitle("emptyBureaucrat", 60);
 	{Bureaucrat	test;}
+	std::cout << "------\n";
 	{Bureaucrat	test("Buro", 30);}
+	std::cout << "------\n";
 	{Bureaucrat	test("", 2);}
+	std::cout << "------\n";
 }
 
 
-static void emptyForm()
+static void emptyShrubberyForm()
 {
 	printTitle("emptyForm", 60);
 	{ShrubberyCreationForm	test;}
+	std::cout << "------\n";
 	{ShrubberyCreationForm	test("target");}
+	std::cout << "------\n";
 	{ShrubberyCreationForm	test("");}
+	std::cout << "------\n";
 }
 
 static void fill(std::exception const &e, std::ostringstream& os)
@@ -129,6 +149,8 @@ static void orderException(std::exception const &e, std::ostringstream* os[])
 		fill(e, *os[4]);
 	else if (typeid(e) == typeid(AForm::FormStatus))
 		fill(e, *os[5]);
+	else
+		fill(e, *os[6]);
 }
 
 void tryCatch(void (*test)(), std::ostringstream* os[])
@@ -143,34 +165,34 @@ void tryCatch(void (*test)(), std::ostringstream* os[])
 
 static void InitoOS(std::ostringstream* os[])
 {
-	//os[BG, BL, FH, FL, NP, FS] // (6)
-	for (int i = 0; i < 6; ++i)
+	//os[BG, BL, FH, FL, NP, FS, default] // (7)
+	for (int i = 0; i < 7; ++i)
 		os[i] = new std::ostringstream();
 }
 
 static void cleanOS(std::ostringstream* os[])
 {
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 7; ++i)
 		delete os[i];
 }
 
 static void runAllTest(std::ostringstream* os[])
 {
-	tryCatch(&testBasic, os);
+	tryCatch(&testShrubberyBasic, os);
 	// tryCatch(&testManyForms, os);
 	// tryCatch(&testExceptionGradeToExecute, os);
 	// tryCatch(&testExceptionBureaucrat, os);
 	// tryCatch(&testHighExceptionGradeSign, os);
 	// tryCatch(&testLowExceptionGradeSign, os);
-	tryCatch(&testBureaucratExceptionLow, os);
-	tryCatch(&emptyForm, os);
+	// tryCatch(&testBureaucratExceptionLow, os);
+	// tryCatch(&emptyShrubberyForm, os);
 }
 
 static void printExeptions(std::ostringstream* os[6])
 {
 	bool seed = 0;
 
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 7; ++i)
 	{
 		if (!os[i]->str().empty())
 		{
@@ -189,7 +211,7 @@ static void printExeptions(std::ostringstream* os[6])
 
 int	main(int ac, char* arg[])
 {
-	std::ostringstream* os[6] = { NULL, NULL, NULL, NULL, NULL, NULL };
+	std::ostringstream* os[7] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 	bool				jump = false;
 
 	InitoOS(os);
@@ -198,15 +220,15 @@ int	main(int ac, char* arg[])
 		int choice = std::atoi(arg[1]);
 		switch (choice)
 		{
-			case 1: tryCatch(&testBasic, os); break;
-			// case 2: tryCatch(&testManyForms, os); break;
-			// case 3: tryCatch(&testExceptionGradeToExecute, os); break;
-			// case 4: tryCatch(&testExceptionBureaucrat, os); break;
-			// case 5: tryCatch(&testHighExceptionGradeSign, os); break;
-			// case 6: tryCatch(&testLowExceptionGradeSign, os); break;
-			case 7: tryCatch(&testBureaucratExceptionLow, os); break;
-			case 8: tryCatch(&emptyBureaucrat, os); break;
-			case 9: tryCatch(&emptyForm, os); break;
+		// 	case 1: tryCatch(&testShrubberyBasic, os); break;
+		// 	// case 2: tryCatch(&testManyForms, os); break;
+		// 	// case 3: tryCatch(&testExceptionGradeToExecute, os); break;
+		// 	// case 4: tryCatch(&testExceptionBureaucrat, os); break;
+		// 	// case 5: tryCatch(&testHighExceptionGradeSign, os); break;
+		// 	// case 6: tryCatch(&testLowExceptionGradeSign, os); break;
+		// 	case 7: tryCatch(&testBureaucratExceptionLow, os); break;
+		// 	case 8: tryCatch(&emptyBureaucrat, os); break;
+		// 	case 9: tryCatch(&emptyForm, os); break;
 			default: jump = true; break;
 		}
 	}

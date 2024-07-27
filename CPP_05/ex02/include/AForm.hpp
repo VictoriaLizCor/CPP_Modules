@@ -5,7 +5,6 @@
 # include <sstream>
 # include <string>
 # include <typeinfo>
-# include <fstream>
 # include "Utils.hpp"
 
 # ifndef DEBUG
@@ -22,6 +21,7 @@ class AForm
 		int					_instanceBase;
 
 		void						checkGrade(size_t grade);
+		void 						throwExeption(std::exception const& exception)const;
 
 	private:
 		// Debug attributes:
@@ -47,13 +47,13 @@ class AForm
 		size_t const&				getMinimumGradeToSign() const;
 		size_t const&				getMinimumGradeToExecute() const;
 		bool const&					getSigned() const;
-		virtual void				execute( Bureaucrat const& executor ) const = 0;
+		virtual void				execute(Bureaucrat const& executor) const = 0;
 		virtual void				beSigned(Bureaucrat const& bureaucrat);
 
 		virtual std::string			printStatus() const;
-		virtual std::string 		getInfo() const = 0;
+		virtual std::string 		getInfo();
 
-		void						checkExeStatus(Bureaucrat const& bureaucrat);
+		void						checkExeStatus(Bureaucrat const& bureaucrat) const;
 		//Class Exeptions
 		class GradeTooHighException : public std::out_of_range
 		{
@@ -78,7 +78,7 @@ class AForm
 
 };
 
-std::ostream& operator << (std::ostream& os, AForm const& rhs);
+std::ostream& operator << (std::ostream& os, AForm& rhs);
 
 #endif // FORM_HPP
 

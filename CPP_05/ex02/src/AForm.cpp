@@ -16,7 +16,7 @@ _signed(0)
 {
 	checkGrade(_minimumGradeToSign);
 	checkGrade(_minimumGradeToExecute);
-	if (DEBUG)
+	if (DEBUG == 2)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
 }
 
@@ -40,7 +40,7 @@ _minimumGradeToExecute(rhs.getMinimumGradeToExecute())
 
 AForm::~AForm(void)
 {
-	if (DEBUG)
+	if (DEBUG == 2)
 		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
 	_instanceCount--;
 }
@@ -68,18 +68,20 @@ void AForm::checkGrade(size_t grade)
 	}
 }
 
-static void throwExeption(std::exception const& exception)
+void AForm::throwExeption(std::exception const& exception) const
 {
 	std::cout << getColorStr(FLRED, "Action failed\n");
-	throw (exception);
+	// std::cout << exception.what() << std::endl;
+	// throw;
+	throw std::runtime_error(exception.what());
 }
 
-void AForm::checkExeStatus(Bureaucrat const& bureaucrat)
+void AForm::checkExeStatus(Bureaucrat const& bureaucrat) const
 {
 	if (!getSigned())
-		throwExeption(AForm::FormStatus("Form is not signed"));
-	if (bureaucrat.getGrade() < getMinimumGradeToExecute())
-		throwExeption(AForm::NoPrivilege());
+		throwExeption(FormStatus("Form is not signed"));
+	if (bureaucrat.getGrade() > getMinimumGradeToExecute())
+		throwExeption(NoPrivilege());
 }
 
 void AForm::beSigned(Bureaucrat const& bureaucrat)
@@ -117,13 +119,25 @@ std::string AForm::printStatus(void) const
 	std::ostringstream os;
 	os << std::string(C_END) << " [ Signed: " 
 	<< (getSigned() ? getColorStr(FGREEN,"1") : getColorStr(FLGREEN, "0"))
-	<< ", MinGrade: " << getColorStr(FLCYAN, (lsi)getMinimumGradeToSign())
+	<< ", MinGrade: " << getColorStr(BBLUE, (lsi)getMinimumGradeToSign())
 	<< ", ExeGrade: " << getColorStr(FLYELLOW, (lsi)getMinimumGradeToExecute())
 	<< " ]";
 	return (os.str());
 }
 
-std::ostream& operator << (std::ostream& os, AForm const& rhs)
+std::string AForm::getInfo()
+{
+	std::ostringstream os;
+
+	if (DEBUG > 0)
+		os << className(typeid(*this).name());
+	else
+		os << "AF" << _instanceBase << "::";
+	os << C_END;
+	return (os.str());
+}
+
+std::ostream& operator << (std::ostream& os, AForm& rhs)
 {
 	os << rhs.getInfo();
 	return (os);
@@ -140,4 +154,3 @@ AForm::NoPrivilege::NoPrivilege()
 
 AForm::FormStatus::FormStatus(std::string const& msg)
 : std::runtime_error(msg) {}
-//"AForm::" + std::string(__func__) + 

@@ -99,15 +99,30 @@ void Bureaucrat::signForm(AForm& form)
 	{
 		form.beSigned(*this);
 		std::cout << *this << " signed " << form << std::endl;
-		if (DEBUG)
-			form.printStatus();
 	}
-	catch(const std::exception &e)
+	catch(std::exception const& e)
 	{
 		std::cout << os.str()  << e.what() << std::endl;
 	}
 }
 
+void Bureaucrat::executeForm(AForm const& form)
+{
+	AForm& tmpForm = const_cast<AForm&>(form);
+	std:: ostringstream os;
+
+	os << *this << " couldn't execute " << tmpForm <<  " because ";
+	try
+	{
+		tmpForm.execute(*this);
+		std::cout << *this << " executed " << tmpForm << std::endl;
+	}
+	catch(std::exception const& e)
+	{
+		std::cout << os.str()  << e.what() << std::endl;
+		// throw(GradeTooHighException(os.str() + e.what()));
+	}
+}
 
 std::string Bureaucrat::getInfo() const
 {
@@ -126,7 +141,7 @@ std::string Bureaucrat::getInfo() const
 std::ostream& operator << (std::ostream& os, Bureaucrat const& rhs)
 {
 	os << rhs.getInfo() << "(G:" 
-	<< getColorStr(FLCYAN, (lsi)rhs.getGrade()) << ")";
+	<< getColorStr(BBLUE, (lsi)rhs.getGrade()) << ")";
 	return (os);
 }
 

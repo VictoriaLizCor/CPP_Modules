@@ -38,7 +38,7 @@ class Bureaucrat
 		void					incrementGrade(void);
 		void					decrementGrade(void);
 		void					signForm(AForm& form);
-
+		void					executeForm(AForm const& form);
 		std::string 			getInfo() const;
 		
 		class GradeTooHighException : public std::out_of_range
