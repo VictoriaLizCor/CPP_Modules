@@ -53,7 +53,7 @@ void ShrubberyCreationForm::execute(Bureaucrat const& executor) const
 	{
 		std::string const fileName = _target + "_shrubbery";
 		std::stringstream buffer;
-		Files file(fileName.c_str());
+		Files file;
 
 		writeTree(buffer);
 		file.write(buffer);

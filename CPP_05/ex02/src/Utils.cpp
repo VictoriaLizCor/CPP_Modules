@@ -10,6 +10,12 @@ std::string s_coloredName::getName() const
 	return (colorStr + str + C_END);
 }
 
+void nl(size_t newLines)
+{
+	for (size_t i=1 ; i <= newLines; ++i)
+		std::cout << std::endl;
+}
+
 /**
  * @brief Prints a string followed by a newline.
  *
@@ -201,20 +207,37 @@ std::string getRandomColorFmt(bool bold)
 	return (strColor.str());
 }
 
+std::string	getColorShade(int eColor, int pattern)
+{
+	std::ostringstream strColor;
+
+	strColor << C_FMT << eColor;
+	if (toStr(pattern).find_first_of("68") == std::string::npos)
+		return (strColor.str() + "m");
+	strColor << ";" << pattern << "m";
+	return (strColor.str());
+}
+
+/**
+ * @brief Returns a string representing the color shade based on the given color code.
+ * 
+ * @param eColor The color code.
+ * @return std::string The color shade string.
+ */
 std::string	getColorShade(int eColor)
 {
 	std::ostringstream strColor;
-	static int pattern = 10;
+	static int pattern = -1;
 
-	pattern--;
+	pattern++;
 	if (toStr(pattern).find_first_of("68") != std::string::npos)
-		pattern--;
+		pattern++;
 	strColor << C_FMT << eColor;
 	if (pattern != 0)
 		strColor << ";" << pattern;
 	strColor << "m";
-	if (pattern < 1)
-		pattern = 10;
+	if (pattern > 9)
+		pattern = 0;
 	return (strColor.str());
 }
 

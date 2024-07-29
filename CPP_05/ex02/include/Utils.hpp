@@ -77,6 +77,7 @@ typedef long signed int lsi;
 typedef s_coloredName t_Name;
 
 std::string error(std::string str, bool bold);
+void nl(size_t newLines);
 void 		coutnl(std::ostream& os);
 std::string	toStr(int value);
 std::string	getColorFmt(int eColor);
@@ -86,6 +87,7 @@ std::string	getColorStr(int eColor, std::string const& str);
 std::string	getColorStr(int eColor, lsi num);
 int			ft_rand(int min, int max);
 std::string	getRandomColorFmt(bool bold);
+std::string	getColorShade(int eColor, int pattern);
 std::string	getColorShade(int eColor);
 std::string	setObjColor(int const& color);
 bool		checkInput(const std::string& str, int (*check_type)(int));

@@ -1,0 +1,19 @@
+{
+    "configurations":[], //[
+//         // {
+// //             "name": "Linux",
+// //             "includePath": [
+// //                 // "${workspaceFolder}/**",
+// //                 // "${workspaceFolder}/CPP_05/ex00/include"
+// // 				// "${workspaceFolder}/CPP_05/ex01/include"
+// // 				"${workspaceFolder}/CPP_05/ex02/include"
+// //             ],
+// //             "defines": [],
+// //             "compilerPath": "/usr/bin/clang",
+// //             "cStandard": "c17",
+// //             "cppStandard": "c++14",
+// //             "intelliSenseMode": "linux-clang-x64"
+//         // }
+//     ],
+    "version": 4
+}

@@ -1,4 +1,5 @@
 {
+	// 
 	//***************************************************//
 	// Add this to your settings.json
 	"[windows]":
@@ -28,8 +29,10 @@
 	"doxdocgen.generic.useGitUserName": true,
 	"doxdocgen.c.triggerSequence": "/**",
 	//************************************************//
-	"compiler-explorer.url": "https://godbolt.org", // url of the compiler explorer you want to use.
-	"compiler-explorer.compiler": "armg454", // Compiler code - See help below.
+	// url of the compiler explorer you want to use.
+	"compiler-explorer.url": "https://godbolt.org",
+	// Compiler code - See help below.
+	"compiler-explorer.compiler": "armg454",
 	"compiler-explorer.options": [
 		"-O3"
 	], // Compiler options
@@ -40,11 +43,30 @@
 	],
 	"window.customTitleBarVisibility": "auto",
 	"rewrap.wrappingColumn": 70,
+	"C_Cpp.dimInactiveRegions": false,
+	 // indicates that the extension will print debug to its output channel.
+	"doxdocgen.generic.commandSuggestionAddPrefix": true,
+	"files.exclude":
+	{
+		"**/evals/cpp01":true,
+		"**/evals/cpp02":true,
+		"**/evals/cpp03":true,
+		"**/evals/cpp04":true,
+		"**/CPP_00": true,
+		"**/CPP_01": true,
+		"**/CPP_02": true,
+		"**/CPP_03": true,
+		"**/CPP_04": true
+		// "**/CPP_05": true,
+	},
+	"github.copilot.editor.enableAutoCompletions": false,
+	"pdf-preview.default.sidebar": false,
 	"files.associations": {
 		"array": "cpp",
 		"atomic": "cpp",
 		"bit": "cpp",
 		"*.tcc": "cpp",
+		"bitset": "cpp",
 		"cctype": "cpp",
 		"clocale": "cpp",
 		"cmath": "cpp",
@@ -56,6 +78,7 @@
 		"cstdio": "cpp",
 		"cstdlib": "cpp",
 		"cstring": "cpp",
+		"ctime": "cpp",
 		"cwchar": "cpp",
 		"cwctype": "cpp",
 		"deque": "cpp",
@@ -76,7 +99,9 @@
 		"tuple": "cpp",
 		"type_traits": "cpp",
 		"utility": "cpp",
+		"fstream": "cpp",
 		"initializer_list": "cpp",
+		"iomanip": "cpp",
 		"iosfwd": "cpp",
 		"iostream": "cpp",
 		"istream": "cpp",
@@ -86,29 +111,68 @@
 		"ostream": "cpp",
 		"ranges": "cpp",
 		"span": "cpp",
+		"sstream": "cpp",
 		"stdexcept": "cpp",
 		"streambuf": "cpp",
 		"cinttypes": "cpp",
-		"typeinfo": "cpp",
-		"ctime": "cpp",
-		"iomanip": "cpp",
-		"sstream": "cpp",
-		"fstream": "cpp",
-		"bitset": "cpp",
-		"chrono": "cpp",
-		"ratio": "cpp"
+		"typeinfo": "cpp"
 	},
-	"C_Cpp.dimInactiveRegions": false,
-	"doxdocgen.generic.commandSuggestionAddPrefix": true, // true indicates that the extension will print debug to its output channel.
-	"files.exclude":
-	{
-		"**/CPP_00": true,
-		"**/CPP_01": true,
-		"**/CPP_02": true,
-		"**/CPP_03": true,
-		"**/CPP_04": true,
-		// "**/CPP_05": true,
-	},
-	"github.copilot.editor.enableAutoCompletions": false,
-	"pdf-preview.default.sidebar": false
+		// "files.associations": {
+	// 	"array": "cpp",
+	// 	"atomic": "cpp",
+	// 	"bit": "cpp",
+	// 	"*.tcc": "cpp",
+	// 	"cctype": "cpp",
+	// 	"clocale": "cpp",
+	// 	"cmath": "cpp",
+	// 	"compare": "cpp",
+	// 	"concepts": "cpp",
+	// 	"cstdarg": "cpp",
+	// 	"cstddef": "cpp",
+	// 	"cstdint": "cpp",
+	// 	"cstdio": "cpp",
+	// 	"cstdlib": "cpp",
+	// 	"cstring": "cpp",
+	// 	"cwchar": "cpp",
+	// 	"cwctype": "cpp",
+	// 	"deque": "cpp",
+	// 	"unordered_map": "cpp",
+	// 	"vector": "cpp",
+	// 	"exception": "cpp",
+	// 	"algorithm": "cpp",
+	// 	"functional": "cpp",
+	// 	"iterator": "cpp",
+	// 	"memory": "cpp",
+	// 	"memory_resource": "cpp",
+	// 	"numeric": "cpp",
+	// 	"optional": "cpp",
+	// 	"random": "cpp",
+	// 	"string": "cpp",
+	// 	"string_view": "cpp",
+	// 	"system_error": "cpp",
+	// 	"tuple": "cpp",
+	// 	"type_traits": "cpp",
+	// 	"utility": "cpp",
+	// 	"initializer_list": "cpp",
+	// 	"iosfwd": "cpp",
+	// 	"iostream": "cpp",
+	// 	"istream": "cpp",
+	// 	"limits": "cpp",
+	// 	"new": "cpp",
+	// 	"numbers": "cpp",
+	// 	"ostream": "cpp",
+	// 	"ranges": "cpp",
+	// 	"span": "cpp",
+	// 	"stdexcept": "cpp",
+	// 	"streambuf": "cpp",
+	// 	"cinttypes": "cpp",
+	// 	"typeinfo": "cpp",
+	// 	"ctime": "cpp",
+	// 	"iomanip": "cpp",
+	// 	"sstream": "cpp",
+	// 	"fstream": "cpp",
+	// 	"bitset": "cpp",
+	// 	"chrono": "cpp",
+	// 	"ratio": "cpp"
+	// }
 }

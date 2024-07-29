@@ -32,5 +32,4 @@ class ShrubberyCreationForm : public AForm
 		void				execute(Bureaucrat const& executor) const;
 };
 
-
 #endif // SHRUBBERYCREATIONFORM_HPP

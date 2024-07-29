@@ -1,6 +1,14 @@
-
 #include "Files.hpp"
 #include "Utils.hpp"
+
+
+// /**
+//  * @brief Default constructor for the Files class.
+//  *
+//  * This constructor initializes a new instance of the Files class. It does not
+//  * take any parameters and does not perform any operations.
+//  */
+// Files::Files(){return ;}
 
 /**
  * @brief Constructs a Files object with the specified file name and open mode.
@@ -9,12 +17,17 @@
  * @param mode The open mode for the file( std::ios::in | std::ios::out |
  * std::ios::app | std::ios::ate | std::ios::binary | std::ios::trunc).
  */
-Files::Files(const char* fileName, std::ios_base::openmode mode): _file(fileName, mode), _fileName(fileName)
+Files::Files(std::string const& fileName, std::ios_base::openmode mode):
+_fileName(fileName), _fileMode(mode), _file()
 {
-	_fileMode = mode;
-	fileIsOpen();
 	if (DEBUG)
-		std::cout << _fileName << getColorStr(FGRAY, " was Created\n");
+		std::cout << *this << getColorStr(FGRAY, " was Created\n");
+	if (DEBUG)
+	{
+		std::cout << getColorStr(getColorShade(BGRAY, 7), "PATH");
+		std::cout << getDirectory(fileName) << std::endl;
+	}
+	openFile();
 }
 
 
@@ -23,22 +36,21 @@ Files::Files(const char* fileName, std::ios_base::openmode mode): _file(fileName
  *
  * @param fileName The name of the file to be associated with the Files object.
  */
-Files::Files(const char* fileName): _file(), _fileName(fileName)
-{
-	openFile(std::ios::in | std::ios::out | std::ios::trunc);
-	return ;
-}
+// Files::Files(const char* fileName): _file(), _fileName(fileName)
+// {
+// 	openFile(std::ios::in | std::ios::out | std::ios::trunc);
+// 	return ;
+// }
 
 /**
  * @brief Copy constructor for the Files class.
  * 
  * @param file The Files object to be copied.
  */
-Files::Files(Files& file): _file(), _fileName(file._fileName)
+Files::Files(Files& file): _fileName(file._fileName + "_cpy"), _file()
 {
 	openFile(std::ios::in | std::ios::out | std::ios::trunc);
 	copyFile(file);
-	return ;
 }
 
 
@@ -51,8 +63,28 @@ Files::Files(Files& file): _file(), _fileName(file._fileName)
 Files::~Files()
 {
 	closeFile();
+	if (DEBUG)
+		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
 }
 
+std::string Files::getDirectory(std::string const& path)
+{
+	// if (path.empty())
+	// 	return ("");
+	std::string tempFileName = "path.txt";
+	std::string command = "pwd > " + tempFileName;
+	system(command.c_str());
+
+	std::ifstream tempFile(tempFileName.c_str());
+	std::string currentDirectory;
+	if (tempFile.is_open())
+	{
+		std::getline(tempFile, currentDirectory);
+		tempFile.close();
+	}
+	std::remove(tempFileName.c_str());
+	return (currentDirectory + "/" + path);
+}
 /**
  * @brief Opens a file with the specified mode.
  *
@@ -66,7 +98,8 @@ void Files::openFile(std::ios_base::openmode mode)
 {
 	_fileMode = mode;
 	closeFile();
-	_file.open(_fileName.c_str(), mode);
+	if (!_fileName.empty() && _fileMode != 0)
+		_file.open(_fileName.c_str(), mode);
 	fileIsOpen();
 }
 
@@ -80,7 +113,7 @@ void Files::openFile(std::ios_base::openmode mode)
  */
 void Files::openFile()
 {
-	void closeFile();
+	closeFile();
 	_file.open(_fileName.c_str(), _fileMode);
 	fileIsOpen();
 }
@@ -153,9 +186,10 @@ void Files::copyFile(Files& in)
 	in.closeFile();
 }
 
-static std::string fileMode(std::ios_base::openmode& fileMode, std::stringstream& ss, int& i)
+static void fileMode(std::ios_base::openmode& fileMode, std::stringstream& ss, int& i)
 {
 	std::stringstream tmp;
+
 	if (i == 0 && fileMode & std::ios::in)
 		tmp << getColorStr(FLBLUE, "READ");
 	if (i == 1 && fileMode & std::ios::out)
@@ -170,6 +204,7 @@ static std::string fileMode(std::ios_base::openmode& fileMode, std::stringstream
 		tmp << getColorStr(FLWHITE, " BINARY");
 	if (!tmp.str().empty() && !ss.str().empty())
 		ss << " | ";
+	
 	ss << tmp.str();
 }
 /**
@@ -188,7 +223,7 @@ void Files::fileIsOpen()
 {
 	std::stringstream ss;
 
-	if (_file.is_open() == false)
+	if ((!_fileName.empty() && _fileMode != 0) && _file.is_open() == false)
 	{
 		ss << error("Failed to open the file " + _fileName, 0) << std::endl;
 		checkFileStatus(ss);
@@ -197,13 +232,16 @@ void Files::fileIsOpen()
 	if (DEBUG)
 	{
 		std::stringstream s2;
-		ss << _fileName << " file open as: [ ";
-		printTitle("File Info", 20);
-		for (int i = 0; i < 6 ; ++i)
+
+		ss << " open mode as: [ ";
+		printTitle("File " + _fileName + " Info", 30);
+		if (_fileMode == 0)
+			s2 << getColorStr(FWHITE, "Default");
+		else
 		{
-			fileMode(_fileMode, s2, i);
+			for (int i = 0; i < 6 ; ++i)
+				fileMode(_fileMode, s2, i);
 		}
-		
 		std::cout << ss.str()<< s2.str() << " ]\n";
 	}
 }
@@ -265,7 +303,7 @@ void Files::showContent()
 	openFile(std::ios::in);
 	_file.seekg(0);
 	ss << _file.rdbuf();
-	std::cout << ss.str() << std::endl;
+	std::cout << getColorStr(FGREEN, ss.str()) << std::endl;
 }
 
 void Files::checkFileStatus(std::stringstream& ss)
@@ -281,6 +319,22 @@ void Files::checkFileStatus(std::stringstream& ss)
 		ss << error("File does not exist\n", 0);
 }
 
+std::string Files::getInfo()
+{
+	std::ostringstream os;
 
-Files::FileError::FileError(std::string const& msg)
-: std::runtime_error(msg) {}
+	os << getColorFmt(FGRAY);
+	os << className(typeid(*this).name());
+	os << " " << _fileName;
+	os << C_END;
+	return (os.str());
+}
+
+std::ostream& operator << (std::ostream& os, Files& rhs)
+{
+	os << rhs.getInfo();
+	return (os);
+}
+
+Files::FileError::FileError(std::string const& msg):
+std::runtime_error(msg) {}
