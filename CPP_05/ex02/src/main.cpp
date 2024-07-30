@@ -125,42 +125,47 @@
 // 	std::cout << "------\n";
 // }
 
-static void testExeShrubbery()
-{
-	{
-		ShrubberyCreationForm f2;
-		Bureaucrat	b2("BureaucratB", 1);
-		std::cout << "------\n";
-		printTitle("BureaucratB_TestSign", 40);
-		b2.signForm(f2);
-		printTitle("BureaucratB_Sign", 40);
-		for (int i = 1; i <= 3 ; ++i)
-			b2.executeForm(f2);
-		std::cout << "------\n";
-	}
-}
+// static void testExeShrubbery()
+// {
+// 	{
+// 		ShrubberyCreationForm f2("home");
+// 		Bureaucrat	b2("BureaucratB", 1);
+// 		std::cout << "------\n";
+// 		printTitle("BureaucratB_TestSign", 40);
+// 		b2.signForm(f2);
+// 		printTitle("BureaucratB_Sign", 40);
+// 		// for (int i = 1; i <= 3 ; ++i)
+// 			b2.executeForm(f2);
+// 		std::cout << "------\n";
+// 	}
+// }
 
 static void testFile()
 {
 	{
 		nl(1);
 		Files f;
+		// std::cout << getColorStr(getColorShade(BGRAY, 7), "PATH:");
+		// std::cout << " " << f.getPath("home") << std::endl;
+		
+		std::cout << f.getPath("") << std::endl;
+		// f.openFile();
 		std::cout << "------\n";
 	}
-	{
-		nl(1);
-		Files f("target");
-		std::cout << "------\n";
-	}
-	{
-		nl(1);
-		Files f1("target", std::ios::out);
-		std::cout << "------\n";
-		f1.openFile();
-		nl(1);
-		Files f2("target", std::ios::out);
-		std::cout << "------\n";
-	}
+	// {
+	// 	nl(1);
+	// 	Files f("target");
+	// 	std::cout << "------\n";
+	// }
+	// {
+	// 	nl(1);
+	// 	Files f1("target", std::ios::out);
+	// 	std::cout << "------\n";
+	// 	f1.openFile();
+	// 	nl(1);
+	// 	Files f2("target", std::ios::out);
+	// 	std::cout << "------\n";
+	// }
 	std::cout << "------\n";
 }
 
@@ -225,8 +230,8 @@ static void runAllTest(std::ostringstream* os[])
 	// tryCatch(&testLowExceptionGradeSign, os);
 	// tryCatch(&testBureaucratExceptionLow, os);
 	// tryCatch(&emptyShrubberyForm, os);
-	tryCatch(&testExeShrubbery, os);
-	// tryCatch(&testFile, os);
+	// tryCatch(&testExeShrubbery, os);
+	tryCatch(&testFile, os);
 }
 
 static void printExeptions(std::ostringstream* os[6])

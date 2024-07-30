@@ -300,7 +300,19 @@ bool	isOnlySpaces(const std::string& str)
 		if (*it != ' ')
 			return false;
 	}
-	return true;
+	return (true);
+}
+
+std::string toUpperCase(std::string const& str)
+{
+	std::string upperCase(str);
+
+	for (size_t i = 0; i < str.size(); ++i)
+	{
+		if (std::islower(str[i]))
+			upperCase.replace(i, 1, 1, static_cast<char>(std::toupper(str[i])));
+	}
+	return (upperCase);
 }
 
 /**

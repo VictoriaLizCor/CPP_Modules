@@ -92,6 +92,7 @@ std::string	getColorShade(int eColor);
 std::string	setObjColor(int const& color);
 bool		checkInput(const std::string& str, int (*check_type)(int));
 bool		isOnlySpaces(const std::string& str);
+std::string toUpperCase(std::string const& str);
 size_t		maxStringLength(int fieldSize, std::string* arrayData);
 std::string	center(const std::string& s, std::string::size_type width);
 std::string	className(const std::string& str);

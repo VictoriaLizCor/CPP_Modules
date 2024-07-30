@@ -22,12 +22,10 @@ _fileName(fileName), _fileMode(mode), _file()
 {
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
-	if (DEBUG)
-	{
-		std::cout << getColorStr(getColorShade(BGRAY, 7), "PATH");
-		std::cout << getDirectory(fileName) << std::endl;
-	}
-	openFile();
+	if (!_fileName.empty() && _fileMode != 0)
+		openFile();
+	else
+		std::cout << getColorStr(FWHITE, "Waiting for file to be open...\n");
 }
 
 
@@ -67,24 +65,46 @@ Files::~Files()
 		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
 }
 
-std::string Files::getDirectory(std::string const& path)
+std::string Files::getPath(std::string const& path)
 {
-	// if (path.empty())
-	// 	return ("");
-	std::string tempFileName = "path.txt";
-	std::string command = "pwd > " + tempFileName;
-	system(command.c_str());
 
-	std::ifstream tempFile(tempFileName.c_str());
-	std::string currentDirectory;
-	if (tempFile.is_open())
+	std::stringstream ss;
+
+	ss << std::getenv(toUpperCase(path).c_str());
+	if ((DEBUG)) { std::cout << ss.str() + "\n"; }
+	if (!ss.str().empty())
+		return (ss.str());
+	else
 	{
-		std::getline(tempFile, currentDirectory);
-		tempFile.close();
+		std::cout << getColorStr(FLYELLOW, "Path not fount in ENV\n");
+		std::string tempFileName = "pathFile.txt";
+		std::string currentDirectory;
+		std::string command = "pwd > " + tempFileName;
+		int status = system(command.c_str());
+		if (status == 0)
+		{
+			std::ifstream tempFile(tempFileName.c_str());
+
+			if (tempFile.is_open())
+			{
+				std::getline(tempFile, currentDirectory);
+				tempFile.close();
+			}
+			std::remove(tempFileName.c_str());
+		}
+		else
+			std::cout << "Error in System '"<< command << "' execution";
+		ss.clear();
+		ss.str("");
+		if (checkFileStatus(ss) == 0)
+		{
+			std::cout << "Returning working directory\n";
+			return (currentDirectory);
+		}
+		return (currentDirectory + "/" + path);
 	}
-	std::remove(tempFileName.c_str());
-	return (currentDirectory + "/" + path);
 }
+
 /**
  * @brief Opens a file with the specified mode.
  *
@@ -98,9 +118,8 @@ void Files::openFile(std::ios_base::openmode mode)
 {
 	_fileMode = mode;
 	closeFile();
-	if (!_fileName.empty() && _fileMode != 0)
-		_file.open(_fileName.c_str(), mode);
-	fileIsOpen();
+	_file.open(_fileName.c_str(), mode);
+	fileInfo();
 }
 
 /**
@@ -115,7 +134,7 @@ void Files::openFile()
 {
 	closeFile();
 	_file.open(_fileName.c_str(), _fileMode);
-	fileIsOpen();
+	fileInfo();
 }
 /**
  * @brief Opens a file with the specified file name and mode.
@@ -131,7 +150,7 @@ void Files::openFile(const char* fileName, std::ios_base::openmode mode)
 	_fileMode = mode;
 	closeFile();
 	_file.open(_fileName.c_str(), mode);
-	fileIsOpen();
+	fileInfo();
 }
 /**
  * @brief Closes the file if it is open.
@@ -154,10 +173,9 @@ void Files::closeFile()
 
 void Files::write(std::stringstream const& buffer)
 {
+	// openFile()
 	_file << buffer.str();
 	closeFile();
-	if (DEBUG)
-		showContent();
 }
 
 /**
@@ -219,22 +237,15 @@ static void fileMode(std::ios_base::openmode& fileMode, std::stringstream& ss, i
  * The function uses the setColor function to colorize the output based on the
  * file mode.
  */
-void Files::fileIsOpen()
+void Files::fileInfo()
 {
 	std::stringstream ss;
 
-	if ((!_fileName.empty() && _fileMode != 0) && _file.is_open() == false)
-	{
-		ss << error("Failed to open the file " + _fileName, 0) << std::endl;
-		checkFileStatus(ss);
-		throw (FileError(ss.str()));
-	}
 	if (DEBUG)
 	{
 		std::stringstream s2;
 
-		ss << " open mode as: [ ";
-		printTitle("File " + _fileName + " Info", 30);
+		ss << "Opening mode as: [ ";
 		if (_fileMode == 0)
 			s2 << getColorStr(FWHITE, "Default");
 		else
@@ -242,7 +253,14 @@ void Files::fileIsOpen()
 			for (int i = 0; i < 6 ; ++i)
 				fileMode(_fileMode, s2, i);
 		}
-		std::cout << ss.str()<< s2.str() << " ]\n";
+		std::cout << ss.str() << s2.str() << " ]\n";
+	}
+	else if (_file.is_open() == false)
+	{
+		ss.str("");
+		ss << error("Failed to open file " + _fileName, 0) << std::endl;
+		checkFileStatus(ss);
+		throw (FileError("\n" + ss.str()));
 	}
 }
 
@@ -299,24 +317,33 @@ void Files::showContent()
 {
 	std::stringstream ss;
 
+	if (checkFileStatus(ss) == 0)
+		return ;
 	_file.clear();
 	openFile(std::ios::in);
+	printTitle("File '" + _fileName + "' Content", 30);
 	_file.seekg(0);
 	ss << _file.rdbuf();
+	printTitle("End of '" + _fileName + "' Content", 30);
 	std::cout << getColorStr(FGREEN, ss.str()) << std::endl;
 }
 
-void Files::checkFileStatus(std::stringstream& ss)
+bool Files::checkFileStatus(std::stringstream& ss)
 {
-	struct stat st;
+	struct stat	st;
+	bool		status = 0;
 
 	if(stat(_fileName.c_str(), &st) == 0)
 	{
 		access(_fileName.c_str(), R_OK) == -1 ? ss << error("No read permissions\n", 0) : ss << "";
 		access(_fileName.c_str(), W_OK) == -1 ? ss << error("No write permissions\n", 0) : ss << "";
+		status = 1;
 	}
 	else
-		ss << error("File does not exist\n", 0);
+		ss << getColorStr(FLRED, "file does not exist\n");
+	if (DEBUG)
+		std::cerr << ss.str() + "\n";
+	return (status);
 }
 
 std::string Files::getInfo()
