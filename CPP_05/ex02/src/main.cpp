@@ -144,7 +144,7 @@ static void testFile()
 {
 	{
 		nl(1);
-		Files f("test", std::ios::in);
+		Files f("x", std::ios::in);
 		// std::cout << getColorStr(BGRAY, "PATH:") << "\n";
 		// std::cout << " " << f.getPath("home") << std::endl;
 		// std::cout << f.getPath("home") << std::endl;

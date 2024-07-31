@@ -6,7 +6,7 @@
 /*   By: lilizarr <lilizarr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 17:09:22 by lilizarr          #+#    #+#             */
-/*   Updated: 2024/07/31 10:52:46 by lilizarr         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:32:14 by lilizarr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ class Files
 		void		openFile(const char* fileName, std::ios_base::openmode mode);
 		std::string	getPath(std::string const& path);
 		bool		checkEnv(std::string const& path, std::stringstream& ss);
-		bool		checkDirectoryStatus(std::string const& path, std::stringstream& ss);
-		bool		checkFileStatus(std::stringstream& ss);
+		bool		checkTargetStatus(std::string const& path, std::stringstream& ss);
 		void		write(std::stringstream const& buffer);
 		void		closeFile(void);
 		void		copyFile(Files& in);

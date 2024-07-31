@@ -24,11 +24,15 @@ _fileName(fileName), _fileMode(mode), _file()
 	if (!_fileName.empty() && _fileMode != 0)
 	{
 		std::stringstream ss;
-		if (!checkFileStatus(ss))
-		{
-			fileInfo();
-			throw(FileError(ss.str()));
-		}
+		bool status = checkTargetStatus(_fileName, ss);
+
+		fileInfo();
+		if (ss.str().find("does not exist") != std::string::npos)
+			status = 0;
+		if (ss.str().find("is a Directory") != std::string::npos)
+			status = 0;
+		if (!status)
+			throw(FileError(getColorStr(FRED, ss.str())));
 		openFile();
 	}
 	else
@@ -341,7 +345,7 @@ void Files::showContent()
 {
 	std::stringstream ss;
 
-	if (checkFileStatus(ss) == 0)
+	if (checkTargetStatus(_fileName, ss) == 0)
 		return ;
 	_file.clear();
 	openFile(std::ios::in);
@@ -352,43 +356,27 @@ void Files::showContent()
 	std::cout << getColorStr(FGREEN, ss.str()) << std::endl;
 }
 
-bool Files::checkDirectoryStatus(std::string const& path, std::stringstream& ss)
+bool Files::checkTargetStatus(std::string const& target, std::stringstream& ss)
 {
 	struct stat st;
+	std::string strTarget("Target '" + target + "' ");
+	bool isDirectory = false;
 	bool status = false;
 
-	if (stat(path.c_str(), &st) == 0)
+	if (stat(target.c_str(), &st) == 0)
 	{
-		if (access(path.c_str(), R_OK) == -1)
-			ss << "No read permissions\n";
-		if (access(path.c_str(), W_OK) == -1)
-			ss << "No write permissions\n";
-		status = S_ISDIR(st.st_mode);
+		if (access(target.c_str(), R_OK) == -1)
+			ss << strTarget << "has no reading permissions\n";
+		if (access(target.c_str(), W_OK) == -1)
+			ss << strTarget << "has no writing permissions\n";
+		isDirectory = S_ISDIR(st.st_mode);
+		status = true;
 	}
-	if (status == 0)
-		ss << "Directory does not exist\n";
-	debug(DEFAULT, ss.str() + "\n");
-	return (status);
-}
-
-bool Files::checkFileStatus(std::stringstream &ss)
-{
-	struct stat	st;
-	bool		status = 0;
-
-	if(stat(_fileName.c_str(), &st) == 0)
-	{
-		if (access(_fileName.c_str(), R_OK) == -1)
-			ss << "No read permissions\n";
-		if (access(_fileName.c_str(), W_OK) == -1)
-			ss << "No write permissions\n";
-		status = !checkDirectoryStatus(_fileName, ss);
-	}
-	if (status == 0)
-	{
-		ss << getColorStr(FLRED, "File '" + _fileName);
-		ss << getColorStr(FLRED, "' does not exist or it is a Directory\n");
-	}
+	
+	if (!status)
+		ss << strTarget << "does not exist";
+	else if (isDirectory)
+		ss << strTarget << "is a Directory";
 	return (status);
 }
 
