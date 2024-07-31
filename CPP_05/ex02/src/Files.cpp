@@ -20,12 +20,19 @@
 Files::Files(std::string const& fileName, std::ios_base::openmode mode):
 _fileName(fileName), _fileMode(mode), _file()
 {
-	if (DEBUG)
-		std::cout << *this << getColorStr(FGRAY, " was Created\n");
+	out(std::cout << *this << getColorStr(FGRAY, " was Created"));
 	if (!_fileName.empty() && _fileMode != 0)
+	{
+		std::stringstream ss;
+		if (!checkFileStatus(ss))
+		{
+			fileInfo();
+			throw(FileError(ss.str()));
+		}
 		openFile();
+	}
 	else
-		std::cout << getColorStr(FWHITE, "Waiting for file to be open...\n");
+		debug(FWHITE, "Waiting for file to be open...\n");
 }
 
 
@@ -61,22 +68,104 @@ Files::Files(Files& file): _fileName(file._fileName + "_cpy"), _file()
 Files::~Files()
 {
 	closeFile();
-	if (DEBUG)
-		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
+	out(std::cout << *this << getColorStr(FGRAY, " was Destroyed"));
+}
+
+/**
+ * @brief Opens a file with the specified file name and mode.
+ *
+ * This function first closes any previously opened file, then attempts to open
+ * a new file with the name and mode stored in the _fileName and _fileMode
+ * member variables, respectively. After opening the file, it checks if the file
+ * is successfully opened.
+ */
+void Files::openFile()
+{
+	closeFile();
+	printTitle("Opening", 20);
+	_file.open(_fileName.c_str(), _fileMode);
+	printTitle("Info", 20);
+	fileInfo();
+}
+/**
+ * @brief Opens a file with the specified file name and mode.
+ *
+ * This function first closes any previously opened file, then attempts to open
+ * a new file with the name and mode stored in the _fileName and _fileMode
+ * member variables, respectively. After opening the file, it checks if the file
+ * is successfully opened.
+ */
+void Files::openFile(const char* fileName, std::ios_base::openmode mode)
+{
+	_fileName = fileName;
+	_fileMode = mode;
+	closeFile();
+	printTitle("Opening", 20);
+	_file.open(_fileName.c_str(), mode);
+	printTitle("Info", 20);
+	fileInfo();
+}
+
+/**
+ * @brief Opens a file with the specified mode.
+ *
+ * This function opens a file with the specified mode. If a file is already
+ * open, it will be closed before opening the new file.
+ *
+ * @param mode The mode to open the file in (e.g., std::ios_base::in,
+ * std::ios_base::out, std::ios_base::app, etc.).
+ */
+void Files::openFile(std::ios_base::openmode mode)
+{
+	_fileMode = mode;
+	closeFile();
+	printTitle("Opening", 20);
+	_file.open(_fileName.c_str(), mode);
+	printTitle("Info", 20);
+	fileInfo();
+}
+
+/**
+ * @brief Closes the file if it is open.
+ * 
+ * This function checks if the file is open and closes it if it is. 
+ * If the file is not open, this function does nothing.
+ */
+void Files::closeFile()
+{
+	if (this->_file.is_open())
+	{
+		checkStreamFlags(*this);
+		_file.clear();
+		this->_file.close();
+		if (this->_file.fail())
+			throw (FileError(" Failed to close the file " + this->_fileName));
+		std::cout << getColorStr(FGRAY, "File " + this->_fileName + " closed successfully.") << std::endl;
+	}
+	else
+		std::cout << "File not open\n";
+}
+bool Files::checkEnv(std::string const& path, std::stringstream& ss)
+{
+	ss << std::getenv(toUpperCase(path).c_str());
+	if (ss.str().empty())
+	{
+		debug(FLYELLOW, "Path not fount in ENV\n");
+		return (0);
+	}
+	debug(DEFAULT, std::string(toUpperCase(path) + ":" + ss.str() + "\n"));
+	return (1);
+	
 }
 
 std::string Files::getPath(std::string const& path)
 {
-
 	std::stringstream ss;
 
-	ss << std::getenv(toUpperCase(path).c_str());
-	if ((DEBUG)) { std::cout << ss.str() + "\n"; }
-	if (!ss.str().empty())
+	if (checkEnv(path, ss))
 		return (ss.str());
 	else
 	{
-		std::cout << getColorStr(FLYELLOW, "Path not fount in ENV\n");
 		std::string tempFileName = "pathFile.txt";
 		std::string currentDirectory;
 		std::string command = "pwd > " + tempFileName;
@@ -93,83 +182,16 @@ std::string Files::getPath(std::string const& path)
 			std::remove(tempFileName.c_str());
 		}
 		else
-			std::cout << "Error in System '"<< command << "' execution";
-		ss.clear();
-		ss.str("");
-		if (checkFileStatus(ss) == 0)
+			debug(FRED, "Error in System '" + command + "' execution");
+		if (path.empty())
 		{
-			std::cout << "Returning working directory\n";
+			debug(DEFAULT, "Returning working directory:\n");
 			return (currentDirectory);
 		}
 		return (currentDirectory + "/" + path);
 	}
 }
 
-/**
- * @brief Opens a file with the specified mode.
- *
- * This function opens a file with the specified mode. If a file is already
- * open, it will be closed before opening the new file.
- *
- * @param mode The mode to open the file in (e.g., std::ios_base::in,
- * std::ios_base::out, std::ios_base::app, etc.).
- */
-void Files::openFile(std::ios_base::openmode mode)
-{
-	_fileMode = mode;
-	closeFile();
-	_file.open(_fileName.c_str(), mode);
-	fileInfo();
-}
-
-/**
- * @brief Opens a file with the specified file name and mode.
- *
- * This function first closes any previously opened file, then attempts to open
- * a new file with the name and mode stored in the _fileName and _fileMode
- * member variables, respectively. After opening the file, it checks if the file
- * is successfully opened.
- */
-void Files::openFile()
-{
-	closeFile();
-	_file.open(_fileName.c_str(), _fileMode);
-	fileInfo();
-}
-/**
- * @brief Opens a file with the specified file name and mode.
- *
- * This function first closes any previously opened file, then attempts to open
- * a new file with the name and mode stored in the _fileName and _fileMode
- * member variables, respectively. After opening the file, it checks if the file
- * is successfully opened.
- */
-void Files::openFile(const char* fileName, std::ios_base::openmode mode)
-{
-	_fileName = fileName;
-	_fileMode = mode;
-	closeFile();
-	_file.open(_fileName.c_str(), mode);
-	fileInfo();
-}
-/**
- * @brief Closes the file if it is open.
- * 
- * This function checks if the file is open and closes it if it is. 
- * If the file is not open, this function does nothing.
- */
-void Files::closeFile()
-{
-	if (this->_file.is_open())
-	{
-		checkStreamFlags(*this);
-		_file.clear();
-		this->_file.close();
-		if (!this->_file.good())
-			throw (FileError(" Failed to close the file " + this->_fileName));
-		std::cout << getColorStr(FGRAY, "File " + this->_fileName + " closed successfully.") << std::endl;
-	}
-}
 
 void Files::write(std::stringstream const& buffer)
 {
@@ -245,6 +267,7 @@ void Files::fileInfo()
 	{
 		std::stringstream s2;
 
+		ss << "FileName: ['" << _fileName << "']\n";
 		ss << "Opening mode as: [ ";
 		if (_fileMode == 0)
 			s2 << getColorStr(FWHITE, "Default");
@@ -255,12 +278,13 @@ void Files::fileInfo()
 		}
 		std::cout << ss.str() << s2.str() << " ]\n";
 	}
-	else if (_file.is_open() == false)
+	if (_file.fail())
 	{
+		ss.clear();
 		ss.str("");
 		ss << error("Failed to open file " + _fileName, 0) << std::endl;
-		checkFileStatus(ss);
 		throw (FileError("\n" + ss.str()));
+		debug(FRED, ss.str());
 	}
 }
 
@@ -328,21 +352,43 @@ void Files::showContent()
 	std::cout << getColorStr(FGREEN, ss.str()) << std::endl;
 }
 
-bool Files::checkFileStatus(std::stringstream& ss)
+bool Files::checkDirectoryStatus(std::string const& path, std::stringstream& ss)
+{
+	struct stat st;
+	bool status = false;
+
+	if (stat(path.c_str(), &st) == 0)
+	{
+		if (access(path.c_str(), R_OK) == -1)
+			ss << "No read permissions\n";
+		if (access(path.c_str(), W_OK) == -1)
+			ss << "No write permissions\n";
+		status = S_ISDIR(st.st_mode);
+	}
+	if (status == 0)
+		ss << "Directory does not exist\n";
+	debug(DEFAULT, ss.str() + "\n");
+	return (status);
+}
+
+bool Files::checkFileStatus(std::stringstream &ss)
 {
 	struct stat	st;
 	bool		status = 0;
 
 	if(stat(_fileName.c_str(), &st) == 0)
 	{
-		access(_fileName.c_str(), R_OK) == -1 ? ss << error("No read permissions\n", 0) : ss << "";
-		access(_fileName.c_str(), W_OK) == -1 ? ss << error("No write permissions\n", 0) : ss << "";
-		status = 1;
+		if (access(_fileName.c_str(), R_OK) == -1)
+			ss << "No read permissions\n";
+		if (access(_fileName.c_str(), W_OK) == -1)
+			ss << "No write permissions\n";
+		status = !checkDirectoryStatus(_fileName, ss);
 	}
-	else
-		ss << getColorStr(FLRED, "file does not exist\n");
-	if (DEBUG)
-		std::cerr << ss.str() + "\n";
+	if (status == 0)
+	{
+		ss << getColorStr(FLRED, "File '" + _fileName);
+		ss << getColorStr(FLRED, "' does not exist or it is a Directory\n");
+	}
 	return (status);
 }
 

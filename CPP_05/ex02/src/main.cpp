@@ -144,11 +144,11 @@ static void testFile()
 {
 	{
 		nl(1);
-		Files f;
-		// std::cout << getColorStr(getColorShade(BGRAY, 7), "PATH:");
+		Files f("test", std::ios::in);
+		// std::cout << getColorStr(BGRAY, "PATH:") << "\n";
 		// std::cout << " " << f.getPath("home") << std::endl;
-		
-		std::cout << f.getPath("") << std::endl;
+		// std::cout << f.getPath("home") << std::endl;
+		// std::cout << f.getPath("") << std::endl;
 		// f.openFile();
 		std::cout << "------\n";
 	}
@@ -234,7 +234,7 @@ static void runAllTest(std::ostringstream* os[])
 	tryCatch(&testFile, os);
 }
 
-static void printExeptions(std::ostringstream* os[6])
+static void printExeptions(std::ostringstream* os[])
 {
 	bool seed = 0;
 

@@ -78,7 +78,8 @@ typedef s_coloredName t_Name;
 
 std::string error(std::string str, bool bold);
 void nl(size_t newLines);
-void 		coutnl(std::ostream& os);
+void		out(std::ostream& os);
+void		debug(int eColor, std::string str);
 std::string	toStr(int value);
 std::string	getColorFmt(int eColor);
 // std::string	getColorStr(t_Name const& name);

@@ -16,6 +16,12 @@ void nl(size_t newLines)
 		std::cout << std::endl;
 }
 
+void debug(int eColor, std::string str)
+{
+	if (DEBUG)
+		std::cerr << getColorStr(eColor, str);
+}
+
 /**
  * @brief Prints a string followed by a newline.
  *
@@ -29,9 +35,10 @@ void nl(size_t newLines)
  * printnl(std::cout, string1);
  * printnl(std::cout, string2);
  */
-void coutnl(std::ostream& os)
+void out(std::ostream& os)
 {
-	os << std::endl;
+	if (DEBUG)
+		os << std::endl;
 }
 
 
@@ -135,7 +142,9 @@ std::string	getColorStr(std::string const& eColor, std::string const& str)
  */
 std::string	getColorStr(int eColor, std::string const& str)
 {
-	return (getColorFmt(eColor) + str + std::string(C_END));
+	std::ostringstream os;
+	os << getColorFmt(eColor) << str << C_END;
+	return (os.str());
 }
 
 std::string	getColorStr(int eColor, lsi num)

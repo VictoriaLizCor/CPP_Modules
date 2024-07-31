@@ -12,7 +12,6 @@ PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir $(shell find $(PROJECT_ROOT) -name Makefile | sort)))
 CURRENT		:= $(shell basename $$PWD)
-DEBUG_PATH	:= debug
 #------ DEBUG FLAG ------#
 D			= 0
 #------ Sanitizer Flag ------#
@@ -23,12 +22,13 @@ MAKEFLAGS	+= --no-print-directory #--jobs
 VALGRIND	:= valgrind -s --leak-check=yes --show-leak-kinds=all -q 
 HELGRIND	:= valgrind -s --tool=helgrind
 MAC_LEAKS	:= leaks -atExit --
-BUILD_DIR	:= .build/
-DEBUG_DIR	:= $(NAME).dSYM
 
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 CXX			= g++
+DEBUG_PATH	:= debug
+BUILD_DIR	:= .build/
+DEBUG_DIR	:= $(NAME).dSYM
 OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
 #------ CODE FOR OBJECT FILES ------#
 # The `vpath` directive in a Makefile is used to specify a list of
