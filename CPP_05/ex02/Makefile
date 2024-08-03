@@ -12,6 +12,8 @@ PROJECT_ROOT:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../)
 GIT_REPO	:=$(abspath $(dir $(lastword $(MAKEFILE_LIST)))/../..)
 DIRS		:= $(abspath $(dir $(shell find $(PROJECT_ROOT) -name Makefile | sort)))
 CURRENT		:= $(shell basename $$PWD)
+DEBUG_PATH	:= debug
+BUILD_DIR	:= .build/
 #------ DEBUG FLAG ------#
 D			= 0
 #------ Sanitizer Flag ------#
@@ -26,8 +28,6 @@ MAC_LEAKS	:= leaks -atExit --
 #------ ADDING DEBUG FLAGS ------#
 ifneq ($(D), 0)
 CXX			= g++
-DEBUG_PATH	:= debug
-BUILD_DIR	:= .build/
 DEBUG_DIR	:= $(NAME).dSYM
 OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
 #------ CODE FOR OBJECT FILES ------#
@@ -100,7 +100,7 @@ endif
 .PHONY: clean fclean re test val leaks
 
 clean:
-	@echo $(RED)
+	@echo;
 	@if [ -d "$(BUILD_DIR)" ]; then	\
 		rm -rf $(BUILD_DIR); 		\
 		printf "$(LF)🧹 $(P_RED) Clean $(P_YELLOW)$(NAME)'s Object files$(P_NC)\n"; \

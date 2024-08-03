@@ -20,21 +20,10 @@
 Files::Files(std::string const& fileName, std::ios_base::openmode mode):
 _fileName(fileName), _fileMode(mode), _file()
 {
-	out(std::cout << *this << getColorStr(FGRAY, " was Created"));
+	if (DEBUG)
+		std::cout << *this << getColorStr(FGRAY, " was Created\n");
 	if (!_fileName.empty() && _fileMode != 0)
-	{
-		std::stringstream ss;
-		bool status = checkTargetStatus(_fileName, ss);
-
-		fileInfo();
-		if (ss.str().find("does not exist") != std::string::npos)
-			status = 0;
-		if (ss.str().find("is a Directory") != std::string::npos)
-			status = 0;
-		if (!status)
-			throw(FileError(getColorStr(FRED, ss.str())));
 		openFile();
-	}
 	else
 		debug(FWHITE, "Waiting for file to be open...\n");
 }
@@ -72,7 +61,8 @@ Files::Files(Files& file): _fileName(file._fileName + "_cpy"), _file()
 Files::~Files()
 {
 	closeFile();
-	out(std::cout << *this << getColorStr(FGRAY, " was Destroyed"));
+	if (DEBUG)
+		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
 }
 
 /**
@@ -139,16 +129,14 @@ void Files::closeFile()
 {
 	if (this->_file.is_open())
 	{
-		checkStreamFlags(*this);
 		_file.clear();
 		this->_file.close();
 		if (this->_file.fail())
 			throw (FileError(" Failed to close the file " + this->_fileName));
 		std::cout << getColorStr(FGRAY, "File " + this->_fileName + " closed successfully.") << std::endl;
 	}
-	else
-		std::cout << "File not open\n";
 }
+
 bool Files::checkEnv(std::string const& path, std::stringstream& ss)
 {
 	ss << std::getenv(toUpperCase(path).c_str());
@@ -160,6 +148,14 @@ bool Files::checkEnv(std::string const& path, std::stringstream& ss)
 	debug(DEFAULT, std::string(toUpperCase(path) + ":" + ss.str() + "\n"));
 	return (1);
 	
+}
+
+std::streampos  Files::FileIsEmpty(std::fstream& file)
+{
+	file.seekg(0, std::ios::end);
+	std::streampos fileSize = file.tellg();
+
+	return (fileSize);
 }
 
 std::string Files::getPath(std::string const& path)
@@ -199,9 +195,14 @@ std::string Files::getPath(std::string const& path)
 
 void Files::write(std::stringstream const& buffer)
 {
-	// openFile()
-	_file << buffer.str();
-	closeFile();
+	if(_file.is_open())
+	{
+		_file.seekp(0, std::ios::end);
+		_file << buffer.str();
+		closeFile();
+	}
+	else
+		throw(FileError(error("'" + _fileName + "' file not Open", 0)));
 }
 
 /**
@@ -282,15 +283,19 @@ void Files::fileInfo()
 		}
 		std::cout << ss.str() << s2.str() << " ]\n";
 	}
-	if (_file.fail())
-	{
-		ss.clear();
-		ss.str("");
-		ss << error("Failed to open file " + _fileName, 0) << std::endl;
-		throw (FileError("\n" + ss.str()));
-		debug(FRED, ss.str());
-	}
+	ss.clear();
+	ss.str("");
+	checkStreamFlags(*this);
 }
+
+// 	if (status && ss.str().find("is a Directory") != std::string::npos)
+// 	{
+// 		status = 0;
+// 		throw(FileError(getColorStr(FRED, ss.str())));
+// 	}
+// 	if (ss.str().find("does not exist") != std::string::npos)
+// 		status = 0;
+// }
 
 /**
  * @brief Checks the status flags of a file stream.
@@ -311,19 +316,21 @@ void Files::checkStreamFlags(Files& file)
 {
 	std::stringstream ss;
 
-	if (DEBUG == 0)
-		return ;
 	if (!file._file.good())
 		std::cout << "*-----checkStreamFLAGS------" << std::endl;
 	if (file._file.fail())
-		ss << error("A I/O error has occurred in ", 0) << file._fileName << std::endl;
+		ss << error("A I/O error has occurred ", 0) << std::endl;
 	if (file._file.bad())
-		ss << error("A critical I/O error has occurred in ", 0) << file._fileName << std::endl;
+		ss << error("A critical I/O error has occurred: ", 0) << std::endl;
 	if (file._file.eof())
-		ss << error("End of file has been reached in ", 0) << file._fileName << std::endl;
-	std::cout << ss.str();
-	if (!file._file.good())
-		std::cout << "-----------*" << std::endl;
+		ss << error("End of file has been reached", 0) << std::endl;
+	checkTargetStatus(_fileName, ss);
+	if (ss.str().find("does not exist") != std::string::npos)
+		throw(FileError(getColorStr(FRED, ss.str())));
+	if (ss.str().find("is a Directory") != std::string::npos)
+	{
+		throw(FileError(getColorStr(FRED, "ERROR: " + ss.str())));
+	}
 }
 
 /**
@@ -345,8 +352,6 @@ void Files::showContent()
 {
 	std::stringstream ss;
 
-	if (checkTargetStatus(_fileName, ss) == 0)
-		return ;
 	_file.clear();
 	openFile(std::ios::in);
 	printTitle("File '" + _fileName + "' Content", 30);
@@ -356,10 +361,10 @@ void Files::showContent()
 	std::cout << getColorStr(FGREEN, ss.str()) << std::endl;
 }
 
-bool Files::checkTargetStatus(std::string const& target, std::stringstream& ss)
+void Files::checkTargetStatus(std::string const& target, std::stringstream& ss)
 {
 	struct stat st;
-	std::string strTarget("Target '" + target + "' ");
+	std::string strTarget(getColorFmt(FRED) + "Target '" + target + "' ");
 	bool isDirectory = false;
 	bool status = false;
 
@@ -372,12 +377,11 @@ bool Files::checkTargetStatus(std::string const& target, std::stringstream& ss)
 		isDirectory = S_ISDIR(st.st_mode);
 		status = true;
 	}
-	
 	if (!status)
 		ss << strTarget << "does not exist";
 	else if (isDirectory)
 		ss << strTarget << "is a Directory";
-	return (status);
+	ss << C_END;
 }
 
 std::string Files::getInfo()

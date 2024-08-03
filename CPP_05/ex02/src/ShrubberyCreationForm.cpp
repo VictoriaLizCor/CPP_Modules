@@ -44,6 +44,7 @@ static void writeTree(std::stringstream& buffer)
 	buffer << "⠀⠀⠀⠐⠛⠋⢯⣿⢏⠓⠀⣎⠏⠀⠲⠵⣎⡷⠎⠊⠃⠀⠀" << "\n";
 	buffer << "⠀⠀⠀⠀⠀⠀⠈⠉⠈⠀⠀⢽⡃⠀⠀⠀⠙⠁⠀⠀⠀⠀⠀" << "\n";
 	buffer << "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣷⣣⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀" << "\n";
+	buffer << "\n";
 }
 
 void ShrubberyCreationForm::execute(Bureaucrat const& executor) const
@@ -56,9 +57,10 @@ void ShrubberyCreationForm::execute(Bureaucrat const& executor) const
 		Files file(fileName);
 
 		file.getPath(_target);
+		file.openFile(std::ios::app);
 		writeTree(buffer);
-		// file.write(buffer);
-		// file.showContent();
+		file.write(buffer);
+		file.showContent();
 	}
 	catch(std::exception const &e)
 	{

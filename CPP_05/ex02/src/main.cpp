@@ -125,26 +125,29 @@
 // 	std::cout << "------\n";
 // }
 
-// static void testExeShrubbery()
-// {
-// 	{
-// 		ShrubberyCreationForm f2("home");
-// 		Bureaucrat	b2("BureaucratB", 1);
-// 		std::cout << "------\n";
-// 		printTitle("BureaucratB_TestSign", 40);
-// 		b2.signForm(f2);
-// 		printTitle("BureaucratB_Sign", 40);
-// 		// for (int i = 1; i <= 3 ; ++i)
-// 			b2.executeForm(f2);
-// 		std::cout << "------\n";
-// 	}
-// }
+static void testExeShrubbery()
+{
+	{
+		ShrubberyCreationForm f2("home");
+		Bureaucrat	b2("BureaucratB", 1);
+		std::cout << "------\n";
+		printTitle("BureaucratB_TestSign", 40);
+		b2.signForm(f2);
+		printTitle("BureaucratB_Sign", 40);
+		// for (int i = 1; i <= 3 ; ++i)
+			b2.executeForm(f2);
+		std::cout << "------\n";
+	}
+}
 
 static void testFile()
 {
 	{
 		nl(1);
-		Files f("x", std::ios::in);
+		// Files f1("in", std::ios::in);
+		// Files f2("inOut", std::ios::in | std::ios::out);
+		// Files f3("out", std::ios::out);
+		Files f4("test", std::ios::in);
 		// std::cout << getColorStr(BGRAY, "PATH:") << "\n";
 		// std::cout << " " << f.getPath("home") << std::endl;
 		// std::cout << f.getPath("home") << std::endl;
@@ -230,8 +233,8 @@ static void runAllTest(std::ostringstream* os[])
 	// tryCatch(&testLowExceptionGradeSign, os);
 	// tryCatch(&testBureaucratExceptionLow, os);
 	// tryCatch(&emptyShrubberyForm, os);
-	// tryCatch(&testExeShrubbery, os);
-	tryCatch(&testFile, os);
+	tryCatch(&testExeShrubbery, os);
+	// tryCatch(&testFile, os);
 }
 
 static void printExeptions(std::ostringstream* os[])

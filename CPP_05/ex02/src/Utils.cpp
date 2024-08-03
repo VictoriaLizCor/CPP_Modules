@@ -37,8 +37,14 @@ void debug(int eColor, std::string str)
  */
 void out(std::ostream& os)
 {
-	if (DEBUG)
+	if (DEBUG > 0)
 		os << std::endl;
+	else
+	{
+		os.flush();
+		os.clear();
+		os << std::endl;
+	}
 }
 
 
