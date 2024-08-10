@@ -31,7 +31,10 @@ class Files
 		std::string		getPath(std::string const& path);
 		bool			checkEnv(std::string const& path, std::stringstream& ss);
 		void			checkTargetStatus(std::string const& path, std::stringstream& ss);
-		std::streampos	FileIsEmpty(std::fstream& file);
+		std::streampos	contentSize(void);
+		bool			readLineInFile(std::string& line);
+		bool			readLineInFile(std::string& line, std::streampos& lastPosition);
+		bool			writeAtPosition(std::string const& data, std::streampos& position);
 		void			write(std::stringstream const& buffer);
 		void			closeFile(void);
 		void			copyFile(Files& in);

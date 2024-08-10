@@ -36,7 +36,7 @@ OBJS := $(addprefix $(BUILD_DIR), $(notdir $(SRC:%.cpp=%.o)))
 # prerequisites. 
 vpath %.cpp $(sort $(dir $(SRC)))
 DEPS		:= $(OBJS:.o=.d)
-DEPENDENCIES := $(shell find $(BUILD_DIR) -name '*.d')
+#DEPENDENCIES := $(shell find $(BUILD_DIR) -name '*.d')
 -include $(DEPS) # to include in compilation
 D_FLAGS		+= -O0 -g3 #-Og optimization + good debuggin experience
 # ASAN_OPTIONS=detect_leaks=1 # in case platform leaks detections is not enable

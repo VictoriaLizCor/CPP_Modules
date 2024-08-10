@@ -20,7 +20,8 @@ class ShrubberyCreationForm : public AForm
 		int					_instanceId;
 		std::string			_colorIdStr;
 
-		
+		void	plantTree(Files& file, std::stringstream& treeBuffer) const;
+
 	public:
 		explicit ShrubberyCreationForm(std::string const& target="Unknown");
 		ShrubberyCreationForm& operator=(ShrubberyCreationForm const& rhs);

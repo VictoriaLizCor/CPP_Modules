@@ -150,10 +150,10 @@ bool Files::checkEnv(std::string const& path, std::stringstream& ss)
 	
 }
 
-std::streampos  Files::FileIsEmpty(std::fstream& file)
+std::streampos  Files::contentSize(void)
 {
-	file.seekg(0, std::ios::end);
-	std::streampos fileSize = file.tellg();
+	_file.seekg(0, std::ios::end);
+	std::streampos fileSize = _file.tellg();
 
 	return (fileSize);
 }
@@ -192,12 +192,49 @@ std::string Files::getPath(std::string const& path)
 	}
 }
 
+bool Files::readLineInFile(std::string& line, std::streampos& lastPosition)
+{
+	if(!_file.is_open())
+	{
+		std::string msg;
+		msg = error("File " + _fileName + " is not open\n", 1);
+		throw (FileError(msg));
+	}
+	_file.seekp(lastPosition);
+	if (std::getline(_file, line))
+	{
+		lastPosition = (_file.tellg());
+		return (true);
+	}
+	if(_file.peek() == std::fstream::traits_type::eof())
+		return (false);
+	return (false);
+}
+
+bool Files::writeAtPosition(std::string const& data, std::streampos& position)
+{
+	if (!_file.is_open())
+	{
+		std::string msg;
+		msg = error("File " + _fileName + " is not open\n", 1);
+		throw (FileError(msg));
+	}
+	_file.clear();
+	_file.seekp(static_cast<std::streamoff>(position));
+	if (_file.fail())
+		return (false);
+	_file << data;
+	if (_file.fail())
+		return (false);
+	return (true);
+}
 
 void Files::write(std::stringstream const& buffer)
 {
 	if(_file.is_open())
 	{
-		_file.seekp(0, std::ios::end);
+		_file.clear();
+		_file.seekp(0, std::ios::beg);
 		_file << buffer.str();
 		closeFile();
 	}
