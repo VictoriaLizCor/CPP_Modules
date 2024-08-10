@@ -203,7 +203,7 @@ bool Files::readLineInFile(std::string& line, std::streampos& lastPosition)
 	_file.seekp(lastPosition);
 	if (std::getline(_file, line))
 	{
-		lastPosition = (_file.tellg());
+		lastPosition = _file.tellg();
 		return (true);
 	}
 	if(_file.peek() == std::fstream::traits_type::eof())
@@ -288,6 +288,11 @@ static void fileMode(std::ios_base::openmode& fileMode, std::stringstream& ss, i
 		ss << " | ";
 	
 	ss << tmp.str();
+}
+
+std::fstream& Files::getFile(void)
+{
+	return (_file);
 }
 /**
  * @brief Checks if a file is open and reports the file mode.

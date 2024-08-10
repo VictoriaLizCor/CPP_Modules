@@ -58,43 +58,85 @@ size_t countNewlines(const std::string& str)
 }
 
 // // Move to the end of the file
-//     file.seekg(0, std::ios::end);
+//	 file.seekg(0, std::ios::end);
 
-//     // Get the position of the last character
-//     std::streampos lastPos = file.tellg();
+//	 // Get the position of the last character
+//	 std::streampos lastPos = file.tellg();
 void ShrubberyCreationForm::plantTree(Files& file, std::stringstream& treeBuffer) const
 {
 	std::string			fileLine;
 	std::streampos		fileLinePos = 0;
 	std::string			treeLine;
-	std::stringstream	ss;
-
-	file.readLineInFile(fileLine, fileLinePos);
+	std::string*		buffer;
+	std::streampos		start = 0;
+	ssize_t				size = countNewlines(treeBuffer.str());
+	
+	buffer = readLinesBeforeEnd(file, size, start);
 	std::getline(treeBuffer, treeLine);
 	if (fileLine.length() == (treeLine.length() * 3))
 	{
-		fileLinePos = (countNewlines(treeLine)*(treeLine.length() + 1) * 3);
+		fileLinePos = (countNewlines(treeBuffer.str())*(treeLine.length() + 1) * 3);
+		std::cout << error("Changing line pos", 0) << std::endl;
+		std::cout << "Pos:" << fileLinePos << " "
+		<< fileLine.length()  << std::endl;
+		std::cout << "Pos:" << fileLinePos << " "
+		<< fileLine.length()  << std::endl;
+		printTitle("===", 20);
 	}
+	else
+		fileLinePos = 0;
 	treeBuffer.clear();
 	treeBuffer.seekg(0, std::ios::beg);
-	while (file.readLineInFile(fileLine, fileLinePos))
+	file.getFile().clear();
+	file.getFile().seekg(0, std::ios::beg);
+	// delete[] buffer;
+	if (fileLinePos == 0)
 	{
-		std::cout << "Pos:" << fileLinePos << " "
-		<< fileLine.length() << " "
-		<< fileLine << "-" << std::endl;
-		if (std::getline(treeBuffer, treeLine))
+		std::stringstream	ss;
+		while (file.readLineInFile(fileLine, fileLinePos))
 		{
-			fileLine += treeLine + "\n";
-			ss << fileLine;
-			// fileLinePos = static_cast<std::streamoff>(fileLine.length());
+			std::cout << "Pos:" << fileLinePos << " "
+			<< fileLine.length() << " "
+			<< fileLine << "-" << std::endl;
+			if (std::getline(treeBuffer, treeLine))
+			{
+				fileLine += treeLine + "\n";
+				ss << fileLine;
+			}
 		}
+		file.closeFile();
+		file.openFile( std::ios::out | std::ios::trunc);
+		file.write(ss);
 	}
-// if (!file.writeAtPosition(fileLine, fileLinePos))
-			// 	throw Files::FileError("Failed to write to file");
-	file.closeFile();
-	std::cout << ss.str();
-	file.openFile( std::ios::out | std::ios::trunc);
-	file.write(ss);
+	else
+	{
+		file.closeFile();
+		file.openFile( std::ios::app);
+		file.write(treeBuffer);
+
+	}
+}
+
+std::string* ShrubberyCreationForm::readLinesBeforeEnd(Files& file, size_t const& size, std::streampos& start) const
+{
+	if (!file.getFile().is_open())
+	{
+		std::cerr << "Failed to open the file: " << file << std::endl;
+		return;
+	}
+	std::string		line;
+	std::streampos	pos;
+	std::string* 	buffer = new std::string[size];
+	size_t			count = 0;
+	while (file.readLineInFile(line, pos))
+	{
+		buffer[count % size] = line;
+		count++;
+	}
+	file.getFile().close();
+	start = pos;
+	
+	// std::cout << buffer[(start + i) % numLines] << std::endl;
 }
 
 void ShrubberyCreationForm::execute(Bureaucrat const& executor) const

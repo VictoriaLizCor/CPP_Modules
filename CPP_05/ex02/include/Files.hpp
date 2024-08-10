@@ -24,6 +24,7 @@ class Files
 		explicit Files(std::string const& fileName = "", std::ios_base::openmode mode = static_cast<std::ios_base::openmode>(0));
 		Files(Files& file);
 		~Files();
+		std::fstream&	getFile(void);
 		void			fileInfo(void);
 		void			openFile(void);
 		void			openFile(std::ios_base::openmode mode);
