@@ -192,12 +192,27 @@ std::string Files::getPath(std::string const& path)
 	}
 }
 
+/**
+ * @brief Reads a line from the file starting at the given position.
+ *
+ * This function attempts to read a line from the file associated with
+ * this Files object. It starts reading from the position specified by
+ * lastPosition. If the file is not open, it throws a FileError.
+ *
+ * @param line Reference to a string where the read line will be
+ * stored.
+ * @param lastPosition Reference to a stream position indicating where
+ *        to start reading from.
+ * @return true if a line was successfully read, false if the end of
+ *         the file was reached.
+ * @throws FileError if the file is not open.
+ */
 bool Files::readLineInFile(std::string& line, std::streampos& lastPosition)
 {
 	if(!_file.is_open())
 	{
 		std::string msg;
-		msg = error("File " + _fileName + " is not open\n", 1);
+		msg = error("*File " + _fileName + " is not open\n", 1);
 		throw (FileError(msg));
 	}
 	_file.seekp(lastPosition);
@@ -211,6 +226,21 @@ bool Files::readLineInFile(std::string& line, std::streampos& lastPosition)
 	return (false);
 }
 
+/**
+ * @brief Writes data to the file at the specified position.
+ *
+ * This function writes the provided data string to the file
+ * associated with this Files object, starting at the given position.
+ * If the file is not open, it throws a FileError. The function
+ * ensures the file stream is clear before seeking to the position and
+ * writing the data.
+ *
+ * @param data The string data to be written to the file.
+ * @param position Reference to a stream position indicating where to
+ *        start writing in the file.
+ * @return true if the data was successfully written, false otherwise.
+ * @throws FileError if the file is not open.
+ */
 bool Files::writeAtPosition(std::string const& data, std::streampos& position)
 {
 	if (!_file.is_open())

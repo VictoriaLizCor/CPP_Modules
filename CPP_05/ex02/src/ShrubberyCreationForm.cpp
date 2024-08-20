@@ -73,10 +73,11 @@ void ShrubberyCreationForm::plantTree(Files& file, std::stringstream& treeBuffer
 	
 	buffer = readLinesBeforeEnd(file, size, start);
 	std::getline(treeBuffer, treeLine);
-	if (fileLine.length() == (treeLine.length() * 3))
+	if (buffer[size].length() >= (treeLine.length() * 3))
+	// if (fileLine.length() >= (treeLine.length() * 3))
 	{
-		fileLinePos = (countNewlines(treeBuffer.str())*(treeLine.length() + 1) * 3);
-		std::cout << error("Changing line pos", 0) << std::endl;
+		// fileLinePos = size * ((treeLine.length() + 1) * 3);
+		std::cout << error("Line too loong", 0) << std::endl;
 		std::cout << "Pos:" << fileLinePos << " "
 		<< fileLine.length()  << std::endl;
 		std::cout << "Pos:" << fileLinePos << " "
@@ -90,7 +91,17 @@ void ShrubberyCreationForm::plantTree(Files& file, std::stringstream& treeBuffer
 	file.getFile().clear();
 	file.getFile().seekg(0, std::ios::beg);
 	// delete[] buffer;
-	if (fileLinePos == 0)
+	if (!file.getFile().is_open())
+	{
+		std::cerr << "**Error: File is not open" << std::endl;
+		return;
+	}
+	std::cout << error("Changing line pos:", 0) << std::endl;
+	std::cout << "fileLinePos:" << fileLinePos << "\n" ;
+	// if (!fileLinePos)
+	std::cout << "buffer line size:" << buffer[size].length() << "\n" ;
+	std::cout << "tree line size" << ((treeLine.length()) * 3) << "\n" ;
+	if (buffer[0].length() < ((treeLine.length()) * 3))
 	{
 		std::stringstream	ss;
 		while (file.readLineInFile(fileLine, fileLinePos))
@@ -105,15 +116,20 @@ void ShrubberyCreationForm::plantTree(Files& file, std::stringstream& treeBuffer
 			}
 		}
 		file.closeFile();
+		// file.openFile( std::ios::app);
 		file.openFile( std::ios::out | std::ios::trunc);
 		file.write(ss);
 	}
 	else
 	{
+		std::cout << error("Pos != 0", 0) << std::endl;
+		std::cout << "Pos:" << fileLinePos << " "
+		<< fileLine.length()  << std::endl;
 		file.closeFile();
 		file.openFile( std::ios::app);
+		std::cout << "FILE\n";
+		// file.writeAtPosition(treeBuffer.str(), start);
 		file.write(treeBuffer);
-
 	}
 }
 
@@ -122,7 +138,7 @@ std::string* ShrubberyCreationForm::readLinesBeforeEnd(Files& file, size_t const
 	if (!file.getFile().is_open())
 	{
 		std::cerr << "Failed to open the file: " << file << std::endl;
-		return;
+		return (NULL);
 	}
 	std::string		line;
 	std::streampos	pos;
@@ -133,9 +149,9 @@ std::string* ShrubberyCreationForm::readLinesBeforeEnd(Files& file, size_t const
 		buffer[count % size] = line;
 		count++;
 	}
-	file.getFile().close();
+	// file.getFile().close(); ->> do not close
 	start = pos;
-	
+	return (buffer);
 	// std::cout << buffer[(start + i) % numLines] << std::endl;
 }
 
