@@ -150,12 +150,72 @@ bool Files::checkEnv(std::string const& path, std::stringstream& ss)
 	
 }
 
-std::streampos  Files::contentSize(void)
+/**
+ * @brief Calculate the size of the file content.
+ *
+ * This function seeks to the end of the file to determine its size
+ * and returns the size in bytes. It does not modify the file
+ * position indicator for any I/O operations that may follow.
+ *
+ * @return The size of the file in bytes.
+ */
+size_t  Files::contentSize(void)
 {
+	checkFileIsOpen();
 	_file.seekg(0, std::ios::end);
-	std::streampos fileSize = _file.tellg();
+	size_t fileSize = _file.tellg();
 
 	return (fileSize);
+}
+
+std::streampos Files::startAtRowBeforeEnd(int rowsBeforeEnd)
+{
+	int count = 0;
+	char ch;
+	size_t fileSize = contentSize();
+
+	for (size_t i = 1; i <= fileSize; ++i)
+	{
+		_file.seekg(-i, std::ios::end); // go to position with get
+		_file.get(ch);
+		if (ch == '\n')
+		{
+			++count;
+			if (count == rowsBeforeEnd + 1)
+				return _file.tellg();
+		}
+	}
+	return (std::streampos(0));
+}
+
+/**
+ * @brief Reads a line from the file starting at the given position.
+ *
+ * This function attempts to read a line from the file associated with
+ * this Files object. It starts reading from the position specified by
+ * lastPosition. If the file is not open, it throws a FileError.
+ *
+ * @param line Reference to a string where the read line will be
+ * stored.
+ * @param lastPosition Reference to a stream position indicating where
+ *		to start reading from.
+ * @return true if a line was successfully read, false if the end of
+ *		 the file was reached.
+ * @throws FileError if the file is not open.
+ */
+bool Files::readFileAfterLinePos(std::string& line, std::streampos& lastPosition)
+{
+	checkFileIsOpen();
+	_file.seekg(lastPosition, std::ios::beg);
+	// _file.seekg(lastPosition, std::ios::end);
+	if (std::getline(_file, line))
+	{
+		lastPosition = _file.tellg();
+		return (true);
+	}
+	if(_file.peek() == std::fstream::traits_type::eof())
+		return (false);
+	return (false);
 }
 
 std::string Files::getPath(std::string const& path)
@@ -192,22 +252,8 @@ std::string Files::getPath(std::string const& path)
 	}
 }
 
-/**
- * @brief Reads a line from the file starting at the given position.
- *
- * This function attempts to read a line from the file associated with
- * this Files object. It starts reading from the position specified by
- * lastPosition. If the file is not open, it throws a FileError.
- *
- * @param line Reference to a string where the read line will be
- * stored.
- * @param lastPosition Reference to a stream position indicating where
- *        to start reading from.
- * @return true if a line was successfully read, false if the end of
- *         the file was reached.
- * @throws FileError if the file is not open.
- */
-bool Files::readLineInFile(std::string& line, std::streampos& lastPosition)
+
+void Files::checkFileIsOpen()
 {
 	if(!_file.is_open())
 	{
@@ -215,17 +261,7 @@ bool Files::readLineInFile(std::string& line, std::streampos& lastPosition)
 		msg = error("*File " + _fileName + " is not open\n", 1);
 		throw (FileError(msg));
 	}
-	_file.seekp(lastPosition);
-	if (std::getline(_file, line))
-	{
-		lastPosition = _file.tellg();
-		return (true);
-	}
-	if(_file.peek() == std::fstream::traits_type::eof())
-		return (false);
-	return (false);
 }
-
 /**
  * @brief Writes data to the file at the specified position.
  *
@@ -237,23 +273,18 @@ bool Files::readLineInFile(std::string& line, std::streampos& lastPosition)
  *
  * @param data The string data to be written to the file.
  * @param position Reference to a stream position indicating where to
- *        start writing in the file.
+ *		start writing in the file.
  * @return true if the data was successfully written, false otherwise.
  * @throws FileError if the file is not open.
  */
-bool Files::writeAtPosition(std::string const& data, std::streampos& position)
+bool Files::writeAtPosition(std::stringstream const& buffer, std::streampos& position)
 {
-	if (!_file.is_open())
-	{
-		std::string msg;
-		msg = error("File " + _fileName + " is not open\n", 1);
-		throw (FileError(msg));
-	}
+	checkFileIsOpen();
 	_file.clear();
-	_file.seekp(static_cast<std::streamoff>(position));
+	_file.seekp(position);
 	if (_file.fail())
 		return (false);
-	_file << data;
+	_file << buffer.str();
 	if (_file.fail())
 		return (false);
 	return (true);
@@ -320,7 +351,7 @@ static void fileMode(std::ios_base::openmode& fileMode, std::stringstream& ss, i
 	ss << tmp.str();
 }
 
-std::fstream& Files::getFile(void)
+std::fstream& Files::getStream(void)
 {
 	return (_file);
 }
@@ -420,7 +451,7 @@ void Files::checkStreamFlags(Files& file)
  * If the DEBUG constant is set to 0, the function returns immediately without
  * checking the status flags.
  */
-void Files::showContent()
+void Files::showContent(int eColor)
 {
 	std::stringstream ss;
 
@@ -430,7 +461,9 @@ void Files::showContent()
 	_file.seekg(0);
 	ss << _file.rdbuf();
 	printTitle("End of '" + _fileName + "' Content", 30);
-	std::cout << getColorStr(FGREEN, ss.str()) << std::endl;
+	std::cout << getColorStr(eColor, ss.str()) << std::endl;
+	_file.clear();
+	_file.seekg(0);
 }
 
 void Files::checkTargetStatus(std::string const& target, std::stringstream& ss)

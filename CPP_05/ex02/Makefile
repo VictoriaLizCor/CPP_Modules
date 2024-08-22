@@ -99,7 +99,8 @@ endif
 
 .PHONY: clean fclean re test val leaks
 
-clean:
+
+clean: del
 	@echo;
 	@if [ -d "$(BUILD_DIR)" ]; then	\
 		rm -rf $(BUILD_DIR); 		\
@@ -108,13 +109,14 @@ clean:
 	@if [ -d "$(DEBUG_DIR)" ]; then	\
 		rm -rf $(DEBUG_DIR); 		\
 	fi
+	@printf  "\n$(P_NC)"
+
+del:
 	@files=$(shell find . -type f -name "*_shrubbery*"); \
 	if [ -n "$$files" ]; then \
 		printf "$(LF) 🧹 $(P_RED) Removing $(P_YELLOW)$$files$(P_NC)\n"; \
 		rm -rf $$files; \
 	fi
-
-	@printf  "\n$(P_NC)"
 
 fclean: clean
 	@if [ -f "$(NAME)" ]; then	\

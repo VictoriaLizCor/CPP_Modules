@@ -24,7 +24,7 @@ class Files
 		explicit Files(std::string const& fileName = "", std::ios_base::openmode mode = static_cast<std::ios_base::openmode>(0));
 		Files(Files& file);
 		~Files();
-		std::fstream&	getFile(void);
+		std::fstream&	getStream(void);
 		void			fileInfo(void);
 		void			openFile(void);
 		void			openFile(std::ios_base::openmode mode);
@@ -32,15 +32,17 @@ class Files
 		std::string		getPath(std::string const& path);
 		bool			checkEnv(std::string const& path, std::stringstream& ss);
 		void			checkTargetStatus(std::string const& path, std::stringstream& ss);
-		std::streampos	contentSize(void);
-		bool			readLineInFile(std::string& line);
-		bool			readLineInFile(std::string& line, std::streampos& lastPosition);
-		bool			writeAtPosition(std::string const& data, std::streampos& position);
+		size_t			contentSize(void);
+		
+		void			checkFileIsOpen(void);
+		bool			readFileAfterLinePos(std::string& line, std::streampos& lastPosition);
+		bool			writeAtPosition(std::stringstream const& buffer, std::streampos& position);
+		std::streampos	startAtRowBeforeEnd(int rowsBeforeEnd);
 		void			write(std::stringstream const& buffer);
 		void			closeFile(void);
 		void			copyFile(Files& in);
 		void			checkStreamFlags(Files& file);
-		void			showContent(void);
+		void			showContent(int eColor);
 		std::string		getInfo();
 		class FileError : public std::runtime_error
 		{
