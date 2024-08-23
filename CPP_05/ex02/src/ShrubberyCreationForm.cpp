@@ -46,6 +46,19 @@ static void tree(std::stringstream& buffer)
 	buffer << "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣷⣣⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀" << "\n";
 }
 
+static void tree2(std::stringstream& buffer)
+{
+	buffer << "       _-_         " << "\n";
+    buffer << "    /~~   ~~\\     " << "\n";
+    buffer << " /~~         ~~\\  " << "\n";
+    buffer << "{               }  " << "\n";
+    buffer << " \\  _-     -_  /  " << "\n";
+    buffer << "   ~  \\\\ //  ~   " << "\n";
+    buffer << "       | |         " << "\n";
+    buffer << "       | |         " << "\n";
+    buffer << "      // \\        " << "\n";
+}
+
 size_t countNewlines(const std::string& str)
 {
 	size_t count = 0;
@@ -66,19 +79,18 @@ void ShrubberyCreationForm::plantTree(Files& file, std::stringstream& treeBuffer
 	std::string			treeLine;
 	ssize_t				size = countNewlines(treeBuffer.str());
 	
-	file.showContent(FYELLOW);
 	std::getline(treeBuffer, treeLine);
 	fileLinePos = file.startAtRowBeforeEnd(size);
 	std::getline(file.getStream(), fileLine);
 	treeBuffer.clear();
 	treeBuffer.seekg(0, std::ios::beg);
-	// file.getStream().seekg(fileLinePos, std::ios::beg);
 	std::cout << "FileLinePos:" << fileLinePos << " FileLineLen:"
 	<< fileLine.length() << "-" << std::endl;
 	std::cout << "treeLineLen:" << (treeLine.length() * 3) << "-" << std::endl;
 	if (fileLine.length() < (treeLine.length() * 3) - 1)
 	{
 		std::stringstream	ss;
+		std::cout << getColorStr(FLGREEN, "less than three") << "\n";
 		while (file.readFileAfterLinePos(fileLine, fileLinePos))
 		{
 			std::cout << "Pos:" << fileLinePos << " "
@@ -86,27 +98,19 @@ void ShrubberyCreationForm::plantTree(Files& file, std::stringstream& treeBuffer
 			<< fileLine << "-" << std::endl;
 			if (std::getline(treeBuffer, treeLine))
 			{
-				fileLine += treeLine + "\n";
-				ss << fileLine;
+				ss << fileLine << treeLine << "\n";
 			}
 		}
-		file.closeFile();
-		file.openFile(std::ios::in | std::ios::out | std::ios::trunc);
-		fileLinePos = file.startAtRowBeforeEnd(size);
-		// file.openFile(std::ios::in | std::ios::out | std::ios::trunc);
-		// file.getStream().seekp(fileLinePos, std::ios::beg);
-		file.write(ss);
-		// file.getStream().seekg(fileLinePos, std::ios::beg);
-		// file.writeAtPosition(ss, fileLinePos);
+		file.openFile(std::ios::in | std::ios::out); // do not use trunc
+		fileLinePos = file.startAtRowBeforeEnd(size); // do not delete to use with writeAtPosition
+		std::cout << getColorStr(FLBLUE, "fileLinePos: ") << fileLinePos << " FileLineLen:"
+	<< fileLine.length() << "-" << std::endl;
+		file.writeAtPosition(ss, fileLinePos);
 	}
 	else
 	{
-		std::cout << error("Pos != 0", 0) << std::endl;
-		std::cout << "Pos:" << fileLinePos << " "
-		<< fileLine.length()  << std::endl;
 		file.closeFile();
-		file.openFile( std::ios::app);
-		std::cout << "FILE\n";
+		file.openFile(std::ios::app);
 		file.write(treeBuffer);
 	}
 }

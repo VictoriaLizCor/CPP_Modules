@@ -36,7 +36,7 @@ class Files
 		
 		void			checkFileIsOpen(void);
 		bool			readFileAfterLinePos(std::string& line, std::streampos& lastPosition);
-		bool			writeAtPosition(std::stringstream const& buffer, std::streampos& position);
+		void			writeAtPosition(std::stringstream const& buffer, std::streampos const& position);
 		std::streampos	startAtRowBeforeEnd(int rowsBeforeEnd);
 		void			write(std::stringstream const& buffer);
 		void			closeFile(void);

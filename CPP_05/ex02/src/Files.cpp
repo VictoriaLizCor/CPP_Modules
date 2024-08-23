@@ -112,9 +112,12 @@ void Files::openFile(const char* fileName, std::ios_base::openmode mode)
 void Files::openFile(std::ios_base::openmode mode)
 {
 	_fileMode = mode;
+	_file.clear();
 	closeFile();
 	printTitle("Opening", 20);
 	_file.open(_fileName.c_str(), mode);
+	checkFileIsOpen();
+	// _file.seekp(0, std::ios::beg); // neccesary?
 	printTitle("Info", 20);
 	fileInfo();
 }
@@ -135,6 +138,7 @@ void Files::closeFile()
 			throw (FileError(" Failed to close the file " + this->_fileName));
 		std::cout << getColorStr(FGRAY, "File " + this->_fileName + " closed successfully.") << std::endl;
 	}
+	this->_file.close();
 }
 
 bool Files::checkEnv(std::string const& path, std::stringstream& ss)
@@ -164,7 +168,8 @@ size_t  Files::contentSize(void)
 	checkFileIsOpen();
 	_file.seekg(0, std::ios::end);
 	size_t fileSize = _file.tellg();
-
+	_file.seekg(0, std::ios::beg);
+	_file.clear();
 	return (fileSize);
 }
 
@@ -173,7 +178,6 @@ std::streampos Files::startAtRowBeforeEnd(int rowsBeforeEnd)
 	int count = 0;
 	char ch;
 	size_t fileSize = contentSize();
-
 	for (size_t i = 1; i <= fileSize; ++i)
 	{
 		_file.seekg(-i, std::ios::end); // go to position with get
@@ -205,17 +209,19 @@ std::streampos Files::startAtRowBeforeEnd(int rowsBeforeEnd)
  */
 bool Files::readFileAfterLinePos(std::string& line, std::streampos& lastPosition)
 {
+	bool status = false;
 	checkFileIsOpen();
 	_file.seekg(lastPosition, std::ios::beg);
-	// _file.seekg(lastPosition, std::ios::end);
 	if (std::getline(_file, line))
 	{
 		lastPosition = _file.tellg();
-		return (true);
+		status = true;
 	}
-	if(_file.peek() == std::fstream::traits_type::eof())
-		return (false);
-	return (false);
+	else if(_file.peek() == std::fstream::traits_type::eof())
+		status = false;
+	_file.seekg(0, std::ios::beg);
+	// _file.clear();
+	return (status);
 }
 
 std::string Files::getPath(std::string const& path)
@@ -255,10 +261,14 @@ std::string Files::getPath(std::string const& path)
 
 void Files::checkFileIsOpen()
 {
+	std::string msg;
 	if(!_file.is_open())
-	{
-		std::string msg;
 		msg = error("*File " + _fileName + " is not open\n", 1);
+	if (_file.fail())
+		msg = error("*File " + _fileName + " failed\n", 1);
+	if (!msg.empty())
+	{
+		std::cout << msg;
 		throw (FileError(msg));
 	}
 }
@@ -277,30 +287,25 @@ void Files::checkFileIsOpen()
  * @return true if the data was successfully written, false otherwise.
  * @throws FileError if the file is not open.
  */
-bool Files::writeAtPosition(std::stringstream const& buffer, std::streampos& position)
+void Files::writeAtPosition(std::stringstream const& buffer, std::streampos const& position) // !! this is corropting the file at the begining
 {
 	checkFileIsOpen();
 	_file.clear();
-	_file.seekp(position);
-	if (_file.fail())
-		return (false);
+	_file.seekp(position, std::ios::beg);
 	_file << buffer.str();
-	if (_file.fail())
-		return (false);
-	return (true);
+	// _file.seekp(0, std::ios::beg);
+	fileInfo();
+	closeFile();
 }
 
 void Files::write(std::stringstream const& buffer)
 {
-	if(_file.is_open())
-	{
-		_file.clear();
-		_file.seekp(0, std::ios::beg);
-		_file << buffer.str();
-		closeFile();
-	}
-	else
-		throw(FileError(error("'" + _fileName + "' file not Open", 0)));
+	checkFileIsOpen();
+	_file.clear();
+	_file.seekp(0, std::ios::beg);
+	_file << buffer.str();
+	fileInfo();
+	closeFile();
 }
 
 /**
@@ -464,6 +469,10 @@ void Files::showContent(int eColor)
 	std::cout << getColorStr(eColor, ss.str()) << std::endl;
 	_file.clear();
 	_file.seekg(0);
+	{
+		size_t fileSize = contentSize();
+		std::cout << getColorStr(FLBLUE, "Filesize:") << fileSize << "\n";
+	}
 }
 
 void Files::checkTargetStatus(std::string const& target, std::stringstream& ss)
