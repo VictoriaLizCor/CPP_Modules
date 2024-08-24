@@ -1,174 +1,223 @@
 #include "Bureaucrat.hpp"
 #include "ShrubberyCreationForm.hpp"
+#include "RobotomyRequestForm.hpp"
+#include "PresidentialPardonForm.hpp"
 #include "Utils.hpp"
 
-// static void testShrubberyBasic()
-// {
-// 	printTitle("testShrubberyBasic", 60);
-// 	ShrubberyCreationForm f;
-// 	{
-// 		std::cout << "------\n";
-// 		Bureaucrat	b1("BureaucratA", 146);
+static void testShrubberyBasic()
+{
+	printTitle("testShrubberyBasic", 60);
+	ShrubberyCreationForm f;
+	{
+		std::cout << "------\n";
+		Bureaucrat	b1("BureaucratA", 146);
 		
-// 		b1.signForm(f);
-// 		printTitle("BureaucratIncrement", 40);
-// 		b1.incrementGrade();
-// 		b1.signForm(f);
-// 		{
-// 			std::cout << "\n";
-// 			printTitle("BureaucratB", 40);
-// 			Bureaucrat	b2("BureaucratB", 138);
-// 			printTitle("BureaucratB_TestGrade", 40);
-// 			b2.executeForm(f);
-// 		}
-// 		{
-// 			ShrubberyCreationForm f2;
-// 			Bureaucrat	b2("BureaucratB", 1);
-// 			printTitle("BureaucratB_TestSign", 40);
-// 			b2.executeForm(f2);
-// 			printTitle("BureaucratB_Sign", 40);
-// 			b2.signForm(f2);
-// 			b2.executeForm(f2);
-// 			std::cout << "------\n";
-// 		}
-// 		std::cout << "------\n";
-// 	}
-// 	std::cout << "\n\n";
-// }
+		b1.signForm(f);
+		printTitle("BureaucratIncrement", 40);
+		b1.incrementGrade();
+		b1.signForm(f);
+		{
+			std::cout << "\n";
+			printTitle("BureaucratB", 40);
+			Bureaucrat	b2("BureaucratB", 138);
+			printTitle("BureaucratB_TestGrade", 40);
+			b2.executeForm(f);
+		}
+		{
+			ShrubberyCreationForm f2;
+			Bureaucrat	b2("BureaucratB", 1);
+			printTitle("BureaucratB_TestSign", 40);
+			b2.executeForm(f2);
+			printTitle("BureaucratB_Sign", 40);
+			b2.signForm(f2);
+			b2.executeForm(f2);
+			std::cout << "------\n";
+		}
+		std::cout << "------\n";
+	}
+	std::cout << "\n\n";
+}
 
-// static void testManyForms()
-// {
-// 	printTitle("testManyForms", 60);
-// 	{
-// 		Bureaucrat	test("Bureaucrat", 6);
-// 		AForm f1("Anmeldung", 6, 10);
-// 		AForm f2("Visa", 2, 5);
-// 		std::cout << "------\n";
-// 		test.signForm(f1);
-// 		std:: cout << "\n";
-// 		printTitle("BureaucratIncrement", 27);
-// 		while (test.getGrade() > f2.getMinimumGradeToSign())
-// 		{
-// 			test.incrementGrade();
-// 			test.signForm(f2);
-// 		}
-// 		std::cout << "------\n";
-// 	}
-// 	std::cout << "\n\n";
-// }
+void	testBureaucratExceptionLow(void)
+{
+	printTitle("testBureaucratExceptionLow", 60);
+	{Bureaucrat	Low("Low", 151);}
+}
 
-// void	testBureaucratExceptionLow(void)
-// {
-// 	printTitle("testBureaucratExceptionLow", 60);
-// 	{Bureaucrat	Low("Low", 151);}
-// }
+void	testBureaucratExceptionHigh(void)
+{
+	printTitle("testBureaucratExceptionHigh", 60);
+	{Bureaucrat	High("High", 0);}
+}
 
-// static void testExceptionGradeToExecute()
-// {
-// 	printTitle("testExceptionGradeToExecute", 60);
-// 	{AForm f2("", 51, 50);}
-// }
+static void testExceptionBureaucrat() //4
+{
+	printTitle("testExceptionBureaucrat", 60);
+	{
+		Bureaucrat	test("Bureaucrat", 6);
+		PresidentialPardonForm f2("Trillian");
+		std::cout << "------\n";
+		test.signForm(f2);
+		std:: cout << "\n";
+		printTitle("BureaucratIncrement", 27);
+		while (test.getGrade() >= f2.getMinimumGradeToSign())
+		{
+			test.incrementGrade();
+			test.signForm(f2);
+			test.incrementGrade();
+		}
+		std::cout << "------\n";
+	}
+	std::cout << "\n\n";
+}
 
-// static void testLowExceptionGradeSign()
-// {
-// 	printTitle("testLowExceptionGradeSign", 60);
-// 	{AForm f2("", 150, 151);}
-// }
-
-// static void testHighExceptionGradeSign()
-// {
-// 	printTitle("testHighExceptionGradeSign", 60);
-// 	{AForm f2("", 0, 150);}
-// }
-
-// static void testExceptionBureaucrat() //4
-// {
-// 	printTitle("testExceptionBureaucrat", 60);
-// 	{
-// 		Bureaucrat	test("Bureaucrat", 6);
-// 		AForm f2("Visa", 2, 5);
-// 		std::cout << "------\n";
-// 		test.signForm(f2);
-// 		std:: cout << "\n";
-// 		printTitle("BureaucratIncrement", 27);
-// 		while (test.getGrade() >= f2.getMinimumGradeToSign())
-// 		{
-// 			test.incrementGrade();
-// 			test.signForm(f2);
-// 			test.incrementGrade();
-// 		}
-// 		std::cout << "------\n";
-// 	}
-// 	std::cout << "\n\n";
-// }
-
-// static void emptyBureaucrat()
-// {
-// 	printTitle("emptyBureaucrat", 60);
-// 	{Bureaucrat	test;}
-// 	std::cout << "------\n";
-// 	{Bureaucrat	test("Buro", 30);}
-// 	std::cout << "------\n";
-// 	{Bureaucrat	test("", 2);}
-// 	std::cout << "------\n";
-// }
+static void emptyBureaucrat()
+{
+	printTitle("emptyBureaucrat", 60);
+	{Bureaucrat	test;}
+	std::cout << "------\n";
+	{Bureaucrat	test("Buro", 30);}
+	std::cout << "------\n";
+	{Bureaucrat	test("", 2);}
+	std::cout << "------\n";
+}
 
 
-// static void emptyShrubberyForm()
-// {
-// 	printTitle("emptyForm", 60);
-// 	{ShrubberyCreationForm	test;}
-// 	std::cout << "------\n";
-// 	{ShrubberyCreationForm	test("target");}
-// 	std::cout << "------\n";
-// 	{ShrubberyCreationForm	test("");}
-// 	std::cout << "------\n";
-// }
+static void emptyShrubberyForm()
+{
+	printTitle("emptyForm", 60);
+	{ShrubberyCreationForm	test;}
+	std::cout << "------\n";
+	{ShrubberyCreationForm	test("target");}
+	std::cout << "------\n";
+	{ShrubberyCreationForm	test("");}
+	std::cout << "------\n";
+}
 
 static void testExeShrubbery()
 {
+	printTitle("testExeShrubbery START", 60);
 	{
-		ShrubberyCreationForm f2("home");
-		Bureaucrat	b2("BureaucratB", 1);
+		ShrubberyCreationForm f1("home");
+		Bureaucrat	b1("BureaucratB", 1);
 		std::cout << "------\n";
 		printTitle("BureaucratB_TestSign", 40);
-		b2.signForm(f2);
-		printTitle("BureaucratB_Sign", 40);
-		// for (int i = 1; i <= 3 ; ++i)
-			b2.executeForm(f2);
+		for (int i = 1; i <= 3 ; ++i)
+			b1.signForm(f1);
+		printTitle("BureaucratB_EXECUTE", 40);
+		for (int i = 1; i <= 3 ; ++i)
+			b1.executeForm(f1);
 		std::cout << "------\n";
 	}
+	printTitle("testExeShrubbery DONE", 60);
+	nl(2);
+	printTitle("testExeShrubbery2 START", 60);
+	{
+		ShrubberyCreationForm f1("home");
+		Bureaucrat	b1("BureaucratB", 1);
+		std::cout << "------\n";
+		printTitle("BureaucratB_TestExecuteBeforeSign", 40);
+		b1.executeForm(f1);
+		b1.signForm(f1);
+		b1.executeForm(f1);
+		std::cout << "------\n";
+	}
+	printTitle("testExeShrubbery2 DONE", 60);
 }
 
+static void testExeRobotomy()
+{
+	printTitle("testExeRobotomy1 START", 60);
+	{
+		RobotomyRequestForm f1("Roboto");
+		Bureaucrat	b1("BureaucratB", 1);
+		std::cout << "------\n";
+		printTitle("BureaucratB_TestSign", 40);
+		for (int i = 1; i <= 3 ; ++i)
+			b1.signForm(f1);
+		printTitle("BureaucratB_EXECUTE", 40);
+		for (int i = 1; i <= 3 ; ++i)
+			b1.executeForm(f1);
+		std::cout << "------\n";
+	}
+	printTitle("testExeRobotomy1 DONE", 60);
+	nl(2);
+	printTitle("testExeRobotomy2 START", 60);
+	{
+		RobotomyRequestForm f1("Roboto");
+		Bureaucrat	b1("BureaucratB", 73);
+		std::cout << "------\n";
+		printTitle("BureaucratB_TestExecuteBeforeSign", 40);
+		b1.executeForm(f1);
+		b1.signForm(f1);
+		b1.executeForm(f1);
+		std::cout << "------\n";
+	}
+	printTitle("testExeRobotomy2 DONE", 60);
+	nl(2);
+	printTitle("testExeRobotomy3 START", 60);
+	{
+		RobotomyRequestForm f1("Roboto");
+		Bureaucrat	b1("BureaucratB", 46);
+		std::cout << "------\n";
+		printTitle("BureaucratB_TestExecuteBeforeSign", 40);
+		b1.executeForm(f1);
+		b1.signForm(f1);
+		b1.executeForm(f1);
+		std::cout << "------\n";
+	}
+	printTitle("testExeRobotomy3 DONE", 60);
+}
+
+static void testExePresi()
+{
+	printTitle("testExePresi START", 60);
+	{
+		PresidentialPardonForm f1("Trillian");
+		Bureaucrat	b1("BureaucratB", 6);
+		std::cout << "------\n";
+		printTitle("BureaucratB_TestSign", 40);
+		b1.executeForm(f1);
+		for (int i = 1; i <= 3 ; ++i)
+			b1.signForm(f1);
+		printTitle("BureaucratB_EXECUTE", 40);
+		b1.executeForm(f1);
+		printTitle("BureaucratIncrement", 27);
+		b1.incrementGrade();
+		for (int i = 1; i <= 3 ; ++i)
+			b1.executeForm(f1);
+		std::cout << "------\n";
+	}
+	printTitle("testExePresi DONE", 60);
+}
 static void testFile()
 {
 	{
 		nl(1);
-		// Files f1("in", std::ios::in);
-		// Files f2("inOut", std::ios::in | std::ios::out);
-		// Files f3("out", std::ios::out);
+		Files f1("in", std::ios::in);
+		Files f2("inOut", std::ios::in | std::ios::out);
+		Files f3("out", std::ios::out);
 		Files f4("test", std::ios::in);
-		// std::cout << getColorStr(BGRAY, "PATH:") << "\n";
-		// std::cout << " " << f.getPath("home") << std::endl;
-		// std::cout << f.getPath("home") << std::endl;
-		// std::cout << f.getPath("") << std::endl;
-		// f.openFile();
+		std::cout << getColorStr(BGRAY, "PATH:") << "\n";
+		std::cout << f1.getPath("home") << std::endl;
+		std::cout << f2.getPath("") << std::endl;
+		f1.openFile();
 		std::cout << "------\n";
 	}
-	// {
-	// 	nl(1);
-	// 	Files f("target");
-	// 	std::cout << "------\n";
-	// }
-	// {
-	// 	nl(1);
-	// 	Files f1("target", std::ios::out);
-	// 	std::cout << "------\n";
-	// 	f1.openFile();
-	// 	nl(1);
-	// 	Files f2("target", std::ios::out);
-	// 	std::cout << "------\n";
-	// }
+	{
+		nl(1);
+		Files f("target");
+		std::cout << "------\n";
+	}
+	{
+		nl(1);
+		Files f1("target", std::ios::out);
+		std::cout << "------\n";
+		f1.openFile();
+		nl(1);
+		Files f2("target", std::ios::out);
+		std::cout << "------\n";
+	}
 	std::cout << "------\n";
 }
 
@@ -204,7 +253,7 @@ void tryCatch(void (*test)(), std::ostringstream* os[])
 {
 	try{ test();}
 	catch (std::exception  const &e){orderException(e, os);}
-	catch(...) // ...
+	catch(...)
 	{
 		std::cerr << error("Problems during what() message formatting\n", 1);
 	}
@@ -212,7 +261,7 @@ void tryCatch(void (*test)(), std::ostringstream* os[])
 
 static void InitoOS(std::ostringstream* os[])
 {
-	//os[BG, BL, FH, FL, NP, FS, default] // (7)
+	//os[BG, BL, FH, FL, NP, FS, default] (7)
 	for (int i = 0; i < 7; ++i)
 		os[i] = new std::ostringstream();
 }
@@ -225,15 +274,14 @@ static void cleanOS(std::ostringstream* os[])
 
 static void runAllTest(std::ostringstream* os[])
 {
-	// tryCatch(&testShrubberyBasic, os);
-	// tryCatch(&testManyForms, os);
-	// tryCatch(&testExceptionGradeToExecute, os);
-	// tryCatch(&testExceptionBureaucrat, os);
-	// tryCatch(&testHighExceptionGradeSign, os);
-	// tryCatch(&testLowExceptionGradeSign, os);
-	// tryCatch(&testBureaucratExceptionLow, os);
-	// tryCatch(&emptyShrubberyForm, os);
+	tryCatch(&testShrubberyBasic, os);
+	tryCatch(&testExceptionBureaucrat, os);
+	tryCatch(&testBureaucratExceptionLow, os);
+	tryCatch(&testBureaucratExceptionHigh, os);
+	tryCatch(&emptyShrubberyForm, os);
 	tryCatch(&testExeShrubbery, os);
+	tryCatch(&testExeRobotomy, os);
+	tryCatch(&testExePresi, os);
 	// tryCatch(&testFile, os);
 }
 
@@ -269,15 +317,14 @@ int	main(int ac, char* arg[])
 		int choice = std::atoi(arg[1]);
 		switch (choice)
 		{
-		// 	case 1: tryCatch(&testShrubberyBasic, os); break;
-		// 	// case 2: tryCatch(&testManyForms, os); break;
-		// 	// case 3: tryCatch(&testExceptionGradeToExecute, os); break;
-		// 	// case 4: tryCatch(&testExceptionBureaucrat, os); break;
-		// 	// case 5: tryCatch(&testHighExceptionGradeSign, os); break;
-		// 	// case 6: tryCatch(&testLowExceptionGradeSign, os); break;
-		// 	case 7: tryCatch(&testBureaucratExceptionLow, os); break;
-		// 	case 8: tryCatch(&emptyBureaucrat, os); break;
-		// 	case 9: tryCatch(&emptyForm, os); break;
+			case 1: tryCatch(&testShrubberyBasic, os); break;
+			case 2: tryCatch(&testExceptionBureaucrat, os); break;
+			case 3: tryCatch(&testBureaucratExceptionLow, os); break;
+			case 4: tryCatch(&testBureaucratExceptionHigh, os); break; 
+			case 5: tryCatch(&emptyBureaucrat, os); break;
+			case 6: tryCatch(&testExeShrubbery, os); break;
+			case 7: tryCatch(&testExeRobotomy, os); break;
+			case 8: tryCatch(&testExePresi, os); break;
 			default: jump = true; break;
 		}
 	}

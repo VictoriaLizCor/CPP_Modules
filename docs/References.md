@@ -20,4 +20,7 @@
 
 https://www.baeldung.com/cs/check-if-point-is-in-2d-triangle
 
-<!-- CVb3d2023-->
+<!--
+	https://www.42evals.com/s
+	CVb3d2023 //depracrated
+-->

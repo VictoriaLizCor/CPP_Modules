@@ -9,6 +9,7 @@
 # include "Utils.hpp"
 # include "AForm.hpp"
 # include "Files.hpp"
+
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
@@ -21,8 +22,6 @@ class ShrubberyCreationForm : public AForm
 		std::string			_colorIdStr;
 
 		void			plantTree(Files& file, std::stringstream& treeBuffer) const;
-		std::string*	readLinesBeforeEnd(Files& file, size_t const& size, std::streampos& start) const;
-
 	public:
 		explicit		ShrubberyCreationForm(std::string const& target="Unknown");
 		ShrubberyCreationForm& operator=(ShrubberyCreationForm const& rhs);

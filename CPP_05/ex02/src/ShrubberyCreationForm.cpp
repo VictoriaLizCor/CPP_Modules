@@ -132,9 +132,10 @@ void ShrubberyCreationForm::plantTree(Files& file, std::stringstream& treeBuffer
  */
 void ShrubberyCreationForm::execute(Bureaucrat const& executor) const
 {
-	checkExeStatus(executor);
+	//checkExeStatus(executor); do it here to catch exeption in main
 	try
 	{
+		checkExeStatus(executor);
 		std::string const fileName = _target + "_shrubbery";
 		std::stringstream buffer;
 		Files file(fileName,  std::ios::in | std::ios::out | std::ios::app);
@@ -150,6 +151,7 @@ void ShrubberyCreationForm::execute(Bureaucrat const& executor) const
 	{
 		throw (FormStatus(e.what()));
 	}
+	std::cout << getColorStr(FLGREEN, "Execution succesful:\n");
 }
 
 /**
@@ -185,7 +187,7 @@ std::string ShrubberyCreationForm::getInfo()
 
 	os << _colorIdStr;
 	if (DEBUG == 2)
-		os << "AF" << _instanceBase << "::";
+		os << "SF" << _instanceBase << "::";
 	os << getName();
 	if (DEBUG >= 1)
 		os << _instanceId;

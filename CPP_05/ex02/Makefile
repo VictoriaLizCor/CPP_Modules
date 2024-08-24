@@ -366,7 +366,7 @@ class {{CLASS_NAME}}
 
 };
 
-// std::ostream& operator << (std::ostream& os, {{CLASS_NAME}} const& rhs);
+// std::ostream& operator << (std::ostream& os, {{CLASS_NAME}}& rhs);
 
 #endif // {{UPPER_H}}
 endef
@@ -396,7 +396,7 @@ define CPP_CONTENT
 {
 }
 
-std::ostream& operator << (std::ostream& os, {{CLASS_NAME}} const& rhs)
+std::ostream& operator << (std::ostream& os, {{CLASS_NAME}}& rhs)
 {
 	return (os);
 }

@@ -78,7 +78,7 @@ void Files::openFile()
 	closeFile();
 	printTitle("Opening", 20);
 	_file.open(_fileName.c_str(), _fileMode);
-	printTitle("Info", 20);
+	printTitle("Info", 10);
 	fileInfo();
 }
 /**
@@ -96,7 +96,7 @@ void Files::openFile(const char* fileName, std::ios_base::openmode mode)
 	closeFile();
 	printTitle("Opening", 20);
 	_file.open(_fileName.c_str(), mode);
-	printTitle("Info", 20);
+	printTitle("Info", 10);
 	fileInfo();
 }
 
@@ -232,10 +232,6 @@ bool Files::readFileAfterLinePos(std::string& line, std::streampos& lastPosition
 		lastPosition = _file.tellg();
 		status = true;
 	}
-	else if(_file.peek() == std::fstream::traits_type::eof())
-		status = false;
-	_file.seekg(0, std::ios::beg);
-	// _file.clear();
 	return (status);
 }
 
@@ -304,6 +300,7 @@ void Files::checkFileIsOpen()
 		std::cout << msg;
 		throw (FileError(msg));
 	}
+	// _file.clear();
 }
 
 /**
