@@ -190,36 +190,37 @@ static void testExePresi()
 	}
 	printTitle("testExePresi DONE", 60);
 }
-static void testFile()
-{
-	{
-		nl(1);
-		Files f1("in", std::ios::in);
-		Files f2("inOut", std::ios::in | std::ios::out);
-		Files f3("out", std::ios::out);
-		Files f4("test", std::ios::in);
-		std::cout << getColorStr(BGRAY, "PATH:") << "\n";
-		std::cout << f1.getPath("home") << std::endl;
-		std::cout << f2.getPath("") << std::endl;
-		f1.openFile();
-		std::cout << "------\n";
-	}
-	{
-		nl(1);
-		Files f("target");
-		std::cout << "------\n";
-	}
-	{
-		nl(1);
-		Files f1("target", std::ios::out);
-		std::cout << "------\n";
-		f1.openFile();
-		nl(1);
-		Files f2("target", std::ios::out);
-		std::cout << "------\n";
-	}
-	std::cout << "------\n";
-}
+
+// static void testFile()
+// {
+// 	{
+// 		nl(1);
+// 		Files f1("in", std::ios::in);
+// 		Files f2("inOut", std::ios::in | std::ios::out);
+// 		Files f3("out", std::ios::out);
+// 		Files f4("test", std::ios::in);
+// 		std::cout << getColorStr(BGRAY, "PATH:") << "\n";
+// 		std::cout << f1.getPath("home") << std::endl;
+// 		std::cout << f2.getPath("") << std::endl;
+// 		f1.openFile();
+// 		std::cout << "------\n";
+// 	}
+// 	{
+// 		nl(1);
+// 		Files f("target");
+// 		std::cout << "------\n";
+// 	}
+// 	{
+// 		nl(1);
+// 		Files f1("target", std::ios::out);
+// 		std::cout << "------\n";
+// 		f1.openFile();
+// 		nl(1);
+// 		Files f2("target", std::ios::out);
+// 		std::cout << "------\n";
+// 	}
+// 	std::cout << "------\n";
+// }
 
 static void fill(std::exception const &e, std::ostringstream& os)
 {

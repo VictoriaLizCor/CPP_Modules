@@ -75,7 +75,7 @@ void PresidentialPardonForm::execute(Bureaucrat const& executor) const
 	try
 	{
 		checkExeStatus(executor);
-		_succesful << " " << getColorStr(FMAGENTA, _target) << " has been pardoned by Zaphod Beeblebrox 🗳✨";
+		_succesful << "\n\t" << getColorStr(FMAGENTA, _target) << " has been pardoned by Zaphod Beeblebrox 🗳  ✨";
 	}
 	catch(std::exception const &e)
 	{
