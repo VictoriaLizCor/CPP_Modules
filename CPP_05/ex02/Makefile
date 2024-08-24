@@ -115,6 +115,7 @@ del:
 	@files=$(shell find . -type f -name "*_shrubbery*"); \
 	if [ -n "$$files" ]; then \
 		printf "$(LF) 🧹 $(P_RED) Removing $(P_YELLOW)$$files$(P_NC)\n"; \
+		chmod +w $$files; \
 		rm -rf $$files; \
 	fi
 
