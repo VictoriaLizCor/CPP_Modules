@@ -22,15 +22,16 @@ class ShrubberyCreationForm : public AForm
 
 		void			plantTree(Files& file, std::stringstream& treeBuffer) const;
 		std::string*	readLinesBeforeEnd(Files& file, size_t const& size, std::streampos& start) const;
+
 	public:
-		explicit ShrubberyCreationForm(std::string const& target="Unknown");
+		explicit		ShrubberyCreationForm(std::string const& target="Unknown");
 		ShrubberyCreationForm& operator=(ShrubberyCreationForm const& rhs);
 		ShrubberyCreationForm(ShrubberyCreationForm const& rhs);
 		~ShrubberyCreationForm();
 
-		std::string			getTarget()const;
-		std::string			getInfo();
-		void				execute(Bureaucrat const& executor) const;
+		std::string		getTarget()const;
+		std::string		getInfo();
+		void			execute(Bureaucrat const& executor) const;
 };
 
 #endif // SHRUBBERYCREATIONFORM_HPP

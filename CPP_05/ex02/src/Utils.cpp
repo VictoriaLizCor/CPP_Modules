@@ -450,6 +450,9 @@ std::string getRandString()
 void printTitle(std::string title, int n)
 {
 	int size = n;
+
+	if (DEBUG == 0)
+		return ;
 	std::string toPrint = " " + title + " "; 
 
 	if (size <= 0 || size > 60)
@@ -475,4 +478,21 @@ size_t getRandomNum(size_t num)
 		seeded = true;
 	}
 	return (static_cast<size_t>(rand()) % num);
+}
+
+/**
+ * Counts the number of newline characters in a given string.
+ *
+ * @param str The string to count newlines in.
+ * @return The number of newline characters in the string.
+ */
+size_t countNewlines(const std::string& str)
+{
+	size_t count = 0;
+	for (std::string::const_iterator it = str.begin(); it != str.end(); ++it)
+	{
+		if (*it == '\n')
+			++count;
+	}
+	return (count);
 }

@@ -32,12 +32,12 @@ class Files
 		std::string		getPath(std::string const& path);
 		bool			checkEnv(std::string const& path, std::stringstream& ss);
 		void			checkTargetStatus(std::string const& path, std::stringstream& ss);
-		size_t			contentSize(void);
+		std::streampos			contentSize(void);
 		
 		void			checkFileIsOpen(void);
 		bool			readFileAfterLinePos(std::string& line, std::streampos& lastPosition);
 		void			writeAtPosition(std::stringstream const& buffer, std::streampos const& position);
-		std::streampos	startAtRowBeforeEnd(int rowsBeforeEnd);
+		std::streampos	startAtRowBeforeEnd(size_t rowsBeforeEnd);
 		void			write(std::stringstream const& buffer);
 		void			closeFile(void);
 		void			copyFile(Files& in);

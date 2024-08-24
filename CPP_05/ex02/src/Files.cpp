@@ -130,17 +130,23 @@ void Files::openFile(std::ios_base::openmode mode)
  */
 void Files::closeFile()
 {
-	if (this->_file.is_open())
+	if (_file.is_open())
 	{
 		_file.clear();
-		this->_file.close();
-		if (this->_file.fail())
-			throw (FileError(" Failed to close the file " + this->_fileName));
-		std::cout << getColorStr(FGRAY, "File " + this->_fileName + " closed successfully.") << std::endl;
+		_file.close();
+		if (_file.fail())
+			throw FileError("Failed to close the file " + _fileName);
+		debug(FGRAY, "File " + _fileName + " closed successfully.\n");
 	}
-	this->_file.close();
 }
 
+/**
+ * @brief Checks if a given path exists in the environment variables and retrieves its value.
+ * 
+ * @param path The path to check in the environment variables.
+ * @param ss A reference to a stringstream object to store the retrieved value.
+ * @return True if the path exists in the environment variables, false otherwise.
+ */
 bool Files::checkEnv(std::string const& path, std::stringstream& ss)
 {
 	ss << std::getenv(toUpperCase(path).c_str());
@@ -163,22 +169,31 @@ bool Files::checkEnv(std::string const& path, std::stringstream& ss)
  *
  * @return The size of the file in bytes.
  */
-size_t  Files::contentSize(void)
+std::streampos  Files::contentSize(void)
 {
+	std::streampos fileSize;
+	
 	checkFileIsOpen();
 	_file.seekg(0, std::ios::end);
-	size_t fileSize = _file.tellg();
+	fileSize = _file.tellg();
 	_file.seekg(0, std::ios::beg);
 	_file.clear();
 	return (fileSize);
 }
 
-std::streampos Files::startAtRowBeforeEnd(int rowsBeforeEnd)
+/**
+ * Returns the position in the file stream to start reading from, which is the row
+ * that is a specified number of rows before the end of the file.
+ *
+ * @param rowsBeforeEnd The number of rows before the end of the file to start reading from.
+ * @return The position in the file stream to start reading from.
+ */
+std::streampos Files::startAtRowBeforeEnd(size_t rowsBeforeEnd)
 {
-	int count = 0;
+	size_t count = 0;
 	char ch;
-	size_t fileSize = contentSize();
-	for (size_t i = 1; i <= fileSize; ++i)
+	std::streampos fileSize = contentSize();
+	for (long int i = 1; i <= fileSize; ++i)
 	{
 		_file.seekg(-i, std::ios::end); // go to position with get
 		_file.get(ch);
@@ -186,7 +201,7 @@ std::streampos Files::startAtRowBeforeEnd(int rowsBeforeEnd)
 		{
 			++count;
 			if (count == rowsBeforeEnd + 1)
-				return _file.tellg();
+				return (_file.tellg());
 		}
 	}
 	return (std::streampos(0));
@@ -224,6 +239,17 @@ bool Files::readFileAfterLinePos(std::string& line, std::streampos& lastPosition
 	return (status);
 }
 
+/**
+ * @brief Retrieves the absolute path for a given file or directory.
+ * 
+ * This function checks if the provided path exists in the environment variables.
+ * If it does, it returns the corresponding absolute path.
+ * If not, it retrieves the current working directory and appends the provided path to it.
+ * If no path is provided, it returns the current working directory.
+ * 
+ * @param path The file or directory path.
+ * @return The absolute path.
+ */
 std::string Files::getPath(std::string const& path)
 {
 	std::stringstream ss;
@@ -259,6 +285,13 @@ std::string Files::getPath(std::string const& path)
 }
 
 
+/**
+ * @brief Checks if the file is open and throws an exception if it is not.
+ * 
+ * This function checks if the file associated with the `Files` object is open. If the file is not open or if it has failed, an exception of type `FileError` is thrown with an appropriate error message.
+ * 
+ * @throws FileError If the file is not open or if it has failed.
+ */
 void Files::checkFileIsOpen()
 {
 	std::string msg;
@@ -272,6 +305,7 @@ void Files::checkFileIsOpen()
 		throw (FileError(msg));
 	}
 }
+
 /**
  * @brief Writes data to the file at the specified position.
  *
@@ -293,11 +327,15 @@ void Files::writeAtPosition(std::stringstream const& buffer, std::streampos cons
 	_file.clear();
 	_file.seekp(position, std::ios::beg);
 	_file << buffer.str();
-	// _file.seekp(0, std::ios::beg);
 	fileInfo();
 	closeFile();
 }
 
+/**
+ * Writes the contents of the given stringstream to the file.
+ * 
+ * @param buffer The stringstream containing the data to be written.
+ */
 void Files::write(std::stringstream const& buffer)
 {
 	checkFileIsOpen();
@@ -334,6 +372,19 @@ void Files::copyFile(Files& in)
 	in.closeFile();
 }
 
+/**
+ * @brief Determines the file mode based on the given parameters.
+ * 
+ * This function takes in an `openmode` object and a `stringstream` object, along with an integer `i`.
+ * It checks the value of `i` and the corresponding flags in the `fileMode` object to determine the file mode.
+ * If both the `tmp` and `ss` strings are not empty, it appends a separator " | " to the `ss` string.
+ * 
+ * @param fileMode The file mode object to determine the mode from.
+ * @param ss The `stringstream` object to store the file mode information.
+ * @param i The integer value to determine the file mode.
+ * 
+ * @return void
+ */
 static void fileMode(std::ios_base::openmode& fileMode, std::stringstream& ss, int& i)
 {
 	std::stringstream tmp;
@@ -356,10 +407,16 @@ static void fileMode(std::ios_base::openmode& fileMode, std::stringstream& ss, i
 	ss << tmp.str();
 }
 
+/**
+ * @brief Returns the reference to the file stream.
+ * 
+ * @return std::fstream& The reference to the file stream.
+ */
 std::fstream& Files::getStream(void)
 {
 	return (_file);
 }
+
 /**
  * @brief Checks if a file is open and reports the file mode.
  *
@@ -396,14 +453,6 @@ void Files::fileInfo()
 	checkStreamFlags(*this);
 }
 
-// 	if (status && ss.str().find("is a Directory") != std::string::npos)
-// 	{
-// 		status = 0;
-// 		throw(FileError(getColorStr(FRED, ss.str())));
-// 	}
-// 	if (ss.str().find("does not exist") != std::string::npos)
-// 		status = 0;
-// }
 
 /**
  * @brief Checks the status flags of a file stream.
@@ -460,21 +509,32 @@ void Files::showContent(int eColor)
 {
 	std::stringstream ss;
 
+
 	_file.clear();
 	openFile(std::ios::in);
 	printTitle("File '" + _fileName + "' Content", 30);
 	_file.seekg(0);
 	ss << _file.rdbuf();
 	printTitle("End of '" + _fileName + "' Content", 30);
-	std::cout << getColorStr(eColor, ss.str()) << std::endl;
+	debug(eColor, ss.str());
 	_file.clear();
 	_file.seekg(0);
 	{
-		size_t fileSize = contentSize();
-		std::cout << getColorStr(FLBLUE, "Filesize:") << fileSize << "\n";
+		int fileSize = static_cast<int>(contentSize());
+		debug(FLBLUE, "Filesize:" + toStr(fileSize) +"\n");
 	}
 }
 
+/**
+ * @brief Checks the status of a target file or directory.
+ * 
+ * This function checks the status of the specified target file or directory.
+ * It determines if the target exists, has reading and writing permissions,
+ * and if it is a directory.
+ * 
+ * @param target The path of the target file or directory.
+ * @param ss The output stringstream to store the status messages.
+ */
 void Files::checkTargetStatus(std::string const& target, std::stringstream& ss)
 {
 	struct stat st;
@@ -498,6 +558,14 @@ void Files::checkTargetStatus(std::string const& target, std::stringstream& ss)
 	ss << C_END;
 }
 
+/**
+ * @brief Get the information about the Files object.
+ * 
+ * This function returns a string containing the information about the Files object.
+ * The information includes the class name and the file name.
+ * 
+ * @return std::string The information about the Files object.
+ */
 std::string Files::getInfo()
 {
 	std::ostringstream os;
@@ -509,11 +577,26 @@ std::string Files::getInfo()
 	return (os.str());
 }
 
+/**
+ * @brief Overloaded stream insertion operator for the Files class.
+ * 
+ * This function allows the Files object to be printed to an output stream.
+ * It calls the getInfo() function of the Files object and inserts the result into the output stream.
+ * 
+ * @param os The output stream to insert the Files object into.
+ * @param rhs The Files object to be inserted into the output stream.
+ * @return std::ostream& A reference to the output stream after the insertion.
+ */
 std::ostream& operator << (std::ostream& os, Files& rhs)
 {
 	os << rhs.getInfo();
 	return (os);
 }
 
+/**
+ * @brief Constructs a new FileError object with the given error message.
+ * 
+ * @param msg The error message to associate with the exception.
+ */
 Files::FileError::FileError(std::string const& msg):
 std::runtime_error(msg) {}
