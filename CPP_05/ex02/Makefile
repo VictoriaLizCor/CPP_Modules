@@ -112,12 +112,8 @@ clean: del
 	@printf  "\n$(P_NC)"
 
 del:
-	@files=$(shell find . -type f -name "*_shrubbery*"); \
-	if [ -n "$$files" ]; then \
-		printf "$(LF) 🧹 $(P_RED) Removing $(P_YELLOW)$$files$(P_NC)\n"; \
-		chmod +w $$files; \
-		rm -rf $$files; \
-	fi
+	@printf "$(LF) 🧹 $(P_RED)Removing files matching $(P_YELLOW)*_shrubbery*$(P_NC)\n"
+	@find . -type f -name "*_shrubbery*" -exec rm -rf {} \;
 
 fclean: clean
 	@if [ -f "$(NAME)" ]; then	\
