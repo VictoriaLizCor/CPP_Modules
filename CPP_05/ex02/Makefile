@@ -197,7 +197,7 @@ gPush:
 			exit 1; \
 		fi \
 	fi
-git:
+git: fclean
 	@if [ -f "$(GIT_REPO)/Makefile" ] && [ -d "$(GIT_REPO)/.git" ]; then \
 		$(MAKE) -C "$(GIT_REPO)" git; \
 	else \
