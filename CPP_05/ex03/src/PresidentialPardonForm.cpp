@@ -1,12 +1,12 @@
-#include "RobotomyRequestForm.hpp"
+#include "PresidentialPardonForm.hpp"
 
 /**
- * @brief Constructs a RobotomyRequestForm object.
+ * @brief Constructs a PresidentialPardonForm object.
  * 
  * @param target The target of the robotomy request.
  */
-RobotomyRequestForm::RobotomyRequestForm(std::string const& target):
-AForm(className(typeid(*this).name()).c_str(), 72, 45),
+PresidentialPardonForm::PresidentialPardonForm(std::string const& target):
+AForm(className(typeid(*this).name()).c_str(), 25, 5),
 _target(target),
 _instanceId(_instanceCount),
 _colorIdStr(getColorShade(FWHITE))
@@ -16,7 +16,7 @@ _colorIdStr(getColorShade(FWHITE))
 }
 
 /**
- * @brief Assignment operator for the RobotomyRequestForm class.
+ * @brief Assignment operator for the PresidentialPardonForm class.
  * 
  * This operator assigns the values of the right-hand side object to the left-hand side object.
  * It first checks if the objects are not the same, then calls the assignment operator of the base class AForm.
@@ -25,7 +25,7 @@ _colorIdStr(getColorShade(FWHITE))
  * @param rhs The right-hand side object to assign from.
  * @return A reference to the left-hand side object after assignment.
  */
-RobotomyRequestForm&::RobotomyRequestForm::operator=(RobotomyRequestForm const& rhs)
+PresidentialPardonForm&::PresidentialPardonForm::operator=(PresidentialPardonForm const& rhs)
 {
 	if (this != &rhs)
 	{
@@ -38,11 +38,11 @@ RobotomyRequestForm&::RobotomyRequestForm::operator=(RobotomyRequestForm const& 
 }
 
 /**
- * @brief Constructs a new RobotomyRequestForm object by copying another RobotomyRequestForm object.
+ * @brief Constructs a new PresidentialPardonForm object by copying another PresidentialPardonForm object.
  * 
- * @param rhs The RobotomyRequestForm object to be copied.
+ * @param rhs The PresidentialPardonForm object to be copied.
  */
-RobotomyRequestForm::RobotomyRequestForm(RobotomyRequestForm const& rhs):
+PresidentialPardonForm::PresidentialPardonForm(PresidentialPardonForm const& rhs):
 AForm(className(typeid(this).name())),
 _target(rhs.getTarget()),
 _instanceId(++_instanceCount),
@@ -52,42 +52,30 @@ _colorIdStr(getColorShade(BWHITE))
 }
 
 /**
- * @brief Destructor for the RobotomyRequestForm class.
+ * @brief Destructor for the PresidentialPardonForm class.
  * 
- * This destructor is responsible for destroying an instance of the RobotomyRequestForm class.
+ * This destructor is responsible for destroying an instance of the PresidentialPardonForm class.
  * It prints a message indicating that the object was destroyed if the DEBUG flag is set.
  */
-RobotomyRequestForm::~RobotomyRequestForm(void)
+PresidentialPardonForm::~PresidentialPardonForm(void)
 {
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
 }
 
 /**
- * Executes the RobotomyRequestForm.
+ * Executes the PresidentialPardonForm.
  * 
  * @param executor The bureaucrat who is executing the form.
  * @throws FormStatus If the execution fails.
  */
-void RobotomyRequestForm::execute(Bureaucrat const& executor) const
+void PresidentialPardonForm::execute(Bureaucrat const& executor) const
 {
 	// checkExeStatus(executor);
 	try
 	{
 		checkExeStatus(executor);
-		{
-			bool RomotomizedSuccesfull = getRandomNum(2);
-			
-			if (RomotomizedSuccesfull)
-			{
-				std::string str = "\t🔩 🛠️  rizzz, bzzzzzz";
-				_succesful << str << " 🤖 " <<getColorStr(FMAGENTA, _target) << " has been Robotomized";
-			}
-			else
-			{
-				throwExeption(FormStatus(getColorStr(FYELLOW, "Robotomy failed")));
-			}
-		}
+		_succesful << "\n\t" << getColorStr(FMAGENTA, _target) << " has been pardoned by Zaphod Beeblebrox 🗳  ✨";
 	}
 	catch(std::exception const &e)
 	{
@@ -97,21 +85,21 @@ void RobotomyRequestForm::execute(Bureaucrat const& executor) const
 }
 
 /**
- * @brief Get the target of the RobotomyRequestForm.
+ * @brief Get the target of the PresidentialPardonForm.
  * 
- * @return std::string The target of the RobotomyRequestForm.
+ * @return std::string The target of the PresidentialPardonForm.
  */
-std::string RobotomyRequestForm::getTarget() const{return (_target);}
+std::string PresidentialPardonForm::getTarget() const{return (_target);}
 
 /**
- * @brief Get the information about the RobotomyRequestForm.
+ * @brief Get the information about the PresidentialPardonForm.
  * 
- * This function returns a string containing the information about the RobotomyRequestForm.
+ * This function returns a string containing the information about the PresidentialPardonForm.
  * The information includes the color ID, the name, the instance ID, the status, and any successful messages.
  * 
- * @return std::string The information about the RobotomyRequestForm.
+ * @return std::string The information about the PresidentialPardonForm.
  */
-std::string RobotomyRequestForm::getInfo()
+std::string PresidentialPardonForm::getInfo()
 {
 	std::ostringstream os;
 
@@ -122,12 +110,9 @@ std::string RobotomyRequestForm::getInfo()
 	if (DEBUG >= 1)
 		os << _instanceId;
 	os << printStatus();
-	if (!_succesful.str().empty())
-	{
-		os << "\n" + _succesful.str();
-		_succesful.clear();
-		_succesful.str("");
-	}
+	os << _succesful.str();
+	_succesful.clear();
+	_succesful.str("");
 	os << C_END;
 	return (os.str());
 }

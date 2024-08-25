@@ -117,7 +117,8 @@
 		"stdexcept": "cpp",
 		"streambuf": "cpp",
 		"cinttypes": "cpp",
-		"typeinfo": "cpp"
+		"typeinfo": "cpp",
+		"map": "cpp"
 	},
 		// "files.associations": {
 	// 	"array": "cpp",

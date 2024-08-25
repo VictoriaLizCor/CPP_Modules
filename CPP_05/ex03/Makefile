@@ -361,8 +361,9 @@ class {{CLASS_NAME}}
 		
 	public:
 		{{CLASS_NAME}}();
+		{{CLASS_NAME}}& operator=({{CLASS_NAME}} const& rhs);
+		{{CLASS_NAME}}({{CLASS_NAME}} const& rhs);
 		virtual ~{{CLASS_NAME}}();
-
 };
 
 // std::ostream& operator << (std::ostream& os, {{CLASS_NAME}}& rhs);
