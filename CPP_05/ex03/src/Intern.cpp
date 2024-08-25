@@ -64,8 +64,9 @@ AForm* Intern::makeForm(std::string const& formName, std::string const& target)
 	if (it != formCreationMap.end())
 	{
 		form = it->second(target);
-		std::cout << *this << " creates Form " << form->getInfo();
-		nl(3);
+		std::cout << getColorStr(FLGREEN, "Action succesful:\n");
+		std::cout << *this << "creates Form " << form->getInfo();
+		nl(2);
 		return (form);
 	}
 	else
