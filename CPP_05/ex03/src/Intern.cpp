@@ -57,13 +57,21 @@ Intern::Intern():
 _instanceId(++_instanceCount),
 _colorIdStr(getRandomColorFmt(1))
 {
-	formCreationMap["shrubbery creation"] = &newShrubbery;
-	formCreationMap["robotomy request"] = &newRobotomy;
-	formCreationMap["presidential pardon"] = &newPresidential;
 	if (DEBUG)
 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
 }
 
+//Using map containers
+// Intern::Intern():
+// _instanceId(++_instanceCount),
+// _colorIdStr(getRandomColorFmt(1))
+// {
+// 	formCreationMap["shrubbery creation"] = &newShrubbery;
+// 	formCreationMap["robotomy request"] = &newRobotomy;
+// 	formCreationMap["presidential pardon"] = &newPresidential;
+// 	if (DEBUG)
+// 		std::cout << *this << getColorStr(FGRAY, " was Created\n");
+// }
 /**
  * @brief Copy constructor for the Intern class.
  * 
@@ -101,7 +109,7 @@ Intern::~Intern()
 		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
 }
 
-static std::string lowerStr(std::string const& str)
+static std::string lower2Str(std::string const& str)
 {
 	std::string res;
 
@@ -111,6 +119,22 @@ static std::string lowerStr(std::string const& str)
 	}
 	return (res);
 }
+
+static int		getFormIdx(const std::string formName)
+{
+	std::string		formNames[3] = {"shrubbery creation", "robotomy request", "presidential pardon"};
+	int				idx = -1;
+
+	for (int i = 0; i < 3; i++)
+	{
+		if (lower2Str(formName) == formNames[i])
+		{
+			return (i);
+		}
+	}
+	return (idx);
+}
+
 
 /**
  * @brief Creates a form based on the given form name and target.
@@ -123,11 +147,12 @@ static std::string lowerStr(std::string const& str)
  */
 AForm* Intern::makeForm(std::string const& formName, std::string const& target)
 {
-	AForm* form;
-	std::map<std::string, FormCreator>::const_iterator it = formCreationMap.find(lowerStr(formName));
-	if (it != formCreationMap.end())
+	FormCreator forms[3] = {&newShrubbery, &newRobotomy, &newPresidential};
+	int idx = getFormIdx(formName);
+
+	if (idx >= 0)
 	{
-		form = it->second(target);
+		AForm* form = forms[idx](target);
 		std::cout << getColorStr(FLGREEN, "Action succesful:\n");
 		std::cout << *this << "creates Form " << form->getInfo();
 		nl(2);
@@ -140,6 +165,25 @@ AForm* Intern::makeForm(std::string const& formName, std::string const& target)
 	}
 }
 
+// Using Maps
+// AForm* Intern::makeForm(std::string const& formName, std::string const& target)
+// {
+// 	AForm* form;
+// 	std::map<std::string, FormCreator>::const_iterator it = formCreationMap.find(lowerStr(formName));
+// 	if (it != formCreationMap.end())
+// 	{
+// 		form = it->second(target);
+// 		std::cout << getColorStr(FLGREEN, "Action succesful:\n");
+// 		std::cout << *this << "creates Form " << form->getInfo();
+// 		nl(2);
+// 		return (form);
+// 	}
+// 	else
+// 	{
+// 		std::cout << error("",0) << *this << "cannot create " << getColorStr(FMAGENTA, formName) << " form" << std::endl;
+// 		return (NULL);
+// 	}
+// }
 /**
  * @brief Get the information about the Intern object.
  * 

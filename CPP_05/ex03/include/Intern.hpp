@@ -5,8 +5,8 @@
 #include "RobotomyRequestForm.hpp"
 #include "PresidentialPardonForm.hpp"
 #include "Utils.hpp"
-#include <map>
-#include <vector>
+// #include <map>
+// #include <vector>
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -21,7 +21,7 @@ class Intern
 		std::string const	_colorIdStr;
 
 		typedef AForm* (*FormCreator)(const std::string&);
-		std::map<std::string, FormCreator> formCreationMap;
+		// std::map<std::string, FormCreator> formCreationMap;
 		Intern& operator=(Intern const& rhs);
 		Intern(Intern const& rhs);
 	public:
