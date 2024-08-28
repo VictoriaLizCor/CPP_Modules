@@ -1,7 +1,7 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98 -Wshadow #-Werror #-Wno-unused-function -Wunused
+D_FLAGS		= -Wall -Wextra -std=c++98  #-Werror #-Wshadow#-Wno-unused-function -Wunused
 INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR		:= src/
@@ -149,6 +149,13 @@ test:$(NAME)
 		fi; \
 		echo "---------------------------------"; \
 	done
+run:$(NAME)
+	@echo $(BOLD) $(CYAN) ./$(NAME) $$i $(E_NC) "\n"; \
+	if [ "$(S)" = "0" ]; then \
+		echo $(E_NC); $(MAKE) -C . val; \
+	else \
+		echo $(E_NC); ./$(NAME) $$i; \
+	fi; \
 # ATTENTION !!!!!!!!!!!!!!  USE WITH S=0 !
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) "$i" $(E_NC)  "\n"

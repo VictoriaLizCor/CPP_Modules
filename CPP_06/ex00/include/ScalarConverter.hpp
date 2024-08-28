@@ -7,6 +7,9 @@
 # include <typeinfo>
 # include <cstdlib>
 # include <cctype>
+# include <cfloat>
+# include <limits>
+# include <cmath>
 # include <Utils.hpp>
 
 # ifndef DEBUG
