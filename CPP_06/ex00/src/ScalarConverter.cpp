@@ -17,11 +17,13 @@ void ScalarConverter::printInt(int i)
 
 void ScalarConverter::printFloat(float f)
 {
+	std::cout << std::fixed << std::setprecision(1);
 	std::cout << "float: " << f << "f" << std::endl;
 }
 
 void ScalarConverter::printDouble(double d)
 {
+	std::cout << std::fixed << std::setprecision(1);
 	std::cout << "double: " << d << std::endl;
 }
 
@@ -53,7 +55,6 @@ void ScalarConverter::convert(std::string const &literal)
 {
 	try
 	{
-		std::ostream x; 
 		// Try to detect and convert to char
 		if (literal.length() == 1 && std::isprint(literal[0]) && !std::isdigit(literal[0]))
 		{
@@ -102,22 +103,6 @@ void ScalarConverter::convert(std::string const &literal)
 		std::cout << "double: impossible" << std::endl;
 	}
 }
-
-void ScalarConverter::printFloat(float f)
-{
-	std::cout << "float: " << f << "f" << std::endl;
-}
-
-void ScalarConverter::info typedef static_cast(value)()
-std::ostream& operator << (std::ostream& os, ScalarConverter& rhs)
-{
-	std::ostream o = std::cout;
-	o << "char:" << rhs.printChar(os.str());
-	o << "int:" << rhs.printInt(os);
-	o << "float:" << rhs.printFloat(o);
-	o << "double:" << rhs.printDouble(o);
-	return (o);
-};
 
 /*
 how can i use ostream operator if i dont save any value in ScalarConverter class I want to do something like

@@ -43,6 +43,6 @@ class ScalarConverter
 		static void convert(std::string const& literal);
 };
 
-std::ostream& operator << (std::ostream& os, ScalarConverter& rhs);
+// std::ostream& operator << (std::ostream& os, ScalarConverter& rhs);
 
 #endif // SCALARCONVERTER_HPP

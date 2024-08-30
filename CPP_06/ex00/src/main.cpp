@@ -9,7 +9,7 @@ static std::string toFloat(float f)
 	return (ss.str());
 }
 
-static std::string toDouble(float f)
+static std::string toDouble(double f)
 {
 	std::stringstream ss;
 	ss << f;
@@ -107,6 +107,24 @@ static void deepTest(void)
 	std::cout << getColorStr(FGREEN, "All tests passed!") << std::endl;
 }
 
+
+bool isOverflowing(double originalValue) {
+    float floatValue = static_cast<float>(originalValue);
+    double float2double = static_cast<double>(floatValue);
+	int intValue = static_cast<int>(originalValue);
+    double int2double = static_cast<double>(intValue);
+	std::cout << std::fixed << std::setprecision(1);
+	std::cout << "original:\t" << originalValue << std::endl
+	 		<< "float:\t\t" << floatValue << std::endl
+			<< "float2double:\t" << float2double << std::endl
+			<< "intValue:\t" << intValue << std::endl
+			<< "int2double:\t" << int2double << std::endl;
+
+    return originalValue != float2double;
+	printTitle("LINE", 30);
+}
+
+
 int main(int argc, char* argv[])
 {
 	if (argc != 2)
@@ -117,7 +135,23 @@ int main(int argc, char* argv[])
 		return (1);
 	}
 	if (DEBUG == 0)
+	{
+		double value = std::numeric_limits<double>::quiet_NaN();
+		if (isOverflowing(value)) {
+			std::cout << "Overflow detected!" << std::endl;
+		} else {
+			std::cout << "No overflow." << std::endl;
+		}
+		std::stringstream ss(argv[1]);
+		ss >> value;
+		if (isOverflowing(value)) {
+			std::cout << "Overflow detected!" << std::endl;
+		} else {
+			std::cout << "No overflow." << std::endl;
+		}
 		ScalarConverter::convert(argv[1]);
+
+	}
 	else
 		deepTest();
 	return (0);
