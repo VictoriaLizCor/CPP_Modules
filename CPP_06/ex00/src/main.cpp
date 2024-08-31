@@ -55,12 +55,6 @@ static void deepTest(void)
 	ScalarConverter::convert("0.0f");
 	ScalarConverter::convert("-.5f");
 	ScalarConverter::convert("1.0e-4f");
-	ScalarConverter::convert(toFloat(FLOAT_MAX / 1.0001f));
-	ScalarConverter::convert(toFloat(FLOAT_MIN / 1.0001f));
-	ScalarConverter::convert(toFloat(FLOAT_UNDERFLOW * 1.0001f));
-	ScalarConverter::convert(toFloat(FLOAT_MAX * 1.0001f));
-	ScalarConverter::convert(toFloat(FLOAT_MIN * 1.0001f));
-	ScalarConverter::convert(toFloat(FLOAT_UNDERFLOW / 1.0001f));
 	ScalarConverter::convert("-1-f");
 	ScalarConverter::convert("10e5ef");
 	ScalarConverter::convert("e1f");
@@ -88,12 +82,6 @@ static void deepTest(void)
 	ScalarConverter::convert("1e10");
 	ScalarConverter::convert("1");
 	ScalarConverter::convert("-inf");
-	ScalarConverter::convert(toDouble(DOUBLE_MAX / 1.0001));
-	ScalarConverter::convert(toDouble(DOUBLE_MIN / 1.0001));
-	ScalarConverter::convert(toDouble(DOUBLE_UNDERFLOW * 1.0001));
-	ScalarConverter::convert(toDouble(DOUBLE_MAX * 1.0001));
-	ScalarConverter::convert(toDouble(DOUBLE_MIN * 1.0001));
-	ScalarConverter::convert(toDouble(DOUBLE_UNDERFLOW / 1.0001));
 	ScalarConverter::convert("3.14f");
 	ScalarConverter::convert("1ff");
 	ScalarConverter::convert("1.23.4f");
@@ -108,20 +96,25 @@ static void deepTest(void)
 }
 
 
-bool isOverflowing(double originalValue) {
-    float floatValue = static_cast<float>(originalValue);
-    double float2double = static_cast<double>(floatValue);
+bool isOverflowing(double originalValue)
+{
+	std::cout << std::fixed << std::setprecision(10);
+	float floatValue = static_cast<float>(originalValue);
+	double float2double = static_cast<double>(floatValue);
 	int intValue = static_cast<int>(originalValue);
-    double int2double = static_cast<double>(intValue);
-	std::cout << std::fixed << std::setprecision(1);
+	double int2double = static_cast<double>(intValue);
+	char charValue = static_cast<char>(originalValue);
+	double char2double = static_cast<double>(charValue);
+
 	std::cout << "original:\t" << originalValue << std::endl
 	 		<< "float:\t\t" << floatValue << std::endl
 			<< "float2double:\t" << float2double << std::endl
 			<< "intValue:\t" << intValue << std::endl
-			<< "int2double:\t" << int2double << std::endl;
+			<< "int2double:\t" << int2double << std::endl
+			<< "charValue:\t" << charValue << std::endl
+			<< "char2double:\t" << char2double << std::endl;
 
-    return originalValue != float2double;
-	printTitle("LINE", 30);
+	return (originalValue != float2double);
 }
 
 
@@ -136,42 +129,52 @@ int main(int argc, char* argv[])
 	}
 	if (DEBUG == 0)
 	{
-		double value = std::numeric_limits<double>::quiet_NaN();
-		if (isOverflowing(value)) {
-			std::cout << "Overflow detected!" << std::endl;
-		} else {
-			std::cout << "No overflow." << std::endl;
-		}
-		std::stringstream ss(argv[1]);
-		ss >> value;
-		if (isOverflowing(value)) {
-			std::cout << "Overflow detected!" << std::endl;
-		} else {
-			std::cout << "No overflow." << std::endl;
-		}
-		ScalarConverter::convert(argv[1]);
+		// Example with a string
+		std::string str = "123.45";
+		ScalarConverter::convert(str);
 
+		// Example with an invalid string
+		std::string invalidStr = "abc";
+		ScalarConverter::convert(invalidStr);
+		ScalarConverter::convert(argv[1]);
+		// ScalarConverter::convert(argv[1]);
 	}
 	else
-		deepTest();
+	{
+		std::cout.precision(10);
+		double value = 0;
+		{
+			value = std::numeric_limits<double>::infinity();
+			if (isOverflowing(value))
+				std::cout << "Overflow detected!" << std::endl;
+			else 
+				std::cout << "No overflow." << std::endl;
+			printTitle("LINE", 30);
+		}
+		{
+			value = std::numeric_limits<double>::quiet_NaN();
+			if (isOverflowing(value))
+				std::cout << "Overflow detected!" << std::endl;
+			else 
+				std::cout << "No overflow." << std::endl;
+			printTitle("LINE", 30);
+		}
+		{
+			value = std::numeric_limits<float>::epsilon();
+			if (isOverflowing(value))
+				std::cout << "Overflow detected!" << std::endl;
+			else 
+				std::cout << "No overflow." << std::endl;
+			printTitle("epsilon", 30);
+		}
+		std::stringstream ss(argv[1]);
+		std::cout << ss.str()<< std::endl;
+		ss >> value;
+		if (isOverflowing(value))
+			std::cout << "Overflow detected!" << std::endl;
+		else
+			std::cout << "No overflow." << std::endl;
+		// deepTest();
+	}
 	return (0);
 }
-
-/*
-./convert 0
-char: Non displayable
-int: 0
-float: 0.0f
-double: 0.0
-./convert nan
-char: impossible
-int: impossible
-float: nanf
-double: nan
-./convert 42.0f
-char: '*'
-int: 42
-float: 42.0f
-double: 42.0
-
-*/
