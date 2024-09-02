@@ -46,11 +46,12 @@ void ScalarConverter::printDouble(long double d)
 
 void ScalarConverter::printAll(long double value)
 {
-	printChar(value);
+	printChar(static_cast<char>(value));
 	printInt(static_cast<int>(value));
 	printFloat(static_cast<float>(value));
-	printDouble(value);
+	printDouble(static_cast<double>(value));
 }
+
 void ScalarConverter::convert(std::string const &literal)
 {
 	try

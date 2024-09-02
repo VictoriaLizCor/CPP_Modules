@@ -14,6 +14,7 @@
 # include <cmath>
 # include <stdexcept>
 # include <Utils.hpp>
+#include <cstring>
 
 # ifndef DEBUG
 #  define DEBUG 0
