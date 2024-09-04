@@ -91,7 +91,8 @@ endif
 ifneq ($(D), 0)
 $(OBJS): $(BUILD_DIR)%.o : %.cpp | $(BUILD_DIR)
 	@$(CXX) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
-	@printf "$(LF)🚧 $(P_BLUE)Creating $(P_YELLOW)$@ $(P_BLUE)from $(P_YELLOW) $< $(FG_TEXT)"
+	@printf "$(LF)🚧 $(P_BLUE)Creating $(P_YELLOW)$@ $(P_BLUE)from $(P_YELLOW) $< $(FG_TEXT)\n"
+	@printf "$(P_BLUE)$(CXX) $(D_FLAGS) $(INCLUDES) $(P_YELLOW) -MMD -MP -c $< $(P_BLUE) -o $@ $(FG_TEXT) \n\n";
 
 $(BUILD_DIR):
 	@mkdir -p $@
