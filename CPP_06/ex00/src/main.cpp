@@ -147,18 +147,22 @@ void callHandler(const std::string& literal)
 	T value;
 	if (is_same<T, char>::value)
 	{
+		std::cout << "char: " << std::endl;
 		value = literal[0];
 	}
 	else if (is_same<T, int>::value)
 	{
+		std::cout << "int: " << std::endl;
 		value = std::strtol(literal.c_str(), NULL, 10);
 	}
 	else if (is_same<T, float>::value)
 	{
+		std::cout << "float: " << std::endl;
 		value = std::strtof(literal.c_str(), NULL);
 	}
 	else if (is_same<T, double>::value)
 	{
+		std::cout << "double: " << std::endl;
 		value = std::strtod(literal.c_str(), NULL);
 	}
 	printAll(value);
