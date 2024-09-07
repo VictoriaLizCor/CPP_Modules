@@ -11,54 +11,74 @@
 # include <limits>
 # include <float.h> 
 # include <climits>
+# include <iomanip>
 # include <cmath>
 # include <stdexcept>
 # include <Utils.hpp>
-#include <cstring>
+# include <cstring>
+# include <iostream>
+# include <cstdio>
+
+
 
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
 
-
-enum varType
+struct EscapeSequence
 {
-	INT,
-	FLOAT,
-	DOUBLE,
-	CHAR
+	const char*	seq;
+	char		ch;
 };
+
+#define F_MIN		-std::numeric_limits<float>::max()
+#define F_UNDERFLOW std::numeric_limits<float>::min()
+#define F_MAX		std::numeric_limits<float>::max()
+#define F_EPS		std::numeric_limits<float>::epsilon();
+
+#define D_MIN		-std::numeric_limits<double>::max()
+#define D_UNDERFLOW std::numeric_limits<double>::min()
+#define D_MAX		std::numeric_limits<double>::max()
 
 class ScalarConverter
 {
 	private:
-
 		ScalarConverter();
 		// ScalarConverter& operator=(ScalarConverter const& rhs);
 		ScalarConverter(ScalarConverter const& rhs);
 		~ScalarConverter();
+		static std::string reinterpretate(std::string const& str);
 
-		static void printChar(long double c);
-		static void printInt(long double i);
-		static void printFloat(long double f);
-		static void printDouble(long double d);
-		static void printAll(long double value);
-		 static bool isChar(const std::string& literal);
-		static bool isInt(const std::string& literal);
-		static bool isFloat(const std::string& literal);
-		static bool isDouble(const std::string& literal);
-		std::string classify(double value);
+
 	protected:
 		
 	public:
 		static void convert(std::string const& literal);
-		template <typename T>
-		static varType determineType(T value);
 };
 
 
 // std::ostream& operator << (std::ostream& os, ScalarConverter& rhs);
 
+template<typename T, typename U>
+struct is_same;
+
+template <typename T>
+bool isType(double originalValue, std::string const& type);
+
+template <typename T>
+void toChar(T value);
+
+template <typename T>
+void toInt(T value);
+
+template <typename T>
+void toFloat(T value);
+
+template <typename T>
+void printAll(T value);
+
+template <typename T>
+void callHandler(const std::string& literal);
 
 #include "ScalarConverter.tpp" 
 

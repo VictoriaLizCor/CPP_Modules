@@ -146,7 +146,11 @@ test:$(NAME)
 		if [ "$(S)" = "0" ]; then \
 			echo $(E_NC); $(MAKE) -C . val; \
 		else \
-			echo $(E_NC); ./$(NAME) $$i; \
+			if [ "$(D)" = "0" ]; then \
+				echo $(E_NC); ./$(NAME) $$i; \
+			else \
+				echo $(E_NC); ./$(NAME) $$i; \
+			fi; \
 		fi; \
 		echo "---------------------------------"; \
 	done
