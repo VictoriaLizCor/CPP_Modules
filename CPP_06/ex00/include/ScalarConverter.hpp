@@ -17,6 +17,7 @@
 # include <Utils.hpp>
 # include <cstring>
 # include <iostream>
+#include <cerrno>
 # include <cstdio>
 
 
@@ -31,15 +32,6 @@ struct EscapeSequence
 	char		ch;
 };
 
-#define F_MIN		-std::numeric_limits<float>::max()
-#define F_UNDERFLOW std::numeric_limits<float>::min()
-#define F_MAX		std::numeric_limits<float>::max()
-#define F_EPS		std::numeric_limits<float>::epsilon();
-
-#define D_MIN		-std::numeric_limits<double>::max()
-#define D_UNDERFLOW std::numeric_limits<double>::min()
-#define D_MAX		std::numeric_limits<double>::max()
-
 class ScalarConverter
 {
 	private:
@@ -47,9 +39,17 @@ class ScalarConverter
 		// ScalarConverter& operator=(ScalarConverter const& rhs);
 		ScalarConverter(ScalarConverter const& rhs);
 		~ScalarConverter();
+		// static void callHandler(long double value);
 		static std::string reinterpretate(std::string const& str);
 
+		template <typename T>
+		static void callHandler(T value);
 
+		template <typename T>
+		static bool isType(long double originalValue, const std::string& type);
+
+		template <typename T>
+		static void toType(long double value, const std::string& type);
 	protected:
 		
 	public:
@@ -61,24 +61,6 @@ class ScalarConverter
 
 template<typename T, typename U>
 struct is_same;
-
-template <typename T>
-bool isType(double originalValue, std::string const& type);
-
-template <typename T>
-void toChar(T value);
-
-template <typename T>
-void toInt(T value);
-
-template <typename T>
-void toFloat(T value);
-
-template <typename T>
-void printAll(T value);
-
-template <typename T>
-void callHandler(const std::string& literal);
 
 #include "ScalarConverter.tpp" 
 

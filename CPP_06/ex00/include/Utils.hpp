@@ -73,7 +73,7 @@ struct s_coloredName
 	
 };
 
-typedef long signed int lsi;
+typedef long double lsi;
 typedef s_coloredName t_Name;
 
 std::string error(std::string str, bool bold);

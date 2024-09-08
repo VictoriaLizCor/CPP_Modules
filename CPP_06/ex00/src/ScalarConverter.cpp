@@ -16,34 +16,30 @@ void ScalarConverter::convert(std::string const& str)
 			std::cout << getColorFmt(FLCYAN);
 			std::cout << "\nliteral: '" << literal << "'"<< std::endl;
 			std::cout << "len: [" << literal.length() << "]" << std::endl;
-			std::cout << "value:" << value << std::endl;
-			std::cout << C_END << std::endl;
 		};
-		
 		if (literal.length() > 1)
 		{		
 			if (*end != '\0' && (*end != 'f' || *(end + 1) != '\0'))
-				throw (std::invalid_argument(""));
+				throw (std::invalid_argument(literal));
 		}
-		std::cout << "literal:" << literal << std::endl;
-			std::cout << "value:" << value << std::endl;
-		if (isType<char>(value, "CHAR") && literal.length() == 1)
-			callHandler<char>(literal);
-		else if (isType<int>(value, "INT") && literal.find(".")== std::string::npos)
-			callHandler<int>(literal);
-		else if (isType<float>(value, "FLOAT"))
-			callHandler<float>(literal);
-		else if(isType<double>(value, "DOUBLE"))
-			callHandler<double>(literal);
+		else if(!std::isprint(static_cast<int>(literal[0])))
+			value = static_cast<long double>(literal[0]);
+		else
+			value = literal[0];
+		if (DEBUG > 0)
+			std::cout << "value: " << value << C_END << std::endl;
+		if (isType<char>(value, "char") && literal.length() == 1)
+			callHandler<char>(static_cast<char>(value));
+		else if (isType<int>(value, "int") && literal.find_first_not_of("+-0123456789") == std::string::npos)
+			callHandler<int>(static_cast<int>(value));
+		else if (isType<float>(value, "float"))
+			callHandler<float>(std::strtof(literal.c_str(), NULL));
+		else if(isType<double>(value, "double"))
+			callHandler<double>(std::strtod(literal.c_str(), NULL));
 	}
 	catch (...)
 	{
-		std::cout << getColorFmt(FRED);
-		std::cout << "char: impossible" << std::endl;
-		std::cout << "int: impossible" << std::endl;
-		std::cout << "float: impossible" << std::endl;
-		std::cout << "double: impossible" << std::endl;
-		std::cout << C_END << std::endl;
+		callHandler<long double>(std::numeric_limits<long double>::max());
 	}
 }
 
