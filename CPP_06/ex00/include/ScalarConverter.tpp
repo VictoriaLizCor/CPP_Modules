@@ -4,22 +4,12 @@
 #include "ScalarConverter.hpp"
 #include <cstdlib> 
 
-template<typename T, typename U>
-struct is_same
-{
-	static const bool value = false;
-};
-
-template<typename T>
-struct is_same<T, T>
-{
-	static const bool value = true;
-};
 
 template <typename T>
 long double customRound(long double value)
 {
-	long double decimals = std::numeric_limits<T>::digits10 * 10;
+	// long double decimals = std::numeric_limits<T>::digits10 * 10;
+	long double decimals = 1 * 10;
 	long double scaledValue = value * decimals;
 
 	long double  roundedValue;
@@ -60,54 +50,95 @@ bool ScalarConverter::isType(long double originalValue, std::string const& type)
 	return (customRound<T>(originalValue) == customRound<T>(recasting));
 }
 
-template <typename T>
-bool detectPrecisionIssues(T originalValue)
+template<typename T, typename U>
+bool detectPrecisionIssues(T value2type, U original)
 {
-	long double newValue = static_cast<long double>(originalValue);
-	T recasting = static_cast<T>(newValue);
+	long double doubleValue = static_cast<long double>(value2type);
+	T recasting = static_cast<T>(doubleValue);
 	long double epsilon = std::numeric_limits<T>::epsilon();
 
 	if (DEBUG > 0)
 	{
 		std::cout << getColorFmt(FLYELLOW);
-		std::cout << std::fixed << std::setprecision(20);
-		std::cout << "Original: " << originalValue << std::endl;
-		std::cout << "New: " << newValue << std::endl;
+		std::cout << std::fixed << std::setprecision(std::numeric_limits<T>::digits10);
+		std::cout << "Original: " << value2type << std::endl;
+		std::cout << "New: " << doubleValue << std::endl;
 		std::cout << "Recasted: " << recasting << std::endl;
-		std::cout << "Original: " << customRound<T>(originalValue) << std::endl;
-		std::cout << "New: " << customRound<T>(newValue) << std::endl;
+		std::cout << "Original: " << customRound<T>(value2type) << std::endl;
+		std::cout << "New: " << customRound<T>(doubleValue) << std::endl;
 		std::cout << "Recasted: " << customRound<T>(recasting) << std::endl;
-		std::cout << "original == recasted?:" << std::boolalpha << (std::abs(customRound<T>(originalValue) - customRound<T>(recasting)) < epsilon) << std::endl;
+		std::cout << "original == recasted?:" << std::boolalpha << (std::abs(customRound<T>(value2type) - customRound<T>(recasting)) < epsilon) << std::endl;
 		std::cout << C_END << std::endl;
 	}
 
-	if (std::isnan(originalValue) || std::isinf(originalValue))
+	if (std::isnan(value2type) || std::isinf(value2type))
 		return (true);
 
-	return (std::abs(customRound<T>(originalValue) - customRound<T>(recasting)) >= epsilon);
+	return (value2type == customRound<T>(recasting));
 }
-template <typename T>
-void ScalarConverter::toType(long double value, std::string const& type)
+
+// template <typename T>
+// void ScalarConverter::toType(long double value, std::string const& type)
+// {
+// 	long double max;
+// 	long double min;
+
+// 	max = std::numeric_limits<T>::max();
+// 	min = -(std::numeric_limits<T>::max() + 1);
+// 	std::cout << "min: " << min << std::endl;
+// 	std::cout << "max: " << max << std::endl;
+// 	std::cout << getColorFmt(FWHITE)<< std::setw(6) << type << ": " << C_END;
+// 	if (type == "float" || type == "double")
+// 	{
+// 		// int decimals = std::numeric_limits<T>::digits10;
+// 		std::cout << std::fixed << std::setprecision(1);
+// 	}
+// 	if ((value >= min && value <= max) || (((type == "float" || type == "double") && (std::isnan(value) || std::isinf(value)))))
+// 	{
+// 		if (type == "char" && !std::isprint(static_cast<char>(value)))
+// 			std::cout << getColorStr(FYELLOW, "Non displayable");
+// 		// else if ((type == "float" || type == "double") && detectPrecisionIssues(value))
+// 		// 	std::cout << getColorFmt(FYELLOW) << static_cast<T>(value);
+// 		else
+// 		{
+			
+// 			std::cout << getColorFmt(FGREEN) << static_cast<T>(value);
+// 		}
+// 		if (type == "float")
+// 			std::cout << "f";
+// 		std::cout << C_END << std::endl;
+// 	}
+// 	else
+// 		std::cout << getColorStr(FRED,"impossible") << std::endl;
+// }
+
+template <typename T, typename U>
+void ScalarConverter::toType(long double value, T original, std::string const& type)
 {
 	long double max;
 	long double min;
 
 	max = std::numeric_limits<T>::max();
 	min = -(std::numeric_limits<T>::max() + 1);
+	std::cout << "min: " << min << std::endl;
+	std::cout << "max: " << max << std::endl;
 	std::cout << getColorFmt(FWHITE)<< std::setw(6) << type << ": " << C_END;
 	if (type == "float" || type == "double")
 	{
-		int decimals = std::numeric_limits<T>::digits10;
-		std::cout << std::fixed << std::setprecision(decimals);
+		// int decimals = std::numeric_limits<T>::digits10;
+		std::cout << std::fixed << std::setprecision(1);
 	}
 	if ((value >= min && value <= max) || (((type == "float" || type == "double") && (std::isnan(value) || std::isinf(value)))))
 	{
 		if (type == "char" && !std::isprint(static_cast<char>(value)))
 			std::cout << getColorStr(FYELLOW, "Non displayable");
-		else if ((type == "float" || type == "double") && detectPrecisionIssues(value))
-			std::cout << getColorFmt(FYELLOW) << static_cast<T>(value);
+		// else if ((type == "float" || type == "double") && detectPrecisionIssues(value))
+		// 	std::cout << getColorFmt(FYELLOW) << static_cast<T>(value);
 		else
+		{
+			
 			std::cout << getColorFmt(FGREEN) << static_cast<T>(value);
+		}
 		if (type == "float")
 			std::cout << "f";
 		std::cout << C_END << std::endl;
@@ -119,10 +150,11 @@ void ScalarConverter::toType(long double value, std::string const& type)
 template <typename T>
 void ScalarConverter::callHandler(T value)
 {
-	toType<char>(value, "char");
-	toType<int>(value, "int");
-	toType<float>(value, "float");
-	toType<double>(value, "double");
+	T original;
+	toType<char, T>(value, original, "char");
+	toType<int, T>(value, original,  "int");
+	toType<float, T>(value, original,  "float");
+	toType<double, T>(value, original,  "double");
 }
 
 #endif // SCALARCONVERTER_TPP

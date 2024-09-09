@@ -167,11 +167,11 @@ subject:$(NAME)
 		echo "---------------------------------"; \
 	done
 run:$(NAME)
-	@echo $(BOLD) $(CYAN) ./$(NAME) "$$i" $(E_NC) "\n"; \
+	@echo $(BOLD) $(CYAN) ./$(NAME) '"$(i)"' $(E_NC) "\n"; \
 	if [ "$(S)" = "0" ]; then \
 		echo $(E_NC); $(MAKE) -C . val; \
 	else \
-		echo $(E_NC); ./$(NAME) "$$i" ; \
+		echo $(E_NC); ./$(NAME) "$(i)" ; \
 	fi;
 # ATTENTION !!!!!!!!!!!!!!  USE WITH S=0 !
 leaks: $(NAME)

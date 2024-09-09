@@ -28,9 +28,10 @@ void ScalarConverter::convert(std::string const& str)
 			value = literal[0];
 		if (DEBUG > 0)
 			std::cout << "value: " << value << C_END << std::endl;
-		if (isType<char>(value, "char") && literal.length() == 1)
+		if (literal.length() == 1 && isType<char>(value, "char"))
 			callHandler<char>(static_cast<char>(value));
-		else if (isType<int>(value, "int") && literal.find_first_not_of("+-0123456789") == std::string::npos)
+		else if (literal.find_first_not_of("+-0123456789") == std::string::npos && \
+		isType<int>(value, "int"))
 			callHandler<int>(static_cast<int>(value));
 		else if (isType<float>(value, "float"))
 			callHandler<float>(std::strtof(literal.c_str(), NULL));

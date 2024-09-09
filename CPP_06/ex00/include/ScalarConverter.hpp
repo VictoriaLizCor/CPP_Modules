@@ -48,8 +48,10 @@ class ScalarConverter
 		template <typename T>
 		static bool isType(long double originalValue, const std::string& type);
 
-		template <typename T>
-		static void toType(long double value, const std::string& type);
+		// template <typename T>
+		// static void toType(long double value, const std::string& type);
+		template <typename T, typename U>
+		void ScalarConverter::toType(long double value, T original, std::string const& type);
 	protected:
 		
 	public:
