@@ -140,29 +140,21 @@ check:
 		echo  $(f) [$(GREEN) OK $(E_NC)]; \
 	fi
 test:$(NAME)
-	@echo $(BOLD) $(CYAN) "Running tests..." $(E_NC) "\n"
-	@for i in "42.0f" "42.0" "-inff" "+inf" "nan" "invalid" "123" "123.456" "0.0f" "-0.0" "1e10" "1e10f" "\n" "\\n"; do \
-		echo $(BOLD) $(CYAN) ./$(NAME) $$i $(E_NC) "\n"; \
-		if [ "$(S)" = "0" ]; then \
-			echo $(E_NC); $(MAKE) -C . val; \
-		else \
-			if [ "$(D)" = "0" ]; then \
-				echo $(E_NC); ./$(NAME) "$$i"; \
-			else \
-				echo $(E_NC); ./$(NAME) " "; \
-			fi; \
-		fi; \
-		echo "---------------------------------"; \
-	done
+	@echo $(BOLD) $(CYAN) ./$(NAME) '"$(i)"' $(E_NC) "\n"; \
+	if [ "$(S)" = "0" ]; then \
+		echo $(E_NC); $(MAKE) -C . val; \
+	else \
+		echo $(E_NC); ./$(NAME) "$(i)" ; \
+	fi;
 
 subject:$(NAME)
 	@echo $(BOLD) $(CYAN) "Running tests..." $(E_NC) "\n"
-	@for i in "0" "0.0f" "nan" "nanf" "42.0f"; do \
+	@for i in "42.0f" "42.0" "-inff" "+inf" "nan" "invalid" "123" "123.456" "0.0f" "-0.0" "1e10" "1e10f"; do \
 		echo $(BOLD) $(CYAN) ./$(NAME) $$i $(E_NC) "\n"; \
 		if [ "$(S)" = "0" ]; then \
 			echo $(E_NC); $(MAKE) -C . val; \
 		else \
-			echo $(E_NC); ./$(NAME) $$i; \
+			echo $(E_NC); ./$(NAME) "$$i"; \
 		fi; \
 		echo "---------------------------------"; \
 	done
@@ -348,22 +340,17 @@ $(D_PURPLE)
 FLAGS:
 	D -> debug information	 (default: 0)
 	S -> sanatizer information (default: -1)
-	i -> switch case 
-		* 1.- 
-		* 2.- 
-		* 3.- 
-		* 4.- 
-		* Defautl Subject
 
 Example:
 
-$(D_WHITE)[Character test]
-$(D_PURPLE)$> make test i=1
+$(D_WHITE)[Short test]
+$(D_PURPLE)$> make subject
 $(D_WHITE)[Debug information and run Basic test with Valgrind]
-$(D_PURPLE)$> make D=1 S=0 re test i=1
+$(D_PURPLE)$> make D=1 S=0 re val i=1
+$(D_WHITE)[Debug information and run Basic test with Sanitizer]
+$(D_PURPLE)$> make D=2 S=1 re run  i=1
 $(D_WHITE)[run all tests]
-$(D_PURPLE)$> make test
-
+$(D_PURPLE)$> make D=1 run
 endef
 export MANUAL
 

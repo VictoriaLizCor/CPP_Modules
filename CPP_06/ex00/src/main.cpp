@@ -7,6 +7,7 @@ static void deepTest(void)
 {
 
 	{
+		ScalarConverter::convert("\n");
 		ScalarConverter::convert("!");
 		ScalarConverter::convert("'!'");
 		ScalarConverter::convert("'1'");
@@ -54,7 +55,6 @@ static void deepTest(void)
 		ScalarConverter::convert("abcf");
 		ScalarConverter::convert("");
 		ScalarConverter::convert("f");
-
 		ScalarConverter::convert("0");
 		ScalarConverter::convert("1.23");
 		ScalarConverter::convert("nan");
@@ -83,7 +83,12 @@ static void deepTest(void)
 		ScalarConverter::convert("4.3f5");
 		//precision issues
 		ScalarConverter::convert("3213213212312.31652426719665527344");
-		std::cout << getColorStr(FGREEN, "All tests passed!") << std::endl;
+		ScalarConverter::convert("340282346638528859811704183484516925440.00000000000000000000");
+		ScalarConverter::convert("214748365023452345.5");
+		ScalarConverter::convert("179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368.0");
+		ScalarConverter::convert("2147483647");
+		ScalarConverter::convert("2147483649");
+		std::cout << getColorStr(FGREEN, "\nDONE with all tests!") << std::endl;
 	}
 
 }
@@ -91,7 +96,8 @@ static void deepTest(void)
 
 int main(int ac, char* argv[])
 {
-	std::cout << "ac: " << ac<< std::endl;
+	if (DEBUG != 0)
+		std::cout << "ac: " << ac<< std::endl;
 	if (ac != 2)
 	{
 		std::ostringstream ss;

@@ -24,8 +24,8 @@ void ScalarConverter::convert(std::string const& str)
 		}
 		else if(!std::isprint(static_cast<int>(literal[0])))
 			value = static_cast<long double>(literal[0]);
-		else
-			value = literal[0];
+		else // check if digit
+			value = static_cast<int>(literal[0]);;
 		if (DEBUG > 0)
 			std::cout << "value: " << value << C_END << std::endl;
 		if (literal.length() == 1 && isType<char>(value, "char"))
@@ -37,6 +37,10 @@ void ScalarConverter::convert(std::string const& str)
 			callHandler<float>(std::strtof(literal.c_str(), NULL));
 		else if(isType<double>(value, "double"))
 			callHandler<double>(std::strtod(literal.c_str(), NULL));
+		else if(isType<long double>(value, "double"))
+			callHandler<long double>(std::strtold(literal.c_str(), NULL));
+		if (DEBUG > 0)
+			std::cout << "---------------" << std::endl;
 	}
 	catch (...)
 	{
