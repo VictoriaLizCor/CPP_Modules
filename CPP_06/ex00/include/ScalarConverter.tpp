@@ -95,7 +95,10 @@ void ScalarConverter::toType(long double value, std::string const& type)
 		}
 		else
 		{
-			std::cout << getColorFmt(FGREEN) << static_cast<T>(value);
+			if (type == "char")
+				std::cout << getColorFmt(FGREEN) << "'" << static_cast<T>(value)  << "'";
+			else
+				std::cout << getColorFmt(FGREEN) << static_cast<T>(value);
 			notPossible = false;
 		}
 		if (type == "float")
