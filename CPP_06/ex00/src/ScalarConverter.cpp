@@ -19,13 +19,7 @@ void ScalarConverter::convert(std::string const& str)
 		};
 		if (literal.length() > 1)
 		{
-			// if (((*end == 'F' || *end == 'f')) && *(end + 1) == '\0')
-			// {
-			// 	std::cout << "isfloat\n";
-			// 	value = std::strtof(literal.c_str(), NULL);
-			// }
-			// else if (*end != '\0')
-			if (*end != '\0' && ((*end != 'f' || *end != 'F') && *(end + 1) != '\0'))
+			if (*end != '\0' && ((*end != 'f' && *end != 'F') || *(end + 1) != '\0'))
 				throw (std::invalid_argument(literal));
 		}
 		else if(!std::isdigit(literal[0]))
