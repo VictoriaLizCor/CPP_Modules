@@ -53,6 +53,14 @@ bool ScalarConverter::isType(long double originalValue, std::string const& type)
 }
 
 template <typename T>
+bool ScalarConverter::precisionLost(long double originalValue)
+{
+	T newValue = static_cast<T>(originalValue);
+	long double recasting = static_cast<long double>(newValue);
+	return (customRound<T>(originalValue) != customRound<T>(recasting));
+}
+
+template <typename T>
 void ScalarConverter::toType(long double value, std::string const& type)
 {
 	long double max;
@@ -70,6 +78,8 @@ void ScalarConverter::toType(long double value, std::string const& type)
 	if (type == "float" || type == "double")
 	{
 		std::cout << std::fixed << std::setprecision(1);
+		if (DEBUG)
+			std::cout << std::fixed << std::setprecision(std::numeric_limits<T>::digits10);
 	}
 	if ((value >= min && value <= max) || (((type == "float" || type == "double") && (std::isnan(value) || std::isinf(value)))))
 	{
@@ -78,13 +88,12 @@ void ScalarConverter::toType(long double value, std::string const& type)
 			std::cout << getColorStr(FYELLOW, "Non displayable");
 			notPossible = false;
 		}
-		else if ( (type == "float" || type == "double") && !isType<T>(value, type))
+		else if ( (type == "float" || type == "double") && precisionLost<T>(value))
 		{
 			std::cout << getColorFmt(FYELLOW) << static_cast<T>(value);
 			notPossible = false;
 		}
-		else// if (type == "int" || type == "char" || type == "double")
-		// else if (type == "int" || type == "char"  || type == "double")
+		else
 		{
 			std::cout << getColorFmt(FGREEN) << static_cast<T>(value);
 			notPossible = false;

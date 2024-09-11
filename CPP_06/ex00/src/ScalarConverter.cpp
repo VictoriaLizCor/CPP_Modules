@@ -22,10 +22,11 @@ void ScalarConverter::convert(std::string const& str)
 			if (*end != '\0' && (*end != 'f' || *(end + 1) != '\0'))
 				throw (std::invalid_argument(literal));
 		}
-		else if(!std::isprint(static_cast<int>(literal[0])))
-			value = static_cast<long double>(literal[0]);
+		else if(!std::isdigit(literal[0]))
+			value = literal[0];
 		else // check if digit
-			value = static_cast<int>(literal[0]);;
+			// value = (literal.c_str()[0]);
+			value = std::atoi(literal.c_str());
 		if (DEBUG > 0)
 			std::cout << "value: " << value << C_END << std::endl;
 		if (literal.length() == 1 && isType<char>(value, "char"))

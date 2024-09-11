@@ -51,9 +51,9 @@ class ScalarConverter
 		template <typename T>
 		static void toType(long double value, const std::string& type);
 		
+		template <typename T>
+		static bool precisionLost(long double originalValue);
 
-	protected:
-		
 	public:
 		static void convert(std::string const& literal);
 };
