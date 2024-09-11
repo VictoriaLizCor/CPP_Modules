@@ -21,6 +21,20 @@ long double customRound(long double value)
 }
 
 template <typename T>
+static void setLimits(long double& min, long double& max, std::string const& type)
+{
+	max = std::numeric_limits<T>::max();
+	min = -(std::numeric_limits<T>::max() + 1);
+	if (type == "char")
+		min = 0;
+	if (DEBUG > 3)
+	{
+		std::cout << "min: " << min << std::endl;
+		std::cout << "max: " << max << std::endl;
+	}
+}
+
+template <typename T>
 bool ScalarConverter::isType(long double originalValue, std::string const& type)
 {
 	T newValue = static_cast<T>(originalValue);
@@ -37,15 +51,7 @@ bool ScalarConverter::isType(long double originalValue, std::string const& type)
 		std::cout << "New: " << customRound<T>(newValue) << std::endl;
 		std::cout << "Recasted: " <<  customRound<T>(newValue) << std::endl;
 		std::cout << "original == recasted?:" << std::boolalpha << (customRound<T>(originalValue) == customRound<T>(recasting)) << std::endl;
-		if (DEBUG > 2)
-		{
-			long double max = std::numeric_limits<T>::max();
-			long double min = -(std::numeric_limits<T>::max() + 1);
-
-			std::cout << "min: " << min << std::endl;
-			std::cout << "max: " << max << std::endl;
-			std::cout << C_END  << std::endl;
-		}
+		std::cout << C_END;
 	}
 	if ((std::isnan(originalValue) || std::isinf(originalValue)) && (type == "double" || type == "float"))
 		return (true);
@@ -57,6 +63,8 @@ bool ScalarConverter::precisionLost(long double originalValue)
 {
 	T newValue = static_cast<T>(originalValue);
 	long double recasting = static_cast<long double>(newValue);
+	if ((std::isnan(originalValue) || std::isinf(originalValue)))
+		return (false);
 	return (customRound<T>(originalValue) != customRound<T>(recasting));
 }
 
@@ -66,47 +74,37 @@ void ScalarConverter::toType(long double value, std::string const& type)
 	long double max;
 	long double min;
 	bool notPossible = true;
-
-	max = std::numeric_limits<T>::max();
-	min = -(std::numeric_limits<T>::max() + 1);
-	if (DEBUG > 3)
-	{
-		std::cout << "min: " << min << std::endl;
-		std::cout << "max: " << max << std::endl;
-	}
-	std::cout << getColorFmt(FWHITE)<< std::setw(6) << type << ": " << C_END;
-	if (type == "float" || type == "double")
+	const bool isFloatOrDouble = (type == "float" || type == "double");
+	setLimits<T>(min, max, type);
+	std::cout << getColorFmt(FWHITE) << std::setw(6) << type << ": " << C_END;
+	if (isFloatOrDouble)
 	{
 		std::cout << std::fixed << std::setprecision(1);
 		if (DEBUG)
 			std::cout << std::fixed << std::setprecision(std::numeric_limits<T>::digits10);
 	}
-	if ((value >= min && value <= max) || (((type == "float" || type == "double") && (std::isnan(value) || std::isinf(value)))))
+	if ((value >= min && value <= max) || (isFloatOrDouble && (std::isnan(value) || std::isinf(value))))
 	{
 		if (type == "char" && !std::isprint(static_cast<char>(value)))
-		{
 			std::cout << getColorStr(FYELLOW, "Non displayable");
-			notPossible = false;
-		}
-		else if ( (type == "float" || type == "double") && precisionLost<T>(value))
-		{
+		else if (isFloatOrDouble && precisionLost<T>(value))
 			std::cout << getColorFmt(FYELLOW) << static_cast<T>(value);
-			notPossible = false;
-		}
 		else
 		{
 			if (type == "char")
-				std::cout << getColorFmt(FGREEN) << "'" << static_cast<T>(value)  << "'";
+				std::cout << getColorFmt(FGREEN) << "'" << static_cast<T>(value) << "'";
 			else
 				std::cout << getColorFmt(FGREEN) << static_cast<T>(value);
-			notPossible = false;
 		}
 		if (type == "float")
-				std::cout << "f";
+			std::cout << "f";
+		notPossible = false;
 		std::cout << C_END;
 	}
+
 	if (notPossible)
-		std::cout << getColorStr(FRED,"impossible");
+		std::cout << getColorStr(FRED, "impossible");
+
 	std::cout << std::endl;
 }
 

@@ -149,7 +149,7 @@ test:$(NAME)
 
 subject:$(NAME)
 	@echo $(BOLD) $(CYAN) "Running tests..." $(E_NC) "\n"
-	@for i in "42.0f" "42.0" "-inff" "+inf" "nan" "invalid" "123" "123.456" "0.0f" "-0.0" "1e10" "1e10f"; do \
+	@for i in "42.0f" "52.0" "-inff" "+inf" "nan" "invalid" "123" "123.456" "0.0f" "-0.0" "1e10" "1e10f"; do \
 		echo $(BOLD) $(CYAN) ./$(NAME) $$i $(E_NC) "\n"; \
 		if [ "$(S)" = "0" ]; then \
 			echo $(E_NC); $(MAKE) -C . val; \
