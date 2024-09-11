@@ -116,7 +116,7 @@ int main(int ac, char* argv[])
 			// std::cout << "float: "<< static_cast<float>(0.f) << std::endl;
 			// std::cout << "float: "<< static_cast<float>(0.0f) << std::endl;
 			// std::cout << "float: "<< static_cast<float>(.1f) << std::endl;
-			// std::cout << "float: "<< static_cast<float>(0.1f) << std::endl;
+			std::cout << "float: "<< static_cast<float>(0.1F) << std::endl;
 
 			// std::cout << "float: "<< static_cast<float>(12.31652429999999999975) << std::endl;
 			// std::cout << std::fixed << std::setprecision(20) << "float: "<< static_cast<float>(2147483647) << std::endl;
