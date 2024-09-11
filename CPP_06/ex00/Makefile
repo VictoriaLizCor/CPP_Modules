@@ -233,7 +233,8 @@ soft:
 	@if [ -f "$(GIT_REPO)/Makefile" ]; then	\
 		$(MAKE) -C $(GIT_REPO) soft || \
 		if [ $$? -ne 0 ]; then \
-		echo $(RED) GIT_REPO not found $(E_NC); \
+			echo $(RED) GIT_REPO not found $(E_NC); \
+		fi \
 	fi
 temp:
 	@printf '%b\n' "$${MAIN_CONTENT}\n" | pygmentize -l cpp

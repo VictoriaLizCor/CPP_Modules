@@ -5,7 +5,6 @@
 
 static void deepTest(void)
 {
-
 	{
 		ScalarConverter::convert("\n");
 		ScalarConverter::convert("!");
