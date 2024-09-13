@@ -2,7 +2,6 @@
 #include "Utils.hpp"
 #include <iostream>
 
-
 static void deepTest(void)
 {
 	{

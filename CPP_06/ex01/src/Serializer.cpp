@@ -9,17 +9,17 @@ Serializer::~Serializer(void)
 }
 
 /**
- * @brief       Convert a Data pointer into unsigned int
+ * @brief Convert a Data pointer into unsigned int
  */
-uintptr_t Serializer::serialize( Data* ptr )
+uintptr_t Serializer::serialize(Data* data)
 {
-  return reinterpret_cast<uintptr_t>( ptr );
+	return (reinterpret_cast<uintptr_t>(data));
 }
 
 /**
- * @brief       Convert unsigned int into Data pointer
+ * @brief Convert unsigned int into Data pointer
  */
-Data* Serializer::deserialize( uintptr_t raw )
+Data* Serializer::deserialize(uintptr_t raw)
 {
-  return reinterpret_cast<Data*>( raw );
+	return (reinterpret_cast<Data*>(raw));
 }

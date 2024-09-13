@@ -489,10 +489,12 @@ std::string getRandString()
 void printTitle(std::string title, int n)
 {
 	int size = n;
+	std::string toPrint;
 
 	if (DEBUG == 0)
 		return ;
-	std::string toPrint = " " + title + " "; 
+	if (!title.empty())
+		toPrint = " " + title + " "; 
 
 	if (size <= 0 || size > 60)
 		size = 60;
@@ -505,6 +507,28 @@ void printTitle(std::string title, int n)
 	std::cout << std::setfill('=') << std::setw(padding) << "";
 	std::cout << toPrint;
 	std::cout << std::setfill('=') << std::setw(size - len - padding)
+	<< "" << std::endl;
+}
+
+void printTitle(std::string title, int n, char c)
+{
+	int size = n;
+	std::string toPrint;
+
+	if (!title.empty())
+		toPrint = " " + title + " "; 
+
+	if (size <= 0 || size > 60)
+		size = 60;
+	int len = static_cast<int>(toPrint.size());
+	int padding = (size - len) / 2;
+
+	if (len % 2 != 0 && size % 2 == 0)
+		padding++;
+
+	std::cout << std::setfill(c) << std::setw(padding) << "";
+	std::cout << toPrint;
+	std::cout << std::setfill(c) << std::setw(size - len - padding)
 	<< "" << std::endl;
 }
 

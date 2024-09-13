@@ -102,5 +102,6 @@ std::string	demangle(const char* mangled_name);
 std::string	getRandString();
 size_t		getRandomNum(size_t num);
 void		printTitle(std::string title, int n);
+void		printTitle(std::string title, int n, char c);
 size_t		countNewlines(const std::string& str);
 #endif
