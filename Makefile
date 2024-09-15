@@ -1,7 +1,7 @@
 MAKEFLAGS			+= --no-print-directory
 GIT_REPO			:= $(shell basename $$PWD)
 ROOT_CPP_MODULES	:= $(abspath $(dir $(lastword $(MAKEFILE_LIST)))/)
-DIRS				:= $(abspath $(dir ${shell find ./*/ -type d -name "CPP_06*" |sort}))
+DIRS				:= $(abspath $(dir ${shell find ./*/ -type d -name "CPP_07*" |sort}))
 # DIRS				:= $(abspath $(dir ${shell find ./*/ -type d -name "CPP_0*" |sort}))
 #------ DEBUG ------#
 D			= 1
