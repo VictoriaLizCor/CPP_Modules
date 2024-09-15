@@ -328,8 +328,6 @@ Example:
 
 $(D_WHITE)[test]
 $(D_PURPLE)$> make D=0 test
-$(D_WHITE)[test union]
-$(D_PURPLE)$> make D=1 test
 $(D_WHITE)[Debug information and run Basic test with Valgrind]
 $(D_PURPLE)$> make D=0 re val
 $(D_WHITE)[Debug information and run Basic test with Sanitizer]
