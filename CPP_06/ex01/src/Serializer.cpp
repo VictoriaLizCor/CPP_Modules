@@ -8,6 +8,12 @@ Serializer::~Serializer(void)
 {
 }
 
+Serializer& Serializer::operator=(Serializer const& rhs)
+{
+	(void)rhs;
+	return (*this);
+}
+
 /**
  * @brief Convert a Data pointer into unsigned int
  */

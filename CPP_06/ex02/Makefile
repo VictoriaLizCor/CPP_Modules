@@ -48,7 +48,7 @@ D_FLAGS		+= -DDEBUG=$(D)
 endif
 D_FLAGS		+= -Wconversion -Wsign-conversion -pedantic
 D_FLAGS		+= -fno-omit-frame-pointer
-# /// When debug folder is availabe///
+# /// When debug folder is available///
 # DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
 # SRC			+= $(DEBUG_SRC)
 # INCLUDES	+= -I $(DEBUG_PATH)/include
@@ -100,6 +100,7 @@ endif
 
 .PHONY: clean fclean re test val leaks
 
+
 clean:
 	@echo;
 	@if [ -d "$(BUILD_DIR)" ]; then	\
@@ -139,18 +140,6 @@ test:$(NAME)
 	else \
 		echo $(E_NC); ./$(NAME) "$(i)" ; \
 	fi;
-
-subject:$(NAME)
-	@echo $(BOLD) $(CYAN) "Running tests..." $(E_NC) "\n"
-	@for i in "42.0f" "52.0" "-inff" "+inf" "nan" "invalid" "123" "123.456" "0.0f" "-0.0" "1e10" "1e10f"; do \
-		echo $(BOLD) $(CYAN) ./$(NAME) $$i $(E_NC) "\n"; \
-		if [ "$(S)" = "0" ]; then \
-			echo $(E_NC); $(MAKE) -C . val; \
-		else \
-			echo $(E_NC); ./$(NAME) "$$i"; \
-		fi; \
-		echo "---------------------------------"; \
-	done
 run:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) '"$(i)"' $(E_NC) "\n"; \
 	if [ "$(S)" = "0" ]; then \
@@ -337,14 +326,15 @@ FLAGS:
 
 Example:
 
-$(D_WHITE)[Short test]
-$(D_PURPLE)$> make subject
+$(D_WHITE)[test]
+$(D_PURPLE)$> make D=0 test
+$(D_WHITE)[test union]
+$(D_PURPLE)$> make D=1 test
 $(D_WHITE)[Debug information and run Basic test with Valgrind]
-$(D_PURPLE)$> make D=1 S=0 re val i=1
+$(D_PURPLE)$> make D=0 re val
 $(D_WHITE)[Debug information and run Basic test with Sanitizer]
-$(D_PURPLE)$> make D=2 S=1 re run  i=1
-$(D_WHITE)[run all tests]
-$(D_PURPLE)$> make D=1 run
+$(D_PURPLE)$> make D=0 S=1 re run i=1
+
 endef
 export MANUAL
 
@@ -381,11 +371,11 @@ class {{CLASS_NAME}}
 endef
 export HEADER_CONTENT
 define MAIN_CONTENT
+#include <iostream>
 $(shell for file in include/*.hpp; do \
 	printf '#include "'$$(basename $$file)'"\\n';\
 done)
 
-#include <iostream>
 
 int main(void)
 {

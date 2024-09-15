@@ -86,11 +86,27 @@ static void deepTest(void)
 		ScalarConverter::convert("179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368.0");
 		ScalarConverter::convert("2147483647");
 		ScalarConverter::convert("2147483649");
+		std::stringstream ss;
+		ss << std::numeric_limits<long double>::max();
+		ScalarConverter::convert(ss.str());
 		std::cout << getColorStr(FGREEN, "\nDONE with all tests!") << std::endl;
 	}
 
 }
+/*
+* When you use the value `std::numeric_limits<long double>::max()` as
+* a string for the [`ScalarConverter`], it is recognized as [`inf`]for
+* [`float`] and [`double`] because the value exceeds the maximum
+* representable value for these types.
+* 
+* Conversion to Float and
+* Double**: When the string is converted to [`float`], the value
+* exceeds the maximum representable value for these types. According
+* to the IEEE 754 standard, when a floating-point operation results in
+* a value that exceeds the representable range, it is set to infinity
+* ([`inf`].
 
+*/
 
 int main(int ac, char* argv[])
 {

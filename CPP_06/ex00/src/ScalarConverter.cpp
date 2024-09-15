@@ -2,21 +2,40 @@
 
 ScalarConverter::~ScalarConverter(){}
 
+ScalarConverter& ScalarConverter::operator=(ScalarConverter const& rhs)
+{
+	(void)rhs;
+	return (*this);
+}
+/**
+ * @brief Converts a given string to its corresponding scalar type and
+ * handles the conversion.
+ *
+ * This function attempts to interpret the input string as a scalar
+ * value, which can be a char, int, float, double, or long double. It
+ * performs the conversion and calls the appropriate handler based on
+ * the detected type.
+ *
+ * @param str The input string to be converted.
+ *
+ * @throws std::invalid_argument If the input string cannot be
+ * interpreted as a valid scalar value.
+ */
 void ScalarConverter::convert(std::string const& str)
 {
 	try
 	{
 		std::string literal(reinterpretate(str));
 		long double value;
-		
 		char* end;
 		value = std::strtold(literal.c_str(), &end);
+
 		if (DEBUG > 0)
 		{
 			std::cout << getColorFmt(FLCYAN);
 			std::cout << "\nliteral: '" << literal << "'"<< std::endl;
 			std::cout << "len: [" << literal.length() << "]" << std::endl;
-		};
+		}
 		if (literal.length() > 1)
 		{
 			if (*end != '\0' && ((*end != 'f' && *end != 'F') || *(end + 1) != '\0'))
@@ -24,8 +43,7 @@ void ScalarConverter::convert(std::string const& str)
 		}
 		else if(!std::isdigit(literal[0]))
 			value = literal[0];
-		else // check if digit
-			// value = (literal.c_str()[0]);
+		else
 			value = std::atoi(literal.c_str());
 		if (DEBUG > 0)
 			std::cout << "value: " << value << C_END << std::endl;
@@ -38,18 +56,26 @@ void ScalarConverter::convert(std::string const& str)
 			callHandler<float>(std::strtof(literal.c_str(), NULL));
 		else if(isType<double>(value, "double"))
 			callHandler<double>(std::strtod(literal.c_str(), NULL));
-		else if(isType<long double>(value, "double"))
+		else
 			callHandler<long double>(std::strtold(literal.c_str(), NULL));
 		if (DEBUG > 0)
 			std::cout << "---------------" << std::endl;
 	}
-	catch (...)
+	catch (const std::invalid_argument& e)
 	{
 		callHandler<long double>(std::numeric_limits<long double>::max());
 	}
 }
 
-
+/**
+ * @brief Reinterprets escape sequences in a given string.
+ *
+ * This function takes a string and replaces any recognized escape sequences
+ * (such as \n, \t, \r, etc.) with their corresponding character representations.
+ *
+ * @param str The input string containing potential escape sequences.
+ * @return A new string with escape sequences replaced by their corresponding characters.
+ */
 std::string ScalarConverter::reinterpretate(const std::string& str)
 {
 	std::string result = str;
