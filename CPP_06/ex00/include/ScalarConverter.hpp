@@ -26,12 +26,6 @@
 #  define DEBUG 0
 # endif
 
-struct EscapeSequence
-{
-	const char*	seq;
-	char		ch;
-};
-
 class ScalarConverter
 {
 	private:
@@ -40,6 +34,12 @@ class ScalarConverter
 		ScalarConverter(ScalarConverter const& rhs);
 		~ScalarConverter();
 		// static void callHandler(long double value);
+		struct EscapeSequence
+		{
+			const char*	seq;
+			char		ch;
+		};
+
 		static std::string reinterpretate(std::string const& str);
 
 		template <typename T>
