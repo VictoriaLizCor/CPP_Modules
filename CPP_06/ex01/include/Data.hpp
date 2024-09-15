@@ -13,6 +13,7 @@ struct Data
 	void print(std::string type) const;
 };
 
+
 #endif // DATA_HPP
 
 /**

@@ -12,24 +12,20 @@ static void checkSerialization(Data* originalPtr, Data* deserializedPtr)
 		deserializedPtr->print("Deserialized");
 	} else {
 		std::cout << error("serialization failed", 0) << std::endl;
+		deserializedPtr->print("Deserialized");
 	}
-	printTitle("", 20, '-');
+	printTitle("", 60, '-');
 }
 
-static void testFailure()
+static void testFailure(Data* originalPtr)
 {
-	Data originalData = {'a', 42, 3.14f, 2.718};
-	Data* originalPtr = &originalData;
-
 	uintptr_t serialized = Serializer::serialize(originalPtr);
 
 	uintptr_t corruptedSerialized = serialized + 1;
 
-	Data* deserializedPtr = Serializer::deserialize(corruptedSerialized);
+	Data* corruptedSerializedPtr = Serializer::deserialize(corruptedSerialized);
 
-	checkSerialization(&originalData, deserializedPtr);
-	deserializedPtr->setData('b', 217473847, 3.1416f, 1.4142);
-	deserializedPtr->print("New deserilazed Data");
+	checkSerialization(originalPtr, corruptedSerializedPtr);
 }
 
 int main()
@@ -42,7 +38,9 @@ int main()
 	Data* deserializedPtr = Serializer::deserialize(serialized);
 
 	checkSerialization(&originalData, deserializedPtr);
-
-	testFailure();
+	deserializedPtr->setData('b', 217473847, 3.1416f, 1.4142);
+	deserializedPtr->print("New deserilazed Data");
+	std::cout << std::endl;
+	testFailure(&originalData);
 	return (0);
 }

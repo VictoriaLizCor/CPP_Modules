@@ -20,6 +20,11 @@ class Serializer
 		Serializer& operator=(Serializer const& rhs);
 		Serializer(Serializer const& rhs);
 		virtual ~Serializer();
+		union DataUnion
+		{
+			Data* ptr;
+			uintptr_t raw;
+		};
 
 	public:
 		static uintptr_t serialize(Data* ptr);
@@ -49,27 +54,6 @@ class Serializer
  *    operations, such as interfacing with hardware or performing
  *    certain optimizations.
  *
- * ### Example:
- * In the context of the `Serializer` class:
- *
- * ```cpp
- * class Serializer {
- * public:
- *     static uintptr_t serialize(Data* ptr) {
- *         return reinterpret_cast<uintptr_t>(ptr);
- *     }
- *
- *     static Data* deserialize(uintptr_t raw) {
- *         return reinterpret_cast<Data*>(raw);
- *     }
- * };
- * ```
- *
- * - **Serialization**: `reinterpret_cast<uintptr_t>(ptr)` converts a
- *   `Data*` pointer to an `uintptr_t` integer.
- * - **Deserialization**: `reinterpret_cast<Data*>(raw)` converts an
- *   `uintptr_t` integer back to a `Data*` pointer.
- *
  * ### Usage:
  * - **Serialization/Deserialization**: As shown in the example,
  *   converting pointers to integers and back.
@@ -89,4 +73,25 @@ class Serializer
  * should be used with caution. It allows for low-level type
  * conversions that bypass the type system, providing flexibility at
  * the cost of safety.
+ * 
+ * -------------------------------------------------
+### Summary UNIOn
+
+A union is a low-level feature in C++ that allows you to store different types of data in the same memory location. It is particularly useful for tasks like type-punning and efficient memory usage, making it a valuable feature for low-level programming and optimization tasks. It is not a container or a booster but a fundamental part of the C++ language.
+A `union` in C++ is neither a container like `std::vector` nor a booster like the Boost libraries. Instead, it is a special data structure that allows you to store different data types in the same memory location. Here are some key points to understand about unions:
+
+### Key Characteristics of Unions
+
+1. **Memory Sharing**: All members of a union share the same memory location. This means that the size of the union is determined by the size of its largest member.
+
+2. **Type-Punning**: Unions are often used for type-punning, which is a way to interpret the same memory location as different data types. This can be useful for low-level programming tasks, such as interpreting raw data or performing certain optimizations.
+
+3. **Efficient Memory Usage**: Since all members share the same memory, unions can be more memory-efficient than structures (`structs`) when you need to store different types of data but never simultaneously.
+
+
+### Explanation
+- **Without Union**: You need to use `reinterpret_cast` to convert between `Data*` and `uintptr_t`.
+- **With Union**: The union handles the conversion internally, so you don't need to use `reinterpret_cast`.
+
+Using a union simplifies the code and makes it more readable by eliminating the need for explicit type casting. It also ensures that the conversion is safe and well-defined.
 */

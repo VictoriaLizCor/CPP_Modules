@@ -13,6 +13,16 @@ Serializer::~Serializer(void)
  */
 uintptr_t Serializer::serialize(Data* data)
 {
+	if (DEBUG)
+	{
+		DataUnion du;
+
+		std::cout << getColorStr(FLCYAN, "Union serialize\n");
+		du.ptr = data;
+		std::cout << "serialize:" << du.raw << std::endl;
+		return (du.raw);
+	}
+	std::cout << "serialize:" << reinterpret_cast<uintptr_t>(data) << std::endl;
 	return (reinterpret_cast<uintptr_t>(data));
 }
 
@@ -21,5 +31,15 @@ uintptr_t Serializer::serialize(Data* data)
  */
 Data* Serializer::deserialize(uintptr_t raw)
 {
+	if (DEBUG)
+	{
+		DataUnion du;
+
+		std::cout << getColorStr(FLCYAN, "Union deserialize\n");
+		du.raw = raw;
+		std::cout << "serialize:" << du.raw << std::endl;
+		return (du.ptr);
+	}
+	std::cout << "serialize:" << raw << std::endl;
 	return (reinterpret_cast<Data*>(raw));
 }

@@ -1,6 +1,10 @@
 #include "Data.hpp"
 #include <iostream>
-
+/**
+ * @brief print data of struct data
+ * 
+ * @param type name of data struct
+ */
 void Data::print(std::string type) const
 {
 	printTitle(type, 30, '=');
@@ -10,6 +14,14 @@ void Data::print(std::string type) const
 	std::cout << "Double: " << d << std::endl;
 }
 
+/**
+ * @brief set function for struct data
+ * 
+ * @param newC new assigment for char
+ * @param newI new assigment for int
+ * @param newF new assigment for float
+ * @param newD new assigment for double
+ */
 void Data::setData(char newC, int newI, float newF, double newD)
 {
 	c = newC;
@@ -17,3 +29,4 @@ void Data::setData(char newC, int newI, float newF, double newD)
 	f = newF;
 	d = newD;
 }
+
