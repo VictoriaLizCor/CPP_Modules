@@ -174,6 +174,7 @@ int main(void)
 		floatPoint(std::numeric_limits<float>::max(), 8, 23);
 		floatPoint(-45.4, 8, 23);
 		floatPoint((float)INT_MAX, 8, 23);
+		floatPoint(static_cast<float>(2147483649), 8, 23);
 		floatPoint(0.0/0.0, 8, 23);
 		floatPoint(-std::numeric_limits<float>::infinity(), 8, 23);
 	}
