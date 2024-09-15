@@ -1,10 +1,19 @@
+/**
+ * @file Serializer.hpp
+ * @author lilizarr (lilizarr@student.42wolfsburg.de)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-15
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef SERIALIZER_HPP
 # define SERIALIZER_HPP
 
 # include <iostream>
 # include <sstream>
 # include <string>
-# include <typeinfo>
 # include <stdint.h>
 # include <Utils.hpp>
 # include "Data.hpp"

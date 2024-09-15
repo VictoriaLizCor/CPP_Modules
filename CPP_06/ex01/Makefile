@@ -1,7 +1,7 @@
 #------ TARGET ------#
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
-D_FLAGS		= -Wall -Wextra -std=c++98  #-Werror #-Wshadow#-Wno-unused-function -Wunused
+D_FLAGS		= -Wall -Wextra -std=c++98 -Werror #-Wshadow#-Wno-unused-function -Wunused
 INCLUDES	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR		:= src/
@@ -100,14 +100,7 @@ endif
 
 .PHONY: clean fclean re test val leaks
 
-del:
-	@files_found=$$(find . -type f -name "*_shrubbery*" | wc -l); \
-	if [ $$files_found -gt 0 ]; then \
-		printf "$(LF) 🧹 $(P_RED)Removing files matching $(P_YELLOW)*_shrubbery*$(P_NC)\n"; \
-		find . -type f -name "*_shrubbery*" -exec rm -f {} \;; \
-	fi
-
-clean: del
+clean:
 	@echo;
 	@if [ -d "$(BUILD_DIR)" ]; then	\
 		rm -rf $(BUILD_DIR); 		\
@@ -147,16 +140,6 @@ test:$(NAME)
 		echo $(E_NC); ./$(NAME) "$(i)" ; \
 	fi;
 
-subject:$(NAME)
-	@echo $(BOLD) $(CYAN) "Running tests..." $(E_NC) "\n"
-	@for i in "42.0f" "52.0" "-inff" "+inf" "nan" "invalid" "123" "123.456" "0.0f" "-0.0" "1e10" "1e10f"; do \
-		echo $(BOLD) $(CYAN) ./$(NAME) $$i $(E_NC) "\n"; \
-		if [ "$(S)" = "0" ]; then \
-			echo $(E_NC); $(MAKE) -C . val; \
-		else \
-			echo $(E_NC); ./$(NAME) "$$i"; \
-		fi; \
-		echo "---------------------------------"; \
 	done
 run:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) '"$(i)"' $(E_NC) "\n"; \
@@ -344,14 +327,15 @@ FLAGS:
 
 Example:
 
-$(D_WHITE)[Short test]
-$(D_PURPLE)$> make subject
+$(D_WHITE)[test]
+$(D_PURPLE)$> make D=0 test
+$(D_WHITE)[test union]
+$(D_PURPLE)$> make D=1 test
 $(D_WHITE)[Debug information and run Basic test with Valgrind]
-$(D_PURPLE)$> make D=1 S=0 re val i=1
+$(D_PURPLE)$> make D=0 re val
 $(D_WHITE)[Debug information and run Basic test with Sanitizer]
-$(D_PURPLE)$> make D=2 S=1 re run  i=1
-$(D_WHITE)[run all tests]
-$(D_PURPLE)$> make D=1 run
+$(D_PURPLE)$> make D=0 S=1 re run i=1
+
 endef
 export MANUAL
 

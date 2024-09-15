@@ -1,10 +1,19 @@
+/**
+ * @file ScalarConverter.hpp
+ * @author lilizarr (lilizarr@student.42wolfsburg.de)
+ * @brief 
+ * @version 0.1
+ * @date 2024-09-15
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef SCALARCONVERTER_HPP
 # define SCALARCONVERTER_HPP
 
 # include <iostream>
 # include <sstream>
 # include <string>
-# include <typeinfo>
 # include <cstdlib>
 # include <cctype>
 # include <cfloat>
@@ -30,7 +39,7 @@ class ScalarConverter
 {
 	private:
 		ScalarConverter();
-		// ScalarConverter& operator=(ScalarConverter const& rhs);
+		ScalarConverter& operator=(ScalarConverter const& rhs);
 		ScalarConverter(ScalarConverter const& rhs);
 		~ScalarConverter();
 		// static void callHandler(long double value);
@@ -60,9 +69,6 @@ class ScalarConverter
 
 
 // std::ostream& operator << (std::ostream& os, ScalarConverter& rhs);
-
-template<typename T, typename U>
-struct is_same;
 
 #include "ScalarConverter.tpp" 
 
