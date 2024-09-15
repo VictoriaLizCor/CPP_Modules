@@ -86,7 +86,7 @@ T getRandomNum(size_t num)
 		srand(static_cast<unsigned int>(time(0)));
 		seeded = true;
 	}
-	return (static_cast<T>(rand()) % num);
+	return (static_cast<T>(static_cast<size_t>(rand()) % num));
 }
 
 #endif

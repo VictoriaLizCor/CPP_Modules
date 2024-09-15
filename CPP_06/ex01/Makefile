@@ -139,8 +139,6 @@ test:$(NAME)
 	else \
 		echo $(E_NC); ./$(NAME) "$(i)" ; \
 	fi;
-
-	done
 run:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) '"$(i)"' $(E_NC) "\n"; \
 	if [ "$(S)" = "0" ]; then \
