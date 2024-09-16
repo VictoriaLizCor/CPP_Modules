@@ -59,7 +59,8 @@
 		"**/CPP_02": true,
 		"**/CPP_03": true,
 		"**/CPP_04": true,
-		"**/CPP_05": true
+		"**/CPP_05": true,
+		"**/CPP_06": true
 	},
 	"github.copilot.editor.enableAutoCompletions": false,
 	"pdf-preview.default.sidebar": false,
