@@ -14,7 +14,6 @@ void swap(T& a, T& b)
 	tmp = a;
 	a = b;
 	b = tmp;
-	return;
 }
 
 template <typename T>
@@ -30,18 +29,26 @@ const T& min(T const& a, T const& b)
 }
 
 template <typename T>
-std::string checkType(T ax, T bx, T value)
+std::string checkType(T const& ax, T const& bx, T const& value)
 {
 	std::stringstream ss;
 	ss << value;
-	if (value == ax)
+	if (DEBUG > 1)
+	{
+		std::cout << "\nValue address: " << &value << std::endl;
+		std::cout << "a address: " << &ax << std::endl;
+		std::cout << "b address: " << &bx << std::endl;
+		std::cout<< std::boolalpha;
+		std::cout << "a == value: " << (&ax == &value) << std::endl;
+		std::cout << "b == value: " << (&bx == &value) << std::endl;
+	}
+	if (&value == &ax)
 		return (getColorStr(FGREEN, ss.str()));
-	else if (value == bx)
+	else if (&value == &bx)
 		return (getColorStr(FYELLOW, ss.str()));
 	else
 		return getColorStr(FRED, ss.str()); 
 }
-;
 #endif // WHATEVER_HPP
 /**
  * @NOTES: 
