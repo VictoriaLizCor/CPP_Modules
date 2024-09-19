@@ -59,7 +59,8 @@
 		"**/CPP_02": true,
 		"**/CPP_03": true,
 		"**/CPP_04": true,
-		"**/CPP_05": true
+		"**/CPP_05": true,
+		"**/CPP_06": true
 	},
 	"github.copilot.editor.enableAutoCompletions": false,
 	"pdf-preview.default.sidebar": false,
@@ -118,7 +119,16 @@
 		"streambuf": "cpp",
 		"cinttypes": "cpp",
 		"typeinfo": "cpp",
-		"map": "cpp"
+		"map": "cpp",
+		"ratio": "cpp",
+		"chrono": "cpp",
+		"condition_variable": "cpp",
+		"list": "cpp",
+		"set": "cpp",
+		"mutex": "cpp",
+		"stop_token": "cpp",
+		"thread": "cpp",
+		"semaphore": "cpp"
 	},
 		// "files.associations": {
 	// 	"array": "cpp",
