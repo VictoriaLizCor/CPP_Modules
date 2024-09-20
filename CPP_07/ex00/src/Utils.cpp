@@ -462,24 +462,6 @@ std::string classFunctionStr(std::string const& c, std::string const& f)
  * 
  * @return The randomly generated string.
  */
-std::string getRandString()
-{
-	static bool seeded = false;
-	std::string randomStr= "";
-	size_t strLen = 10;
-
-	if (!seeded)
-	{
-		srand(static_cast<unsigned int>(time(0)));
-		seeded = true;
-	}
-	for(size_t i = 0; i < strLen; i++)
-	{
-		char random_char = 'a' + static_cast<char>(rand() % 26); // random character between 'a' and 'z'
-		randomStr += random_char;
-	}
-	return (randomStr);
-}
 
 /**
  * Prints a title surrounded by equal signs.
