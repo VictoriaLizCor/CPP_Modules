@@ -1,5 +1,6 @@
-#ifndef STRINGUTILS_H
-# define STRINGUTILS_H
+#ifndef UTILS_H
+# define UTILS_H
+
 # include <iostream>
 # include <string>
 # include <sstream>
@@ -82,5 +83,39 @@ std::string	demangle(const char* mangled_name);
 void		printTitle(std::string title, int n);
 size_t		countNewlines(const std::string& str);
 void		printTitle(std::string title, int n, char c);
+void		initSeed();
 
+#include <Utils.tpp>
 #endif
+
+/**
+ * @NOTES:
+ * When you define template functions in a header file, they are
+   included in multiple translation units (source files). Without the
+   `inline` keyword, the compiler generates multiple definitions of
+   the same function, leading to linker errors. The `inline` keyword
+   tells the compiler that the function can have multiple definitions
+   across different translation units, but they should be treated as a
+   single definition.
+
+Here's a step-by-step explanation:
+
+1. **Template Functions in Header Files**: Template functions are
+   typically defined in header files because their definitions need to
+   be available wherever they are instantiated. This means the
+   compiler needs to see the full definition of the template function
+   to generate the appropriate code for each instantiation.
+
+2. **Multiple Inclusion**: When a header file containing template
+   function definitions is included in multiple source files, each
+   source file gets its own copy of the template function definition.
+   This leads to multiple definitions of the same function when the
+   object files are linked together.
+
+3. **Linker Errors**: Without the `inline` keyword, the linker sees
+   multiple definitions of the same function and generates an error.
+   The `inline` keyword allows the compiler to generate multiple
+   definitions of the function but ensures that the linker treats them
+   as a single definition.
+
+ */

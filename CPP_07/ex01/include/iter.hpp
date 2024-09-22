@@ -17,7 +17,6 @@
 std::string getType(std::string type);
 static void initSeed();
 
-
 template <typename T>
 void printValue(T& val)
 {

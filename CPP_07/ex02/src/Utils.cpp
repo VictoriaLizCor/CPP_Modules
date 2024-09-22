@@ -530,3 +530,14 @@ void printTitle(std::string title, int n, char c)
 	std::cout << std::setfill(c) << std::setw(size - len - padding)
 	<< "" << std::endl;
 }
+
+void initSeed()
+{
+	static bool seeded = false;
+	
+	if (!seeded)
+	{
+		srand(static_cast<unsigned int>(time(0)));
+		seeded = true;
+	}
+}

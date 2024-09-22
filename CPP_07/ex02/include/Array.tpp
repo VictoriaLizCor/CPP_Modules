@@ -1,5 +1,5 @@
 #ifndef ARRAY_TPP
-#define ARRAY_PP
+#define ARRAY_TPP
 
 #include <Array.hpp>
 
@@ -11,10 +11,11 @@ template <typename T>
 u_int Array<T>::_instanceCount = 0;
 
 template <typename T>
-Array<T>::Array(u_int const &size) : _array(NULL),
-									 _size(size),
-									 _instanceId(++_instanceCount),
-									 _colorIdStr(setObjColor(static_cast<int>(_instanceId + FGRAY)))
+Array<T>::Array(u_int const &size) :
+_array(NULL),
+_size(size),
+_instanceId(++_instanceCount),
+_colorIdStr(setObjColor(static_cast<int>(_instanceId + FGRAY)))
 {
 	if (_size)
 		_array = new T[_size];
@@ -45,14 +46,13 @@ Array<T> &Array<T>::operator=(Array<T> const &rhs)
 }
 
 template <typename T>
-Array<T>::Array(Array<T> const &rhs) : _array(new T[rhs._size]),
-									   _size(rhs._size),
-									   _instanceId(++_instanceCount),
-									   _colorIdStr(setObjColor(static_cast<int>(_instanceId + FGRAY)))
+Array<T>::Array(Array<T> const &rhs) :
+_array(new T[rhs._size]),
+_size(rhs._size),
+_instanceId(++_instanceCount),
+_colorIdStr(setObjColor(static_cast<int>(_instanceId + FGRAY)))
 {
-	if (_size == 0)
-		_array = NULL;
-	else
+	if (_size > 0)
 		_array = new T[_size];
 	*this = rhs;
 }
