@@ -13,14 +13,10 @@
 #  define DEBUG 0
 # endif
 
+
 std::string getType(std::string type);
 static void initSeed();
 
-template <typename T>
-struct FuncPtr
-{
-	typedef void(*type)(T&);
-};
 
 template <typename T>
 void printValue(T& val)
@@ -37,14 +33,46 @@ void power(T& val)
 template <>
 void power<std::string>(std::string& val)
 {
+	static bool status;
 	(void)val;
-	std::cout << "Operation not supported for std::string" << " ";
+	if(status == 0)
+	{
+		status = 1;
+		std::cout << "Operation not supported for std::string" << " ";
+	}
+}
+
+template <>
+void power<char>(char& val)
+{
+	static bool status;
+	(void)val;
+	if(status == 0)
+	{
+		status = 1;
+		std::cout << "Operation not supported for char" << " ";
+	}
 }
 
 template <typename T>
 void sum(T& val)
 {
-	std::cout << (val + val) << " ";
+	static T sum;
+	sum += val;
+	std::cout << "\r\033[K" << "Total sum: ";
+	std::cout << sum << " ";
+}
+
+template <>
+void sum<char>(char& val)
+{
+	static bool status;
+	(void)val;
+	if(status == 0)
+	{
+		status = 1;
+		std::cout << "Operation not supported for char" << " ";
+	}
 }
 
 template <typename T>
@@ -57,19 +85,60 @@ void increment(T& val)
 template <>
 void increment<std::string>(std::string& val)
 {
-	static std::string newVal;
-	newVal+=val;
-	std::cout << newVal << " ";
+	for (size_t i =0; i < val.size(); ++i)
+	{
+		if (val[i] == 'z')
+			val[i] = 'a';
+		else
+			val[i] = static_cast<char>(val[i] + 1);
+		std::cout << val[i];
+	}
+	std::cout << " ";
 }
+
+template <>
+void increment<char>(char& val)
+{
+	if (val == 'z')
+		val = 'a';
+	else
+		val += 1;
+	std::cout << val << " ";
+}
+
 
 template <typename T>
 void min(T& val)
 {
+	static bool stat;
 	static T min;
-	if (min > val)
+	if (stat == 0)
+	{
+		stat = 1;
 		min = val;
-	std::cout << min << " ";
+	}
+	else if (min > val)
+		min = val;
+	std::cout << "\r\033[K" << "Min value: ";
+	std::cout << getColorFmt(FWHITE) << min << " " << C_END;
 }
+
+template <typename T>
+void max(T& val)
+{
+	static bool stat;
+	static T max;
+	if (stat == 0)
+	{
+		stat = 1;
+		max = val;
+	}
+	else if (max < val)
+		max = val;
+	std::cout << "\r\033[K" << "Max value: ";
+	std::cout << getColorFmt(FWHITE) << max << " " << C_END;
+}
+
 
 template <typename T>
 T getRandomVal(size_t num)
@@ -110,7 +179,7 @@ std::string getRandomVal<std::string>(size_t num)
 template <typename T>
 std::pair<T*, size_t> createArray()
 {
-	size_t len = getRandomVal<size_t>(20) + 1;
+	size_t len = getRandomVal<size_t>(5) + 1;
 	T* array = new T[len];
 	for(size_t i = 0; i < len; ++i)
 	{
@@ -122,7 +191,7 @@ std::pair<T*, size_t> createArray()
 template <>
 std::pair<std::string*, size_t> createArray<std::string>()
 {
-	size_t len = getRandomVal<size_t>(20) + 1;
+	size_t len = getRandomVal<size_t>(5) + 1;
 	std::string* array = new std::string[len];
 
 	for(size_t i = 0; i < len; ++i)
@@ -146,7 +215,7 @@ std::pair<char*, size_t> createArray<char>()
 }
 
 template <typename T>
-void iter(T* it, size_t len, typename FuncPtr<T>::type fun)
+void iter(T* it, size_t len, void (*fun)(T&))
 // void iter(T* it, size_t len, FuncPtr<T> )
 {
 	for(size_t i = 0; i < len; ++i )
@@ -157,33 +226,34 @@ void iter(T* it, size_t len, typename FuncPtr<T>::type fun)
 template <typename T>
 void runTest()
 {
+	typedef void (*FuncPtr)(T&);
 	std::string typeName = typeid(T).name();
 	std::string functionName("Using function ");
 
-	typename FuncPtr<T>::type functions[5] = {min<T>, increment<T>, sum<T>, power<T>, printValue<T>};
-	size_t idx = getRandomVal<size_t>(5);
+	FuncPtr functions[6] = {min<T>, max<T>, increment<T>, sum<T>, power<T>, printValue<T>};
+	size_t idx = getRandomVal<size_t>(6);
 	std::pair<T*, size_t> intArrayPair = createArray<T>();
 	T* array = intArrayPair.first;
 	size_t len = intArrayPair.second;
 
 	printTitle(getType(typeName), 60, '*');
+	std::cout << "size: " << len << std::endl;
 	std::cout << "values:\n";
 	iter(array, len, printValue<T>);
 	switch (idx)
 	{
-		case 0: functionName += "min"; break;
-		case 1: functionName += "increment"; break;
-		case 2: functionName += "sum"; break;
-		case 3: functionName += "power"; break;
-		default: functionName += "printValue"; break;
+		case 0: functionName += getColorStr(FGREEN, "min"); break;
+		case 1: functionName += getColorStr(FYELLOW, "max"); break;
+		case 2: functionName += getColorStr(FCYAN, "increment"); break;
+		case 3: functionName += getColorStr(FRED, "sum"); break;
+		case 4: functionName += getColorStr(FMAGENTA, "power"); break;
+		default: functionName += getColorStr(FWHITE, "printValue"); break;
 	}
 	nl(1);
-	printTitle(functionName, 30, '*');
+	printTitle(functionName, 40, '*');
 	iter(array, len, functions[idx]);
-	nl(2);
-	iter(array, len, increment<T>);
 	delete[] array;
-	nl(2);
+	nl(1);
 }
 
 

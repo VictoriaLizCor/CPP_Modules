@@ -15,24 +15,24 @@ void initSeed()
 std::string getType(std::string type)
 {
 	if (type == typeid(int).name())
-		return ("int");
+		return (getColorStr(FLGREEN, "int"));
 	if (type == typeid(float).name())
-		return ("float");
+		return (getColorStr(FLBLUE, "float"));
 	if (type == typeid(double).name())
-		return ("double");
+		return (getColorStr(FLCYAN, "double"));
 	if (type == typeid(char).name())
-		return ("char");
+		return (getColorStr(FLMAGENTA, "char"));
 	if (type == typeid(std::string).name())
-		return ("string");
+		return (getColorStr(FLYELLOW, "string"));
 	return (type);
 }
 
 int main( void )
 {
-	// ::runTest<int>();
-	// ::runTest<float>();
-	// ::runTest<double>();
+	::runTest<int>();
+	::runTest<float>();
+	::runTest<double>();
+	::runTest<char>();
 	::runTest<std::string>();
-	printTitle("", 70, '-');
 	return (0);
 }
