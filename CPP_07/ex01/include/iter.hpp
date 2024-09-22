@@ -99,8 +99,8 @@ void increment<std::string>(std::string& val)
 template <>
 void increment<char>(char& val)
 {
-	if (val == 'z')
-		val = 'a';
+	if (val == 126)
+		val = 32;
 	else
 		val += 1;
 	std::cout << val << " ";
@@ -163,17 +163,21 @@ std::string getRandomVal<std::string>(size_t num)
 	std::string randomStr= "";
 	size_t strLen;
 
-	if (num > 1)
-		strLen = getRandomVal<size_t>(num) + 1;
-	else
-		strLen = 1;
-	initSeed();
+	strLen = getRandomVal<size_t>(num) + 1;
 	for(size_t i = 0; i < strLen; i++)
 	{
 		char random_char = 'a' + static_cast<char>(rand() % 26);
 		randomStr += random_char;
 	}
 	return (randomStr);
+}
+
+template <>
+char getRandomVal<char>(size_t num)
+{
+	initSeed();
+	char randomValue = 32 + std::rand() % (126 - 32 + num);
+	return (randomValue);
 }
 
 template <typename T>
@@ -209,14 +213,13 @@ std::pair<char*, size_t> createArray<char>()
 
 	for(size_t i = 0; i < len; ++i)
 	{
-		array[i] = getRandomVal<std::string>(1)[0];
+		array[i] = getRandomVal<char>(1);
 	}
 	return (std::make_pair(array, len));
 }
 
 template <typename T>
 void iter(T* it, size_t len, void (*fun)(T&))
-// void iter(T* it, size_t len, FuncPtr<T> )
 {
 	for(size_t i = 0; i < len; ++i )
 		fun(it[i]);
