@@ -6,6 +6,7 @@
 # include <string>
 # include <typeinfo>
 # include <Utils.hpp>
+#include "CT.hpp"
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -31,64 +32,30 @@ class Array
 		virtual ~Array();
 
 		u_int			size(void) const;
-		std::string		getInfo() const;
+		std::string		getInfo(void) const;
+		void			init(void);
+		void			display(void);
 };
 
 #include "Array.tpp"
 template<typename T>
 std::ostream& operator << (std::ostream& os, Array<T>& rhs);
 
-template <typename T>
-std::pair<Array<T>*, size_t> createArray()
-{
-	size_t len = getRandomVal<size_t>(5) + 1;
-	Array<T>* = new T[len];
-	for(size_t i = 0; i < len; ++i)
-	{
-		array[i] = getRandomVal<T>(1000);
-	}
-	return std::make_pair(array, len);
-}
 
-template <>
-std::pair<Array<std::string>*, size_t> createArray<std::string>()
-{
-	size_t len = getRandomVal<size_t>(5) + 1;
-	Array<std::string>* array = new std::string[len];
-
-	for(size_t i = 0; i < len; ++i)
-	{
-		array[i] = getRandomVal<std::string>(10);
-	}
-	return (std::make_pair(array, len));
-}
-
-template <>
-inline std::pair<Array<char>*, size_t> createArray<char>()
-{
-	size_t len = getRandomVal<size_t>(20) + 1;
-	Array<char>* array = new char[len];
-
-	for(size_t i = 0; i < len; ++i)
-	{
-		array[i] = getRandomVal<char>(1);
-	}
-	return (std::make_pair(array, len));
-}
-
-std::string getType(std::string type);
+static std::string getType(std::string type);
 template <typename T>
 void runTest()
 {
-	std::pair<Array<T>*, size_t> intArrayPair = createArray<T>();
-	Array<T>* array = intArrayPair.first;
-	size_t len = intArrayPair.second;
+	u_int len = static_cast<u_int>((getRandomVal<size_t>(10)));
 	std::string typeName = typeid(T).name();
 	printTitle(getType(typeName), 60, '*');
 	std::cout << "size: " << len << std::endl;
-	std::cout << "values:\n";
-	std::cout << array << std::endl;
-	delete[] array;
+	{
+		Array<T> numbers(len);
+		numbers.init();
+		std::cout << numbers << std::endl;
+		numbers.display();
+	}
 	nl(1);
 }
 

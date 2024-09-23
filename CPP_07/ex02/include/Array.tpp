@@ -17,10 +17,12 @@ _size(size),
 _instanceId(++_instanceCount),
 _colorIdStr(setObjColor(static_cast<int>(_instanceId + FGRAY)))
 {
-	if (_size)
-		_array = new T[_size];
+	for (u_int i = 0; i < _size; ++i)
+	{
+		_array[i] = new T();
+	}
 	if (DEBUG)
-		std::cout << *this << getColorStr(FGRAY, " was Created\n");
+		std::cout <<  getInfo() << getColorStr(FGRAY, " was Created\n");
 }
 
 template <typename T>
@@ -41,19 +43,21 @@ Array<T> &Array<T>::operator=(Array<T> const &rhs)
 		}
 	}
 	if (DEBUG)
-		std::cout << *this << getColorStr(FGRAY, " Copy was Created\n");
+		std::cout << getInfo() << getColorStr(FGRAY, " Copy was Created\n");
 	return (*this);
 }
 
 template <typename T>
 Array<T>::Array(Array<T> const &rhs) :
-_array(new T[rhs._size]),
+_array(NULL),
 _size(rhs._size),
 _instanceId(++_instanceCount),
 _colorIdStr(setObjColor(static_cast<int>(_instanceId + FGRAY)))
 {
-	if (_size > 0)
-		_array = new T[_size];
+	for (u_int i = 0; i < _size; ++i)
+	{
+		_array[i] = T();
+	}
 	*this = rhs;
 }
 
@@ -85,8 +89,9 @@ template <typename T>
 Array<T>::~Array(void)
 {
 	if (DEBUG)
-		std::cout << *this << getColorStr(FGRAY, " was Destroyed\n");
-	delete[] _array;
+		std::cout << getInfo() << getColorStr(FGRAY, " was Destroyed\n");
+	if (_size)
+		delete[] _array;
 	_instanceCount--;
 }
 
@@ -97,19 +102,31 @@ u_int Array<T>::size(void) const
 }
 
 template <typename T>
+void Array<T>::display(void)
+{
+	for(u_int i = 0; i < _size; ++i)
+	{
+		std::cout << "(" << i << ")[" << _array[i] << "] ";
+	}
+	nl(1);
+}
+
+template <typename T>
+void Array<T>::init(void)
+{
+	for(u_int i = 0; i < _size; ++i)
+	{
+		_array[i] = getRandomVal<T>(1000);
+	}
+}
+
+template <typename T>
 std::string Array<T>::getInfo() const
 {
 	std::ostringstream os;
-
-	if (DEBUG >= 1)
-		os << _colorIdStr << _array << std::endl;
-	;
-	os << getColorFmt(FLWHITE);
-	for (u_int i = 0; i < _size; ++i)
-		os << "[" << i << "]-" << _array[i] << " ";
-	if (_size)
-		os << std::endl;
 	os << _colorIdStr;
+	if (DEBUG >= 2)
+		os << static_cast<const void*>(_array) << " ";
 	os << className(typeid(*this).name());
 	if (DEBUG >= 1)
 		os << _instanceId;
@@ -124,4 +141,5 @@ std::ostream &operator<<(std::ostream &os, Array<T> &rhs)
 	os << rhs.getInfo();
 	return (os);
 }
+
 #endif // ARRAY_HPP

@@ -47,8 +47,9 @@ inline char getRandomVal<char>(size_t num)
 {
 	initSeed();
 	num = 1;
-	char randomValue = 32 + std::rand() % (126 - 32 + num);
-	return (randomValue);
+	unsigned int randomValue = 32 + (static_cast<unsigned int>(std::rand()) % (126 - 32 + static_cast<unsigned int>(num)));
+
+	return (static_cast<char>(randomValue));
 }
 
 #endif // TUTILS_HPP

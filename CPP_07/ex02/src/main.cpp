@@ -1,21 +1,22 @@
 /**
  * @file main.cpp
  * @author lilizarr (lilizarr@student.42wolfsburg.de)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-09-22
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 #include <iostream>
 #include <Array.hpp>
+#include "CT.hpp"
 #define MAX_VAL 5
 
 void subject(void)
 {
 	Array<int> numbers(MAX_VAL);
-	int* mirror = new int[MAX_VAL];
+	int *mirror = new int[MAX_VAL];
 	initSeed();
 	for (int i = 0; i < MAX_VAL; ++i)
 	{
@@ -23,7 +24,7 @@ void subject(void)
 		numbers[i] = value;
 		mirror[i] = value;
 	}
-	//SCOPE
+	// SCOPE
 	{
 		Array<int> tmp = numbers;
 		Array<int> test(tmp);
@@ -34,14 +35,14 @@ void subject(void)
 		if (mirror[i] != numbers[i])
 		{
 			std::cerr << "didn't save the same value!!" << std::endl;
-			return ;
+			return;
 		}
 	}
 	try
 	{
 		numbers[-2] = 0;
 	}
-	catch(const std::exception& e)
+	catch (const std::exception &e)
 	{
 		std::cerr << e.what() << '\n';
 	}
@@ -49,7 +50,7 @@ void subject(void)
 	{
 		numbers[MAX_VAL] = 0;
 	}
-	catch(const std::exception& e)
+	catch (const std::exception &e)
 	{
 		std::cerr << e.what() << '\n';
 	}
@@ -58,7 +59,7 @@ void subject(void)
 	{
 		numbers[i] = rand();
 	}
-	delete [] mirror;//
+	delete[] mirror; //
 }
 
 std::string getType(std::string type)
@@ -78,8 +79,35 @@ std::string getType(std::string type)
 
 int main(void)
 {
-	subject();
-
-	::runTest<int>();
+	// subject();
+	// {
+	// 	Array<int> numbers(5);
+	// 	numbers.init();
+	// 	std::cout << numbers << std::endl;
+	// 	numbers.display();
+	// }
+	{
+		Array< CT<int, float> > numbers(5);
+		// numbers.init();
+		std::cout << numbers << std::endl;
+		numbers.display();
+	}
+	// nl(1);
+	// {
+	// 	Array<char> numbers(5);
+	// 	numbers.init();
+	// 	numbers.display();
+	// }
+	// {
+	// 	Array<char>* numbers;
+	// 	printTitle("Array Pointer", 30 , '-');
+	// 	numbers = new Array<char>(5);
+	// 	numbers->init();
+	// 	numbers->display();
+	// 	delete numbers;
+	// }
+	// ::runTest<int>();
+	// ::runTest<char>();
+	// ::runTest<std::string>();
 	return (0);
 }
