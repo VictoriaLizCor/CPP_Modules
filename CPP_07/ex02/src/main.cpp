@@ -10,7 +10,7 @@
  */
 #include <iostream>
 #include <Array.hpp>
-#include "CT.hpp"
+#include "Mix.hpp"
 #define MAX_VAL 5
 
 void subject(void)
@@ -62,52 +62,30 @@ void subject(void)
 	delete[] mirror; //
 }
 
-std::string getType(std::string type)
+std::string getType(std::type_info const& type)
 {
-	if (type == typeid(int).name())
-		return (getColorStr(FLGREEN, "int"));
-	if (type == typeid(float).name())
-		return (getColorStr(FLBLUE, "float"));
-	if (type == typeid(double).name())
-		return (getColorStr(FLCYAN, "double"));
-	if (type == typeid(char).name())
-		return (getColorStr(FLMAGENTA, "char"));
-	if (type == typeid(std::string).name())
-		return (getColorStr(FLYELLOW, "string"));
-	return (type);
+	if (type == typeid(int))
+		return (getColorStr(FGREEN, "int"));
+	if (type == typeid(float))
+		return (getColorStr(FBLUE, "float"));
+	if (type == typeid(double))
+		return (getColorStr(FCYAN, "double"));
+	if (type == typeid(char))
+		return (getColorStr(FMAGENTA, "char"));
+	if (type == typeid(std::string))
+		return (getColorStr(FYELLOW, "string"));
+	if (std::string(type.name()).find("MIX") != std::string::npos)
+		return (getColorStr(FWHITE, "MIX"));
+	return (type.name());
 }
 
 int main(void)
 {
-	// subject();
-	// {
-	// 	Array<int> numbers(5);
-	// 	numbers.init();
-	// 	std::cout << numbers << std::endl;
-	// 	numbers.display();
-	// }
-	{
-		Array< CT<int, float> > numbers(5);
-		// numbers.init();
-		std::cout << numbers << std::endl;
-		numbers.display();
-	}
-	// nl(1);
-	// {
-	// 	Array<char> numbers(5);
-	// 	numbers.init();
-	// 	numbers.display();
-	// }
-	// {
-	// 	Array<char>* numbers;
-	// 	printTitle("Array Pointer", 30 , '-');
-	// 	numbers = new Array<char>(5);
-	// 	numbers->init();
-	// 	numbers->display();
-	// 	delete numbers;
-	// }
-	// ::runTest<int>();
-	// ::runTest<char>();
-	// ::runTest<std::string>();
+	subject();
+	::runTest<int>();
+	::runTest<char>();
+	::runTest<std::string>();
+	::runTestMIX< std::string, float >();
+	::runTestMIX< char, int >();
 	return (0);
 }

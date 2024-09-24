@@ -33,6 +33,7 @@ inline std::string getRandomVal<std::string>(size_t num)
 	std::string randomStr= "";
 	size_t strLen;
 
+	num = 10;
 	strLen = getRandomVal<size_t>(num) + 1;
 	for(size_t i = 0; i < strLen; i++)
 	{

@@ -6,7 +6,7 @@
 # include <string>
 # include <typeinfo>
 # include <Utils.hpp>
-#include "CT.hpp"
+#include "Mix.hpp"
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -23,6 +23,8 @@ class Array
 		static u_int		_instanceCount;
 		u_int				_instanceId;
 		std::string const	_colorIdStr;
+
+		std::string			setColorInstance(std::type_info const& type);
 	public:
 		explicit Array(u_int const& size = 0);
 		Array<T>& operator=(Array<T> const& rhs);
@@ -34,31 +36,55 @@ class Array
 		u_int			size(void) const;
 		std::string		getInfo(void) const;
 		void			init(void);
+		static void		getInstanceCount(void);
 		void			display(void);
 };
 
-#include "Array.tpp"
 template<typename T>
 std::ostream& operator << (std::ostream& os, Array<T>& rhs);
 
+#include "Array.tpp"
 
-static std::string getType(std::string type);
+static std::string getType(std::type_info const& type);
+
 template <typename T>
 void runTest()
 {
+	Array<T>::getInstanceCount();
 	u_int len = static_cast<u_int>((getRandomVal<size_t>(10)));
-	std::string typeName = typeid(T).name();
-	printTitle(getType(typeName), 60, '*');
+	printTitle(getType(typeid(T)), 60, '*');
 	std::cout << "size: " << len << std::endl;
 	{
 		Array<T> numbers(len);
 		numbers.init();
 		std::cout << numbers << std::endl;
 		numbers.display();
+		try
+		{
+			int idx = getRandomVal<int>(len);
+			std::cout << "value in [" << idx << "]: " << numbers[idx] << std::endl;
+		}
+		catch (const std::exception &e)
+		{
+			std::cerr << e.what() << '\n';
+		}
 	}
 	nl(1);
 }
 
+template <typename U, typename T>
+void runTestMIX()
+{
+	u_int len = static_cast<u_int>(getRandomVal<size_t>(10));
+	printTitle(getType(typeid(MIX<U, T>)), 60, '*');
+	std::cout << "size: " << len << std::endl;
+	{
+		Array< MIX<U, T> > numbers(len);
+		std::cout << numbers << std::endl;
+		numbers.display();
+	}
+	nl(1);
+}
 #endif // ARRAY_HPP
 
 /**
