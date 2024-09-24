@@ -237,7 +237,6 @@ std::string	getColorShade(int eColor)
 {
 	std::ostringstream strColor;
 	static int pattern = -1;
-
 	pattern++;
 	if (toStr(pattern).find_first_of("68") != std::string::npos)
 		pattern++;

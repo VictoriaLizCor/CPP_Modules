@@ -82,10 +82,44 @@ std::string getType(std::type_info const& type)
 int main(void)
 {
 	subject();
-	::runTest<int>();
-	::runTest<char>();
-	::runTest<std::string>();
-	::runTestMIX< std::string, float >();
-	::runTestMIX< char, int >();
+	{
+		::runTest<int>();
+		::runTest<char>();
+		::runTest<std::string>();
+		::runTestMIX< std::string, float >();
+		::runTestMIX< char, int >();
+	}
+	{
+		printTitle("Copy constructor", 30 , '-');
+		Array<int> numbers(5);
+		numbers.init();
+		numbers.display();
+		Array<int> cpy(numbers);
+		std::cout << numbers << std::endl;
+		cpy.display();
+	}
+	{
+		printTitle("Copy assigment", 30 , '-');
+		Array<float> numbers(5);
+		numbers.init();
+		numbers.display();
+		Array<float> cpy = numbers;
+		std::cout << numbers << std::endl;
+		cpy.display();
+		numbers.init();
+		numbers.display();
+	}
+	 nl(1);
+	{
+		Array<double>* numbers;
+		printTitle("Array Pointer", 30 , '-');
+		numbers = new Array<double>(5);
+		numbers->init();
+		numbers->display();
+		Array<double> cpy = *numbers;
+		delete numbers;
+		cpy.display();
+	}
+	 nl(1);
 	return (0);
 }
