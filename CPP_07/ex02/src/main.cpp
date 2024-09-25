@@ -86,8 +86,8 @@ int main(void)
 		::runTest<int>();
 		::runTest<char>();
 		::runTest<std::string>();
-		::runTestMIX< std::string, float >();
-		::runTestMIX< char, int >();
+		::runTest< std::string, float >();
+		::runTest< char, int >();
 	}
 	{
 		printTitle("Copy constructor", 30 , '-');

@@ -175,7 +175,8 @@ template <>
 char getRandomVal<char>(size_t num)
 {
 	initSeed();
-	char randomValue = 32 + std::rand() % (126 - 32 + num);
+	(void)num;
+	char randomValue = 32 + static_cast<char>(rand() % 94);
 	return (randomValue);
 }
 

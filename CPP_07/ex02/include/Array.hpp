@@ -73,7 +73,7 @@ void runTest()
 }
 
 template <typename U, typename T>
-void runTestMIX()
+void runTest()
 {
 	u_int len = static_cast<u_int>(getRandomVal<size_t>(10));
 	printTitle(getType(typeid(MIX<U, T>)), 60, '*');
