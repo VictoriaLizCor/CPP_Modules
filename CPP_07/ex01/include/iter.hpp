@@ -226,6 +226,15 @@ void iter(T* it, size_t len, void (*fun)(T&))
 }
 
 template <typename T>
+void iter(T* it, size_t len, void (*fun)(T const&))
+{
+	for(size_t i = 0; i < len; ++i )
+		fun(it[i]);
+	nl(1);
+}
+
+
+template <typename T>
 void runTest()
 {
 	typedef void (*FuncPtr)(T&);
