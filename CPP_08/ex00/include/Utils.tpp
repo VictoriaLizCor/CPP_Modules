@@ -20,7 +20,7 @@ inline T getRandomVal(size_t num)
 }
 
 template <>
-inline size_t getRandomVal<size_t>(size_t num)
+inline size_t getRandomVal<std::size_t>(size_t num)
 {
 	initSeed();
 	return (static_cast<size_t>(rand()) % num);
