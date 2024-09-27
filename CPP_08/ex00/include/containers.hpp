@@ -11,35 +11,48 @@
 #  define DEBUG 0
 # endif
 
-#define CONTAINER_LIST(T) \
-	CONTAINER_TYPE(std::vector<T>, 0) \
-	CONTAINER_TYPE(std::deque<T>, 1) \
-	CONTAINER_TYPE(std::list<T>, 2)
+static std::string getType(std::type_info const& type);
 
-
-template <std::size_t Index, typename T>
-struct RandomContainerSelector;
-
-#define CONTAINER_TYPE(TYPE, INDEX) \
-template <typename T> \
-struct RandomContainerSelector<INDEX, T> { \
-	typedef TYPE type; \
-};
-
-CONTAINER_LIST(int)
-
-#undef CONTAINER_TYPE
+template <typename T, int Index>
+struct containerSelector;
 
 template <typename T>
-struct RandomContainer
+struct containerSelector<T, 0>
 {
-	static const std::size_t containerCount = 3;
-	static std::size_t containerSize;// = getRandomVal<std::size_t>(10);
-	typedef typename RandomContainerSelector< 0, T>::type type;
+	typedef std::list<T> type;
 };
 
 template <typename T>
-std::size_t  RandomContainer<T>::containerSize = getRandomVal<std::size_t>(10);
+struct containerSelector<T, 1>
+{
+	typedef std::vector<T> type;
+};
 
+template <typename T>
+struct containerSelector<T, 2>
+{
+	typedef std::deque<T> type;
+};
 
+template <typename T>
+void getContainer(int index, std::list<T>& con)
+{
+	if (index == 0)
+		con = std::list<T>();
+}
+
+template <typename T>
+void getContainer(int index, std::vector<T>& con)
+{
+	if (index == 1)
+		con = std::vector<T>();
+}
+
+template <typename T>
+void getContainer(int index, std::deque<T>& con)
+{
+	printTitle(getType(typeid(con)), 60, '*');
+	if (index == 2)
+		con = std::deque<T>();
+}
 #endif // CONTAINERS_HPP

@@ -16,7 +16,6 @@
 #  define DEBUG 0
 # endif
 
-static std::string getType(std::type_info const& type);
 
 template <typename T>
 typename T::iterator easyfind(T& container, int value)
@@ -36,20 +35,57 @@ void print(const T& val)
 template <typename T>
 void runTest()
 {
-	typedef typename RandomContainer<T>::type RandomContainerType;
-	RandomContainerType container;
-	std::size_t len = RandomContainer<T>::containerSize;
-	for (std::size_t i = 0; i < len; ++i)
-		container.push_back(getRandomVal<T>(std::numeric_limits<T>::max()));
+	std::size_t index = getRandomVal<std::size_t>(3);
+	std::list<T> listCon;
+	std::vector<T> vectorCon;
+	std::deque<T> dequeCon;
+
+	switch (index)
+	{
+		case 1:
+			getContainer(index, vectorCon);
+			break;
+		case 2:
+			getContainer(index, dequeCon);
+			break;
+		default:
+			getContainer(index, listCon);
+			break;
+	}
+	std::size_t len = getRandomVal<std::size_t>(10);
+	for (size_t i = 0; i < len; ++i)
+	{
+		if (index == 0)
+			vectorCon.push_back(getRandomVal<T>(std::numeric_limits<T>::max()));
+		else if (index == 1)
+			dequeCon.push_back(getRandomVal<T>(std::numeric_limits<T>::max()));
+		else
+			listCon.push_back(getRandomVal<T>(std::numeric_limits<T>::max()));
+	}
 		
-	printTitle(getType(typeid(container)), 60, '*');
 	std::cout << "size: " << len << std::endl;
 	try
 	{
-		std::for_each(container.begin(), container.end(), print<T>);
+		if (index == 0)
+		{
+			std::for_each(vectorCon.begin(), vectorCon.end(), print<T>);
+			typename std::vector<T>::iterator it = easyfind(vectorCon, 3);
+			std::cout << "Found value: " << *it << std::endl;
+		}
+		else if (index == 1)
+		{
+			std::for_each(dequeCon.begin(), dequeCon.end(), print<T>);
+			typename std::deque<T>::iterator it = easyfind(dequeCon, 3);
+			std::cout << "Found value: " << *it << std::endl;
+		}
+		else
+		{
+			std::for_each(listCon.begin(), listCon.end(), print<T>);
+			typename  std::list<T>::iterator it = easyfind(listCon, 3);
+			std::cout << "Found value: " << *it << std::endl;
+		}
 		nl(1);
-		typename RandomContainerType::iterator it = easyfind(container, 3);
-		std::cout << "Found value: " << *it << std::endl;
+		;
 	}
 	catch (const std::exception& e)
 	{
