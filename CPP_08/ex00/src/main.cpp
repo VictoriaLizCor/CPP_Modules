@@ -4,21 +4,68 @@
 
 std::string getType(std::type_info const& type)
 {
-	if (type == typeid(int))
-		return (getColorStr(FGREEN, "int"));
-	if (type == typeid(float))
-		return (getColorStr(FBLUE, "float"));
-	if (type == typeid(double))
-		return (getColorStr(FCYAN, "double"));
-	if (type == typeid(char))
-		return (getColorStr(FMAGENTA, "char"));
-	if (type == typeid(std::string))
-		return (getColorStr(FYELLOW, "string"));
-	return (type.name());
+	std::string typeName = type.name();
+
+	if (typeName.find("vector") != std::string::npos)
+		return (getColorStr(FGREEN, "Vector"));
+	if (typeName.find("deque") != std::string::npos)
+		return (getColorStr(FBLUE, "Deque"));
+	if (typeName.find("list") != std::string::npos)
+		return (getColorStr(FYELLOW, "List"));
+	return (typeName);
 }
 
 int main(void)
 {
+	{
+		std::vector<int> vectorCon;
+		for (size_t i = 0; i < 5; ++i)
+			vectorCon.push_back(i);
+		try
+		{
+			processContainer(vectorCon, getType(typeid(vectorCon)), 3);
+			vectorCon[1] = 3;
+			processContainer(vectorCon, getType(typeid(vectorCon)), 3);
+			processContainer(vectorCon, getType(typeid(vectorCon)), 5);
+		}
+		catch (const std::exception& e)
+		{
+			std::cerr << std::endl << e.what() << std::endl;
+		}
+	}
 	runTest<int>();
 	return (0);
 }
+
+/**
+ * @NOTES:
+ * Standard containers in C++ (like `std::vector`, `std::list`, and
+   `std::deque`) have different behaviors and use cases. Here's a
+   brief overview of each:
+
+1. **std::vector**:
+   - **Dynamic array**: Provides dynamic array functionality.
+   - **Contiguous memory**: Elements are stored in contiguous memory
+     locations.
+   - **Fast access**: Provides fast random access to elements.
+   - **Insertion/Deletion**: Insertion and deletion at the end are
+     fast (amortized constant time), but can be slow (linear time) at
+     other positions.
+
+2. **std::list**:
+   - **Doubly linked list**: Provides a doubly linked list.
+   - **Non-contiguous memory**: Elements are not stored in contiguous
+     memory locations.
+   - **Fast insertion/deletion**: Provides fast insertion and deletion
+     at any position (constant time).
+   - **Slow access**: Random access is slow (linear time).
+
+3. **std::deque**:
+   - **Double-ended queue**: Provides a double-ended queue.
+   - **Non-contiguous memory**: Elements are stored in chunks of
+     contiguous memory.
+   - **Fast access**: Provides fast random access to elements.
+   - **Fast insertion/deletion**: Provides fast insertion and deletion
+     at both ends (constant time).
+ * 
+ */
