@@ -33,12 +33,21 @@ void print(const T& val)
 	std::cout << val << " ";
 }
 
-template <typename Container>
-void processContainer(Container& con, const std::string& type, int value)
+template <typename T, typename Container>
+void processContainer(Container& con, T value, bool ran)
 {
-	printTitle(type, 60, '*');
-	std::for_each(con.begin(), con.end(), print<int>);
-	typename Container::iterator it = easyfind(con, value);
+	nl(1);
+	printTitle(getType(typeid(con)), 60, '*');
+	std::size_t len = getRandomVal<std::size_t>(10);
+	std::cout << "size: " << len << std::endl;
+	std::cout << "to find: " << value << std::endl;
+	for (size_t i = 0; ran && i < len; ++i)
+	{
+			con.push_back(getRandomVal<T>(10));
+	}
+	std::cout << "values : ";
+	std::for_each(con.begin(), con.end(), print<T>);
+	typename Container::iterator it = easyfind(con, static_cast<int>(value));
 	std::cout << "\nFound value: " << *it ;
 	std::cout << " at position " << std::distance( con.begin(), it ) << std::endl;
 }
@@ -51,28 +60,15 @@ void runTest()
 	std::vector<T> vectorCon;
 	std::deque<T> dequeCon;
 
-	std::size_t len = getRandomVal<std::size_t>(10);
-	for (size_t i = 0; i < len; ++i)
-	{
-		if (containerType == 0)
-			vectorCon.push_back(getRandomVal<T>(10));
-		else if (containerType == 1)
-			dequeCon.push_back(getRandomVal<T>(10));
-		else
-			listCon.push_back(getRandomVal<T>(10));
-	}
-		
-	std::cout << "size: " << len << std::endl;
 	try
 	{
-		std::size_t value = getRandomVal<std::size_t>(10);
+		T value = getRandomVal<T>(10);
 		if (containerType == 0)
-			processContainer(vectorCon, getType(typeid(vectorCon)), value);
+			processContainer<T>(vectorCon, value, 1);
 		else if (containerType == 1)
-			processContainer(dequeCon, getType(typeid(dequeCon)), value);
+			processContainer<T>(dequeCon, value, 1);
 		else
-			processContainer(listCon, getType(typeid(listCon)), value);
-		nl(1);
+			processContainer<T>(listCon, value, 1);
 	}
 	catch (const std::exception& e)
 	{

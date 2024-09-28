@@ -18,22 +18,27 @@ std::string getType(std::type_info const& type)
 int main(void)
 {
 	{
-		std::vector<int> vectorCon;
-		for (size_t i = 0; i < 5; ++i)
-			vectorCon.push_back(i);
 		try
 		{
-			processContainer(vectorCon, getType(typeid(vectorCon)), 3);
+			std::vector<int> vectorCon;
+			
+			for (int i = 0; i < 5; ++i)
+				vectorCon.push_back(i);
+
+			processContainer<int>(vectorCon, 3, 0);
 			vectorCon[1] = 3;
-			processContainer(vectorCon, getType(typeid(vectorCon)), 3);
-			processContainer(vectorCon, getType(typeid(vectorCon)), 5);
+			processContainer<int>(vectorCon, 3, 0);
+			processContainer<int>(vectorCon, -1, 0);
 		}
 		catch (const std::exception& e)
 		{
 			std::cerr << std::endl << e.what() << std::endl;
 		}
 	}
+	nl(1);
+	printTitle("runTest()", 70, '*');
 	runTest<int>();
+	runTest<float>();
 	return (0);
 }
 
