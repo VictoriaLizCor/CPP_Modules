@@ -133,7 +133,7 @@ check:
 		echo  $(f) [$(GREEN) OK $(E_NC)]; \
 	fi
 test: $(NAME)
-	@echo $(BOLD) $(CYAN) ./$(NAME) '"$(i)"' $(E_NC) "\n"; \
+	@echo $(BOLD) $(CYAN) ./$(NAME) "$(i)" $(E_NC) "\n"; \
 	if [ "$(S)" = "0" ]; then \
 		echo $(E_NC); $(MAKE) -C . val; \
 	else \
