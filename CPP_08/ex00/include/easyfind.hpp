@@ -42,9 +42,7 @@ void processContainer(Container& con, T value, bool ran)
 	std::cout << "size: " << len << std::endl;
 	std::cout << "to find: " << value << std::endl;
 	for (size_t i = 0; ran && i < len; ++i)
-	{
 			con.push_back(getRandomVal<T>(10));
-	}
 	std::cout << "values : ";
 	std::for_each(con.begin(), con.end(), print<T>);
 	typename Container::iterator it = easyfind(con, static_cast<int>(value));

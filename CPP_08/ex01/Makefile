@@ -2,7 +2,7 @@
 NAME		:= $(notdir $(CURDIR))
 #------ WFLAGS ------#
 D_FLAGS		= -Wall -Wextra -std=c++98 -Werror #-Wshadow#-Wno-unused-function -Wunused
-INCLUDES	+= -I include/
+INC	+= -I include/
 #------ SRC FILES & DIRECTORIES ------#
 SRC_DIR		:= src/
 SRC			:= $(shell find $(SRC_DIR) -name '*.cpp' ! -name 'main.cpp')
@@ -41,8 +41,8 @@ DEPS		:= $(OBJS:.o=.d)
 D_FLAGS		+= -O0 -g3 #-Og optimization + good debuggin experience
 # ASAN_OPTIONS=detect_leaks=1 # in case platform leaks detections is not enable
 DEBUG_FLAG	:= $(D)
-ifeq ($(DEBUG_FLAG),)
-D_FLAGS		+= -DDEBUG=1
+ifeq ($(DEBUG_FLAG), )
+D_FLAGS		+= -DDEBUG=0
 else
 D_FLAGS		+= -DDEBUG=$(D)
 endif
@@ -51,7 +51,7 @@ D_FLAGS		+= -fno-omit-frame-pointer
 # /// When debug folder is available///
 # DEBUG_SRC	:= $(shell find $(DEBUG_PATH) -name '*.cpp')
 # SRC			+= $(DEBUG_SRC)
-# INCLUDES	+= -I $(DEBUG_PATH)/include
+# INC	+= -I $(DEBUG_PATH)/include
 # else
 # MAIN		:= $(SRC_DIR)main.cpp
 # SRC			+= $(MAIN)
@@ -82,17 +82,17 @@ endif
 	@printf "\n"
 	@printf "$(LF)⚙️ $(P_BLUE) Create $(P_GREEN)$@ ⚙️\n"
 	@echo $(GREEN)
-	@printf "$(CXX) $(D_FLAGS) $(INCLUDES) $(P_YELLOW) $^ $(P_GREEN) -o $@ $(FG_TEXT) \n\n";
-	@$(CXX) $(D_FLAGS) $(INCLUDES) $^ -o $(NAME)
+	@printf "$(CXX) $(D_FLAGS) $(INC) $(P_YELLOW) $^ $(P_GREEN) -o $@ $(FG_TEXT) \n\n";
+	@$(CXX) $(D_FLAGS) $(INC) $^ -o $(NAME)
 	@printf "\n$(LF)✅ $(P_BLUE)Successfully Created $(P_GREEN)$@! ✅\n$(P_NC)"
 	@echo $(CYAN) "$$CPP" $(E_NC)
 	@echo "$$MANUAL" $(E_NC)
 
 ifneq ($(D), 0)
 $(OBJS): $(BUILD_DIR)%.o : %.cpp | $(BUILD_DIR)
-	@$(CXX) $(D_FLAGS) $(INCLUDES) -MMD -MP -c $< -o $@
+	@$(CXX) $(D_FLAGS) $(INC) -MMD -MP -c $< -o $@
 	@printf "$(LF)🚧 $(P_BLUE)Creating $(P_YELLOW)$@ $(P_BLUE)from $(P_YELLOW) $< $(FG_TEXT)\n"
-	@printf "$(P_BLUE)$(CXX) $(D_FLAGS) $(INCLUDES) $(P_YELLOW) -MMD -MP -c $< $(P_BLUE) -o $@ $(FG_TEXT) \n\n";
+	@printf "$(P_BLUE)$(CXX) $(D_FLAGS) $(INC) $(P_YELLOW) -MMD -MP -c $< $(P_BLUE) -o $@ $(FG_TEXT) \n\n";
 
 $(BUILD_DIR):
 	@mkdir -p $@
@@ -127,13 +127,13 @@ re: fclean all
 
 #make check f=file -> check file syntax
 check:
-	@g++ $(D_FLAGS) $(INCLUDES) -fsyntax-only $(f); \
+	@g++ $(D_FLAGS) $(INC) -fsyntax-only $(f); \
 	ret=$$? ; \
 	if [ $$ret = 0 ]; then \
 		echo  $(f) [$(GREEN) OK $(E_NC)]; \
 	fi
-test:$(NAME)
-	@echo $(BOLD) $(CYAN) ./$(NAME) '"$(i)"' $(E_NC) "\n"; \
+test: $(NAME)
+	@echo $(BOLD) $(CYAN) ./$(NAME) "$(i)" $(E_NC) "\n"; \
 	if [ "$(S)" = "0" ]; then \
 		echo $(E_NC); $(MAKE) -C . val; \
 	else \
@@ -369,12 +369,10 @@ class {{CLASS_NAME}}
 endef
 export HEADER_CONTENT
 define MAIN_CONTENT
+#include <iostream>
 $(shell for file in include/*.hpp; do \
 	printf '#include "'$$(basename $$file)'"\\n';\
 done)
-
-#include <iostream>
-
 int main(void)
 {
 	return (0);
