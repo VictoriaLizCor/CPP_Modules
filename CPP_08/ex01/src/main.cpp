@@ -3,6 +3,7 @@
 #include "Utils.hpp"
 #include <vector>
 
+
 void testException()
 {
 	printTitle("test exception", 30 ,'=');
@@ -16,6 +17,7 @@ void testException()
 			max = static_cast<size_t>(std::numeric_limits<int>::max());
 
 		std::vector<int> test(5);
+		// 
 		std::generate_n(test.begin(), test.size(), FillFunctor<int>(max));
 		std::cout << "test size: " << test.size() << std::endl;
 		std::cout << "test vector: ";

@@ -137,9 +137,9 @@ void testSubject()
 				s.pop();
 			}
 			nl(1);
-			// std::list<int> lst;
-			// std::copy(mstack.begin(), mstack.end(), std::back_inserter(lst));
-			// std::for_each(lst.begin(), lst.end(), PrintFunctor < std::list<int> >(std::cout, lst));
+			std::list<int> lst;
+			std::copy(mstack.begin(), mstack.end(), std::back_inserter(lst));
+			std::for_each(lst.begin(), lst.end(), PrintFunctor < std::list<int> >(std::cout, lst));
 		}
 	}
 	nl(1);
