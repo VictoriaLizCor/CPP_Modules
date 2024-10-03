@@ -17,8 +17,8 @@ std::stack<T>(s),
 _instanceId(++_instanceCount),
 _colorIdStr(getRandomColorFmt(1))
 {
-	if (DEBUG == 1)
-		std::cout << getName() << getColorStr(FGRAY, " was Created\n");
+	if (DEBUG)
+		std::cout << getName(__func__) << getColorStr(FGRAY, " was Created\n");
 }
 
 template <typename T>
@@ -27,7 +27,8 @@ std::stack<T>(rhs),
 _instanceId(++_instanceCount),
 _colorIdStr(getRandomColorFmt(1))
 {
-	*this = rhs;
+	if (DEBUG)
+		std::cout << getName(__func__) << getColorStr(FGRAY, " copy was Created\n");
 }
 
 template <typename T>
@@ -35,16 +36,16 @@ MutantStack<T>& MutantStack<T>::operator=(MutantStack<T> const& rhs)
 {
 	if (this != &rhs)
 		std::stack<T>::operator=(rhs);
-	if (DEBUG == 1)
-		std::cout << getName() << getColorStr(FGRAY, " copy was Created\n");
+	if (DEBUG)
+		std::cout << getName(__func__) << getColorStr(FGRAY, " copy was Created\n");
 	return(*this);
 }
 
 template <typename T>
 MutantStack<T>::~MutantStack()
 {
-	if (DEBUG == 1)
-		std::cout << getName() << getColorStr(FGRAY, " was Destroyed\n");
+	if (DEBUG)
+		std::cout << getName(__func__) << getColorStr(FGRAY, " was Destroyed\n");
 }
 
 template <typename T>
@@ -102,17 +103,30 @@ void MutantStack<T>::clear()
 }
 
 template <typename T>
-std::string MutantStack<T>::getName(void)
+std::deque<T>& MutantStack<T>::getContainer()
+{
+	return this->c;
+}
+
+template <typename T>
+std::string MutantStack<T>::getName(std::string name)
 {
 	std::ostringstream os;
+	static std::string _name;
+	size_t pos = name.find("~");
 
+	if (name.empty())
+		name = className(typeid(*this).name());
+	if (_name.empty() || pos != std::string::npos)
+		_name = name;
 	os << _colorIdStr;
 	if (DEBUG >= 1)
-		os << className(typeid(*this).name()) << _instanceId;
+		os << _name << _instanceId;
 	else 
-		os << className(typeid(*this).name());
+		os << _name;
 	os << C_END;
-
+	if (pos != std::string::npos)
+		_name = name.substr(pos + 1);
 	return (os.str());
 }
 
@@ -120,7 +134,7 @@ std::string MutantStack<T>::getName(void)
 template <typename T>
 void MutantStack<T>::getInfo(std::ostream& os)
 {
-	os << getName() << " size: " << this->size() << std::endl;
+	os << getName("") << " size: " << this->size() << std::endl;
 	if (this->size())
 	{
 		os << "values: ";

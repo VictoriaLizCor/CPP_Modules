@@ -10,6 +10,7 @@
 # include <algorithm>
 # include <stack>
 # include <iterator>
+# include <deque>
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -45,8 +46,9 @@ class MutantStack : public std::stack<T>
 
 		//debug
 		void					clear();
-		std::string				getName(void);
+		std::string				getName(std::string name);
 		void					getInfo(std::ostream& os);
+		std::deque<T>&			getContainer();
 };
 
 

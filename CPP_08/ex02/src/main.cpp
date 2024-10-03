@@ -1,6 +1,7 @@
 #include <iostream>
 #include "MutantStack.hpp"
 #include "Utils.hpp"
+#include "list"
 
 void testCopy()
 {
@@ -9,42 +10,139 @@ void testCopy()
 		unsigned int size = static_cast<unsigned int>(getRandomVal<size_t>(10));
 		size = 10;
 		MutantStack<int> sp;
-
 		size_t max = 10000;
-		if (DEBUG == 1)
-			max = static_cast<size_t>(std::numeric_limits<int>::max());
-		
-		std::generate_n(std::back_inserter(sp), size, FillFunctor<int>(max));
+
+		std::generate_n(std::back_inserter(sp.getContainer()), size, FillFunctor<int>(max));
 		std::cout << sp << std::endl;
 		MutantStack<int> cpy(sp);
 		std::cout << cpy << std::endl;
-		cpy.clear();
-		std::cout << "After clean: " << std::endl;
-		std::cout << cpy << std::endl;
+		nl(1);
+		MutantStack<int> cpy2;
+		cpy2 = cpy;
+		std::cout << cpy2 << std::endl;
+		std::cout << getColorStr(FGREEN, "---test push_front vs push----") << std::endl;
+		cpy2.getContainer().push_front(100);
+		cpy2.push(101);
+		std::cout << cpy2 << std::endl;
+	}
+	nl(1);
+}
+
+void testList()
+{
+	printTitle("test List", 30, '=');
+	{
+		std::list<int> lst;
+		std::cout << "list created" << std::endl;
+		lst.push_back(5);
+		lst.push_back(17);
+		if (DEBUG)
+		{
+			std::cout << "size: " << lst.size() << std::endl;
+			std::cout << "values: ";
+			std::for_each(lst.begin(), lst.end(), PrintFunctor < std::list<int> >(std::cout, lst));
+			nl(1);
+			std::cout << "top & pop:";
+		}
+		std::cout << lst.back() << std::endl;
+		lst.pop_back();
+		if (DEBUG)
+		{
+			std::cout << "size: " << lst.size() << std::endl;
+			std::cout << "values: ";
+			std::for_each(lst.begin(), lst.end(), PrintFunctor < std::list<int> >(std::cout, lst));
+			nl(1);
+			std::cout << "size: ";
+		}
+		std::cout << lst.size() << std::endl;
+		lst.push_back(3);
+		lst.push_back(5);
+		lst.push_back(737);
+		lst.push_back(0);
+		std::list<int>::iterator it = lst.begin();
+		std::list<int>::iterator ite = lst.end();
+		++it;
+		--it;
+		while (it != ite)
+		{
+			std::cout << *it;
+			if (DEBUG)
+				std::cout << " ";
+			else
+				std::cout << std::endl;
+			++it;
+		}
+		std::stack<int, std::list<int> > s(lst);
+		if (DEBUG)
+		{
+			nl(1);
+			std::cout << "---print stack--" << std::endl;
+			while (!s.empty())
+			{
+				std::cout << s.top() << " ";
+				s.pop();
+			}
+			nl(1);
+		}
+		nl(1);
 	}
 }
+
 void testSubject()
 {
-	MutantStack<int> mstack;
-	mstack.push(5);
-	mstack.push(17);
-	std::cout << mstack.top() << std::endl;
-	mstack.pop();
-	std::cout << mstack.size() << std::endl;
-	mstack.push(3);
-	mstack.push(5);
-	mstack.push(737);
-	mstack.push(0);
-	MutantStack<int>::iterator it = mstack.begin();
-	MutantStack<int>::iterator ite = mstack.end();
-	++it;
-	--it;
-	while (it != ite)
+	printTitle("test subject", 30 ,'=');
 	{
-		std::cout << *it << std::endl;
+		MutantStack<int> mstack;
+		mstack.push(5);
+		mstack.push(17);
+		if (DEBUG)
+		{
+			std::cout << mstack;
+			std::cout << "top & pop:";
+		}
+		std::cout << mstack.top() << std::endl;
+		mstack.pop();
+		if (DEBUG)
+		{
+			std::cout << mstack;
+			std::cout << "size: ";
+		}
+		std::cout << mstack.size() << std::endl;
+		mstack.push(3);
+		mstack.push(5);
+		mstack.push(737);
+		mstack.push(0);
+		MutantStack<int>::iterator it = mstack.begin();
+		MutantStack<int>::iterator ite = mstack.end();
 		++it;
+		--it;
+		while (it != ite)
+		{
+			std::cout << *it;
+			if (DEBUG)
+				std::cout << " ";
+			else
+				std::cout << std::endl;
+			++it;
+		}
+		std::stack<int> s(mstack);
+		if (DEBUG)
+		{
+			nl(1);
+			// s.push_front(5);
+			std::cout << "---print stack--" << std::endl;
+			while (!s.empty())
+			{
+				std::cout << s.top() << " ";
+				s.pop();
+			}
+			nl(1);
+			// std::list<int> lst;
+			// std::copy(mstack.begin(), mstack.end(), std::back_inserter(lst));
+			// std::for_each(lst.begin(), lst.end(), PrintFunctor < std::list<int> >(std::cout, lst));
+		}
 	}
-	std::stack<int> s(mstack);
+	nl(1);
 }
 
 static void fill(std::exception const &e, std::ostringstream& os)
@@ -92,10 +190,11 @@ static void cleanOS(std::ostringstream* os[], size_t& arraySize)
 static void runAllTest(std::ostringstream* os[])
 {
 	// tryCatch(&testException, os);
-	// tryCatch(&testCopy, os);
+	tryCatch(&testCopy, os);
 	// tryCatch(&testFill, os);
 	// tryCatch(&testShort, os);
 	tryCatch(&testSubject, os);
+	tryCatch(&testList, os);
 }
 
 static void printExeptions(std::ostringstream* os[], size_t& arraySize)
@@ -145,6 +244,5 @@ int	main(int ac, char* arg[])
 	std::cout << std::endl << std::flush;
 	std::cerr << std::flush;
 	cleanOS(os, arraySize);
-	nl(1);
 	return (0);
 }

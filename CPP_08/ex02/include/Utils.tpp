@@ -74,6 +74,9 @@ struct PrintFunctor
 	std::ostream& _os;
 	T const& _s;
 	PrintFunctor(std::ostream& os, T const& s): _os(os), _s(s){}
-	void operator()(int const& value) const;
+	void operator()(int const& value) const
+	{
+		osPrint(_os, value);
+	}
 };
 #endif // TUTILS_HPP
