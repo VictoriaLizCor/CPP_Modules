@@ -137,7 +137,11 @@ test: $(NAME)
 	if [ "$(S)" = "0" ]; then \
 		echo $(E_NC); $(MAKE) -C . val; \
 	else \
-		echo $(E_NC); ./$(NAME) "$(i)" ; \
+		if [ -z "$(i)" ]; then \
+			echo $(E_NC); ./$(NAME) ; \
+		else \
+			echo $(E_NC); ./$(NAME) "$(i)"; \
+		fi; \
 	fi;
 run:$(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) '"$(i)"' $(E_NC) "\n"; \
@@ -387,12 +391,23 @@ define CPP_CONTENT
 {
 }
 
+{{CLASS_NAME}}& {{CLASS_NAME}}::operator=({{CLASS_NAME}} const& rhs)
+{
+
+}
+
+{{CLASS_NAME}}::{{CLASS_NAME}}({{CLASS_NAME}} const& rhs)
+{
+
+}
+
 {{CLASS_NAME}}::~{{CLASS_NAME}}(void)
 {
 }
 
 std::ostream& operator << (std::ostream& os, {{CLASS_NAME}}& rhs)
 {
+	(void)rhs;
 	return (os);
 }
 endef
