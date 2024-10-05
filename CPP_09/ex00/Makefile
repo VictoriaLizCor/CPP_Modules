@@ -1,5 +1,5 @@
 #------ TARGET ------#
-NAME		:= $(notdir $(CURDIR))
+NAME		:= btc#$(notdir $(CURDIR))
 #------ WFLAGS ------#
 D_FLAGS		= -Wall -Wextra -std=c++98 -Werror #-Wshadow#-Wno-unused-function -Wunused
 INC	+= -I include/
