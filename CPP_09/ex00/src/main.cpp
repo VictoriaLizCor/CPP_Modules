@@ -4,16 +4,16 @@
 
 int main(int argc, char* argv[])
 {
-	if (argc != 2)
+	int status = 0;
+	if (argc == 2)
+		BitcoinExchange btc(argv[1]);
+	else
 	{
 		std::ostringstream os;
 
-		os << std::endl << "Usage: " << argv[0] << " <input_file>" << std::endl;
-		std::cerr << getColorStr(FRED, "ERROR:") << os.str();
-		return (1);
+		os << std::endl << getColorStr(FWHITE,"Usage: ") << argv[0] << " <input_file>" << std::endl;
+		std::cerr << error("\n", 1) << os.str();
 	}
-	
-	BitcoinExchange btc(argv[1]);
-
-	return (0);
+	nl(1);
+	return (status);
 }

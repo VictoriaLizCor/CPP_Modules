@@ -1,19 +1,13 @@
 #include "BitcoinExchange.hpp"
 
-void BitcoinExchange::fillDB(std::stringstream &info)
-{
-	(void)info;
-}
-
 BitcoinExchange::BitcoinExchange(std::string const& inputFile):
 _colorIdStr(getRandomColorFmt(1))
 {
-	std::stringstream info;
-	// readFile("data/data.csv", info);
-	readFile(inputFile, info);
-	// fillDB(info);
 	if (DEBUG)
 		std::cout << getName(__func__) << getColorStr(FGRAY, " was Created\n");
+	readFile("data/data.csv", ",");
+	std::for_each(_dataBase.begin(), _dataBase.end(), PrintFunctor<std::map<std::string, float> >(std::cout, _dataBase));
+	readFile(inputFile, " | ");
 }
 
 BitcoinExchange& BitcoinExchange::operator=(BitcoinExchange const& rhs)
@@ -38,38 +32,115 @@ BitcoinExchange::~BitcoinExchange(void)
 		std::cout << getName(__func__) << getColorStr(FGRAY, " was Destroyed\n");
 }
 
-void BitcoinExchange::readFile(std::string const& fileName, std::stringstream &info)
+static float stringToFloat(const std::string& str)
+{
+	char* end;
+	errno = 0;
+	float value = std::strtof(str.c_str(), &end);
+
+	if (*end != '\0' && ((*end != 'f' && *end != 'F') || *(end + 1) != '\0'))
+		throw std::invalid_argument(error("No conversion could be performed: ", 1) + str);
+	if (errno == ERANGE)
+		throw std::out_of_range(error("Value out of range: ", 1) + str);
+	if (value < 0)
+		throw std::out_of_range(error("not a positive number.", 1));
+	return value;
+}
+
+void BitcoinExchange::readFile(std::string const& fileName, std::string const& delimiter)
 {
 	std::ifstream tempFile;
-
 	try
 	{
+		std::ifstream tempFile;
+		std::stringstream ss;
 		std::string line;
-
-		tempFile.exceptions(std::ifstream::failbit | 
-		std::ifstream::badbit);
 		
-		std::cout << fileName << std::endl;
+		checkTargetStatus(fileName, ss);
+		if (!ss.str().empty())
+			throw(std::runtime_error(ss.str()));
+		std::cout << fileName;
+		nl(2);
 		tempFile.open(fileName.c_str());
-		!tempFile.eof() && std::getline(tempFile, line);
-		while(!tempFile.eof() && std::getline(tempFile, line))
+		checkStreamFlags(tempFile, fileName);
+		std::getline(tempFile, line);
+		while(std::getline(tempFile, line))
 		{
-			info << line;
-			std::cerr << line << std::endl;
+			try
+			{
+				std::string::size_type pos = line.find(delimiter);
+				
+				if (pos != std::string::npos)
+				{
+					std::string key = line.substr(0, pos);
+					std::string strValue = line.substr(pos + delimiter.length());
+					float value = stringToFloat(strValue);
+					if (delimiter == ",")
+						_dataBase[key] = value;
+					else
+					{
+						if (value > 1000)
+							throw std::out_of_range(error("Value over 1000", 1));
+						std::cerr << line << std::endl;
+					}
+				}
+				else
+					throw std::runtime_error(error("bad input ", 1) + line);
+			}
+			catch(const std::exception& e)
+			{
+				std::cerr << e.what() << std::endl;
+			}
 		}
-		std::cerr << "line" << std::endl;
 		tempFile.clear();
 		tempFile.close();
 	}
 	catch(const std::exception& e)
 	{
-		if (typeid(e) == typeid(std::ifstream::failure))
-			std::cerr << error("File is Empty", 0) << std::endl;
-		else
-			std::cerr << error(e.what(), 0) << std::endl;
+		std::cerr << e.what() << std::endl;
 	}
+	nl(1);
+}
 
+void BitcoinExchange::checkStreamFlags(std::ifstream& file, std::string const& fileName)
+{
+	std::stringstream ss;
 
+	if (!file.good())
+		std::cout << "*-----checkStreamFLAGS------" << std::endl;
+	if (file.peek() == std::fstream::traits_type::eof())
+	{
+		ss.str("");
+		ss << error("File " + fileName + " is empty", 1);
+	}
+	if (file.fail())
+		ss << error("A I/O error has occurred ", 0) << std::endl;
+	if (file.bad())
+		ss << error("A critical I/O error has occurred: ", 0) << std::endl;
+	if (!ss.str().empty())
+		throw std::runtime_error(ss.str());
+}
+
+void BitcoinExchange::checkTargetStatus(std::string const& target, std::stringstream& ss)
+{
+	struct stat st;
+	std::string strTarget(getColorFmt(FRED) + "File '" + target + "' ");
+	bool isDirectory = false;
+	bool status = false;
+
+	if (stat(target.c_str(), &st) == 0)
+	{
+		if (access(target.c_str(), R_OK) == -1)
+			ss << strTarget << "has no reading permissions\n";
+		if (access(target.c_str(), W_OK) == -1)
+			ss << strTarget << "has no writing permissions\n";
+		isDirectory = S_ISDIR(st.st_mode);
+		status = true;
+	}
+	if (!status)
+		ss << strTarget << "does not exist" << C_END;
+	else if (isDirectory)
+		ss << strTarget << "is a Directory"<< C_END;
 }
 
 std::string BitcoinExchange::getName(std::string name)
@@ -91,13 +162,7 @@ std::string BitcoinExchange::getName(std::string name)
 
 void BitcoinExchange::getInfo(std::ostream& os)
 {
-	os << getName("") ;// << " size: " << this->size() << std::endl;
-	// if (this->size())
-	// {
-	// 	os << "values: ";
-	// 	std::for_each(this->begin(), this->end(), PrintFunctor< MutantStack<T> >(os, *this));
-	// 	os << std::endl;
-	// }
+	os << getName("");
 }
 std::ostream& operator << (std::ostream& os, BitcoinExchange& rhs)
 {

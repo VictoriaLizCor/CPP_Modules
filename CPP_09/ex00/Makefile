@@ -140,7 +140,7 @@ test: $(NAME)
 		if [ -z "$(i)" ]; then \
 			echo $(E_NC); ./$(NAME) ; \
 		else \
-			echo $(E_NC); ./$(NAME) "$(i)"; \
+			echo $(E_NC); ./$(NAME) $(i); \
 		fi; \
 	fi;
 run:$(NAME)
@@ -148,7 +148,7 @@ run:$(NAME)
 	if [ "$(S)" = "0" ]; then \
 		echo $(E_NC); $(MAKE) -C . val; \
 	else \
-		echo $(E_NC); ./$(NAME) "$(i)" ; \
+		echo $(E_NC); ./$(NAME) $(i) ; \
 	fi;
 # ATTENTION !!!!!!!!!!!!!!  USE WITH S=0 !
 leaks: $(NAME)
