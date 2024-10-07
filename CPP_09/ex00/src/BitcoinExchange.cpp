@@ -6,7 +6,8 @@ _colorIdStr(getRandomColorFmt(1))
 	if (DEBUG)
 		std::cout << getName(__func__) << getColorStr(FGRAY, " was Created\n");
 	readFile("data/data.csv", ",");
-	std::for_each(_dataBase.begin(), _dataBase.end(), PrintFunctor<std::map<std::string, float> >(std::cout, _dataBase));
+	if (DEBUG > 1)
+		std::cout << *this << std::endl;
 	readFile(inputFile, " | ");
 }
 
@@ -14,7 +15,6 @@ BitcoinExchange& BitcoinExchange::operator=(BitcoinExchange const& rhs)
 {
 	if (&rhs == this)
 		return (*this);
-	
 	if (DEBUG)
 		std::cout << getName(__func__) << getColorStr(FGRAY, " copy was Created\n");
 	return (*this);
@@ -32,16 +32,37 @@ BitcoinExchange::~BitcoinExchange(void)
 		std::cout << getName(__func__) << getColorStr(FGRAY, " was Destroyed\n");
 }
 
-static float stringToFloat(const std::string& str)
+std::string BitcoinExchange::checkDate(std::string const& date)
+{
+	std::tm tm;
+	std::memset(&tm, 0, sizeof(std::tm));
+	std::string format = "%Y-%m-%d";
+	std::stringstream ss(date);
+
+	 if (date.size() != 10 || date[4] != '-' || date[7] != '-')
+		throw std::runtime_error("Failed to parse date: " + date);
+
+	char dash1, dash2;
+	if (!(ss >> tm.tm_year >> dash1 >> tm.tm_mon >> dash2 >> tm.tm_mday) || dash1 != '-' || dash2 != '-')
+		throw std::runtime_error("Failed to parse date: " + date);
+	tm.tm_year -= 1900;
+	tm.tm_mon -= 1;
+	ss.str("");
+	ss.clear();
+	ss << (tm.tm_year + 1900) << "-" << (tm.tm_mon + 1) << "-" << tm.tm_mday;
+	return (ss.str());
+}
+
+float BitcoinExchange::strToFloat(std::string const& strValue)
 {
 	char* end;
 	errno = 0;
-	float value = std::strtof(str.c_str(), &end);
+	float value = std::strtof(strValue.c_str(), &end);
 
 	if (*end != '\0' && ((*end != 'f' && *end != 'F') || *(end + 1) != '\0'))
-		throw std::invalid_argument(error("No conversion could be performed: ", 1) + str);
+		throw std::invalid_argument(error("No conversion could be performed: ", 1) + strValue);
 	if (errno == ERANGE)
-		throw std::out_of_range(error("Value out of range: ", 1) + str);
+		throw std::out_of_range(error("Value out of range: ", 1) + strValue);
 	if (value < 0)
 		throw std::out_of_range(error("not a positive number.", 1));
 	return value;
@@ -68,17 +89,17 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 		{
 			try
 			{
-				std::string::size_type pos = line.find(delimiter);
-				
+				size_t pos = line.find(delimiter);
 				if (pos != std::string::npos)
 				{
 					std::string key = line.substr(0, pos);
 					std::string strValue = line.substr(pos + delimiter.length());
-					float value = stringToFloat(strValue);
+					float value = strToFloat(strValue);
 					if (delimiter == ",")
 						_dataBase[key] = value;
 					else
 					{
+						std::cout << checkDate(key) << std::endl;
 						if (value > 1000)
 							throw std::out_of_range(error("Value over 1000", 1));
 						std::cerr << line << std::endl;
@@ -162,8 +183,12 @@ std::string BitcoinExchange::getName(std::string name)
 
 void BitcoinExchange::getInfo(std::ostream& os)
 {
-	os << getName("");
+	os << getName("") << " values:" << std::endl ;
+	nl(1);
+	if (DEBUG)
+		std::for_each(_dataBase.begin(), _dataBase.end(), PrintFunctor<std::map<std::string, float> >(os, _dataBase));
 }
+
 std::ostream& operator << (std::ostream& os, BitcoinExchange& rhs)
 {
 	rhs.getInfo(os);
