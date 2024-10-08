@@ -32,7 +32,24 @@ BitcoinExchange::~BitcoinExchange(void)
 		std::cout << getName(__func__) << getColorStr(FGRAY, " was Destroyed\n");
 }
 
-std::string BitcoinExchange::checkDate(std::string const& date)
+static bool isLeap(int year)
+{
+	if (year % 4 != 0) return (false);
+	if (year % 100 != 0) return (true);
+	if (year % 400 != 0) return (false);
+	return (true);
+}
+static bool isValidDate(int year, int month, int day)
+{
+	if (month < 1 || month > 12) return (false);
+	if (day < 1) return (false);
+
+	int daysInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	if (isLeap(year)) daysInMonth[1] = 29;
+
+	return (day <= daysInMonth[month - 1]);
+}
+std::string BitcoinExchange::checkDate(std::string const& date, std::string const& line)
 {
 	std::tm tm;
 	std::memset(&tm, 0, sizeof(std::tm));
@@ -40,32 +57,52 @@ std::string BitcoinExchange::checkDate(std::string const& date)
 	std::stringstream ss(date);
 
 	 if (date.size() != 10 || date[4] != '-' || date[7] != '-')
-		throw std::runtime_error("Failed to parse date: " + date);
+		throw std::runtime_error(error("Failed to parse date: " + line, 1));
 
 	char dash1, dash2;
 	if (!(ss >> tm.tm_year >> dash1 >> tm.tm_mon >> dash2 >> tm.tm_mday) || dash1 != '-' || dash2 != '-')
-		throw std::runtime_error("Failed to parse date: " + date);
-	tm.tm_year -= 1900;
-	tm.tm_mon -= 1;
+		throw std::runtime_error(error("Failed to parse date: " + line, 1));
+	
+	if (!isValidDate(tm.tm_year, tm.tm_mon, tm.tm_mday))
+		throw std::runtime_error(error("Invalid date: ", 1) + line);
+
+	std::cout << tm.tm_year << std::endl;
 	ss.str("");
 	ss.clear();
-	ss << (tm.tm_year + 1900) << "-" << (tm.tm_mon + 1) << "-" << tm.tm_mday;
+	ss << (tm.tm_year) << "-" 
+	<< std::setw(2) << std::setfill('0') << (tm.tm_mon + 1) << "-"
+	<< std::setw(2) << std::setfill('0') << tm.tm_mday;
+	std::cout << tm.tm_year << std::endl;
 	return (ss.str());
 }
 
-float BitcoinExchange::strToFloat(std::string const& strValue)
+float BitcoinExchange::strToFloat(std::string const& strValue, std::string const& line)
 {
 	char* end;
-	errno = 0;
 	float value = std::strtof(strValue.c_str(), &end);
 
 	if (*end != '\0' && ((*end != 'f' && *end != 'F') || *(end + 1) != '\0'))
-		throw std::invalid_argument(error("No conversion could be performed: ", 1) + strValue);
-	if (errno == ERANGE)
-		throw std::out_of_range(error("Value out of range: ", 1) + strValue);
+		throw std::invalid_argument(error("Invalid Value input => ", 1) + line);
 	if (value < 0)
-		throw std::out_of_range(error("not a positive number.", 1));
-	return value;
+		throw std::out_of_range(error("not a positive number => ", 1) + line);
+	return (value);
+}
+
+float BitcoinExchange::getExchangeRate(std::string const& date, std::string const& line)
+{
+	std::map<std::string, float>::iterator it = _dataBase.lower_bound(date);
+	if (it == _dataBase.end() || it->first != date)
+	{
+		if (it == _dataBase.begin())
+		{
+			std::stringstream ss;
+			ss << error("Unable to compare in database => ", 1) << line << std::endl;
+			ss << "Last Available date : " << it->first << std::endl;
+			throw std::runtime_error(ss.str());
+		}
+		--it;
+	}
+	return (it->second);
 }
 
 void BitcoinExchange::readFile(std::string const& fileName, std::string const& delimiter)
@@ -90,23 +127,25 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 			try
 			{
 				size_t pos = line.find(delimiter);
-				if (pos != std::string::npos)
-				{
-					std::string key = line.substr(0, pos);
-					std::string strValue = line.substr(pos + delimiter.length());
-					float value = strToFloat(strValue);
-					if (delimiter == ",")
-						_dataBase[key] = value;
-					else
-					{
-						std::cout << checkDate(key) << std::endl;
-						if (value > 1000)
-							throw std::out_of_range(error("Value over 1000", 1));
-						std::cerr << line << std::endl;
-					}
-				}
+				if (line.empty())
+					continue;
+				if (pos == std::string::npos)
+					throw std::runtime_error(error("bad input => ", 1) + line);
+				std::string key = line.substr(0, pos);
+				std::string strValue = line.substr(pos + delimiter.length());
+				float value = strToFloat(strValue, line);
+				if (delimiter == ",")
+					_dataBase[key] = value;
 				else
-					throw std::runtime_error(error("bad input ", 1) + line);
+				{
+					std::string checkedDate = checkDate(key, line);
+					float exchangeRate = getExchangeRate(checkedDate, line);
+					if (value > 1000)
+						throw std::out_of_range(error("Value over 1000 =>", 1));
+					float result = value * exchangeRate;
+
+					std::cout << checkedDate << " => " << value << " = " << result << std::endl;
+				}
 			}
 			catch(const std::exception& e)
 			{
@@ -146,8 +185,8 @@ void BitcoinExchange::checkTargetStatus(std::string const& target, std::stringst
 {
 	struct stat st;
 	std::string strTarget(getColorFmt(FRED) + "File '" + target + "' ");
-	bool isDirectory = false;
-	bool status = false;
+	bool isDirectory = (false);
+	bool status = (false);
 
 	if (stat(target.c_str(), &st) == 0)
 	{
@@ -156,7 +195,7 @@ void BitcoinExchange::checkTargetStatus(std::string const& target, std::stringst
 		if (access(target.c_str(), W_OK) == -1)
 			ss << strTarget << "has no writing permissions\n";
 		isDirectory = S_ISDIR(st.st_mode);
-		status = true;
+		status = (true);
 	}
 	if (!status)
 		ss << strTarget << "does not exist" << C_END;

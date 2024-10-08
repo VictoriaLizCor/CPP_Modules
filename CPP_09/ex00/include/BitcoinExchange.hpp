@@ -34,8 +34,9 @@ class BitcoinExchange
 		void checkTargetStatus(std::string const& target, std::stringstream& ss);
 		void 			checkStreamFlags(std::ifstream& file, std::string const&fileName);
 		// fill map
-		float 			strToFloat(std::string const& strValue);
-		std::string		checkDate(std::string const& date);
+		float 			strToFloat(std::string const& strValue, std::string const& line);
+		std::string		checkDate(std::string const& date, std::string const& line);
+		float			getExchangeRate(std::string const& date, std::string const& line);
 
 	public:
 		BitcoinExchange(std::string const& name);
@@ -49,3 +50,18 @@ class BitcoinExchange
 std::ostream& operator << (std::ostream& os, BitcoinExchange& rhs);
 
 #endif // BITCOINEXCHANGE_HPP
+
+/** @NOTES:
+ * To avoid iterating through the entire database, you can use binary
+   search techniques to quickly determine if the input date is lower
+   than the middle value of the database. This can help you decide
+   whether to search in the first half or the second half of the
+   database.
+
+ * However, since `std::map` is typically implemented as a balanced
+   binary search tree (e.g., Red-Black Tree), it already provides
+   logarithmic time complexity for operations like [`lower_bound`
+   function is already efficient and does not require iterating
+   through the entire database.
+
+ */
