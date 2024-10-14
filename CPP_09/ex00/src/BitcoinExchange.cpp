@@ -44,8 +44,8 @@ static bool isLeap(int year)
 }
 static bool isValidDate(int year, int month, int day)
 {
-	if (month < 1 || month > 12) return (false);
-	if (day < 1) return (false);
+	if ((month < 1 || month > 12) || day < 1)
+		return (false);
 
 	int daysInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 	if (isLeap(year)) daysInMonth[1] = 29;
@@ -60,22 +60,20 @@ std::string BitcoinExchange::checkDate(std::string const& date, std::string cons
 	std::stringstream ss(date);
 
 	 if (date.size() != 10 || date[4] != '-' || date[7] != '-')
-		throw std::runtime_error(error("Failed to parse date: " + line, 1));
+		throw std::runtime_error(error("Failed to parse date: ", 1) + line);
 
 	char dash1, dash2;
 	if (!(ss >> tm.tm_year >> dash1 >> tm.tm_mon >> dash2 >> tm.tm_mday) || dash1 != '-' || dash2 != '-')
-		throw std::runtime_error(error("Failed to parse date: " + line, 1));
+		throw std::runtime_error(error("Failed to parse date: ", 1) + line);
 	
 	if (!isValidDate(tm.tm_year, tm.tm_mon, tm.tm_mday))
 		throw std::runtime_error(error("Invalid date: ", 1) + line);
 
-	std::cout << tm.tm_year << std::endl;
 	ss.str("");
 	ss.clear();
 	ss << (tm.tm_year) << "-" 
 	<< std::setw(2) << std::setfill('0') << (tm.tm_mon + 1) << "-"
 	<< std::setw(2) << std::setfill('0') << tm.tm_mday;
-	std::cout << tm.tm_year << std::endl;
 	return (ss.str());
 }
 
@@ -87,7 +85,7 @@ float BitcoinExchange::strToFloat(std::string const& strValue, std::string const
 	if (*end != '\0' && ((*end != 'f' && *end != 'F') || *(end + 1) != '\0'))
 		throw std::invalid_argument(error("Invalid Value input => ", 1) + line);
 	if (value < 0)
-		throw std::out_of_range(error("not a positive number => ", 1) + line);
+		throw std::out_of_range(error("Not a positive value => ", 1) + line);
 	return (value);
 }
 
@@ -100,7 +98,7 @@ float BitcoinExchange::getExchangeRate(std::string const& date, std::string cons
 		{
 			std::stringstream ss;
 			ss << error("Unable to compare in database => ", 1) << line << std::endl;
-			ss << "Last Available date : " << it->first << std::endl;
+			ss << "Last Available date : " << it->first;
 			throw std::runtime_error(ss.str());
 		}
 		--it;
@@ -133,7 +131,7 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 				if (line.empty())
 					continue;
 				if (pos == std::string::npos)
-					throw std::runtime_error(error("bad input => ", 1) + line);
+					throw std::runtime_error(error("Bad input => ", 1) + line);
 				std::string key = line.substr(0, pos);
 				std::string strValue = line.substr(pos + delimiter.length());
 				float value = strToFloat(strValue, line);
@@ -144,7 +142,7 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 					std::string checkedDate = checkDate(key, line);
 					float exchangeRate = getExchangeRate(checkedDate, line);
 					if (value > 1000)
-						throw std::out_of_range(error("Value over 1000 =>", 1));
+						throw std::out_of_range(error("Value over 1000 => ", 1) + line);
 					float result = value * exchangeRate;
 
 					std::cout << checkedDate << " => " << value << " = " << result << std::endl;
