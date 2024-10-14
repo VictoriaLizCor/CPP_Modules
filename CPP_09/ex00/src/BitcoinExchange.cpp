@@ -48,10 +48,13 @@ static bool isValidDate(int year, int month, int day)
 		return (false);
 
 	int daysInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-	if (isLeap(year)) daysInMonth[1] = 29;
+
+	if (isLeap(year))
+		daysInMonth[1] = 29;
 
 	return (day <= daysInMonth[month - 1]);
 }
+
 std::string BitcoinExchange::checkDate(std::string const& date, std::string const& line)
 {
 	std::tm tm;
@@ -65,14 +68,13 @@ std::string BitcoinExchange::checkDate(std::string const& date, std::string cons
 	char dash1, dash2;
 	if (!(ss >> tm.tm_year >> dash1 >> tm.tm_mon >> dash2 >> tm.tm_mday) || dash1 != '-' || dash2 != '-')
 		throw std::runtime_error(error("Failed to parse date: ", 1) + line);
-	
 	if (!isValidDate(tm.tm_year, tm.tm_mon, tm.tm_mday))
 		throw std::runtime_error(error("Invalid date: ", 1) + line);
 
 	ss.str("");
 	ss.clear();
 	ss << (tm.tm_year) << "-" 
-	<< std::setw(2) << std::setfill('0') << (tm.tm_mon) << "-"
+	<< std::setw(2) << std::setfill('0') << tm.tm_mon << "-"
 	<< std::setw(2) << std::setfill('0') << tm.tm_mday;
 	return (ss.str());
 }
@@ -89,6 +91,7 @@ float BitcoinExchange::strToFloat(std::string const& strValue, std::string const
 	return (value);
 }
 
+
 float BitcoinExchange::getExchangeRate(std::string const& date, std::string const& line)
 {
 	std::map<std::string, float>::iterator it = _dataBase.lower_bound(date);
@@ -100,6 +103,30 @@ float BitcoinExchange::getExchangeRate(std::string const& date, std::string cons
 			ss << error("Unable to compare in database => ", 1) << line << std::endl;
 			ss << "Last Available date : " << it->first;
 			throw std::runtime_error(ss.str());
+		}
+		if (it == _dataBase.end())
+		{
+			std::tm tm;
+			if (checkDate(date, line).empty()) {
+				throw std::runtime_error("Failed to parse date");
+			}
+
+			std::time_t inputTime = std::mktime(&tm);
+			if (inputTime == -1) {
+				throw std::runtime_error("Failed to convert to std::time_t");
+			}
+
+			std::time_t currentTime = std::time(0);
+
+			if (inputTime > currentTime)
+				 throw std::runtime_error("Failed date");
+			char buffer[11];
+			std::time_t t = std::time(0);
+			std::tm* current = std::localtime(&t);
+			std::string currentDate;
+			std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", current);
+			currentDate = std::string(buffer);
+			std::cout << getColorStr(FLMAGENTA, currentDate) << std::endl;
 		}
 		--it;
 	}
@@ -145,7 +172,7 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 						throw std::out_of_range(error("Value over 1000 => ", 1) + line);
 					float result = value * exchangeRate;
 					std::cout << getColorFmt(FWHITE) ;
-					std::cout << checkedDate << " => " 
+					std::cout << key << " => " 
 					<< value << " = " << result << C_END << std::endl;
 				}
 			}
