@@ -72,7 +72,7 @@ std::string BitcoinExchange::checkDate(std::string const& date, std::string cons
 	ss.str("");
 	ss.clear();
 	ss << (tm.tm_year) << "-" 
-	<< std::setw(2) << std::setfill('0') << (tm.tm_mon + 1) << "-"
+	<< std::setw(2) << std::setfill('0') << (tm.tm_mon) << "-"
 	<< std::setw(2) << std::setfill('0') << tm.tm_mday;
 	return (ss.str());
 }
@@ -103,6 +103,8 @@ float BitcoinExchange::getExchangeRate(std::string const& date, std::string cons
 		}
 		--it;
 	}
+	// std::cout << getColorStr(FLCYAN, date) << std::endl;
+	// std::cout << getColorStr(FLYELLOW, line) << std::endl;
 	return (it->second);
 }
 
@@ -118,8 +120,6 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 		checkTargetStatus(fileName, ss);
 		if (!ss.str().empty())
 			throw(std::runtime_error(ss.str()));
-		std::cout << fileName;
-		nl(2);
 		tempFile.open(fileName.c_str());
 		checkStreamFlags(tempFile, fileName);
 		std::getline(tempFile, line);
@@ -144,8 +144,9 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 					if (value > 1000)
 						throw std::out_of_range(error("Value over 1000 => ", 1) + line);
 					float result = value * exchangeRate;
-
-					std::cout << checkedDate << " => " << value << " = " << result << std::endl;
+					std::cout << getColorFmt(FWHITE) ;
+					std::cout << checkedDate << " => " 
+					<< value << " = " << result << C_END << std::endl;
 				}
 			}
 			catch(const std::exception& e)
