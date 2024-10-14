@@ -5,6 +5,7 @@
 # include <cstdlib>
 # include <ctime>
 # include <string>
+# include <map>
 
 # ifndef DEBUG
 #  define DEBUG 0
@@ -74,9 +75,22 @@ struct PrintFunctor
 	std::ostream& _os;
 	T const& _s;
 	PrintFunctor(std::ostream& os, T const& s): _os(os), _s(s){}
-	void operator()(int const& value) const
+	void operator()(const typename T::value_type& value) const
 	{
 		osPrint(_os, value);
+	}
+};
+
+template <typename K, typename V>
+struct PrintFunctor<std::map<K, V> >
+{
+	std::ostream& os;
+	const std::map<K, V>& container;
+
+	PrintFunctor(std::ostream& os, const std::map<K, V>& container) : os(os), container(container) {}
+
+	void operator()(const std::pair<const K, V>& entry) const {
+		os << entry.first << ": " << entry.second << std::endl;
 	}
 };
 #endif // TUTILS_HPP
