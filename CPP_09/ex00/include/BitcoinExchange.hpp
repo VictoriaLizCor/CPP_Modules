@@ -35,8 +35,8 @@ class BitcoinExchange
 		void 			checkStreamFlags(std::ifstream& file, std::string const&fileName);
 		// fill map
 		float 			strToFloat(std::string const& strValue, std::string const& line);
-		std::string		checkDate(std::string const& date, std::string const& line);
-		float			getExchangeRate(std::string const& date, std::string const& line);
+		bool			checkInvalidDate(std::string& date, std::tm& tm);
+		float			getExchangeRate(std::string& date);
 
 	public:
 		BitcoinExchange(std::string const& name);
