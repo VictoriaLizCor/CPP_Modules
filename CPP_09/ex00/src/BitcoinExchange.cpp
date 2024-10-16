@@ -56,22 +56,20 @@ static bool isValidDate(int year, int month, int day)
 	return (day <= daysInMonth[month - 1]);
 }
 
+//  if (date.size() != 10 || date[4] != '-' || date[7] != '-')
+// 	throw std::runtime_error(errorFmt("Failed to parse date: ")) + line);
 bool BitcoinExchange::checkInvalidDate(std::string & date, std::tm& tm)
 {
 	std::memset(&tm, 0, sizeof(std::tm));
 	std::string format = "%Y-%m-%d";
 	std::stringstream ss(date);
 
-	//  if (date.size() != 10 || date[4] != '-' || date[7] != '-')
-	// 	throw std::runtime_error(error("Failed to parse date: ", 1) + line);
 
 	char dash1, dash2;
 	if (!(ss >> tm.tm_year >> dash1 >> tm.tm_mon >> dash2 >> tm.tm_mday) || dash1 != '-' || dash2 != '-')
 		return (1);
-	//	throw std::runtime_error(error("Failed to parse date: ", 1) + line);
 	if (!isValidDate(tm.tm_year, tm.tm_mon, tm.tm_mday))
 		return (1);
-	//	throw std::runtime_error(error("Invalid date: ", 1) + line);
 	ss.str("");
 	ss.clear();
 	ss << (tm.tm_year) << "-" 
@@ -87,30 +85,33 @@ float BitcoinExchange::strToFloat(std::string const& strValue, std::string const
 	float value = std::strtof(strValue.c_str(), &end);
 
 	if (*end != '\0' && ((*end != 'f' && *end != 'F') || *(end + 1) != '\0'))
-		throw std::invalid_argument(error("Invalid Value input => ", 1) + line);
+		throw std::invalid_argument(errorFmt("Invalid Value input") + line);
 	if (value < 0)
-		throw std::out_of_range(error("Not a positive value => ", 1) + line);
+		throw std::out_of_range(errorFmt("Not a positive value") + line);
 	return (value);
 }
 
 float BitcoinExchange::getExchangeRate(std::string& date)
 {
 	std::tm inputDate;
+
 	if (checkInvalidDate(date, inputDate))
-		throw std::runtime_error(error("Invalid date => ", 1) + date);
+		throw std::runtime_error(errorFmt("Invalid date") + date);
 	std::map<std::string, float>::iterator it = _dataBase.lower_bound(date);
 	if (it == _dataBase.end() || it->first != date)
 	{
 		if (it == _dataBase.begin())
 		{
 			std::stringstream ss;
-			ss << error("Unable to compare in database => ", 1) << date << std::endl;
-			ss << "Bitcoin started at: " << it->first;
+			ss << errorFmt("Unable to compare in database") << date;
+			if (DEBUG)
+				ss << std::endl << "Bitcoin started at: " << it->first;
 			throw std::runtime_error(ss.str());
 		}
 		if (it == _dataBase.end())
 		{
 			std::tm lastDate;
+			std::time_t currentTime = std::time(0);
 			std::map<std::string, float>::iterator tmp = _dataBase.end();
 			--tmp;
 			std::string lastDateStr = tmp->first;
@@ -118,25 +119,33 @@ float BitcoinExchange::getExchangeRate(std::string& date)
 			std::time_t lastDateTime = std::mktime(&lastDate);
 			std::time_t inputTime = std::mktime(&inputDate);
 			if (inputTime == -1 || lastDateTime == -1)
-				throw std::runtime_error(error("Failed to convert to std::time_t", 1));
-
-			std::time_t currentTime = std::time(0);
+				throw std::runtime_error(errorFmt("Failed to convert to std::time_t"));
+			std::tm* tMonthAhead = std::localtime(&lastDateTime);
+			tMonthAhead->tm_mon += 1;
+			std::time_t monthAhead = std::mktime(tMonthAhead);
+			if (inputTime < monthAhead)
+				return (-1 * tmp->second);
+			{// To Delete
+				std::cout << getColorStr(FLCYAN, lastDateStr) << std::endl;
+				std::cout << getColorStr(FLYELLOW, date) << std::endl;
+			}
+			//toCHeck
 			char buffer[11];
 			std::time_t t = std::time(0);
 			std::tm* current = std::localtime(&t);
 			std::string currentDate;
 			std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", current);
 			currentDate = std::string(buffer);
-			std::cout << getColorStr(FLCYAN, lastDateStr) << std::endl;
-			std::cout << getColorStr(FLYELLOW, date) << std::endl;
-			std::cout << getColorStr(FLMAGENTA, currentDate) << std::endl;
+			if (inputTime < currentTime)
+				 throw std::runtime_error(errorFmt("Date ahead") + date);
 			if (inputTime > currentTime)
-				 throw std::runtime_error(error("Date too far in the future => ", 1) + date);
+				throw std::runtime_error(errorFmt("Date in the future") + date);
 		}
 		--it;
 	}
 	return (it->second);
 }
+// std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", current);
 
 void BitcoinExchange::readFile(std::string const& fileName, std::string const& delimiter)
 {
@@ -161,7 +170,7 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 				if (line.empty())
 					continue;
 				if (pos == std::string::npos)
-					throw std::runtime_error(error("Bad input => ", 1) + line);
+					throw std::runtime_error(errorFmt("Bad input") + line);
 				std::string key = line.substr(0, pos);
 				std::string strValue = line.substr(pos + delimiter.length());
 				float value = strToFloat(strValue, line);
@@ -170,11 +179,18 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 				else
 				{
 					if (value > 1000)
-						throw std::out_of_range(error("Value over 1000 => ", 1) + line );
+						throw std::out_of_range(errorFmt("Value over 1000") + line );
 					float result = value * getExchangeRate(key);
-					std::cout << getColorFmt(FWHITE) ;
-					std::cout << key << " => " 
-					<< value << " = " << result << C_END << std::endl;
+					if (result < 0)
+					{
+						std::cout << getColorFmt(FYELLOW);
+						result *= -1;
+					}
+					else
+						std::cout << getColorFmt(FWHITE) ;
+					std::cout << key << " => " << std::setw(6) 
+					<< std::setfill(' ') << value << " = " << 
+					std::setw(6) << std::setfill(' ') << result << C_END << std::endl;
 				}
 			}
 			catch(const std::exception& e)
@@ -201,7 +217,7 @@ void BitcoinExchange::checkStreamFlags(std::ifstream& file, std::string const& f
 	if (file.peek() == std::fstream::traits_type::eof())
 	{
 		ss.str("");
-		ss << error("File " + fileName + " is empty", 1);
+		ss << errorFmt("File " + fileName + " is empty");
 	}
 	if (file.fail())
 		ss << error("A I/O error has occurred ", 0) << std::endl;

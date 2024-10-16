@@ -372,6 +372,13 @@ std::string	center(const std::string& s, std::string::size_type width)
 	return (std::string(left, ' ') + s + std::string(right, ' '));
 }
 
+std::string errorFmt(const std::string& s, int width)
+{
+	std::ostringstream oss;
+	oss << std::left << std::setw(width) 
+	<< std::setfill(' ') << s ;
+	return (error(oss.str() + "=> ", 0));
+}
 /**
  * @brief Extracts and returns the class name from a mangled string.
  *

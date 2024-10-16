@@ -77,6 +77,7 @@ bool		isOnlySpaces(const std::string& str);
 std::string toUpperCase(std::string const& str);
 size_t		maxStringLength(int fieldSize, std::string* arrayData);
 std::string	center(const std::string& s, std::string::size_type width);
+std::string errorFmt(const std::string& s, int width = 30);
 std::string	className(const std::string& str);
 std::string	classFunctionStr(std::string const& c, std::string const& f);
 std::string	demangle(const char* mangled_name);
