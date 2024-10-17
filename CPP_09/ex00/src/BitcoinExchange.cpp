@@ -58,25 +58,23 @@ static bool isValidDate(int year, int month, int day)
 
 //  if (date.size() != 10 || date[4] != '-' || date[7] != '-')
 // 	throw std::runtime_error(errorFmt("Failed to parse date: ")) + line);
-bool BitcoinExchange::checkInvalidDate(std::string & date, std::tm& tm)
+void BitcoinExchange::checkInvalidDate(std::string & date, std::tm& tm)
 {
+	char buffer[11];
 	std::memset(&tm, 0, sizeof(std::tm));
-	std::string format = "%Y-%m-%d";
 	std::stringstream ss(date);
 
 
 	char dash1, dash2;
 	if (!(ss >> tm.tm_year >> dash1 >> tm.tm_mon >> dash2 >> tm.tm_mday) || dash1 != '-' || dash2 != '-')
-		return (1);
+		throw std::runtime_error(errorFmt("Invalid date") + date);
 	if (!isValidDate(tm.tm_year, tm.tm_mon, tm.tm_mday))
-		return (1);
-	ss.str("");
-	ss.clear();
-	ss << (tm.tm_year) << "-" 
-	<< std::setw(2) << std::setfill('0') << tm.tm_mon << "-"
-	<< std::setw(2) << std::setfill('0') << tm.tm_mday;
-	date = ss.str();
-	return (0);
+		throw std::runtime_error(errorFmt("Invalid date") + date);
+	tm.tm_year -= 1900;
+	tm.tm_mon -= 1;
+	std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", &tm);
+	
+	date = std::string(buffer);
 }
 
 float BitcoinExchange::strToFloat(std::string const& strValue, std::string const& line)
@@ -95,8 +93,7 @@ float BitcoinExchange::getExchangeRate(std::string& date)
 {
 	std::tm inputDate;
 
-	if (checkInvalidDate(date, inputDate))
-		throw std::runtime_error(errorFmt("Invalid date") + date);
+	checkInvalidDate(date, inputDate);
 	std::map<std::string, float>::iterator it = _dataBase.lower_bound(date);
 	if (it == _dataBase.end() || it->first != date)
 	{
@@ -110,37 +107,37 @@ float BitcoinExchange::getExchangeRate(std::string& date)
 		}
 		if (it == _dataBase.end())
 		{
-			std::tm lastDate;
-			std::time_t currentTime = std::time(0);
+			std::tm lastDate, current, monthAhead;
+			std::time_t inputTime, lastDateTime, currentTime, monthAheadTime;
 			std::map<std::string, float>::iterator tmp = _dataBase.end();
 			--tmp;
 			std::string lastDateStr = tmp->first;
-			(void)checkInvalidDate(lastDateStr, lastDate);
-			std::time_t lastDateTime = std::mktime(&lastDate);
-			std::time_t inputTime = std::mktime(&inputDate);
+			checkInvalidDate(lastDateStr, lastDate);
+			lastDateTime = std::mktime(&lastDate);
+			inputTime = std::mktime(&inputDate);
 			if (inputTime == -1 || lastDateTime == -1)
 				throw std::runtime_error(errorFmt("Failed to convert to std::time_t"));
-			std::tm* tMonthAhead = std::localtime(&lastDateTime);
-			tMonthAhead->tm_mon += 1;
-			std::time_t monthAhead = std::mktime(tMonthAhead);
-			if (inputTime < monthAhead)
-				return (-1 * tmp->second);
-			{// To Delete
-				std::cout << getColorStr(FLCYAN, lastDateStr) << std::endl;
-				std::cout << getColorStr(FLYELLOW, date) << std::endl;
-			}
-			//toCHeck
+			monthAhead = *std::localtime(&lastDateTime);
+			monthAhead.tm_mon += 1;
+			monthAheadTime = std::mktime(&monthAhead);
+
 			char buffer[11];
-			std::time_t t = std::time(0);
-			std::tm* current = std::localtime(&t);
+			currentTime = std::time(0);
+			current = *std::localtime(&currentTime);
 			std::string currentDate;
-			std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", current);
+			std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", &current);
 			currentDate = std::string(buffer);
-			if (inputTime < currentTime)
-				 throw std::runtime_error(errorFmt("Date ahead") + date);
-			if (inputTime > currentTime)
-				throw std::runtime_error(errorFmt("Date in the future") + date);
+			checkInvalidDate(currentDate, current);
+			currentTime = std::mktime(&current);
+			if (inputTime > monthAheadTime)
+			{
+				if (inputTime < currentTime)
+					return (-1 * tmp->second);
+				if (inputTime > currentTime)
+					throw std::runtime_error(errorFmt("Date in the future") + date);
+			}
 		}
+
 		--it;
 	}
 	return (it->second);
@@ -188,9 +185,8 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 					}
 					else
 						std::cout << getColorFmt(FWHITE) ;
-					std::cout << key << " => " << std::setw(6) 
-					<< std::setfill(' ') << value << " = " << 
-					std::setw(6) << std::setfill(' ') << result << C_END << std::endl;
+					std::cout << key << " => " << formatValue(value, 4, 0) 
+					<< " = " << formatValue(result, 6, 0) << C_END << std::endl;
 				}
 			}
 			catch(const std::exception& e)

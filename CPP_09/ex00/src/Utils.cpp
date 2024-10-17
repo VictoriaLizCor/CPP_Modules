@@ -364,13 +364,20 @@ size_t	maxStringLength(int arraySize, std::string* arrayData)
  */
 std::string	center(const std::string& s, std::string::size_type width)
 {
-	if (width <= s.size())
+	std::string::size_type len = s.length();
+	if (len >= width) {
 		return s;
-	std::string::size_type padding = width - s.size();
-	std::string::size_type left = padding / 2 + padding % 2;
-	std::string::size_type right = padding / 2;
-	return (std::string(left, ' ') + s + std::string(right, ' '));
+	}
+	int padding = (width - len) / 2;
+	return std::string(padding, ' ') + s + std::string(width - len - padding, ' ');
+	// if (width <= s.size())
+	// 	return s;
+	// std::string::size_type padding = width - s.size();
+	// std::string::size_type left = padding / 2 + padding % 2;
+	// std::string::size_type right = padding / 2;
+	// return (std::string(left, ' ') + s + std::string(right, ' '));
 }
+
 
 std::string errorFmt(const std::string& s, int width)
 {

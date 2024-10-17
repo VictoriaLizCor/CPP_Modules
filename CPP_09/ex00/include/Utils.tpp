@@ -12,6 +12,18 @@
 # endif
 
 template <typename T>
+std::string formatValue(T value, int width, bool alignment)
+{
+	std::ostringstream oss;
+	if (alignment)
+		oss << std::left;
+	else
+		oss << std::right;
+	oss << std::setw(width) << std::setfill(' ') << value;
+	return (oss.str());
+}
+
+template <typename T>
 inline T getRandomVal(size_t num)
 {
 	initSeed();
