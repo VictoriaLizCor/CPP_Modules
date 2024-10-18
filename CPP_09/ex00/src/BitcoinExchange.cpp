@@ -7,7 +7,7 @@ _colorIdStr(getRandomColorFmt(1))
 		std::cout << getName(__func__) << getColorStr(FGRAY, " was Created\n");
 	readFile("data/data.csv", ",");
 	if (DEBUG > 1)
-		std::cout << *this << std::endl;
+		std::cout << "DB: " << *this << std::endl;
 	readFile(inputFile, " | ");
 }
 
@@ -56,6 +56,18 @@ static bool isValidDate(int year, int month, int day)
 	return (day <= daysInMonth[month - 1]);
 }
 
+float BitcoinExchange::strToFloat(std::string const& strValue, std::string const& line)
+{
+	char* end;
+	float value = std::strtof(strValue.c_str(), &end);
+
+	if (*end != '\0' && ((*end != 'f' && *end != 'F') || *(end + 1) != '\0'))
+		throw std::invalid_argument(errorFmt("Invalid Value input") + line);
+	if (value < 0)
+		throw std::out_of_range(errorFmt("Not a positive value") + line);
+	return (value);
+}
+
 //  if (date.size() != 10 || date[4] != '-' || date[7] != '-')
 // 	throw std::runtime_error(errorFmt("Failed to parse date: ")) + line);
 void BitcoinExchange::checkInvalidDate(std::string & date, std::tm& tm)
@@ -77,19 +89,19 @@ void BitcoinExchange::checkInvalidDate(std::string & date, std::tm& tm)
 	date = std::string(buffer);
 }
 
-float BitcoinExchange::strToFloat(std::string const& strValue, std::string const& line)
+void BitcoinExchange::getCurrentTime(std::time_t& currentTime, std::tm& current)
 {
-	char* end;
-	float value = std::strtof(strValue.c_str(), &end);
-
-	if (*end != '\0' && ((*end != 'f' && *end != 'F') || *(end + 1) != '\0'))
-		throw std::invalid_argument(errorFmt("Invalid Value input") + line);
-	if (value < 0)
-		throw std::out_of_range(errorFmt("Not a positive value") + line);
-	return (value);
+	char buffer[11];
+	currentTime = std::time(0);
+	current = *std::localtime(&currentTime);
+	std::string currentDate;
+	std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", &current);
+	currentDate = std::string(buffer);
+	checkInvalidDate(currentDate, current);
+	currentTime = std::mktime(&current);
 }
 
-float BitcoinExchange::getExchangeRate(std::string& date)
+std::pair<float, std::string> BitcoinExchange::getExchangeRate(std::string& date)
 {
 	std::tm inputDate;
 
@@ -100,7 +112,7 @@ float BitcoinExchange::getExchangeRate(std::string& date)
 		if (it == _dataBase.begin())
 		{
 			std::stringstream ss;
-			ss << errorFmt("Unable to compare in database") << date;
+			ss << errorFmt("Not comparable in DB") << date;
 			if (DEBUG)
 				ss << std::endl << "Bitcoin started at: " << it->first;
 			throw std::runtime_error(ss.str());
@@ -108,8 +120,8 @@ float BitcoinExchange::getExchangeRate(std::string& date)
 		if (it == _dataBase.end())
 		{
 			std::tm lastDate, current, monthAhead;
-			std::time_t inputTime, lastDateTime, currentTime, monthAheadTime;
-			std::map<std::string, float>::iterator tmp = _dataBase.end();
+			std::time_t inputTime, lastDateTime, currentTime;
+			std::map<std::string, float>::iterator tmp = it;
 			--tmp;
 			std::string lastDateStr = tmp->first;
 			checkInvalidDate(lastDateStr, lastDate);
@@ -117,30 +129,22 @@ float BitcoinExchange::getExchangeRate(std::string& date)
 			inputTime = std::mktime(&inputDate);
 			if (inputTime == -1 || lastDateTime == -1)
 				throw std::runtime_error(errorFmt("Failed to convert to std::time_t"));
-			monthAhead = *std::localtime(&lastDateTime);
+			monthAhead = lastDate;
 			monthAhead.tm_mon += 1;
-			monthAheadTime = std::mktime(&monthAhead);
-
-			char buffer[11];
-			currentTime = std::time(0);
-			current = *std::localtime(&currentTime);
-			std::string currentDate;
-			std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", &current);
-			currentDate = std::string(buffer);
-			checkInvalidDate(currentDate, current);
-			currentTime = std::mktime(&current);
-			if (inputTime > monthAheadTime)
+			getCurrentTime(currentTime, current);
+			if (inputTime < std::mktime(&monthAhead))
+				return (std::make_pair(tmp->second , getColorFmt(FYELLOW)));
+			if (inputTime > std::mktime(&monthAhead))
 			{
 				if (inputTime < currentTime)
-					return (-1 * tmp->second);
+					return (std::make_pair(tmp->second , FORANGE));
 				if (inputTime > currentTime)
 					throw std::runtime_error(errorFmt("Date in the future") + date);
 			}
 		}
-
 		--it;
 	}
-	return (it->second);
+	return (std::make_pair(it->second, getColorFmt(FWHITE)));
 }
 // std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", current);
 
@@ -153,11 +157,11 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 		std::stringstream ss;
 		std::string line;
 		
-		checkTargetStatus(fileName, ss);
+		checkFileStatus(fileName, ss);
 		if (!ss.str().empty())
 			throw(std::runtime_error(ss.str()));
 		tempFile.open(fileName.c_str());
-		checkStreamFlags(tempFile, fileName);
+		checkFileStreamFlags(tempFile, fileName);
 		std::getline(tempFile, line);
 		while(std::getline(tempFile, line))
 		{
@@ -177,16 +181,13 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 				{
 					if (value > 1000)
 						throw std::out_of_range(errorFmt("Value over 1000") + line );
-					float result = value * getExchangeRate(key);
-					if (result < 0)
-					{
-						std::cout << getColorFmt(FYELLOW);
-						result *= -1;
-					}
-					else
-						std::cout << getColorFmt(FWHITE) ;
-					std::cout << key << " => " << formatValue(value, 4, 0) 
-					<< " = " << formatValue(result, 6, 0) << C_END << std::endl;
+					std::pair<float, std::string> tmp = getExchangeRate(key);
+					float result = tmp.first * value;
+					std::cout << tmp.second
+					<< formatValue(key, 42, 0) << " => " 
+					<< formatValue(value, 4, 0) 
+					<< " = " << std::fixed << std::setprecision(2) 
+					<< formatValue(result, 7, 0) << C_END << std::endl;
 				}
 			}
 			catch(const std::exception& e)
@@ -204,7 +205,7 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 	nl(1);
 }
 
-void BitcoinExchange::checkStreamFlags(std::ifstream& file, std::string const& fileName)
+void BitcoinExchange::checkFileStreamFlags(std::ifstream& file, std::string const& fileName)
 {
 	std::stringstream ss;
 
@@ -223,7 +224,7 @@ void BitcoinExchange::checkStreamFlags(std::ifstream& file, std::string const& f
 		throw std::runtime_error(ss.str());
 }
 
-void BitcoinExchange::checkTargetStatus(std::string const& target, std::stringstream& ss)
+void BitcoinExchange::checkFileStatus(std::string const& target, std::stringstream& ss)
 {
 	struct stat st;
 	std::string strTarget(getColorFmt(FRED) + "File '" + target + "' ");

@@ -19,7 +19,8 @@ std::string formatValue(T value, int width, bool alignment)
 		oss << std::left;
 	else
 		oss << std::right;
-	oss << std::setw(width) << std::setfill(' ') << value;
+	oss << std::setw(width) << std::setfill(' ');
+	oss << value;
 	return (oss.str());
 }
 

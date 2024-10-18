@@ -31,13 +31,13 @@ class BitcoinExchange
 
 		//file handler
 		void			readFile(std::string const& fileName, std::string const& delimiter);
-		void checkTargetStatus(std::string const& target, std::stringstream& ss);
-		void 			checkStreamFlags(std::ifstream& file, std::string const&fileName);
+		void			checkFileStatus(std::string const& target, std::stringstream& ss);
+		void 			checkFileStreamFlags(std::ifstream& file, std::string const&fileName);
 		// fill map
 		float 			strToFloat(std::string const& strValue, std::string const& line);
 		void			checkInvalidDate(std::string& date, std::tm& tm);
-		float			getExchangeRate(std::string& date);
-
+		std::pair<float, std::string>	getExchangeRate(std::string& date);
+		void			getCurrentTime(std::time_t& currentTime, std::tm& current);
 	public:
 		BitcoinExchange(std::string const& name);
 		~BitcoinExchange();

@@ -368,7 +368,7 @@ std::string	center(const std::string& s, std::string::size_type width)
 	if (len >= width) {
 		return s;
 	}
-	int padding = (width - len) / 2;
+	size_t padding = (width - len) / 2;
 	return std::string(padding, ' ') + s + std::string(width - len - padding, ' ');
 	// if (width <= s.size())
 	// 	return s;
