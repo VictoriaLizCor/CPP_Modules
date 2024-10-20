@@ -11,6 +11,35 @@
 #  define DEBUG 0
 # endif
 
+/**
+ * @brief Converts an integer value to a string.
+ * 
+ * @param value The integer value to be converted.
+ * @return std::string The string representation of the integer value.
+ */
+template <typename T>
+std::string toStr(const T& value)
+{
+	std::ostringstream ss;
+	ss << std::fixed << value;
+	return ss.str();
+}
+
+/**
+ * @brief Formats a given value into a string with specified width and
+ * alignment.
+ *
+ * This function takes a value of any type, formats it into a string
+ * with a specified width, and aligns it either to the left or right
+ * based on the alignment flag.
+ *
+ * @tparam T The type of the value to be formatted.
+ * @param value The value to be formatted.
+ * @param width The width of the formatted string.
+ * @param alignment If true, the value is left-aligned; if false, the
+ * value is right-aligned.
+ * @return A string representing the formatted value.
+ */
 template <typename T>
 std::string formatValue(T value, int width, bool alignment)
 {
@@ -24,6 +53,18 @@ std::string formatValue(T value, int width, bool alignment)
 	return (oss.str());
 }
 
+/**
+ * @brief Generates a random value within a specified range.
+ *
+ * This function initializes the random seed and generates a random
+ * value within the range of [-num, num). The generated value is then
+ * cast to the specified type T.
+ *
+ * @tparam T The type to which the random value will be cast.
+ * @param num The upper bound of the range. The random value will be
+ * within the range of [-num, num).
+ * @return T A random value of type T within the specified range.
+ */
 template <typename T>
 inline T getRandomVal(size_t num)
 {
@@ -33,6 +74,16 @@ inline T getRandomVal(size_t num)
 
 }
 
+/**
+ * @brief Generates a random value of type size_t within the range [0, num).
+ *
+ * This function initializes the random seed and returns a random value
+ * of type size_t that is within the range from 0 to num - 1.
+ *
+ * @tparam std::size_t The type of the random value to be generated.
+ * @param num The upper bound (exclusive) for the random value.
+ * @return A random value of type size_t within the range [0, num).
+ */
 template <>
 inline size_t getRandomVal<std::size_t>(size_t num)
 {
@@ -41,6 +92,21 @@ inline size_t getRandomVal<std::size_t>(size_t num)
 }
 
 
+/**
+ * @brief Generates a random string of a specified length.
+ *
+ * This template specialization of the getRandomVal function generates
+ * a random string consisting of lowercase alphabetic characters. The
+ * length of the string is determined by generating a random size_t
+ * value and adding 1 to it.
+ *
+ * @tparam std::string The type of the value to be generated.
+ * @param num The base number used to generate the length of the
+ *            random string. This parameter is set to 10 within the
+ *            function.
+ * @return A randomly generated string of lowercase alphabetic
+ * characters.
+ */
 template <>
 inline std::string getRandomVal<std::string>(size_t num)
 {
@@ -57,6 +123,19 @@ inline std::string getRandomVal<std::string>(size_t num)
 	return (randomStr);
 }
 
+/**
+ * @brief Specialization of getRandomVal template function for char
+ * type.
+ *
+ * This function generates a random character within the ASCII range
+ * of printable characters (from space ' ' to tilde '~'). It
+ * initializes the random seed and then calculates a random value
+ * within the specified range.
+ *
+ * @param num This parameter is ignored in the function and is always
+ * set to 1.
+ * @return A random printable ASCII character.
+ */
 template <>
 inline char getRandomVal<char>(size_t num)
 {
@@ -67,6 +146,15 @@ inline char getRandomVal<char>(size_t num)
 	return (static_cast<char>(randomValue));
 }
 
+/**
+ * @brief A functor for filling values with random numbers.
+ *
+ * This struct provides two operator overloads to generate random
+ * values and assign them to a given variable. The random values are
+ * generated within a specified maximum range.
+ *
+ * @tparam T The type of the values to be filled.
+ */
 template <typename T>
 struct FillFunctor
 {
@@ -82,6 +170,12 @@ struct FillFunctor
 	}
 };
 
+/**
+ * @brief A functor for printing elements of a container to an output
+ * stream.
+ *
+ * @tparam T The type of the container whose elements will be printed.
+ */
 template <typename T>
 struct PrintFunctor
 {
@@ -94,6 +188,15 @@ struct PrintFunctor
 	}
 };
 
+/**
+ * @brief Functor to print the contents of a std::map.
+ *
+ * This struct defines a functor that prints each entry of a std::map
+ * to a given output stream.
+ *
+ * @tparam K The type of the keys in the map.
+ * @tparam V The type of the values in the map.
+ */
 template <typename K, typename V>
 struct PrintFunctor<std::map<K, V> >
 {

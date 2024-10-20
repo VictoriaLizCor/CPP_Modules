@@ -2,49 +2,45 @@
 # define BITCOINEXCHANGE_HPP
 
 # include <iostream>
-# include <sstream>
 # include <fstream>
+# include <sstream>
 # include <string>
-# include <sys/stat.h>
-# include <typeinfo>
-# include <unistd.h>
-# include <Utils.hpp>
-# include <stdexcept>
 # include <map>
 # include <ctime>
+# include <stdexcept>
+# include <sys/stat.h>
+# include <unistd.h>
+# include <iomanip>
 # include <algorithm>
-# include <cstring>
+# include "Utils.hpp"
+# include "DateUtils.hpp"
 
 # ifndef DEBUG
 #  define DEBUG 0
 # endif
 
+typedef std::map<std::string, float>::iterator ite;
 class BitcoinExchange
 {
-	private:
-		std::map <std::string, float> _dataBase;
-		//debug
-		std::string const	_colorIdStr;
-
+	public:
+		BitcoinExchange(std::string const& inputFile);
 		BitcoinExchange& operator=(BitcoinExchange const& rhs);
 		BitcoinExchange(BitcoinExchange const& rhs);
+		~BitcoinExchange(void);
 
-		//file handler
-		void			readFile(std::string const& fileName, std::string const& delimiter);
-		void			checkFileStatus(std::string const& target, std::stringstream& ss);
-		void 			checkFileStreamFlags(std::ifstream& file, std::string const&fileName);
-		// fill map
-		float 			strToFloat(std::string const& strValue, std::string const& line);
-		void			checkInvalidDate(std::string& date, std::tm& tm);
+		void readFile(std::string const& fileName, std::string const& delimiter);
 		std::pair<float, std::string>	getExchangeRate(std::string& date);
-		void			getCurrentTime(std::time_t& currentTime, std::tm& current);
-	public:
-		BitcoinExchange(std::string const& name);
-		~BitcoinExchange();
+		std::string						getName(std::string name);
+		void							getInfo(std::ostream& os);
+	private:
+		void	processLine(const std::string& line, const std::string& delimiter);
+		void	processExchangeRate(std::string& key, double value, const std::string& line);
+		void	checkFileStreamFlags(std::ifstream& file, std::string const& fileName);
+		void	checkFileStatus(std::string const& target, std::stringstream& ss);
 
-		std::string		getName(std::string name);
-		void			getInfo(std::ostream& os);
-
+		std::pair<float, std::string> handleDateBeyondDB(std::string const& date, std::tm& inputDate, ite it);
+		std::map<std::string, float> _dataBase;
+		std::string _colorIdStr;
 };
 
 std::ostream& operator << (std::ostream& os, BitcoinExchange& rhs);

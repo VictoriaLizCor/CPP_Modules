@@ -99,19 +99,6 @@ std::string error(std::string str, bool bold)
 }
 
 /**
- * @brief Converts an integer value to a string.
- * 
- * @param value The integer value to be converted.
- * @return std::string The string representation of the integer value.
- */
-std::string toStr(int value)
-{
-	std::ostringstream ss;
-	ss << value;
-	return (ss.str());
-}
-
-/**
  * Concatenates the given color string with the input string and the default color string.
  * 
  * @param eColor The color string to be concatenated.
@@ -221,7 +208,7 @@ std::string	getColorShade(int eColor, int pattern)
 	std::ostringstream strColor;
 
 	strColor << C_FMT << eColor;
-	if (toStr(pattern).find_first_of("68") == std::string::npos)
+	if (toStr<int>(pattern).find_first_of("68") == std::string::npos)
 		return (strColor.str() + "m");
 	strColor << ";" << pattern << "m";
 	return (strColor.str());
@@ -238,7 +225,7 @@ std::string	getColorShade(int eColor)
 	std::ostringstream strColor;
 	static int pattern = -1;
 	pattern++;
-	if (toStr(pattern).find_first_of("68") != std::string::npos)
+	if (toStr<int>(pattern).find_first_of("68") != std::string::npos)
 		pattern++;
 	strColor << C_FMT << eColor;
 	if (pattern != 0)

@@ -1,5 +1,15 @@
 #include "BitcoinExchange.hpp"
 
+/**
+ * @brief Constructs a BitcoinExchange object.
+ *
+ * This constructor initializes a BitcoinExchange object by reading
+ * data from a specified input file and a default data file. It also
+ * assigns a random color format to the object.
+ *
+ * @param inputFile The path to the input file containing Bitcoin
+ * exchange data.
+ */
 BitcoinExchange::BitcoinExchange(std::string const& inputFile):
 _colorIdStr(getRandomColorFmt(1))
 {
@@ -32,81 +42,92 @@ BitcoinExchange::~BitcoinExchange(void)
 		std::cout << getName(__func__) << getColorStr(FGRAY, " was Destroyed\n");
 }
 
-static bool isLeap(int year)
-{
-	if (year % 4 != 0)
-		return (false);
-	if (year % 100 != 0)
-		return (true);
-	if (year % 400 != 0)
-		return (false);
-	return (true);
-}
 
-static bool isValidDate(int year, int month, int day)
-{
-	if ((month < 1 || month > 12) || day < 1)
-		return (false);
-
-	int daysInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-
-	if (isLeap(year))
-		daysInMonth[1] = 29;
-
-	return (day <= daysInMonth[month - 1]);
-}
-
-float BitcoinExchange::strToFloat(std::string const& strValue, std::string const& line)
+/**
+ * @brief Converts a string to a floating-point number.
+ *
+ * This function attempts to convert the given string to a double. It
+ * throws an exception if the string contains invalid characters or if
+ * the resulting value is negative.
+ *
+ * @param strValue The string representation of the number to convert.
+ * @return The converted floating-point number.
+ * @throws std::invalid_argument If the string contains invalid
+ * characters.
+ * @throws std::out_of_range If the resulting value is negative.
+ */
+static double strToFloat(std::string const& strValue)
 {
 	char* end;
-	float value = std::strtof(strValue.c_str(), &end);
+	double value = std::strtod(strValue.c_str(), &end);
 
 	if (*end != '\0' && ((*end != 'f' && *end != 'F') || *(end + 1) != '\0'))
-		throw std::invalid_argument(errorFmt("Invalid Value input") + line);
+		throw std::invalid_argument(errorFmt("Invalid Value input") + strValue);
 	if (value < 0)
-		throw std::out_of_range(errorFmt("Not a positive value") + line);
+		throw std::out_of_range(errorFmt("Not a positive value") + strValue);
 	return (value);
 }
 
-//  if (date.size() != 10 || date[4] != '-' || date[7] != '-')
-// 	throw std::runtime_error(errorFmt("Failed to parse date: ")) + line);
-void BitcoinExchange::checkInvalidDate(std::string & date, std::tm& tm)
+
+/**
+ * @brief Handles dates that are beyond the database range.
+ *
+ * This function processes a given date and determines the appropriate
+ * value and color formatting based on the date's relation to the last
+ * date in the database and the current date.
+ *
+ * @param date The input date as a string.
+ * @param inputDate The input date as a std::tm structure.
+ * @param it An iterator pointing to the position in the database map.
+ * @return A pair containing the float value associated with the date
+ * and a string representing the color format.
+ * @throws std::runtime_error If the date conversion to std::time_t
+ * fails or if the date is in the future.
+ */
+std::pair<float, std::string> BitcoinExchange::handleDateBeyondDB(std::string const& date, std::tm& inputDate, ite it)
 {
-	char buffer[11];
-	std::memset(&tm, 0, sizeof(std::tm));
-	std::stringstream ss(date);
+	std::tm lastDate, current;
+	std::time_t inputTime, lastDateTime, currentTime, monthAheadTime;
+	std::map<std::string, float>::iterator tmp = it;
+	--tmp;
+	std::string lastDateStr = tmp->first;
 
-
-	char dash1, dash2;
-	if (!(ss >> tm.tm_year >> dash1 >> tm.tm_mon >> dash2 >> tm.tm_mday) || dash1 != '-' || dash2 != '-')
-		throw std::runtime_error(errorFmt("Invalid date") + date);
-	if (!isValidDate(tm.tm_year, tm.tm_mon, tm.tm_mday))
-		throw std::runtime_error(errorFmt("Invalid date") + date);
-	tm.tm_year -= 1900;
-	tm.tm_mon -= 1;
-	std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", &tm);
-	
-	date = std::string(buffer);
+	checkParseDate(lastDateStr, lastDate);
+	monthAheadTime = getMonthAheadTime(lastDate);
+	lastDateTime = std::mktime(&lastDate);
+	inputTime = std::mktime(&inputDate);
+	if (inputTime == -1 || lastDateTime == -1)
+		throw std::runtime_error(errorFmt("Failed to convert to std::time_t"));
+	getCurrentTime(currentTime, current);
+	if (inputTime < monthAheadTime)
+		return std::make_pair(tmp->second, getColorFmt(FYELLOW));
+	else if (inputTime < currentTime)
+		return std::make_pair(tmp->second, FORANGE);
+	else
+		throw std::runtime_error(errorFmt("Date in the future") + date);
 }
 
-void BitcoinExchange::getCurrentTime(std::time_t& currentTime, std::tm& current)
-{
-	char buffer[11];
-	currentTime = std::time(0);
-	current = *std::localtime(&currentTime);
-	std::string currentDate;
-	std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", &current);
-	currentDate = std::string(buffer);
-	checkInvalidDate(currentDate, current);
-	currentTime = std::mktime(&current);
-}
-
+/**
+ * @brief Retrieves the exchange rate for Bitcoin on a given date.
+ *
+ * This function searches the internal database for the exchange rate
+ * of Bitcoin on the specified date. If the exact date is not found,
+ * it returns the closest preceding date's exchange rate. If the date
+ * is before the earliest date in the database, an error is thrown.
+ *
+ * @param date The date for which the exchange rate is requested, in
+ * string format.
+ * @return A pair containing the exchange rate (float) and a formatted
+ * string (std::string).
+ * @throws std::runtime_error If the date is before the earliest date
+ * in the database.
+ */
 std::pair<float, std::string> BitcoinExchange::getExchangeRate(std::string& date)
 {
 	std::tm inputDate;
 
-	checkInvalidDate(date, inputDate);
-	std::map<std::string, float>::iterator it = _dataBase.lower_bound(date);
+	checkParseDate(date, inputDate);
+	ite it = _dataBase.lower_bound(date);
 	if (it == _dataBase.end() || it->first != date)
 	{
 		if (it == _dataBase.begin())
@@ -118,36 +139,29 @@ std::pair<float, std::string> BitcoinExchange::getExchangeRate(std::string& date
 			throw std::runtime_error(ss.str());
 		}
 		if (it == _dataBase.end())
-		{
-			std::tm lastDate, current, monthAhead;
-			std::time_t inputTime, lastDateTime, currentTime;
-			std::map<std::string, float>::iterator tmp = it;
-			--tmp;
-			std::string lastDateStr = tmp->first;
-			checkInvalidDate(lastDateStr, lastDate);
-			lastDateTime = std::mktime(&lastDate);
-			inputTime = std::mktime(&inputDate);
-			if (inputTime == -1 || lastDateTime == -1)
-				throw std::runtime_error(errorFmt("Failed to convert to std::time_t"));
-			monthAhead = lastDate;
-			monthAhead.tm_mon += 1;
-			getCurrentTime(currentTime, current);
-			if (inputTime < std::mktime(&monthAhead))
-				return (std::make_pair(tmp->second , getColorFmt(FYELLOW)));
-			if (inputTime > std::mktime(&monthAhead))
-			{
-				if (inputTime < currentTime)
-					return (std::make_pair(tmp->second , FORANGE));
-				if (inputTime > currentTime)
-					throw std::runtime_error(errorFmt("Date in the future") + date);
-			}
-		}
+			return handleDateBeyondDB(date, inputDate, it);
 		--it;
 	}
 	return (std::make_pair(it->second, getColorFmt(FWHITE)));
 }
-// std::strftime(buffer, sizeof(buffer), "%Y-%m-%d", current);
 
+/**
+ * @brief Reads a file and processes its content line by line.
+ *
+ * This function attempts to open and read a file specified by the
+ * given file name. It checks the file status and stream flags, and
+ * processes each line of the file using the specified delimiter. If
+ * any error occurs during these operations, an exception is caught
+ * and an error message is printed.
+ *
+ * @param fileName The name of the file to be read.
+ * @param delimiter The delimiter used to process each line of the
+ * file.
+ * @throws std::runtime_error If there is an issue with the file
+ * status.
+ * @throws std::exception If any other error occurs during file
+ * operations.
+ */
 void BitcoinExchange::readFile(std::string const& fileName, std::string const& delimiter)
 {
 	std::ifstream tempFile;
@@ -162,39 +176,11 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 			throw(std::runtime_error(ss.str()));
 		tempFile.open(fileName.c_str());
 		checkFileStreamFlags(tempFile, fileName);
+		
 		std::getline(tempFile, line);
 		while(std::getline(tempFile, line))
-		{
-			try
-			{
-				size_t pos = line.find(delimiter);
-				if (line.empty())
-					continue;
-				if (pos == std::string::npos)
-					throw std::runtime_error(errorFmt("Bad input") + line);
-				std::string key = line.substr(0, pos);
-				std::string strValue = line.substr(pos + delimiter.length());
-				float value = strToFloat(strValue, line);
-				if (delimiter == ",")
-					_dataBase[key] = value;
-				else
-				{
-					if (value > 1000)
-						throw std::out_of_range(errorFmt("Value over 1000") + line );
-					std::pair<float, std::string> tmp = getExchangeRate(key);
-					float result = tmp.first * value;
-					std::cout << tmp.second
-					<< formatValue(key, 42, 0) << " => " 
-					<< formatValue(value, 4, 0) 
-					<< " = " << std::fixed << std::setprecision(2) 
-					<< formatValue(result, 7, 0) << C_END << std::endl;
-				}
-			}
-			catch(const std::exception& e)
-			{
-				std::cerr << e.what() << std::endl;
-			}
-		}
+			processLine(line, delimiter);
+		
 		tempFile.clear();
 		tempFile.close();
 	}
@@ -205,47 +191,94 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 	nl(1);
 }
 
-void BitcoinExchange::checkFileStreamFlags(std::ifstream& file, std::string const& fileName)
+/**
+ * @brief Processes a line of input to either update the database or
+ * calculate exchange rates.
+ *
+ * This function takes a line of input and a delimiter, then processes
+ * the line to either update the internal database with new values or
+ * calculate exchange rates based on the provided data.
+ *
+ * @param line The input line to be processed.
+ * @param delimiter The delimiter used to split the input line into
+ * key and value.
+ *
+ * @throws std::runtime_error If the input line does not contain the
+ * delimiter.
+ * @throws std::out_of_range If the value extracted from the input
+ * line is greater than 1000.
+ */
+void BitcoinExchange::processLine(const std::string& line, const std::string& delimiter)
 {
-	std::stringstream ss;
-
-	if (!file.good())
-		std::cout << "*-----checkStreamFLAGS------" << std::endl;
-	if (file.peek() == std::fstream::traits_type::eof())
+	if (line.empty())
+		return ;
+	try
 	{
-		ss.str("");
-		ss << errorFmt("File " + fileName + " is empty");
+		size_t pos = line.find(delimiter);
+		
+		if (pos == std::string::npos)
+			throw std::runtime_error(errorFmt("Bad input") + line);
+		
+		std::string key = line.substr(0, pos);
+		std::string strValue = line.substr(pos + delimiter.length());
+		double value = strToFloat(strValue);
+		
+		if (delimiter == ",")
+			_dataBase[key] = static_cast<float>(value);
+		else
+			processExchangeRate(key, value, line);
 	}
-	if (file.fail())
-		ss << error("A I/O error has occurred ", 0) << std::endl;
-	if (file.bad())
-		ss << error("A critical I/O error has occurred: ", 0) << std::endl;
-	if (!ss.str().empty())
-		throw std::runtime_error(ss.str());
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
 }
 
-void BitcoinExchange::checkFileStatus(std::string const& target, std::stringstream& ss)
+/**
+ * @brief Processes the exchange rate for Bitcoin.
+ *
+ * This function takes a key and a value, retrieves the exchange rate
+ * for the key, and calculates the result of the exchange. If the
+ * value exceeds 1000, an exception is thrown. The result is then
+ * printed in a formatted manner.
+ *
+ * @param key The key representing the currency or date for which the
+ * exchange rate is needed.
+ * @param value The amount to be exchanged.
+ * @param line The original line of input, used for error reporting.
+ *
+ * @throws std::out_of_range If the value exceeds 1000.
+ */
+void BitcoinExchange::processExchangeRate(std::string& key, double value, const std::string& line)
 {
-	struct stat st;
-	std::string strTarget(getColorFmt(FRED) + "File '" + target + "' ");
-	bool isDirectory = (false);
-	bool status = (false);
+	if (value > 1000)
+		throw std::out_of_range(errorFmt("Value over 1000") + line);
 
-	if (stat(target.c_str(), &st) == 0)
-	{
-		if (access(target.c_str(), R_OK) == -1)
-			ss << strTarget << "has no reading permissions\n";
-		if (access(target.c_str(), W_OK) == -1)
-			ss << strTarget << "has no writing permissions\n";
-		isDirectory = S_ISDIR(st.st_mode);
-		status = (true);
-	}
-	if (!status)
-		ss << strTarget << "does not exist" << C_END;
-	else if (isDirectory)
-		ss << strTarget << "is a Directory"<< C_END;
+	std::pair<float, std::string> tmp = getExchangeRate(key);
+	float result = tmp.first * static_cast<float>(value);
+
+	std::cout << tmp.second
+			  << formatValue(key, 42, 0) << " => "
+			  << formatValue(value, 4, 0)
+			  << " = " << std::fixed << std::setprecision(2)
+			  << formatValue(result, 7, 0) << C_END << std::endl;
 }
 
+/**
+ * @brief Retrieves the name of the BitcoinExchange instance,
+ * formatted with color codes.
+ *
+ * This function constructs a formatted string that includes the name
+ * of the instance, potentially modified by a tilde ('~') character,
+ * and applies color codes to it.
+ *
+ * @param name A string representing the name to be processed. If the
+ *             string contains a tilde ('~'), the part after the tilde
+ *             will be used as the name. If the string is empty, the
+ *             class name of the instance will be used.
+ * @return A formatted string with the instance name and color codes
+ * applied.
+ */
 std::string BitcoinExchange::getName(std::string name)
 {
 	std::ostringstream os;
@@ -263,6 +296,18 @@ std::string BitcoinExchange::getName(std::string name)
 }
 
 
+/**
+ * @brief Outputs the Bitcoin exchange information to the provided
+ * output stream.
+ *
+ * This function prints the name and values of the Bitcoin exchange to
+ * the given output stream. If debugging is enabled, it iterates
+ * through the internal database and prints each entry using a
+ * functor.
+ *
+ * @param os The output stream to which the information will be
+ * written.
+ */
 void BitcoinExchange::getInfo(std::ostream& os)
 {
 	os << getName("") << " values:" << std::endl ;
