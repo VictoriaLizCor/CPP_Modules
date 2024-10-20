@@ -184,7 +184,7 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
 		tempFile.clear();
 		tempFile.close();
 	}
-	catch(const std::exception& e)
+	catch(std::exception const& e)
 	{
 		std::cerr << e.what() << std::endl;
 	}
@@ -208,7 +208,7 @@ void BitcoinExchange::readFile(std::string const& fileName, std::string const& d
  * @throws std::out_of_range If the value extracted from the input
  * line is greater than 1000.
  */
-void BitcoinExchange::processLine(const std::string& line, const std::string& delimiter)
+void BitcoinExchange::processLine(std::string const& line, std::string const& delimiter)
 {
 	if (line.empty())
 		return ;
@@ -228,7 +228,7 @@ void BitcoinExchange::processLine(const std::string& line, const std::string& de
 		else
 			processExchangeRate(key, value, line);
 	}
-	catch (const std::exception& e)
+	catch (std::exception const& e)
 	{
 		std::cerr << e.what() << std::endl;
 	}
@@ -249,7 +249,7 @@ void BitcoinExchange::processLine(const std::string& line, const std::string& de
  *
  * @throws std::out_of_range If the value exceeds 1000.
  */
-void BitcoinExchange::processExchangeRate(std::string& key, double value, const std::string& line)
+void BitcoinExchange::processExchangeRate(std::string& key, double value, std::string const& line)
 {
 	if (value > 1000)
 		throw std::out_of_range(errorFmt("Value over 1000") + line);

@@ -33,8 +33,8 @@ class BitcoinExchange
 		std::string						getName(std::string name);
 		void							getInfo(std::ostream& os);
 	private:
-		void	processLine(const std::string& line, const std::string& delimiter);
-		void	processExchangeRate(std::string& key, double value, const std::string& line);
+		void	processLine(std::string const& line, std::string const& delimiter);
+		void	processExchangeRate(std::string& key, double value, std::string const& line);
 		void	checkFileStreamFlags(std::ifstream& file, std::string const& fileName);
 		void	checkFileStatus(std::string const& target, std::stringstream& ss);
 

@@ -93,7 +93,7 @@ void checkParseDate(std::string& date, std::tm& tm)
  * @return A `std::time_t` value representing the date one month
  * ahead.
  */
-std::time_t getMonthAheadTime(const std::tm& dateTm)
+std::time_t getMonthAheadTime(std::tm const& dateTm)
 {
 	std::tm monthAhead = dateTm;
 	monthAhead.tm_mon += 1;

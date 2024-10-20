@@ -18,7 +18,7 @@
  * @return std::string The string representation of the integer value.
  */
 template <typename T>
-std::string toStr(T const& value)
+std::string toStr(const T& value)
 {
 	std::ostringstream ss;
 	ss << std::fixed << value;
