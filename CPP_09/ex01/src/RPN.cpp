@@ -19,40 +19,38 @@ RPN::~RPN() {}
 RPN& RPN::operator=(RPN const& rhs)
 {
 	(void)rhs;
-	return *this;
+	return (*this);
 }
 
 bool RPN::isOperator(const std::string& token)
 {
-	return token == "+" || token == "-" || token == "*" || token == "/" || token == "^";
+	return (token == "+" || token == "-" || token == "*" || token == "/" || token == "^");
 }
 
 float RPN::performOperation(float a, float b, const std::string& op)
 {
 	if (op == "+")
-		return a + b;
+		return (a + b);
 	if (op == "-")
-		return a - b;
+		return (a - b);
 	if (op == "*")
-		return a * b;
+		return (a * b);
 	if (op == "/")
 	{
 		if (a == 0)
 			throw std::runtime_error("Error: Division by zero.");
-		return a / b;
+		return (a / b);
 	}
 	if (op == "^")
-		return static_cast<float>(pow(b, a));
+		return (static_cast<float>(pow(b, a)));
 	throw std::runtime_error("Error: Invalid operator.");
 }
 
 bool RPN::isValidToken(const std::string& token)
 {
 	if (token.size() == 1 && (std::isdigit(token[0]) || isOperator(token)))
-	{
-		return true;
-	}
-	return false;
+		return (true);
+	return (false);
 }
 
 Node* RPN::buildTree(const std::string& postfix)
@@ -80,27 +78,27 @@ Node* RPN::buildTree(const std::string& postfix)
 		printDebug("Pushed node with value: " + token);
 	}
 
-	return stk.top();
+	return (stk.top());
 }
 
 float RPN::evaluate(Node* root)
 {
 	if (!root)
 	{
-		return 0;
+		return (0);
 	}
 
 	if (!isOperator(root->value))
 	{
 		printDebug("Returning operand: " + root->value);
-		return static_cast<float>(std::atof(root->value.c_str()));
+		return (static_cast<float>(std::atof(root->value.c_str())));
 	}
 
 	float leftVal = evaluate(root->left);
 	float rightVal = evaluate(root->right);
 	float result = performOperation(leftVal, rightVal, root->value);
-	printDebug("Performed operation: " + root->value + " with operands " + toString(leftVal) + " and " + toString(rightVal) + " resulting in " + toString(result));
-	return result;
+	printDebug("Performed operation: " + root->value + " with operands " + toStr<float>(leftVal) + " and " + toStr<float>(rightVal) + " resulting in " + toStr<float>(result));
+	return (result);
 }
 
 void RPN::deleteTree(Node* node)
@@ -119,11 +117,4 @@ void RPN::printDebug(const std::string& message)
 	{
 		std::cout << message << std::endl;
 	}
-}
-
-std::string RPN::toString(float value)
-{
-	std::ostringstream oss;
-	oss << value;
-	return oss.str();
 }

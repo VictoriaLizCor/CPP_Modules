@@ -41,7 +41,6 @@ class RPN
 		bool isOperator(const std::string& token);
 		float performOperation(float a, float b, const std::string& op);
 		void printDebug(const std::string& message);
-		std::string toString(float value);
 };
 
 // std::ostream& operator << (std::ostream& os, RPN& rhs);
