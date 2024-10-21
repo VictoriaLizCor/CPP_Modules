@@ -9,14 +9,17 @@ int main( int argc, char* arg[] )
 		std::cout << "Usage: RPN <expression>\n";
 		return (1);
 	}
-	std::string postfix = arg[1];
+	std::string expression = arg[1];
 	RPN exprTree;
 
 	try
 	{
-		Node* root = exprTree.buildTree(postfix);
+		Node* root = exprTree.buildTree(expression);
+		if (DEBUG)
+			std::cout << "START: " << std::endl;
+		exprTree.printTree(root);
 		float result = exprTree.evaluate(root);
-		std::cout << "The result is: " << result << std::endl;
+		std::cout << result << std::endl;
 		exprTree.deleteTree(root);
 	}
 	catch (const std::exception& e)

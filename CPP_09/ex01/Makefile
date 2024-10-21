@@ -143,13 +143,11 @@ test: $(NAME)
 			echo $(E_NC); ./$(NAME) $(i); \
 		fi; \
 	fi;
+t1: $(NAME)
+	@echo $(BOLD) $(CYAN) ./$(NAME) "\"1 2 * 2 / 2 * 2 4 - +\"" $(E_NC) "\n";
+	@./$(NAME) "1 2 * 2 / 2 * 2 4 - +"
 run:$(NAME)
-	@echo $(BOLD) $(CYAN) ./$(NAME) '"$(i)"' $(E_NC) "\n"; \
-	if [ "$(S)" = "0" ]; then \
-		echo $(E_NC); $(MAKE) -C . val; \
-	else \
-		echo $(E_NC); ./$(NAME) $(i) ; \
-	fi;
+	D=$(D) ./test.sh
 # ATTENTION !!!!!!!!!!!!!!  USE WITH S=0 !
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) "$i" $(E_NC)  "\n"

@@ -53,51 +53,76 @@ bool RPN::isValidToken(const std::string& token)
 	return (false);
 }
 
-Node* RPN::buildTree(const std::string& postfix)
+static void printStack(std::stack<Node*> stk)
+{
+	std::cout << "Stack elements: ";
+	while (!stk.empty()) {
+		Node* node = stk.top();
+		std::cout << node->value << " ";
+		stk.pop();
+	}
+	std::cout << std::endl;
+}
+
+
+Node* RPN::buildTree(const std::string& expression)
 {
 	std::stack<Node*> stk;
-	std::istringstream iss(postfix);
+	std::istringstream iss(expression);
 	std::string token;
 
 	while (iss >> token)
 	{
 		if (!isValidToken(token))
 			throw std::runtime_error("Error: Invalid token in expression.");
-
+		std::cerr << token << std::endl;
 		Node* node = new Node(token);
 		if (isOperator(token))
 		{
 			if (stk.size() < 2)
 				throw std::runtime_error("Error: Invalid expression.");
 			node->right = stk.top();
+			node->right->parent = node;
 			stk.pop();
 			node->left = stk.top();
+			node->left->parent = node;
 			stk.pop();
 		}
 		stk.push(node);
-		printDebug("Pushed node with value: " + token);
+		printStack(stk);
 	}
 
 	return (stk.top());
 }
 
+static Node* getRoot(Node* node)
+{
+	while (node->parent != NULL)
+	{
+		node = node->parent;
+	}
+	return node;
+}
+
 float RPN::evaluate(Node* root)
 {
 	if (!root)
-	{
 		return (0);
-	}
 
 	if (!isOperator(root->value))
-	{
-		printDebug("Returning operand: " + root->value);
 		return (static_cast<float>(std::atof(root->value.c_str())));
-	}
 
 	float leftVal = evaluate(root->left);
 	float rightVal = evaluate(root->right);
 	float result = performOperation(leftVal, rightVal, root->value);
-	printDebug("Performed operation: " + root->value + " with operands " + toStr<float>(leftVal) + " and " + toStr<float>(rightVal) + " resulting in " + toStr<float>(result));
+	
+	Node* rootNode = getRoot(root);
+	deleteTree(root->left);
+	deleteTree(root->right);
+	root->left = NULL;
+	root->right = NULL;
+	root->value = toStr(result);
+	printTree(rootNode);
 	return (result);
 }
 
@@ -111,10 +136,28 @@ void RPN::deleteTree(Node* node)
 	}
 }
 
-void RPN::printDebug(const std::string& message)
+
+void RPN::printTree(Node* root, std::string indent, bool last)
 {
-	if (DEBUG)
+	if (DEBUG == 0)
+		return ;
+	if (root != NULL)
 	{
-		std::cout << message << std::endl;
+		std::cout << indent;
+		if (last)
+		{
+			std::cout << "└──";
+			indent += "   ";
+		}
+		else
+		{
+			std::cout << "├──";
+			indent += "|  ";
+		}
+		if (!isOperator(root->value))
+			std::cout << " ";
+		std::cout << root->value << std::endl;
+		printTree(root->left, indent, false);
+		printTree(root->right, indent, true);
 	}
 }
