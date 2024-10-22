@@ -21,6 +21,7 @@ expressions=(
 	"8 0 4 - /"
 	"9 3 3 / /"
 	"5 1 2 + 4 * + 3 - 0 /"
+	"3 4 + 2 * 7 /"
 )
 
 
@@ -40,6 +41,7 @@ expectedResults=(
 	"-2"
 	"9"
 	"Error (Division by zero)"
+	"2"
 )
 
 subject=(
@@ -58,15 +60,20 @@ subjectResults=(
 
 # Determine which set of expressions to use
 if [ "$D" == "0" ]; then
-    expressions=("${subject[@]}")
-    expectedResults=("${subjectResults[@]}")
+	expressions=("${subject[@]}")
+	expectedResults=("${subjectResults[@]}")
+fi
+
+if [ "$S" == "0" ]; then
+	VALGRIND="${VAL}"
 fi
 
 # Execute each expression and print the result along with the expected result
 for i in "${!expressions[@]}"; do
 	expr="${expressions[$i]}"
 	expected="${expectedResults[$i]}"
-	echo -e "\n ${BOLD}${CYAN} ./RPN \"$expr\" ${E_NC}"
-	result=$(./RPN "$expr")
-	echo "$result (Expected: $expected)"
+	echo -e "\n${BOLD}${CYAN} $VALGRIND ./RPN \"$expr\" ${E_NC}\n"
+	result=$($VALGRIND ./RPN "$expr")
+	echo "$result"
+	echo "(Expected: $expected)"
 done

@@ -146,8 +146,11 @@ test: $(NAME)
 t1: $(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) "\"1 2 * 2 / 2 * 2 4 - +\"" $(E_NC) "\n";
 	@./$(NAME) "1 2 * 2 / 2 * 2 4 - +"
+#S=-1 run without sanitizer or valgrind
+#S=0 run with valgrind
+#S=1 run with sanitizer
 run:$(NAME)
-	D=$(D) ./test.sh
+	D=$(D) S=$(S) VAL="$(VALGRIND)" ./test.sh
 # ATTENTION !!!!!!!!!!!!!!  USE WITH S=0 !
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) "$i" $(E_NC)  "\n"
@@ -155,7 +158,7 @@ leaks: $(NAME)
 	@echo "\n"
 
 val: $(NAME)
-	@echo $(RED) $(VALGRIND) ./$(NAME) "$i" $(E_NC) "\n"
+	@echo $(RED) $(VALGRIND) ./$(NAME) "\"$i\"" $(E_NC) "\n"
 	@$(VALGRIND) ./$(NAME) $$i; echo
 
 # #-------------------- GIT UTILS ----------------------------#

@@ -11,18 +11,18 @@ int main( int argc, char* arg[] )
 	}
 	std::string expression = arg[1];
 	RPN exprTree;
-
+	Node* root = NULL;
 	try
 	{
-		Node* root = exprTree.buildTree(expression);
+		root = exprTree.buildTree(expression);
 		if (DEBUG)
-			std::cout << "START: " << std::endl;
+			std::cout << getColorStr(FGREEN, "START: ") << std::endl;
 		exprTree.printTree(root);
 		float result = exprTree.evaluate(root);
 		std::cout << result << std::endl;
 		exprTree.deleteTree(root);
 	}
-	catch (const std::exception& e)
+	catch (std::exception const& e)
 	{
 		std::cerr << e.what() << std::endl;
 		return 1;
