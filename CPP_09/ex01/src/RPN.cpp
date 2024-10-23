@@ -37,26 +37,6 @@ bool RPN::isValidToken(const std::string& token)
 	return (false);
 }
 
-static void printStack(std::stack<Node*> stk)
-{
-	if (DEBUG == 0)
-		return ;
-	if(stk.empty())
-	{
-		std::cout << "Empty Stack" << std::endl;
-		return ;
-	}
-	std::cout << "Stack elements: ";
-	while (!stk.empty())
-	{
-		Node* node = stk.top();
-		std::cout << node->value << " ";
-		stk.pop();
-	}
-	std::cout << std::endl;
-}
-
-
 static Node* getRoot(Node* node)
 {
 	while (node->parent != NULL)
@@ -66,25 +46,49 @@ static Node* getRoot(Node* node)
 	return node;
 }
 
-static void deleteStack(std::stack<Node*>& stk)
+
+void RPN::printStack(std::stack<Node*> stk)
+{
+	if (DEBUG == 0)
+		return ;
+	if(stk.empty())
+	{
+		std::cout << "Empty Stack" << std::endl;
+		return ;
+	}
+	std::cout << "Stack: " << std::endl;
+	while (!stk.empty())
+	{
+		Node* node = stk.top();
+		std::cout << node;
+		std::cout << " " << node->value << std::endl;
+		printTree(getRoot(node));
+		stk.pop();
+	}
+	std::cout << std::endl;
+}
+
+void RPN::deleteStack(std::stack<Node*>& stk)
 {
 	while (!stk.empty())
 	{
-		std::cout << "DELETING " << stk.top()->value << std::endl;
-		delete stk.top();
+		Node* toDelete = stk.top();
+		deleteTree(toDelete);
 		stk.pop();
+		if (stk.empty())
+			std::cout << "empty" << std::endl;
 	}
-	printStack(stk);
+	// printStack(stk);
 }
 
-void RPN::deleteTree(Node* node)
+void RPN::deleteTree(Node* toDelete)
 {
-	if (node)
+	if (toDelete)
 	{
-		std::cout << "DELETING " << node->value << std::endl;
-		deleteTree(node->left);
-		deleteTree(node->right);
-		delete node;
+		std::cout << toDelete << " DELETING " << toDelete->value << std::endl;
+		deleteTree(toDelete->left);
+		deleteTree(toDelete->right);
+		delete toDelete;
 	}
 }
 
@@ -94,7 +98,7 @@ Node* RPN::buildTree(const std::string& expression)
 	std::stack<Node*> stk;
 	std::istringstream iss(expression);
 	std::string token;
-
+	Node* node;
 	while (iss >> token)
 	{
 		if (!isValidToken(token))
@@ -102,15 +106,16 @@ Node* RPN::buildTree(const std::string& expression)
 			if (!stk.empty())
 			{
 				printStack(stk);
-				std::cout << stk.size() << std::endl;
-				Node* rootNode = getRoot(stk.top());
-				deleteTree(rootNode);
+				std::cout << "Size: "<< stk.size() << std::endl;
+				std::cout << getColorStr(FMAGENTA,"TREE") << std::endl;
 				deleteStack(stk);
 			}
 			throw std::runtime_error("Error: Invalid token in expression " + error(token, 0));
 		}
 		std::cout << stk.size() << std::endl;
-		Node* node = new Node(token);
+		node = new Node(token);
+		std::cout << node << " nodeCreated " << token <<std::endl;
+		
 		if (isOperator(token))
 		{
 			if (stk.size() < 2)
@@ -118,20 +123,23 @@ Node* RPN::buildTree(const std::string& expression)
 				delete node;
 				if (!stk.empty())
 				{
-					Node* rootNode = getRoot(stk.top());
-					deleteTree(rootNode);
+					deleteStack(stk);
 				}
 				throw std::runtime_error("Error: Invalid expression.");			}
 			node->right = stk.top();
+			// std::cout << "Right " <<std::endl;
+			// printTree(node->right);
 			node->right->parent = node;
 			stk.pop();
 			node->left = stk.top();
 			node->left->parent = node;
+			// std::cout << "Left " <<std::endl;
+			// printTree(node->left);
 			stk.pop();
 		}
+		// std::cout << "TREE " <<std::endl;
+		// printTree(getRoot(node));
 		stk.push(node);
-		std::cout << error("STACK", 0) << std::endl;
-		// printStack(stk);
 	}
 	return (stk.top());
 }
@@ -210,7 +218,9 @@ void RPN::printTree(Node* root, std::string indent, bool last)
 		}
 		if (!isOperator(root->value))
 			std::cout << " ";
-		std::cout << root->value << std::endl;
+		std::cout << root->value;
+		std::cout << " " << root;
+		std::cout << std::endl;
 		printTree(root->left, indent, false);
 		printTree(root->right, indent, true);
 	}

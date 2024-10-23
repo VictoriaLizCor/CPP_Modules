@@ -16,7 +16,8 @@ int main( int argc, char* arg[] )
 	{
 		root = exprTree.buildTree(expression);
 		if (DEBUG)
-			std::cout << getColorStr(FGREEN, "START: ") << std::endl;
+			std::cout << getColorStr(FGREEN, "START: ") << 
+			root << std::endl;
 		exprTree.printTree(root);
 		float result = exprTree.evaluate(root);
 		std::cout << result << std::endl;

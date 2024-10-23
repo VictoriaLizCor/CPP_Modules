@@ -35,7 +35,9 @@ class RPN
 
 		Node* buildTree(const std::string& postfix);
 		float evaluate(Node* root);
+		void deleteStack(std::stack<Node*>& stk);
 		void deleteTree(Node* node);
+		void printStack(std::stack<Node*> stk);
 		void printTree(Node* root, std::string indent = "", bool last = true);
 
 	private:
