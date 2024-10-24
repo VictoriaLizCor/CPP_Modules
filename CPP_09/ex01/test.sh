@@ -1,8 +1,12 @@
 #!/bin/bash
 
 BOLD="\033[1m"
-CYAN="\033[36m"
+COLOR="\033[36m"
+VCOLOR="\033[35m"
+RED="\033[1;31m"
+GREEN="\033[1;32m"
 E_NC="\033[0m"
+
 
 # List of RPN expressions and their expected results
 expressions=(
@@ -22,6 +26,10 @@ expressions=(
 	"9 3 3 / /"
 	"5 1 2 + 4 * + 3 - 0 /"
 	"3 4 + 2 * 7 /"
+	"3 4 + 2 * -5 +"
+	"3 4 + 2 * -5 +"
+	"5 1 2 + 4 * + 3 -"
+	"9 4 6 + 2 * 3 / 7 2 - 1 + *"
 )
 
 
@@ -34,17 +42,22 @@ expectedResults=(
 	"23"
 	"5"
 	"2075"
-	"3.0001220703125"
+	"7.999"
 	"25"
-	"Error (Division by zero)"
+	"ERROR"
 	"1.2"
 	"-2"
 	"9"
-	"Error (Division by zero)"
+	"ERROR"
 	"2"
+	"9"
+	"23"
+	"14"
+	"90"
 )
 
 subject=(
+	"4 2 ^ 3 *"
 	"8 9 * 9 - 9 - 9 - 4 - 1 +"
 	"7 7 * 7 -"
 	"1 2 * 2 / 2 * 2 4 - +"
@@ -52,10 +65,11 @@ subject=(
 )
 
 subjectResults=(
+	"ERROR"
 	"42"
 	"42"
 	"0"
-	"Error"
+	"ERROR"
 )
 
 # Determine which set of expressions to use
@@ -66,14 +80,33 @@ fi
 
 if [ "$S" == "0" ]; then
 	VALGRIND="${VAL}"
+	COLOR="${VCOLOR}"
 fi
+
+test="\033[1;31mERROR: Invalid token in expression: ^ "
+testE="ERROR"
+
+
+	# Output the boolean variable
+
 
 # Execute each expression and print the result along with the expected result
 for i in "${!expressions[@]}"; do
 	expr="${expressions[$i]}"
 	expected="${expectedResults[$i]}"
-	echo -e "\n${BOLD}${CYAN} $VALGRIND ./RPN \"$expr\" ${E_NC}\n"
-	result=$($VALGRIND ./RPN "$expr")
-	echo "$result"
-	echo "(Expected: $expected)"
+	echo -e "\n $i ${BOLD}${COLOR} $VALGRIND ./RPN \"$expr\" ${E_NC}\n"
+	resultStr=$($VALGRIND ./RPN "$expr")
+	resultBool=$?
+	if [ $resultBool -eq 1 ]; then
+		evaluate="ERROR"
+	else
+		echo -n -e "r: $resultStr"
+		evaluate="${resultStr}"
+	fi
+	
+	if [ "$evaluate" == "$expected" ] ; then
+		echo -e " ---> ${GREEN} OK${E_NC}"
+	else
+		echo -e " ---> ${RED} K0 ${E_NC} $evaluate ($expected)"
+	fi
 done

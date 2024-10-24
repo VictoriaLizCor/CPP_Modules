@@ -24,7 +24,7 @@ RPN& RPN::operator=(RPN const& rhs)
 
 bool RPN::isOperator(const std::string& token)
 {
-	if (DEBUG ==2)
+	if (DEBUG > 0)
 		return (token == "+" || token == "-" || token == "*" || token == "/" || token == "^");
 	return (token == "+" || token == "-" || token == "*" || token == "/");
 }
@@ -32,7 +32,20 @@ bool RPN::isOperator(const std::string& token)
 
 bool RPN::isValidToken(const std::string& token)
 {
-	if (token.size() == 1 && (std::isdigit(token[0]) || isOperator(token)))
+	size_t size = 1;
+
+	if (DEBUG)
+	{
+		size = 2;
+		size_t start = 0;
+		
+		if (token[0] == '+' || token[0] == '-')
+			start = 1;
+		size_t pos = token.find_first_not_of("0123456789", start);
+		if (pos == std::string::npos || isOperator(token))
+			return (true);
+	}
+	else if (token.size() == size && (std::isdigit(token[0]) || isOperator(token)))
 		return (true);
 	return (false);
 }
@@ -52,20 +65,18 @@ void RPN::printStack(std::stack<Node*> stk)
 	if (DEBUG == 0)
 		return ;
 	if(stk.empty())
-	{
-		std::cout << "Empty Stack" << std::endl;
 		return ;
-	}
-	std::cout << "Stack: " << std::endl;
+	std::cerr << "Stack: " << std::endl;
 	while (!stk.empty())
 	{
 		Node* node = stk.top();
-		std::cout << node;
-		std::cout << " " << node->value << std::endl;
-		printTree(getRoot(node));
+		std::cerr << node;
+		std::cerr << " " << node->value << std::endl;
+		
+		// printTree(getRoot(node));
 		stk.pop();
 	}
-	std::cout << std::endl;
+	std::cerr << std::endl;
 }
 
 void RPN::deleteStack(std::stack<Node*>& stk)
@@ -75,17 +86,15 @@ void RPN::deleteStack(std::stack<Node*>& stk)
 		Node* toDelete = stk.top();
 		deleteTree(toDelete);
 		stk.pop();
-		if (stk.empty())
-			std::cout << "empty" << std::endl;
 	}
-	// printStack(stk);
 }
 
 void RPN::deleteTree(Node* toDelete)
 {
 	if (toDelete)
 	{
-		std::cout << toDelete << " DELETING " << toDelete->value << std::endl;
+		if (DEBUG > 1)
+			std::cerr << FLORANGE << toDelete << " " << toDelete->value << C_END << std::endl;
 		deleteTree(toDelete->left);
 		deleteTree(toDelete->right);
 		delete toDelete;
@@ -106,39 +115,27 @@ Node* RPN::buildTree(const std::string& expression)
 			if (!stk.empty())
 			{
 				printStack(stk);
-				std::cout << "Size: "<< stk.size() << std::endl;
-				std::cout << getColorStr(FMAGENTA,"TREE") << std::endl;
 				deleteStack(stk);
 			}
-			throw std::runtime_error("Error: Invalid token in expression " + error(token, 0));
+			throw std::runtime_error(error("Invalid token in expression: " + token, 0));
 		}
-		std::cout << stk.size() << std::endl;
 		node = new Node(token);
-		std::cout << node << " nodeCreated " << token <<std::endl;
-		
 		if (isOperator(token))
 		{
 			if (stk.size() < 2)
 			{
 				delete node;
 				if (!stk.empty())
-				{
 					deleteStack(stk);
-				}
-				throw std::runtime_error("Error: Invalid expression.");			}
+				throw std::runtime_error(error("Invalid expression: ", 0));
+			}
 			node->right = stk.top();
-			// std::cout << "Right " <<std::endl;
-			// printTree(node->right);
 			node->right->parent = node;
 			stk.pop();
 			node->left = stk.top();
 			node->left->parent = node;
-			// std::cout << "Left " <<std::endl;
-			// printTree(node->left);
 			stk.pop();
 		}
-		// std::cout << "TREE " <<std::endl;
-		// printTree(getRoot(node));
 		stk.push(node);
 	}
 	return (stk.top());
@@ -148,7 +145,7 @@ Node* RPN::buildTree(const std::string& expression)
 float RPN::performOperation(float a, float b, const std::string& op)
 {
 	if (DEBUG)
-		std::cout  << getColorFmt(FWHITE) << toStr(a) << op << toStr(b) << C_END << std::endl;
+		std::cerr  << getColorFmt(FWHITE) << toStr(a) << op << toStr(b) << C_END << std::endl;
 	if (op == "+")
 		return (a + b);
 	if (op == "-")
@@ -157,13 +154,15 @@ float RPN::performOperation(float a, float b, const std::string& op)
 		return (a * b);
 	if (op == "/")
 	{
-		if (a == 0)
-			throw std::runtime_error("Error: Division by zero.");
-		return (a / b);
+		float result =  a / b;
+		std::cerr << result << std::endl;
+		if (std::isinf(result))
+			throw std::runtime_error(error("Division by zero.", 0));
+		return (result);
 	}
-	if (DEBUG==2 && op == "^")
+	if (DEBUG > 0 && op == "^")
 		return (static_cast<float>(pow(b, a)));
-	throw std::runtime_error("Error: Invalid operator.");
+	throw std::runtime_error(error("Invalid operator.", 0));
 }
 
 float RPN::evaluate(Node* root)
@@ -172,8 +171,10 @@ float RPN::evaluate(Node* root)
 		return (0);
 
 	if (!isOperator(root->value))
-		return (static_cast<float>(std::atof(root->value.c_str())));
-
+	{
+		float toFloat = static_cast<float>(std::atof(root->value.c_str()));
+		return (toFloat);
+	}
 	float leftVal = evaluate(root->left);
 	float rightVal = evaluate(root->right);
 	try
@@ -187,7 +188,7 @@ float RPN::evaluate(Node* root)
 		root->right = NULL;
 		root->value = getColorStr(FYELLOW, toStr(result));
 		if (DEBUG && !rootNode->left && !rootNode->right)
-			std::cout << getColorStr(FCYAN, "RESULT:")<< std::endl;
+			std::cerr << getColorStr(FCYAN, "RESULT:")<< std::endl;
 		printTree(rootNode);
 		return (result);
 	}
@@ -205,22 +206,25 @@ void RPN::printTree(Node* root, std::string indent, bool last)
 		return ;
 	if (root != NULL)
 	{
-		std::cout << indent;
+		// if (root->parent == NULL)
+		// 	std::cerr << "root" << std::endl;
+		std::cerr << indent;
 		if (last)
 		{
-			std::cout << "└──";
+			std::cerr << "└──";
 			indent += "   ";
 		}
 		else
 		{
-			std::cout << "├──";
+			std::cerr << "├──";
 			indent += "|  ";
 		}
 		if (!isOperator(root->value))
-			std::cout << " ";
-		std::cout << root->value;
-		std::cout << " " << root;
-		std::cout << std::endl;
+			std::cerr << " ";
+		std::cerr << root->value;
+		if (DEBUG > 1)
+			std::cerr << " " << root;
+		std::cerr << std::endl;
 		printTree(root->left, indent, false);
 		printTree(root->right, indent, true);
 	}

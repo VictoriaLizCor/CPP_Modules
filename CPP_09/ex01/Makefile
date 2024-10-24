@@ -153,7 +153,7 @@ t2: $(NAME)
 #S=0 run with valgrind
 #S=1 run with sanitizer
 run:$(NAME)
-	D=$(D) S=$(S) VAL="$(VALGRIND)" ./test.sh
+	@D=$(D) S=$(S) VAL="$(VALGRIND)" ./test.sh
 # ATTENTION !!!!!!!!!!!!!!  USE WITH S=0 !
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) "$i" $(E_NC)  "\n"
@@ -286,7 +286,7 @@ GREEN  = "\033[1;32m"
 YELLOW = "\033[1;33m"
 BLUE   = "\033[1;34m"
 WHITE  = "\033[1;37m"
-MAG	= "\033[1;35m"
+MAG = "\033[1;35m"
 CYAN   = "\033[0;1;36m"
 GRAY   = "\033[1;90m"
 PURPLE = "\033[1;38;2;189;147;249m"
