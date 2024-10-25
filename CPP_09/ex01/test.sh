@@ -27,9 +27,10 @@ expressions=(
 	"5 1 2 + 4 * + 3 - 0 /"
 	"3 4 + 2 * 7 /"
 	"3 4 + 2 * -5 +"
-	"3 4 + 2 * -5 +"
 	"5 1 2 + 4 * + 3 -"
 	"9 4 6 + 2 * 3 / 7 2 - 1 + *"
+	"29 7 6 * - 5 + 92 + 2 /"
+	"0 0 /"
 )
 
 
@@ -42,7 +43,7 @@ expectedResults=(
 	"23"
 	"5"
 	"2075"
-	"7.999"
+	"3.00012"
 	"25"
 	"ERROR"
 	"1.2"
@@ -51,9 +52,10 @@ expectedResults=(
 	"ERROR"
 	"2"
 	"9"
-	"23"
 	"14"
-	"90"
+	"ERROR"
+	"42"
+	"ERROR"
 )
 
 subject=(
@@ -94,7 +96,7 @@ testE="ERROR"
 for i in "${!expressions[@]}"; do
 	expr="${expressions[$i]}"
 	expected="${expectedResults[$i]}"
-	echo -e "\n $i ${BOLD}${COLOR} $VALGRIND ./RPN \"$expr\" ${E_NC}\n"
+	echo -e "Test $i ${BOLD}${COLOR} $VALGRIND ./RPN \"$expr\" ${E_NC}\n"
 	resultStr=$($VALGRIND ./RPN "$expr")
 	resultBool=$?
 	if [ $resultBool -eq 1 ]; then
@@ -109,4 +111,5 @@ for i in "${!expressions[@]}"; do
 	else
 		echo -e " ---> ${RED} K0 ${E_NC} $evaluate ($expected)"
 	fi
+	echo -e "---------------------------------------------\n"
 done

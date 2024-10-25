@@ -11,10 +11,9 @@ int main( int argc, char* arg[] )
 	}
 	std::string expression = arg[1];
 	RPN exprTree;
-	Node* root = NULL;
 	try
 	{
-		root = exprTree.buildTree(expression);
+		Node* root = exprTree.buildTree(expression);
 		if (DEBUG)
 			std::cerr << getColorStr(FGREEN, "START: ");
 		if (DEBUG > 1)
@@ -27,8 +26,17 @@ int main( int argc, char* arg[] )
 	}
 	catch (std::exception const& e)
 	{
-		std::cerr << e.what();
+		std::cerr << e.what() << std::endl;
 		return 1;
 	}
 	return (0);
 }
+
+/**
+ * @brief reference
+ * https://paodayag.dev/reverse-polish-notation-js-parser/ 
+ * 
+ * not so good:
+ * https://www.rpn-calc.com/
+ * https://www.dcode.fr/reverse-polish-notation 
+ */

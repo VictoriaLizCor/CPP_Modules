@@ -120,6 +120,11 @@ Node* RPN::buildTree(const std::string& expression)
 			throw std::runtime_error(error("Invalid token in expression: " + token, 0));
 		}
 		node = new Node(token);
+		if (DEBUG == 2)
+		{
+			std::cerr << "Node created: " << FLORANGE << node << C_END 
+			<< " " << token << std::endl;
+		}
 		if (isOperator(token))
 		{
 			if (stk.size() < 2)
@@ -136,7 +141,13 @@ Node* RPN::buildTree(const std::string& expression)
 			node->left->parent = node;
 			stk.pop();
 		}
+		printTree(node);
 		stk.push(node);
+	}
+	if (stk.size() != 1)
+	{
+		deleteStack(stk);
+		throw std::runtime_error(error("Invalid expression in stack: ", 0));
 	}
 	return (stk.top());
 }
@@ -155,13 +166,12 @@ float RPN::performOperation(float a, float b, const std::string& op)
 	if (op == "/")
 	{
 		float result =  a / b;
-		std::cerr << result << std::endl;
-		if (std::isinf(result))
+		if (std::isinf(result) || std::isnan(result))
 			throw std::runtime_error(error("Division by zero.", 0));
 		return (result);
 	}
 	if (DEBUG > 0 && op == "^")
-		return (static_cast<float>(pow(b, a)));
+		return (static_cast<float>(pow(a, b)));
 	throw std::runtime_error(error("Invalid operator.", 0));
 }
 
@@ -206,8 +216,6 @@ void RPN::printTree(Node* root, std::string indent, bool last)
 		return ;
 	if (root != NULL)
 	{
-		// if (root->parent == NULL)
-		// 	std::cerr << "root" << std::endl;
 		std::cerr << indent;
 		if (last)
 		{

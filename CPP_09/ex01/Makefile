@@ -144,8 +144,9 @@ test: $(NAME)
 		fi; \
 	fi;
 t1: $(NAME)
-	@echo $(BOLD) $(CYAN) ./$(NAME) "\"3 4 8 * 1 5 - 2 6 ^ ^ / +\"" $(E_NC) "\n";
-	@./$(NAME) "3 4 2 * 1 5 - 2 6 ^ ^ / +"
+	@echo $(BOLD) $(CYAN) ./$(NAME) "\"3 4 2 * 1 5 - 2 3 ^ ^ / +\"" $(E_NC) "\n";
+	@./$(NAME) "3 4 2 * 1 5 - 2 3 ^ ^ / +"
+
 t2: $(NAME)
 	@echo $(BOLD) $(CYAN) ./$(NAME) "\"3 4 8 * 1 5 - 2 6 * * / +\"" $(E_NC) "\n";
 	@./$(NAME) "3 4 8 * 1 5 - 2 6 * * / +"
