@@ -42,6 +42,7 @@ class RPN
 		void printTree(Node* root, std::string indent = "", bool last = true, Node* op = NULL);
 
 	private:
+		void errorHandler(std::stack<Node*>& stk, Node* node, std::string const&  msg);
 		bool isValidToken(const std::string& token);
 		bool isOperator(const std::string& token);
 		float performOperation(float a, float b, const std::string& op);
@@ -52,10 +53,43 @@ class RPN
 #endif // RPN_HPP
 
 /** @NOTES:
+ * Reverse Polish Notation (RPN) is a mathematical notation in which
+   operators follow their operands. It is also known as postfix
+   notation. In RPN, every operator follows all of its operands,
+   making it unnecessary to use parentheses to dictate the order of
+   operations.
+
+### Example
+For the infix expression:
+```
+3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3
+```
+
+The equivalent RPN expression is:
+```
+3 4 2 * 1 5 - 2 3 ^ ^ / +
+```
+
+### Evaluation
+To evaluate an RPN expression:
+1. Read the expression from left to right.
+2. Push operands onto a stack.
+3. When an operator is encountered, pop the required number of
+   operands from the stack, apply the operator, and push the result
+   back onto the stack.
+4. The final result will be on the stack after the entire expression
+   has been processed.
+
+### Advantages
+- No need for parentheses to dictate operation order.
+- Simplifies the computation process, especially for computers and calculators.
+
+### Usage
+RPN is used in some calculators and computer systems due to its simplicity and efficiency in evaluating expressions.
  * To print a binary tree in a structured format using C++98, you can
    use a stack to perform a depth-first traversal and print the tree
    structure.
-
+*-----------------------------------------------------------------------
 Depth-first traversal (DFT) is a method of exploring a tree or graph
 data structure. In depth-first traversal, you start at the root (or an
 arbitrary node in the case of a graph) and explore as far as possible

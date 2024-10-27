@@ -2,11 +2,26 @@
 #include "RPN.hpp"
 #include "Utils.hpp"
 
+/**
+ * @file main.cpp
+ * @brief Entry point for the RPN (Reverse Polish Notation) expression evaluator.
+ *
+ * This program takes a single command-line argument representing an RPN expression,
+ * builds an expression tree, evaluates it, and prints the result.
+ *
+ * Usage: RPN "<expression>"
+ *
+ * @param argc Number of command-line arguments.
+ * @param arg Array of command-line arguments.
+ * @return int Exit status of the program.
+ *         - 0 on success.
+ *         - 1 on error (e.g., incorrect usage or evaluation error).
+ */
 int main( int argc, char* arg[] )
 {
 	if( argc != 2 )
 	{
-		std::cout << "Usage: RPN <expression>\n";
+		std::cerr << error("Usage: RPN \"<expression>\"", 0) << std::endl;
 		return (1);
 	}
 	std::string expression = arg[1];
