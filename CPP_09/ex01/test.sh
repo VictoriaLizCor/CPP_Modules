@@ -104,14 +104,14 @@ for i in "${!expressions[@]}"; do
 	if [ $resultBool -eq 1 ]; then
 		evaluate="ERROR"
 	else
-		echo -n -e "${BOLD}result: $resultStr ${E_NC}"
+		echo -n -e "${BOLD}result: $resultStr ${E_NC}\n"
 		evaluate="${resultStr}"
 	fi
 	
 	if [ "$evaluate" == "$expected" ] ; then
-		echo -e "\n${GREEN}OK${E_NC}"
+		echo -e "${GREEN}OK${E_NC}"
 	else
-		echo -e "\n${RED}K0 ${E_NC} $evaluate ($expected)"
+		echo -e "${RED}K0 ${E_NC} $evaluate ($expected)"
 	fi
 	echo -e "---------------------------------------------\n"
 done

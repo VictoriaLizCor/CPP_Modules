@@ -41,7 +41,9 @@ bool RPN::isValidToken(const std::string& token)
 		
 		if (token[0] == '+' || token[0] == '-')
 			start = 1;
-		size_t pos = token.find_first_not_of("0123456789", start);
+		size_t pos = token.find_first_not_of(".0123456789", start);
+		if (std::count(token.begin(), token.end(), '.') > 1)
+			return (false);
 		if (pos == std::string::npos || isOperator(token))
 			return (true);
 	}
@@ -95,7 +97,7 @@ void RPN::deleteTree(Node* toDelete)
 	if (toDelete)
 	{
 		if (DEBUG > 2)
-			std::cerr << "DELETING: " <<FLORANGE << toDelete << C_END << " " << toDelete->value  << std::endl;
+			std::cerr << "*DELETING: " <<FLORANGE << toDelete << C_END << " " << toDelete->value  << std::endl;
 		deleteTree(toDelete->left);
 		deleteTree(toDelete->right);
 		delete toDelete;
@@ -153,6 +155,15 @@ Node* RPN::buildTree(const std::string& expression)
 	return (stk.top());
 }
 
+static float strToFloat(std::string const& strValue)
+{
+	char* end;
+	float value = std::strtof(strValue.c_str(), &end);
+
+	if (*end != '\0' && ((*end != 'f' && *end != 'F') || *(end + 1) != '\0'))
+		throw std::invalid_argument(errorFmt("Invalid Value input") + strValue);
+	return (value);
+}
 
 float RPN::performOperation(float a, float b, const std::string& op)
 {
@@ -180,24 +191,28 @@ float RPN::evaluate(Node* root)
 {
 	if (!root)
 		return (0);
-	if (!isOperator(root->value))
-	{
-		float toFloat = static_cast<float>(std::atof(root->value.c_str()));
-		return (toFloat);
-	}
-	float leftVal = evaluate(root->left);
-	float rightVal = evaluate(root->right);
 	try
 	{ 
+		if (!isOperator(root->value))
+		{
+			float toFloat = strToFloat(root->value);
+			return (toFloat);
+		}
+		float leftVal = evaluate(root->left);
+		float rightVal = evaluate(root->right);
 		float result = performOperation(leftVal, rightVal, root->value);
 	
 		Node* rootNode = getRoot(root);
+		std::cerr << root << " & " << rootNode << std::endl;
+		std::cerr << "root->left" << root->left << std::endl;
+		std::cerr << "root->right" << root->right << std::endl;
 		deleteTree(root->left);
 		deleteTree(root->right);
 		root->left = root->right = NULL;
 		root->value = toStr(result);
-		if (DEBUG > 1 && !rootNode->left && !rootNode->right)
+		if (DEBUG > 1 && rootNode && !rootNode->left && !rootNode->right)
 			std::cerr << getColorStr(FCYAN, "RESULT:")<< std::endl;
+		std::cerr << root << " & " << rootNode << std::endl;
 		printTree(rootNode, "", true, root);
 		return (result);
 	}
@@ -228,7 +243,7 @@ void RPN::printTree(Node* root, std::string indent, bool last, Node* op)
 		}
 		if (!isOperator(root->value))
 			std::cerr << " ";
-		if (root == op)
+		if (op && root == op)
 			std::cerr << getColorStr(FYELLOW, root->value);
 		else
 			std::cerr << root->value;

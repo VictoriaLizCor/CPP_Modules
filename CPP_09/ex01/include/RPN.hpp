@@ -9,6 +9,7 @@
 # include <stdexcept>
 # include <cctype>
 # include <cmath>
+# include <algorithm>
 # include <Utils.hpp>
 
 # ifndef DEBUG

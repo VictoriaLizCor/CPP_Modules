@@ -26,7 +26,7 @@ int main( int argc, char* arg[] )
 	}
 	catch (std::exception const& e)
 	{
-		std::cerr << e.what();
+		std::cerr << e.what() << std::endl;
 		return 1;
 	}
 	return (0);
