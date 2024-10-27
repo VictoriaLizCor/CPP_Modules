@@ -1,5 +1,5 @@
 #------ TARGET ------#
-NAME		:= $(notdir $(CURDIR))
+NAME		:= PmergeMe #$(notdir $(CURDIR))
 #------ WFLAGS ------#
 D_FLAGS		= -Wall -Wextra -std=c++98 -Werror #-Wshadow#-Wno-unused-function -Wunused
 INC	+= -I include/
@@ -144,12 +144,17 @@ test: $(NAME)
 		fi; \
 	fi;
 run:$(NAME)
-	@echo $(BOLD) $(CYAN) ./$(NAME) '"$(i)"' $(E_NC) "\n"; \
+	$(eval max=$(shell seq 20 30 | sort -R | tail -1 ))
+	$(eval num=$(shell seq 0 1000 | shuf -n $(max)))
+	@echo $(num)
+	@echo $(BOLD) $(CYAN) ./$(NAME) $(num) $(E_NC) "\n"; \
 	if [ "$(S)" = "0" ]; then \
 		echo $(E_NC); $(MAKE) -C . val; \
 	else \
-		echo $(E_NC); ./$(NAME) $(i) ; \
+		echo $(E_NC); ./$(NAME) $(num) ; \
 	fi;
+	@echo "------------------------------------\n";
+	@echo "elements: $(max)"; \
 # ATTENTION !!!!!!!!!!!!!!  USE WITH S=0 !
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) "$i" $(E_NC)  "\n"

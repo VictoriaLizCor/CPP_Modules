@@ -143,13 +143,7 @@ test: $(NAME)
 			echo $(E_NC); ./$(NAME) $(i); \
 		fi; \
 	fi;
-t1: $(NAME)
-	@echo $(BOLD) $(CYAN) ./$(NAME) "\"3 4 2 * 1 5 - 2 3 ^ ^ / +\"" $(E_NC) "\n";
-	@./$(NAME) "3 4 2 * 1 5 - 2 3 ^ ^ / +"
 
-t2: $(NAME)
-	@echo $(BOLD) $(CYAN) ./$(NAME) "\"3 4 8 * 1 5 - 2 6 * * / +\"" $(E_NC) "\n";
-	@./$(NAME) "3 4 8 * 1 5 - 2 6 * * / +"
 #S=-1 run without sanitizer or valgrind
 #S=0 run with valgrind
 #S=1 run with sanitizer
