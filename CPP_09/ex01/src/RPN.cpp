@@ -62,7 +62,7 @@ static Node* getRoot(Node* node)
 
 void RPN::printStack(std::stack<Node*> stk)
 {
-	if (DEBUG == 0)
+	if (DEBUG < 2)
 		return ;
 	if(stk.empty())
 		return ;
@@ -70,10 +70,11 @@ void RPN::printStack(std::stack<Node*> stk)
 	while (!stk.empty())
 	{
 		Node* node = stk.top();
-		std::cerr << node;
-		std::cerr << " " << node->value << std::endl;
-		
-		// printTree(getRoot(node));
+		if (DEBUG > 2)
+			std::cerr << node << " ";
+		std::cerr  << node->value;
+		if (DEBUG > 2)
+			std::cerr << std::endl;
 		stk.pop();
 	}
 	std::cerr << std::endl;
@@ -93,8 +94,8 @@ void RPN::deleteTree(Node* toDelete)
 {
 	if (toDelete)
 	{
-		if (DEBUG > 1)
-			std::cerr << FLORANGE << toDelete << " " << toDelete->value << C_END << std::endl;
+		if (DEBUG > 2)
+			std::cerr << "DELETING: " <<FLORANGE << toDelete << C_END << " " << toDelete->value  << std::endl;
 		deleteTree(toDelete->left);
 		deleteTree(toDelete->right);
 		delete toDelete;
@@ -108,6 +109,7 @@ Node* RPN::buildTree(const std::string& expression)
 	std::istringstream iss(expression);
 	std::string token;
 	Node* node;
+
 	while (iss >> token)
 	{
 		if (!isValidToken(token))
@@ -120,19 +122,16 @@ Node* RPN::buildTree(const std::string& expression)
 			throw std::runtime_error(error("Invalid token in expression: " + token, 0));
 		}
 		node = new Node(token);
-		if (DEBUG == 2)
-		{
-			std::cerr << "Node created: " << FLORANGE << node << C_END 
-			<< " " << token << std::endl;
-		}
+		if (DEBUG == 3)
+			std::cerr << "Node created: " << std::endl;
 		if (isOperator(token))
 		{
 			if (stk.size() < 2)
 			{
-				delete node;
-				if (!stk.empty())
-					deleteStack(stk);
-				throw std::runtime_error(error("Invalid expression: ", 0));
+				stk.push(node);
+				printStack(stk);
+				deleteStack(stk);
+				throw std::runtime_error(error("Invalid expression: Not enough elements to do operation", 0));
 			}
 			node->right = stk.top();
 			node->right->parent = node;
@@ -141,13 +140,15 @@ Node* RPN::buildTree(const std::string& expression)
 			node->left->parent = node;
 			stk.pop();
 		}
-		printTree(node);
+		if (DEBUG == 3)
+			printTree(node);
 		stk.push(node);
 	}
 	if (stk.size() != 1)
 	{
+		printStack(stk);
 		deleteStack(stk);
-		throw std::runtime_error(error("Invalid expression in stack: ", 0));
+		throw std::runtime_error(error("Invalid expression: more than one element remaing", 0));
 	}
 	return (stk.top());
 }
@@ -155,8 +156,8 @@ Node* RPN::buildTree(const std::string& expression)
 
 float RPN::performOperation(float a, float b, const std::string& op)
 {
-	if (DEBUG)
-		std::cerr  << getColorFmt(FWHITE) << toStr(a) << op << toStr(b) << C_END << std::endl;
+	if (DEBUG > 1)
+		std::cerr << std::endl << getColorFmt(FWHITE) << toStr(a) << op << toStr(b) << C_END << std::endl;
 	if (op == "+")
 		return (a + b);
 	if (op == "-")
@@ -179,7 +180,6 @@ float RPN::evaluate(Node* root)
 {
 	if (!root)
 		return (0);
-
 	if (!isOperator(root->value))
 	{
 		float toFloat = static_cast<float>(std::atof(root->value.c_str()));
@@ -194,12 +194,11 @@ float RPN::evaluate(Node* root)
 		Node* rootNode = getRoot(root);
 		deleteTree(root->left);
 		deleteTree(root->right);
-		root->left = NULL;
-		root->right = NULL;
-		root->value = getColorStr(FYELLOW, toStr(result));
-		if (DEBUG && !rootNode->left && !rootNode->right)
+		root->left = root->right = NULL;
+		root->value = toStr(result);
+		if (DEBUG > 1 && !rootNode->left && !rootNode->right)
 			std::cerr << getColorStr(FCYAN, "RESULT:")<< std::endl;
-		printTree(rootNode);
+		printTree(rootNode, "", true, root);
 		return (result);
 	}
 	catch (std::exception const &e)
@@ -210,9 +209,9 @@ float RPN::evaluate(Node* root)
 	}
 }
 
-void RPN::printTree(Node* root, std::string indent, bool last)
+void RPN::printTree(Node* root, std::string indent, bool last, Node* op)
 {
-	if (DEBUG == 0)
+	if (DEBUG < 2)
 		return ;
 	if (root != NULL)
 	{
@@ -229,11 +228,14 @@ void RPN::printTree(Node* root, std::string indent, bool last)
 		}
 		if (!isOperator(root->value))
 			std::cerr << " ";
-		std::cerr << root->value;
-		if (DEBUG > 1)
-			std::cerr << " " << root;
+		if (root == op)
+			std::cerr << getColorStr(FYELLOW, root->value);
+		else
+			std::cerr << root->value;
+		if (DEBUG > 2)
+			std::cerr << " " <<FLORANGE << root << C_END ;
 		std::cerr << std::endl;
-		printTree(root->left, indent, false);
-		printTree(root->right, indent, true);
+		printTree(root->left, indent, false, op);
+		printTree(root->right, indent, true, op);
 	}
 }

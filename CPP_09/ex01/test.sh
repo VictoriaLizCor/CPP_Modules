@@ -60,6 +60,7 @@ expectedResults=(
 
 subject=(
 	"4 2 ^ 3 *"
+	"4 0 /"
 	"8 9 * 9 - 9 - 9 - 4 - 1 +"
 	"7 7 * 7 -"
 	"1 2 * 2 / 2 * 2 4 - +"
@@ -68,13 +69,14 @@ subject=(
 
 subjectResults=(
 	"ERROR"
+	"ERROR"
 	"42"
 	"42"
 	"0"
 	"ERROR"
 )
 
-# Determine which set of expressions to use
+Determine which set of expressions to use
 if [ "$D" == "0" ]; then
 	expressions=("${subject[@]}")
 	expectedResults=("${subjectResults[@]}")
@@ -102,14 +104,14 @@ for i in "${!expressions[@]}"; do
 	if [ $resultBool -eq 1 ]; then
 		evaluate="ERROR"
 	else
-		echo -n -e "r: $resultStr"
+		echo -n -e "${BOLD}result: $resultStr ${E_NC}"
 		evaluate="${resultStr}"
 	fi
 	
 	if [ "$evaluate" == "$expected" ] ; then
-		echo -e " ---> ${GREEN} OK${E_NC}"
+		echo -e "\n${GREEN}OK${E_NC}"
 	else
-		echo -e " ---> ${RED} K0 ${E_NC} $evaluate ($expected)"
+		echo -e "\n${RED}K0 ${E_NC} $evaluate ($expected)"
 	fi
 	echo -e "---------------------------------------------\n"
 done

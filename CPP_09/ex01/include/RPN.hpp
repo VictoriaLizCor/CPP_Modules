@@ -38,7 +38,7 @@ class RPN
 		void deleteStack(std::stack<Node*>& stk);
 		void deleteTree(Node* node);
 		void printStack(std::stack<Node*> stk);
-		void printTree(Node* root, std::string indent = "", bool last = true);
+		void printTree(Node* root, std::string indent = "", bool last = true, Node* op = NULL);
 
 	private:
 		bool isValidToken(const std::string& token);
