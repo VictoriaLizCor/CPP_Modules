@@ -192,6 +192,19 @@ void RPN::deleteTree(Node* toDelete)
 	}
 }
 
+/**
+ * @brief Handles errors by pushing the node onto the stack, printing
+ *        the stack, deleting the stack, and throwing a runtime error
+ *        with a given message.
+ *
+ * @param stk A reference to a stack of Node pointers.
+ * @param node A pointer to a Node that will be pushed onto the stack
+ * if not null.
+ * @param msg A constant reference to a string containing the error
+ * message.
+ *
+ * @throws std::runtime_error Thrown with the provided error message.
+ */
 void RPN::errorHandler(std::stack<Node*>& stk, Node* node, std::string const& msg)
 {
 	if (node)
@@ -201,6 +214,17 @@ void RPN::errorHandler(std::stack<Node*>& stk, Node* node, std::string const& ms
 	throw std::runtime_error(error(msg, 0));
 }
 
+/**
+ * @brief Fills the left and right children of a given node from a
+ * stack of nodes.
+ *
+ * This function assigns the top two nodes from the stack as the right
+ * and left children of the given node, respectively. It also sets the
+ * parent of these children to the given node.
+ *
+ * @param stk A reference to a stack of Node pointers.
+ * @param node A pointer to the node whose children are to be filled.
+ */
 static void fillNode(std::stack<Node*>& stk, Node* node)
 {
 	node->right = stk.top();
@@ -211,6 +235,22 @@ static void fillNode(std::stack<Node*>& stk, Node* node)
 	stk.pop();
 }
 
+/**
+ * @brief Builds a binary tree from a given Reverse Polish Notation
+ * (RPN) expression.
+ *
+ * This function takes an RPN expression as input and constructs a
+ * binary tree where each node represents an operand or operator from
+ * the expression.
+ *
+ * @param expression The RPN expression as a string.
+ * @return A pointer to the root node of the constructed binary tree.
+ *
+ * @throws std::runtime_error If the expression contains invalid
+ *                            tokens or if the expression is invalid
+ *                            (e.g., not enough elements for an
+ *                            operation).
+ */
 Node* RPN::buildTree(const std::string& expression)
 {
 	std::stack<Node*> stk;
@@ -244,6 +284,19 @@ Node* RPN::buildTree(const std::string& expression)
 	return (stk.top());
 }
 
+/**
+ * @brief Converts a string to a float.
+ *
+ * This function attempts to convert the given string to a float
+ * value. If the string contains invalid characters that cannot be
+ * converted to a float, an std::invalid_argument exception is thrown.
+ *
+ * @param strValue The string representation of the float value to be
+ * converted.
+ * @return The float value represented by the input string.
+ * @throws std::invalid_argument if the input string contains invalid
+ * characters.
+ */
 static float strToFloat(std::string const& strValue)
 {
 	char* end;
@@ -254,6 +307,24 @@ static float strToFloat(std::string const& strValue)
 	return (value);
 }
 
+/**
+ * @brief Performs a mathematical operation on two floating-point
+ * numbers.
+ *
+ * This function takes two floating-point numbers and a string
+ * representing a mathematical operator, and performs the
+ * corresponding operation. Supported operations are addition ("+"),
+ * subtraction ("-"), multiplication ("*"), division ("/"), and
+ * optionally exponentiation ("^") if DEBUG is greater than 0.
+ *
+ * @param a The first operand.
+ * @param b The second operand.
+ * @param op The operator as a string. Supported values are "+", "-",
+ * "*", "/", and "^".
+ * @return The result of the operation as a float.
+ * @throws std::runtime_error If the operator is invalid or if
+ * division by zero occurs.
+ */
 float RPN::performOperation(float a, float b, const std::string& op)
 {
 	if (DEBUG > 1)
@@ -276,6 +347,25 @@ float RPN::performOperation(float a, float b, const std::string& op)
 	throw std::runtime_error(error("Invalid operator.", 0));
 }
 
+/**
+ * @brief Evaluates the value of an expression represented by a binary
+ * tree.
+ *
+ * This function recursively evaluates the value of an expression
+ * represented by a binary tree. Each node in the tree contains either
+ * an operand or an operator. If the node contains an operand, the
+ * function converts it to a float and returns it. If the node
+ * contains an operator, the function evaluates the left and right
+ * subtrees, performs the operation, and returns the result.
+ *
+ * @param root A pointer to the root node of the binary tree
+ * representing the expression.
+ * @return The evaluated result of the expression as a float.
+ *
+ * @throws std::runtime_error If an exception occurs during
+ * evaluation, the function catches it, deletes the entire tree, and
+ * rethrows the exception with the error message.
+ */
 float RPN::evaluate(Node* root)
 {
 	if (!root)
@@ -283,10 +373,7 @@ float RPN::evaluate(Node* root)
 	try
 	{ 
 		if (!isOperator(root->value))
-		{
-			float toFloat = strToFloat(root->value);
-			return (toFloat);
-		}
+			return (strToFloat(root->value));
 		float leftVal = evaluate(root->left);
 		float rightVal = evaluate(root->right);
 		float result = performOperation(leftVal, rightVal, root->value);
@@ -309,6 +396,21 @@ float RPN::evaluate(Node* root)
 	}
 }
 
+/**
+ * @brief Prints the binary tree structure to the standard error
+ * output.
+ *
+ * This function prints the binary tree starting from the given root
+ * node. It uses indentation to represent the tree structure visually.
+ * The function also highlights a specific node if provided.
+ *
+ * @param root Pointer to the root node of the binary tree.
+ * @param indent String used for indentation to represent the tree
+ * structure.
+ * @param last Boolean flag indicating if the current node is the last
+ * child.
+ * @param op Pointer to the node that should be highlighted, if any.
+ */
 void RPN::printTree(Node* root, std::string indent, bool last, Node* op)
 {
 	if (DEBUG < 2)
