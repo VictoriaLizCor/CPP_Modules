@@ -143,13 +143,18 @@ test: $(NAME)
 			echo $(E_NC); ./$(NAME) $(i); \
 		fi; \
 	fi;
+t1: $(NAME)
+	@echo $(BOLD) $(CYAN) ./$(NAME) "\"3 4 2 * 1 5 - 2 3 ^ ^ / +\"" $(E_NC) "\n";
+	@./$(NAME) "3 4 2 * 1 5 - 2 3 ^ ^ / +"
+
+t2: $(NAME)
+	@echo $(BOLD) $(CYAN) ./$(NAME) "\"3 4 8 * 1 5 - 2 6 * * / +\"" $(E_NC) "\n";
+	@./$(NAME) "3 4 8 * 1 5 - 2 6 * * / +"
+#S=-1 run without sanitizer or valgrind
+#S=0 run with valgrind
+#S=1 run with sanitizer
 run:$(NAME)
-	@echo $(BOLD) $(CYAN) ./$(NAME) '"$(i)"' $(E_NC) "\n"; \
-	if [ "$(S)" = "0" ]; then \
-		echo $(E_NC); $(MAKE) -C . val; \
-	else \
-		echo $(E_NC); ./$(NAME) $(i) ; \
-	fi;
+	@D=$(D) S=$(S) VAL="$(VALGRIND)" ./test.sh
 # ATTENTION !!!!!!!!!!!!!!  USE WITH S=0 !
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) "$i" $(E_NC)  "\n"
@@ -157,7 +162,7 @@ leaks: $(NAME)
 	@echo "\n"
 
 val: $(NAME)
-	@echo $(RED) $(VALGRIND) ./$(NAME) "$i" $(E_NC) "\n"
+	@echo $(RED) $(VALGRIND) ./$(NAME) "\"$i\"" $(E_NC) "\n"
 	@$(VALGRIND) ./$(NAME) $$i; echo
 
 # #-------------------- GIT UTILS ----------------------------#
@@ -282,7 +287,7 @@ GREEN  = "\033[1;32m"
 YELLOW = "\033[1;33m"
 BLUE   = "\033[1;34m"
 WHITE  = "\033[1;37m"
-MAG	= "\033[1;35m"
+MAG = "\033[1;35m"
 CYAN   = "\033[0;1;36m"
 GRAY   = "\033[1;90m"
 PURPLE = "\033[1;38;2;189;147;249m"

@@ -5,6 +5,7 @@
 # include <cstdlib>
 # include <ctime>
 # include <string>
+# include <cmath>
 # include <map>
 
 # ifndef DEBUG
@@ -21,7 +22,10 @@ template <typename T>
 std::string toStr(const T& value)
 {
 	std::ostringstream ss;
-	ss << std::fixed << value;
+	if (std::floor(value) == value)
+		ss << std::fixed << std::setprecision(0) << value;
+	else
+		ss << std::fixed << std::setprecision(2) << value;
 	return ss.str();
 }
 
@@ -102,8 +106,8 @@ inline size_t getRandomVal<std::size_t>(size_t num)
  *
  * @tparam std::string The type of the value to be generated.
  * @param num The base number used to generate the length of the
- *            random string. This parameter is set to 10 within the
- *            function.
+ *				random string. This parameter is set to 10 within the
+ *				function.
  * @return A randomly generated string of lowercase alphabetic
  * characters.
  */
