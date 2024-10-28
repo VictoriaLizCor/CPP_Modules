@@ -192,6 +192,34 @@ struct PrintFunctor
 	}
 };
 
+// template <typename T>
+// struct PrintFunctor
+// {
+// 	std::ostream& _os;
+// 	T const& _s;
+// 	PrintFunctor(std::ostream& os, T const& s): _os(os), _s(s){}
+// 	void operator()(const typename T::value_type& value) const
+// 	{
+// 		size_t size = _s.size();
+// 		if (size > 10)
+// 		{
+// 			static size_t limit;
+// 			if (++limit < 5 || limit > size - 5)
+// 				osPrint(_os, value);
+// 			if (limit == 10)
+// 			{
+// 				std::cout << "... ";
+// 			}
+// 			if (limit == size)
+// 				limit = 0;
+// 			else
+// 				return ;
+// 		}
+// 		else
+// 			osPrint(_os, value);
+// 	}
+// };
+
 /**
  * @brief Functor to print the contents of a std::map.
  *

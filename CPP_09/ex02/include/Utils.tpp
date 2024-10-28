@@ -170,23 +170,53 @@ struct FillFunctor
 	}
 };
 
+template <typename T>
+struct PrintFunctor
+{
+	std::ostream& _os;
+	T const& _s;
+	size_t _size;
+	PrintFunctor(std::ostream& os, T const& s, size_t size): _os(os), _s(s), _size(size){}
+	void operator()(const typename T::value_type& value) const
+	{
+		if (_size > 15)
+		{
+			static size_t limit;
+			++limit;
+			// std::cout << "(limit)";
+			if (limit < 6 || limit > _size - 5)
+				osPrint(_os, value);
+			if (limit == 10)
+			{
+				std::cout << "[...] ";
+			}
+			if (limit == _size)
+				limit = 0;
+			else
+				return ;
+		}
+		else
+			osPrint(_os, value);
+	}
+};
+
 /**
  * @brief A functor for printing elements of a container to an output
  * stream.
  *
  * @tparam T The type of the container whose elements will be printed.
  */
-template <typename T>
-struct PrintFunctor
-{
-	std::ostream& _os;
-	T const& _s;
-	PrintFunctor(std::ostream& os, T const& s): _os(os), _s(s){}
-	void operator()(const typename T::value_type& value) const
-	{
-		osPrint(_os, value);
-	}
-};
+// template <typename T>
+// struct PrintFunctor
+// {
+// 	std::ostream& _os;
+// 	T const& _s;
+// 	PrintFunctor(std::ostream& os, T const& s): _os(os), _s(s){}
+// 	void operator()(const typename T::value_type& value) const
+// 	{
+// 		osPrint(_os, value);
+// 	}
+// };
 
 /**
  * @brief Functor to print the contents of a std::map.
