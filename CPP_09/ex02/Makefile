@@ -156,10 +156,9 @@ run:$(NAME)
 	max=$$(shuf -i 1-$$range -n 1); \
 	echo "elements: $$max"; \
 	num=$$(shuf -i 0-5000 -n $$max); \
-	echo $$num; \
 	echo $(BOLD) $(CYAN) ./$(NAME) $$num $(E_NC) "\n"; \
 	if [ "$(S)" = "0" ]; then \
-		echo $(E_NC); $(MAKE) -C . val num="$$num"; \
+		echo $(E_NC); $(MAKE) -C . val num="'$$num'"; \
 	else \
 		echo $(E_NC); ./$(NAME) $$num; \
 	fi; \
@@ -184,14 +183,13 @@ t1:
 	fi; \
 	echo "------------------------------------\n"; 
 # ATTENTION !!!!!!!!!!!!!!  USE WITH S=0 !
+val: $(NAME)
+	@echo $(RED) $(VALGRIND) ./$(NAME) $(shell echo $(num)) $(E_NC) "\n"
+	@$(VALGRIND) ./$(NAME) $(shell echo "$(num)"); echo
 leaks: $(NAME)
 	@echo $(RED)$(MAC_LEAKS) ./$(NAME) "$i" $(E_NC)  "\n"
 	@$(MAC_LEAKS) ./$(NAME)
 	@echo "\n"
-
-val: $(NAME)
-	@echo $(RED) $(VALGRIND) ./$(NAME) $(num) $(E_NC) "\n"
-	@$(VALGRIND) ./$(NAME) $(num); echo
 
 # #-------------------- GIT UTILS ----------------------------#
 info:
