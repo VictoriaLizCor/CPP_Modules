@@ -179,14 +179,14 @@ struct PrintFunctor
 	PrintFunctor(std::ostream& os, T const& s, size_t size): _os(os), _s(s), _size(size){}
 	void operator()(const typename T::value_type& value) const
 	{
-		if (_size > 15)
+		if (_size > 20)
 		{
 			static size_t limit;
 			++limit;
 			// std::cout << "(limit)";
 			if (limit < 6 || limit > _size - 5)
 				osPrint(_os, value);
-			if (limit == 10)
+			if (limit == 20)
 			{
 				std::cout << "[...] ";
 			}

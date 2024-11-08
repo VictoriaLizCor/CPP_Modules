@@ -152,7 +152,5 @@ void PmergeMeVector::sort()
 		mergeInsertSort(0, sorted.size() - 1);
 	}
 }
-#else
-
 
 #endif

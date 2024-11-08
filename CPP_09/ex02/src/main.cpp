@@ -98,80 +98,87 @@ int main(int argc, char* argv[])
 		std::cout << "Time to process a range of " << argc - 1
 				<< " elements with std::deque  : "  << deqExecutionTime << " μs\n";
 	}
-// 	nl(1);
-// 	{
-// 		struct timeval start, finish;
-// 		std::vector<int> vec(numbers);
-// 		std::deque<int> deq(numbers.begin(), numbers.end());
-// 		double         vecExecutionTime;
-// 		double         deqExecutionTime;
-
-// 		gettimeofday( &start, NULL );
-// 		mergeInsertionSortVector(vec);
-// 		gettimeofday( &finish, NULL );
-// 		vecExecutionTime = calculateExecutionTime( start, finish );
-
-// 		gettimeofday( &start, NULL );
-// 		mergeInsertionSortDeque(deq);
-// 		gettimeofday( &finish, NULL );
-// 		deqExecutionTime = calculateExecutionTime( start, finish );
-
-// 		/* std::cout << "      \t"; */
-// 		/* printNumbers( deq ); */
-// 		std::cout << "Time to process a range of " << argc - 1
-// 				<< " elements with std::vector : " << vecExecutionTime << " μs\n";
-// 		std::cout << "Time to process a range of " << argc - 1
-// 				<< " elements with std::deque  : " << deqExecutionTime << " μs\n";
-
-// 	}
-// 	{
-// 		// Copy numbers to different containers
-// 		std::vector<int> vec(numbers);
-// 		std::deque<int> deq(numbers.begin(), numbers.end());
-
-// 		// Measure time for std::vector
-// 		std::clock_t startVec = std::clock();
-// 		mergeInsertionSortVector(vec);
-// 		std::clock_t endVec = std::clock();
-// 		double durationVec = 1000000.0 * (endVec - startVec) / CLOCKS_PER_SEC;
-
-// 		// Measure time for std::deque
-// 		std::clock_t startDeque = std::clock();
-// 		mergeInsertionSortDeque(deq);
-// 		std::clock_t endDeque = std::clock();
-// 		double durationDeque = 1000000.0 * (endDeque - startDeque) / CLOCKS_PER_SEC;
-
-
-
-// 		std::cout << "*Time to process a range of " << argc - 1
-// 				<< " elements with std::vector : "<< durationVec << " μs\n";
-// 		std::cout << "Time to process a range of " << argc - 1
-// 				<< " elements with std::deque  : "<< durationDeque << " μs\n";
-// 	}
-// 	{
-// 		// Copy numbers to different containers
-// 		std::vector<int> vec(numbers);
-// 		std::deque<int> deq(numbers.begin(), numbers.end());
-
-// 		// Measure time for std::vector
-// 		std::clock_t startVec = std::clock();
-// 		mergeInsertionSortVector(vec);
-// 		std::clock_t endVec = std::clock();
-// 		double durationVec = 1000000.0 * (endVec - startVec) / CLOCKS_PER_SEC;
-
-// 		// Measure time for std::deque
-// 		std::clock_t startDeque = std::clock();
-// 		mergeInsertionSortDeque(deq);
-// 		std::clock_t endDeque = std::clock();
-// 		double durationDeque = 1000000.0 * (endDeque - startDeque) / CLOCKS_PER_SEC;
-
-// 		std::cout << std::endl;
-
-// 		std::cout << "Time to process a range of " << argc - 1
-// 				<< " elements with std::vector : "<< durationVec << " μs\n";
-// 		std::cout << "Time to process a range of " << argc - 1
-// 				<< " elements with std::deque  : "<< durationDeque << " μs\n";
-// 	}
-
-	return 0;
+	return (0);
 }
+
+/**
+ * @NOTES:
+ * The performance difference between `std::vector` and `std::deque`
+   in your example can be attributed to several factors, including
+   memory allocation patterns, cache locality, and the specific
+   implementation details of the sorting algorithm. Here are some
+   possible reasons why `std::deque` might be faster than
+   `std::vector` in this particular case:
+
+1. **Memory Allocation**:
+   - `std::vector` allocates a single contiguous block of memory,
+     which can sometimes lead to higher allocation and deallocation
+     costs, especially if the vector needs to resize.
+   - `std::deque` allocates memory in chunks, which can sometimes be
+     more efficient for certain operations, as it avoids the need to
+     allocate a large contiguous block.
+
+2. **Cache Locality**:
+   - `std::vector` generally has better cache locality because its
+     elements are stored contiguously in memory. However, this can
+     also mean that any cache misses can be more costly.
+   - `std::deque` stores elements in separate chunks, which can
+     sometimes lead to better performance if the chunks fit well into
+     the cache, reducing the impact of cache misses.
+
+3. **Implementation Details**:
+   - The specific implementation of the sorting algorithm and how it
+     interacts with the underlying data structure can also affect
+     performance. For example, if the sorting algorithm involves a lot
+     of insertions and deletions, `std::deque` might perform better
+     due to its chunked memory allocation.
+
+4. **Small Data Size**:
+   - For small data sizes (like the 14 elements in your example), the
+     overhead of managing the contiguous memory in `std::vector` might
+     outweigh its benefits. The chunked allocation of `std::deque`
+     might be more efficient in this case.
+
+5. **Compiler Optimizations**:
+   - The compiler might optimize the code differently for
+     `std::vector` and `std::deque`, leading to performance
+     differences.
+
+To further investigate the performance difference, you can try the
+following:
+
+- **Profile the Code**: Use a profiler to analyze where the time is
+  being spent in both cases. This can help identify if there are
+  specific operations that are slower for `std::vector`.
+- **Increase Data Size**: Test with larger data sizes to see if the
+  performance difference persists. Sometimes, the performance
+  characteristics change with the size of the data.
+- **Check Compiler Flags**: Ensure that the compiler optimization
+  flags are the same for both cases. Different optimization levels can
+  affect performance.
+
+Here is an example of how you might profile the code using `gprof`:
+
+1. Compile the code with profiling enabled:
+   ```sh
+   g++ -pg -o PmergeMe main.cpp
+   ```
+
+2. Run the program:
+   ```sh
+   ./PmergeMe 2069 1021 4984 4009 3736 3538 1421 4888 2985 753 144 882 2720 1119
+   ```
+
+3. Generate the profiling report:
+   ```sh
+   gprof PmergeMe gmon.out > profile.txt
+   ```
+
+4. Analyze the `profile.txt` file to see where the time is being
+   spent.
+
+By profiling the code, you can gain insights into the performance
+characteristics and identify any bottlenecks that might explain the
+observed behavior.
+ * 
+ */
