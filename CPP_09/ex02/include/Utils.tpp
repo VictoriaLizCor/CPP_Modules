@@ -184,7 +184,7 @@ struct PrintFunctor
 			static size_t limit;
 			++limit;
 			// std::cout << "(limit)";
-			if (limit < 6 || limit > _size - 5)
+			if (limit < 7 || limit > _size - 7)
 				osPrint(_os, value);
 			if (limit == 20)
 			{

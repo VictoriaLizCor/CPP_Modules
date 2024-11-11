@@ -13,12 +13,14 @@
 
 static float strToFloat(std::string const& strValue)
 {
-	size_t pos = strValue.find_first_not_of("0123456789", 0);
-	if (pos != std::string::npos)
-	{
+	size_t start = 0;
+		
+	if (strValue[0] == '+')
+		start = 1;
+	size_t pos = strValue.find_first_not_of("0123456789", start);
+	if (std::count(strValue.begin(), strValue.end(), '.') > 1 || \
+		pos != std::string::npos)
 		throw std::invalid_argument(error("Invalid Value input: " + strValue, 0));
-		exit(EXIT_FAILURE);
-	}
 	char* end;
 	float value = std::strtof(strValue.c_str(), &end);
 
@@ -40,7 +42,8 @@ std::vector<int> parseArguments(int argc, char* argv[])
 
 		numbers.push_back(num);
 	}
-	std::cout << "Size: " << numbers.size() << std::endl;
+	if (DEBUG)
+		std::cout << "Size: " << numbers.size() << std::endl;
 	return numbers;
 }
 
@@ -54,50 +57,55 @@ double calculateExecutionTime( struct timeval start, struct timeval finish )
 
 int main(int argc, char* argv[])
 {
-	if (argc < 2)
-	{
-		std::cerr << error("wrong input", 0) << std::endl;
-		return (1);
-	}
-
 	// Parse arguments
-	std::vector<int> numbers = parseArguments(argc, argv);
-	std::vector<int> sorted(numbers);
-	std::sort(sorted.begin(), sorted.end());
-	// Display unsorted sequence
-	std::cout << "Before: ";
-	std::for_each(numbers.begin(), numbers.end(), PrintFunctor< std::vector<int> >(std::cout, numbers, numbers.size()));
-	std::cout << std::endl;
-	nl(1);
+	try
 	{
-		struct timeval		start, finish;
-		double				vecExecutionTime;
-		double				deqExecutionTime;
-		#if (DEBUG == 0)
-		PmergeMeVector	vec(numbers);
-		PmergeMeDeque		deq(numbers.begin(), numbers.end());
-		#else
-		PmergeMe< std::vector<int> > vec(numbers);
-		PmergeMe< std::deque<int> > deq(numbers);
-		#endif
-		gettimeofday( &start, NULL );
-		vec.sort();
-		gettimeofday( &finish, NULL );
-		vecExecutionTime = calculateExecutionTime( start, finish );
+		if (argc < 2)
+		{
+			throw std::invalid_argument(error("Wrong input", 0));
+		}
 
-		gettimeofday( &start, NULL );
-		deq.sort();
-		gettimeofday( &finish, NULL );
-		deqExecutionTime = calculateExecutionTime( start, finish );
-		// Display sorted sequence
-		std::cout << "After: ";
-		std::for_each(vec.sorted.begin(), vec.sorted.end(), PrintFunctor< std::vector<int> >(std::cout, vec.sorted, vec.sorted.size()));
+		std::vector<int> numbers = parseArguments(argc, argv);
+		// Display unsorted sequence
+		std::cout << "Before: ";
+		std::for_each(numbers.begin(), numbers.end(), PrintFunctor< std::vector<int> >(std::cout, numbers, numbers.size()));
 		std::cout << std::endl;
-		std::cout << "Time to process a range of " << argc - 1
-				<< " elements with std::vector : "   << vecExecutionTime << " μs\n";
-		std::cout << "Time to process a range of " << argc - 1
-				<< " elements with std::deque  : "  << deqExecutionTime << " μs\n";
+		nl(1);
+		{
+			struct timeval		start, finish;
+			double				vecExecutionTime;
+			double				deqExecutionTime;
+			#if (DEBUG == 0)
+			PmergeMeVector	vec(numbers);
+			PmergeMeDeque	deq(numbers.begin(), numbers.end());
+			#else
+			PmergeMe< std::vector<int> > vec(numbers);
+			PmergeMe< std::deque<int> > deq(numbers);
+			#endif
+			gettimeofday( &start, NULL );
+			vec.sort();
+			gettimeofday( &finish, NULL );
+			vecExecutionTime = calculateExecutionTime( start, finish );
+
+			gettimeofday( &start, NULL );
+			deq.sort();
+			gettimeofday( &finish, NULL );
+			deqExecutionTime = calculateExecutionTime( start, finish );
+			// Display sorted sequence
+			std::cout << "After: ";
+			std::for_each(vec.sorted.begin(), vec.sorted.end(), PrintFunctor< std::vector<int> >(std::cout, vec.sorted, vec.sorted.size()));
+			std::cout << std::endl;
+			std::cout << "Time to process a range of " << argc - 1
+					<< " elements with std::vector : "   << vecExecutionTime << " μs\n";
+			std::cout << "Time to process a range of " << argc - 1
+					<< " elements with std::deque  : "  << deqExecutionTime << " μs\n";
+		}
 	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+
 	return (0);
 }
 

@@ -17,6 +17,7 @@ PmergeMeDeque::PmergeMeDeque(v_it first, v_it last):sorted(first, last)
 {
 
 }
+
 PmergeMeDeque::~PmergeMeDeque()
 {}
 
