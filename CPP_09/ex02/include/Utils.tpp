@@ -176,7 +176,8 @@ struct PrintFunctor
 	std::ostream& _os;
 	T const& _s;
 	size_t _size;
-	PrintFunctor(std::ostream& os, T const& s, size_t size): _os(os), _s(s), _size(size){}
+	typename T::value_type _toCompare;
+	PrintFunctor(std::ostream& os, T const& s, size_t size, const typename T::value_type& toCompare = -1): _os(os), _s(s), _size(size), _toCompare(toCompare){}
 	void operator()(const typename T::value_type& value) const
 	{
 		if (_size > 20)
@@ -196,7 +197,11 @@ struct PrintFunctor
 				return ;
 		}
 		else
+		{
+			if (_toCompare > -1 && value == _toCompare)
+				std::cerr << "*";
 			osPrint(_os, value);
+		}
 	}
 };
 

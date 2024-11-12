@@ -42,7 +42,7 @@ std::vector<int> parseArguments(int argc, char* argv[])
 
 		numbers.push_back(num);
 	}
-	if (DEBUG)
+	if (DEBUG > 1)
 		std::cout << "Size: " << numbers.size() << std::endl;
 	return numbers;
 }
@@ -69,7 +69,6 @@ int main(int argc, char* argv[])
 		// Display unsorted sequence
 		std::cout << "Before: ";
 		std::for_each(numbers.begin(), numbers.end(), PrintFunctor< std::vector<int> >(std::cout, numbers, numbers.size()));
-		std::cout << std::endl;
 		nl(1);
 		{
 			struct timeval		start, finish;
@@ -92,7 +91,7 @@ int main(int argc, char* argv[])
 			gettimeofday( &finish, NULL );
 			deqExecutionTime = calculateExecutionTime( start, finish );
 			// Display sorted sequence
-			std::cout << "After: ";
+			std::cout << "After:  ";
 			std::for_each(vec.sorted.begin(), vec.sorted.end(), PrintFunctor< std::vector<int> >(std::cout, vec.sorted, vec.sorted.size()));
 			std::cout << std::endl;
 			std::cout << "Time to process a range of " << argc - 1

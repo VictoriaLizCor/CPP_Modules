@@ -33,16 +33,19 @@ int PmergeMeDeque::threshold(int size)
 
 void PmergeMeDeque::insertionSort(int left, int right)
 {
+	int tempVal;
 	for (int i = left + 1; i <= right; ++i)
 	{
-		int tempVal = sorted[i];
-		int j = i - 1;
-		while (j >= left && sorted[j] > tempVal)
+		tempVal = sorted[i];
+		int j = i;
+		while (j > left && sorted[j - 1] > tempVal)
 		{
-			sorted[j + 1] = sorted[j];
+			sorted[j] = sorted[j - 1];
+			if (j == 0) 
+				break;
 			--j;
 		}
-		sorted[j + 1] = tempVal;
+		sorted[j] = tempVal;
 	}
 }
 
@@ -57,10 +60,11 @@ void PmergeMeDeque::merge(int left, int mid, int right)
 
 void PmergeMeDeque::mergeInsertSort(int left, int right)
 {
-	if (right - left + 1 <= threshold(right - left + 1))
+	if (right - left + 1 <= threshold(sorted.size()))
 	{
 		insertionSort(left, right);
-	} else
+	}
+	else
 	{
 		int mid = left + (right - left) / 2;
 		mergeInsertSort(left, mid);
@@ -109,16 +113,19 @@ int PmergeMeVector::threshold(int size)
 
 void PmergeMeVector::insertionSort(int left, int right)
 {
+	int tempVal;
 	for (int i = left + 1; i <= right; ++i)
 	{
-		int tempVal = sorted[i];
-		int j = i - 1;
-		while (j >= left && sorted[j] > tempVal)
+		tempVal = sorted[i];
+		int j = i;
+		while (j > left && sorted[j - 1] > tempVal)
 		{
-			sorted[j + 1] = sorted[j];
+			sorted[j] = sorted[j - 1];
+			if (j == 0) 
+				break;
 			--j;
 		}
-		sorted[j + 1] = tempVal;
+		sorted[j] = tempVal;
 	}
 }
 
@@ -133,7 +140,7 @@ void PmergeMeVector::merge(int left, int mid, int right)
 
 void PmergeMeVector::mergeInsertSort(int left, int right)
 {
-	if (right - left + 1 <= threshold(right - left + 1))
+	if (right - left + 1 <= threshold(sorted.size()))
 	{
 		insertionSort(left, right);
 	}

@@ -69,10 +69,12 @@ class PmergeMe
 		std::size_t threshold(std::size_t size);
 		void insertionSort(std::size_t left, std::size_t right);
 		void merge(std::size_t left, std::size_t mid, std::size_t right);
-		void mergeInsertSort(std::size_t left, std::size_t right);
+		void mergeInsertSort(std::size_t left, std::size_t right, bool flag);
 
 		PmergeMe(const PmergeMe& rhs);
 		PmergeMe& operator=(const PmergeMe& rhs);
+		T							_cpy;
+		std::size_t					_threshold;
 	public:
 		PmergeMe(std::vector<int> const& numbers);
 		~PmergeMe();
@@ -81,11 +83,12 @@ class PmergeMe
 };
 
 template <typename T>
-PmergeMe<T>::PmergeMe(std::vector<int> const& numbers )
+PmergeMe<T>::PmergeMe(std::vector<int> const& numbers ):_threshold(threshold(numbers.size()))
 {
 	for(cv_it it = numbers.begin(); it != numbers.end(); ++it )
 	{
 		sorted.push_back(*it);
+		_cpy.push_back(*it);
 	}
 }
 
@@ -120,61 +123,78 @@ template <typename T>
 void PmergeMe<T>::insertionSort(std::size_t left, std::size_t right)
 {
 	typename T::value_type tempVal;
+	typename T::value_type toCompare = sorted[left + 1];
 	for (std::size_t i = left + 1; i <= right; ++i)
 	{
 		tempVal = sorted[i];
-		std::size_t j = i - 1;
-		while (j >= left && sorted[j] > tempVal)
+		std::size_t j = i;
+		while (j > left && sorted[j - 1] > tempVal)
 		{
-			sorted[j + 1] = sorted[j];
+			sorted[j] = sorted[j - 1];
 			if (j == 0) 
 				break;
 			--j;
 		}
-		sorted[j + 1] = tempVal;
-		std::cerr << getColorFmt(FLCYAN) << tempVal << "*";
+		sorted[j] = tempVal;
+		if (DEBUG > 1)
+			std::cerr << getColorFmt(FLCYAN) << sorted[j] << "* ";
 	}
-	std::for_each(sorted.begin(), sorted.end(), PrintFunctor< T >(std::cerr, sorted, sorted.size()));
-	nl(1);
-	// for (typename T::iterator it = sorted.begin(); it != sorted.end(); ++it)
-	// {
-	// 	if (*it == tempVal)
-	// 		std::cerr << *it << "* ";
-	// 	else
-	// 		std::cerr << *it << " ";
-	// }
-	// std::cerr << std::endl;1
-
+	if (DEBUG > 1)
+	{
+		nl(1);
+		std::cerr << C_END << getColorFmt(FLWHITE);
+		std::for_each(_cpy.begin(), _cpy.end(), PrintFunctor< T >(std::cerr, _cpy, _cpy.size(), toCompare));
+		nl(1);
+		std::cerr << C_END << getColorFmt(FCYAN);
+		std::for_each(sorted.begin(), sorted.end(), PrintFunctor< T >(std::cerr, sorted, sorted.size(), toCompare));
+		_cpy.clear();
+		std::copy(sorted.begin(), sorted.end(), std::back_inserter(_cpy));
+		nl(1);
+	}
 }
 
 template <typename T>
 void PmergeMe<T>::merge(std::size_t left, std::size_t mid, std::size_t right)
 {
-	typename T::iterator first = sorted.begin() + static_cast<typename T::difference_type>(left);
-	typename T::iterator middle = sorted.begin() + static_cast<typename T::difference_type>(mid) + 1;
-	typename T::iterator last = sorted.begin() + static_cast<typename T::difference_type>(right) + 1;
+	typedef typename T::iterator ite;
+	typedef typename T::difference_type diff_t;
+	ite first = sorted.begin() + static_cast<diff_t>(left);
+	ite middle = sorted.begin() + static_cast<diff_t>(mid) + 1;
+	ite last = sorted.begin() + static_cast<diff_t>(right) + 1;
 
 	std::inplace_merge(first, middle, last);
-	std::for_each(sorted.begin(), sorted.end(), PrintFunctor< T >(std::cerr, sorted, sorted.size()));
-	nl(1);
+	if (DEBUG > 1)
+	{
+		std::cerr << getColorFmt(FWHITE);
+		std::for_each(sorted.begin(), sorted.end(), PrintFunctor< T >(std::cerr, sorted, sorted.size()));
+		nl(1);
+	}
 }
 
 template <typename T>
-void PmergeMe<T>::mergeInsertSort(std::size_t left, std::size_t right)
+void PmergeMe<T>::mergeInsertSort(std::size_t left, std::size_t right, bool flag)
 {
 	if (DEBUG > 1)
 	{
 		std::cerr << getColorStr(FGREEN, "left: ") << left;
 		std::cerr << getColorStr(FBLUE, "\t right: ") << right;
-		std::cerr << getColorStr(FGRAY, "\t(right - left + 1) :") << (right - left + 1);
-		std::cerr << getColorStr(FYELLOW, "	 threshold: ") << threshold(right - left + 1);
+		std::cerr << getColorStr(FGRAY, "\t(right - left + 1) :") << (right - left + 1 );
+		std::cerr << getColorStr(FYELLOW, "	 threshold: ") << _threshold;
 		nl(1);
 		if (typeid(T) == typeid(std::vector<int>))
 		{
-			std::cerr << getColorFmt(FLMAGENTA);
+			if (flag)
+				std::cerr << getColorFmt(FLMAGENTA);
+			else
+				std::cerr << getColorFmt(FMAGENTA);
 		}
 		else
-			std::cerr << FLORANGE;
+		{
+			if (flag)
+				std::cerr << FLORANGE;
+			else
+				std::cerr << FORANGE;
+		}
 		T cpy(sorted.begin() + static_cast<typename T::difference_type>(left), sorted.begin() + static_cast<typename T::difference_type>(right));
 		if (cpy.size())
 		{
@@ -182,7 +202,7 @@ void PmergeMe<T>::mergeInsertSort(std::size_t left, std::size_t right)
 			nl(1);
 		}
 	}
-	if (right - left + 1 <= threshold(right - left + 1))
+	if (right - left + 1 <= _threshold)
 	{
 		std::cerr << getColorFmt(FLWHITE);
 		insertionSort(left, right);
@@ -190,9 +210,9 @@ void PmergeMe<T>::mergeInsertSort(std::size_t left, std::size_t right)
 	else
 	{
 		std::size_t mid = left + (right - left) / 2;
-		mergeInsertSort(left, mid);
-		mergeInsertSort(mid + 1, right);
-		std::cerr << getColorFmt(FWHITE);
+		
+		mergeInsertSort(left, mid, 0);
+		mergeInsertSort(mid + 1, right, 1);
 		merge(left, mid, right);
 	}
 	std::cerr << C_END;
@@ -203,11 +223,7 @@ void PmergeMe<T>::sort()
 {
 	if (!sorted.empty())
 	{
-		mergeInsertSort(0, sorted.size() - 1);
-		std::cerr << getColorFmt(FGRAY);
-		std::for_each(sorted.begin(), sorted.end(), PrintFunctor< T >(std::cerr, sorted, sorted.size()));
-		std::cerr << C_END;
-		nl(1);
+		mergeInsertSort(0, sorted.size() - 1, 0);
 	}
 }
 #endif
@@ -266,74 +282,43 @@ void PmergeMe<T>::sort()
 3. **Handle Remaining Elements**:
    - If one of the ranges is exhausted, move the remaining elements
      from the other range to the merged range.
+@in_place_rearrangement:
+In-place rearrangement refers to the process of rearranging the elements of a data structure (such as an array or list) within the original data structure itself, without requiring additional storage space proportional to the size of the data structure. This means that the rearrangement is done by modifying the original data structure directly, using only a constant amount of extra space (O(1) space complexity).
 
-### Example
+### Key Characteristics of In-Place Rearrangement
 
-Consider merging two sorted ranges within a vector:
+1. **No Additional Storage**: The algorithm does not use extra space proportional to the size of the input data. It may use a small, constant amount of extra space for variables or temporary storage, but this space does not grow with the size of the input.
+2. **Direct Modification**: The elements of the data structure are modified directly within the original data structure. This is in contrast to algorithms that create a copy of the data structure and perform operations on the copy.
+3. **Efficiency**: In-place rearrangement is often more space-efficient than algorithms that require additional storage, making it suitable for environments with limited memory.
 
-```cpp
-std::vector<int> vec = {1, 3, 5, 2, 4, 6};
-std::vector<int>::iterator first = vec.begin();
-std::vector<int>::iterator middle = vec.begin() + 3;
-std::vector<int>::iterator last = vec.end();
+@threshold:
+Using a threshold in the Ford-Johnson algorithm (or any hybrid sorting algorithm) is necessary to determine when to switch from one sorting method to another. The threshold helps to leverage the strengths of different sorting algorithms based on the size of the data being sorted. Here’s why it is important:
 
-std::inplace_merge(first, middle, last);
-```
+1. **Efficiency for Small Arrays**: Insertion sort is very efficient for small arrays due to its low overhead. It has a time complexity of O(n^2) in the worst case, but for small datasets, the constant factors and simplicity make it faster than more complex algorithms like merge sort.
 
-### Visualization
+2. **Efficiency for Large Arrays**: Merge sort is more efficient for larger arrays due to its O(n log n) time complexity. However, it has higher overhead due to recursive calls and additional memory usage for merging.
 
-1. **Initial State**:
-   - First range: `[1, 3, 5]`
-   - Second range: `[2, 4, 6]`
+3. **Combining Strengths**: By using a threshold, the algorithm can switch from insertion sort to merge sort when the array size exceeds the threshold. This combines the low overhead of insertion sort for small arrays with the efficiency of merge sort for larger arrays.
 
-2. **Merge Process**:
-   - Compare `1` and `2`: `1` is smaller, place `1` in the merged
-     range.
-   - Compare `3` and `2`: `2` is smaller, place `2` in the merged
-     range.
-   - Compare `3` and `4`: `3` is smaller, place `3` in the merged
-     range.
-   - Compare `5` and `4`: `4` is smaller, place `4` in the merged
-     range.
-   - Compare `5` and `6`: `5` is smaller, place `5` in the merged
-     range.
-   - Place the remaining element `6` in the merged range.
+In a hybrid sorting algorithm, the threshold is a critical parameter that determines when to switch from one sorting method to another. The threshold is typically chosen based on empirical observations and performance characteristics of the sorting algorithms involved. Here are some common strategies for determining the threshold:
 
-3. **Final State**:
-   - Merged range: `[1, 2, 3, 4, 5, 6]`
+### 1. Empirical Testing
+- **Benchmarking**: Run the hybrid algorithm on a variety of datasets with different sizes and measure the performance. Identify the size at which the simpler algorithm (e.g., insertion sort) starts to become less efficient compared to the more complex algorithm (e.g., merge sort).
+- **Performance Analysis**: Analyze the time complexity and overhead of both algorithms. For example, insertion sort has a time complexity of O(n^2) but low overhead, making it efficient for small datasets. Merge sort has a time complexity of O(n log n) but higher overhead, making it more efficient for larger datasets.
 
-### Pseudocode
+### 2. Mathematical Heuristics
+- **Square Root Heuristic**: A common heuristic is to use the square root of the size of the dataset as the threshold. This is based on the observation that the overhead of the more complex algorithm becomes worthwhile when the dataset size exceeds a certain point.
+  ```cpp
+  std::size_t threshold(std::size_t size) {
+      std::size_t threshold = 0;
+      while ((threshold + 1) * (threshold + 1) <= size) {
+          ++threshold;
+      }
+      return threshold;
+  }
+  ```
 
-Here is a simplified pseudocode for the `std::inplace_merge`
-algorithm:
-
-```
-function inplace_merge(first, middle, last):
-    buffer = []
-    left = first
-    right = middle
-
-    while left < middle and right < last:
-        if *left <= *right:
-            buffer.append(*left)
-            left += 1
-        else:
-            buffer.append(*right)
-            right += 1
-
-    while left < middle:
-        buffer.append(*left)
-        left += 1
-
-    while right < last:
-        buffer.append(*right)
-        right += 1
-
-    for i in range(len(buffer)):
-        first[i] = buffer[i]
-```
-
-### In-Place Optimization
+### @in_place_optimization:
 
 The actual implementation of `std::inplace_merge` in the Standard
 Library is more complex and optimized to minimize the use of
