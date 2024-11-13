@@ -5,7 +5,6 @@
 # include <cstdlib>
 # include <ctime>
 # include <string>
-# include <cmath>
 # include <map>
 
 # ifndef DEBUG
@@ -19,13 +18,10 @@
  * @return std::string The string representation of the integer value.
  */
 template <typename T>
-std::string toStr(const T& value)
+std::string toStr(T const& value)
 {
 	std::ostringstream ss;
-	if (std::floor(value) == value)
-		ss << std::fixed << std::setprecision(0) << value;
-	else
-		ss << std::fixed << std::setprecision(2) << value;
+	ss << std::fixed << value;
 	return ss.str();
 }
 
@@ -106,8 +102,8 @@ inline size_t getRandomVal<std::size_t>(size_t num)
  *
  * @tparam std::string The type of the value to be generated.
  * @param num The base number used to generate the length of the
- *				random string. This parameter is set to 10 within the
- *				function.
+ *            random string. This parameter is set to 10 within the
+ *            function.
  * @return A randomly generated string of lowercase alphabetic
  * characters.
  */
@@ -174,24 +170,47 @@ struct FillFunctor
 	}
 };
 
+template <typename T>
+struct PrintFunctor
+{
+	std::ostream& _os;
+	T const& _s;
+	size_t _size;
+	typename T::value_type _toCompare;
+	PrintFunctor(std::ostream& os, T const& s, size_t size, const typename T::value_type& toCompare = -1): _os(os), _s(s), _size(size), _toCompare(toCompare){}
+	void operator()(const typename T::value_type& value) const
+	{
+		if (_size > 20)
+		{
+			static size_t limit;
+			++limit;
+			// std::cout << "(limit)";
+			if (limit < 7 || limit > _size - 7)
+				osPrint(_os, value);
+			if (limit == 20)
+			{
+				std::cout << "[...] ";
+			}
+			if (limit == _size)
+				limit = 0;
+			else
+				return ;
+		}
+		else
+		{
+			if (_toCompare > -1 && value == _toCompare)
+				std::cerr << "*";
+			osPrint(_os, value);
+		}
+	}
+};
+
 /**
  * @brief A functor for printing elements of a container to an output
  * stream.
  *
  * @tparam T The type of the container whose elements will be printed.
  */
-template <typename T>
-struct PrintFunctor
-{
-	std::ostream& _os;
-	T const& _s;
-	PrintFunctor(std::ostream& os, T const& s): _os(os), _s(s){}
-	void operator()(const typename T::value_type& value) const
-	{
-		osPrint(_os, value);
-	}
-};
-
 // template <typename T>
 // struct PrintFunctor
 // {
@@ -200,23 +219,7 @@ struct PrintFunctor
 // 	PrintFunctor(std::ostream& os, T const& s): _os(os), _s(s){}
 // 	void operator()(const typename T::value_type& value) const
 // 	{
-// 		size_t size = _s.size();
-// 		if (size > 10)
-// 		{
-// 			static size_t limit;
-// 			if (++limit < 5 || limit > size - 5)
-// 				osPrint(_os, value);
-// 			if (limit == 10)
-// 			{
-// 				std::cout << "... ";
-// 			}
-// 			if (limit == size)
-// 				limit = 0;
-// 			else
-// 				return ;
-// 		}
-// 		else
-// 			osPrint(_os, value);
+// 		osPrint(_os, value);
 // 	}
 // };
 

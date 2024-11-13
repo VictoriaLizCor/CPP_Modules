@@ -112,7 +112,7 @@ clean:
 	@printf  "\n$(P_NC)"
 
 fclean: clean
-	@if [ -f "$(NAME)" ]; then	\
+	@if [ -f $(NAME) ]; then	\
 		printf "$(LF)🧹 $(P_RED) Clean $(P_GREEN) $(CURRENT)/$(NAME)\n";	\
 		rm -rf $(NAME);														\
 		echo $(WHITE) "$$TRASH" $(E_NC);									\
