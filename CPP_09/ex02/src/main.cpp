@@ -11,6 +11,17 @@
 #include <sys/time.h>
 
 
+/**
+ * @brief Converts a string to a float.
+ * 
+ * This function takes a string representation of a floating-point number and converts it to a float.
+ * It handles optional leading '+' sign and ensures the string is a valid positive float representation.
+ * 
+ * @param strValue The string to be converted to a float.
+ * @return The converted float value.
+ * 
+ * @throws std::invalid_argument if the input string is not a valid positive float representation.
+ */
 static float strToFloat(std::string const& strValue)
 {
 	size_t start = 0;
@@ -31,7 +42,17 @@ static float strToFloat(std::string const& strValue)
 	return (value);
 }
 
-// Function to parse command line arguments into a vector of integers
+
+/**
+ * @brief Parses command-line arguments into a vector of integers.
+ *
+ * This function takes the command-line arguments, converts each argument
+ * to a float, casts it to an integer, and stores it in a vector.
+ *
+ * @param argc The number of command-line arguments.
+ * @param argv The array of command-line arguments.
+ * @return A vector of integers parsed from the command-line arguments.
+ */
 std::vector<int> parseArguments(int argc, char* argv[])
 {
 	std::vector<int> numbers;
@@ -47,6 +68,16 @@ std::vector<int> parseArguments(int argc, char* argv[])
 	return numbers;
 }
 
+/**
+ * @brief Calculates the execution time between two time points.
+ * 
+ * This function takes two timeval structures representing the start and finish times,
+ * and calculates the difference between them in microseconds.
+ * 
+ * @param start The starting time point.
+ * @param finish The finishing time point.
+ * @return The execution time in microseconds.
+ */
 double calculateExecutionTime( struct timeval start, struct timeval finish )
 {
 	double startTime = static_cast<double>(start.tv_sec) * 1e+6 + static_cast<double>(start.tv_usec);
@@ -66,7 +97,6 @@ int main(int argc, char* argv[])
 		}
 
 		std::vector<int> numbers = parseArguments(argc, argv);
-		// Display unsorted sequence
 		std::cout << "Before: ";
 		std::for_each(numbers.begin(), numbers.end(), PrintFunctor< std::vector<int> >(std::cout, numbers, numbers.size()));
 		nl(1);
@@ -90,7 +120,7 @@ int main(int argc, char* argv[])
 			deq.sort();
 			gettimeofday( &finish, NULL );
 			deqExecutionTime = calculateExecutionTime( start, finish );
-			// Display sorted sequence
+
 			std::cout << "After:  ";
 			std::for_each(vec.sorted.begin(), vec.sorted.end(), PrintFunctor< std::vector<int> >(std::cout, vec.sorted, vec.sorted.size()));
 			std::cout << std::endl;

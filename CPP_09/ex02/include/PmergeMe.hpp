@@ -83,6 +83,19 @@ class PmergeMe
 		T							sorted;
 };
 
+/**
+ * @brief Constructs a PmergeMe object with a given vector of
+ * integers.
+ *
+ * This constructor initializes the PmergeMe object by copying the
+ * elements from the provided vector of integers into the sorted and
+ * _cpy member variables. It also sets the _threshold member variable
+ * based on the size of the input vector.
+ *
+ * @tparam T The type of the elements in the PmergeMe object.
+ * @param numbers A constant reference to a vector of integers to be
+ * used for initialization.
+ */
 template <typename T>
 PmergeMe<T>::PmergeMe(std::vector<int> const& numbers ):_threshold(threshold(numbers.size()))
 {
@@ -96,6 +109,17 @@ PmergeMe<T>::PmergeMe(std::vector<int> const& numbers ):_threshold(threshold(num
 template <typename T>
 PmergeMe<T>::~PmergeMe() {}
 
+/**
+ * @brief Assignment operator for PmergeMe class template.
+ *
+ * This operator assigns the contents of the right-hand side (rhs)
+ * PmergeMe object to the current object, if they are not the same
+ * instance.
+ *
+ * @param rhs The PmergeMe object to be assigned.
+ * @return PmergeMe<T>& A reference to the current object after
+ * assignment.
+ */
 template <typename T>
 PmergeMe<T>& PmergeMe<T>::operator=(const PmergeMe& rhs)
 {
@@ -109,6 +133,18 @@ PmergeMe<T>& PmergeMe<T>::operator=(const PmergeMe& rhs)
 template <typename T>
 PmergeMe<T>::PmergeMe(const PmergeMe& rhs) : sorted(rhs.sorted) {}
 
+/**
+ * @brief Computes the threshold value for a given size.
+ *
+ * This function calculates the threshold value based on the input
+ * size. The threshold is determined by finding the largest integer
+ * such that the square of (threshold + 1) is less than or equal to
+ * the given size.
+ *
+ * @tparam T The type parameter for the class.
+ * @param size The size for which the threshold is to be calculated.
+ * @return The computed threshold value.
+ */
 template <typename T>
 std::size_t PmergeMe<T>::threshold(std::size_t size)
 {
@@ -120,6 +156,18 @@ std::size_t PmergeMe<T>::threshold(std::size_t size)
 	return (threshold);
 }
 
+/**
+ * @brief Performs insertion sort on a subrange of the container.
+ *
+ * This function sorts the elements in the range [left, right] of the
+ * container using the insertion sort algorithm. It also includes
+ * debug output if the DEBUG level is set appropriately.
+ *
+ * @tparam T The type of the container to be sorted.
+ * @param left The starting index of the subrange to be sorted.
+ * @param right The ending index of the subrange to be sorted.
+ * @param flag A boolean flag used for debug output.
+ */
 template <typename T>
 void PmergeMe<T>::insertionSort(std::size_t left, std::size_t right, bool flag)
 {
@@ -158,6 +206,21 @@ void PmergeMe<T>::insertionSort(std::size_t left, std::size_t right, bool flag)
 	}
 }
 
+/**
+ * @brief Merges two consecutive sorted ranges [left, mid] and [mid+1,
+ * right] within the container.
+ *
+ * This function uses std::inplace_merge to merge the two sorted
+ * ranges into a single sorted range. If the DEBUG level is greater
+ * than 1, it prints the merged result to the standard error stream.
+ *
+ * @tparam T The type of the container.
+ * @param left The starting index of the first sorted range.
+ * @param mid The ending index of the first sorted range.
+ * @param right The ending index of the second sorted range.
+ * @param flag A boolean flag used to determine the color of the debug
+ * output.
+ */
 template <typename T>
 void PmergeMe<T>::merge(std::size_t left, std::size_t mid, std::size_t right, bool flag)
 {
@@ -180,6 +243,20 @@ void PmergeMe<T>::merge(std::size_t left, std::size_t mid, std::size_t right, bo
 	}
 }
 
+/**
+ * @brief Performs a merge-insert sort on the specified range.
+ *
+ * This function sorts the elements in the range [left, right] using a
+ * combination of merge sort and insertion sort. If the size of the
+ * range is less than or equal to the threshold, insertion sort is
+ * used. Otherwise, merge sort is used to divide the range into
+ * smaller subranges, which are then sorted recursively.
+ *
+ * @tparam T The type of the container to be sorted.
+ * @param left The starting index of the range to be sorted.
+ * @param right The ending index of the range to be sorted.
+ * @param flag A boolean flag used for debugging purposes.
+ */
 template <typename T>
 void PmergeMe<T>::mergeInsertSort(std::size_t left, std::size_t right, bool flag)
 {
@@ -227,6 +304,14 @@ void PmergeMe<T>::mergeInsertSort(std::size_t left, std::size_t right, bool flag
 	std::cerr << C_END;
 }
 
+/**
+ * @brief Sorts the elements in the container.
+ * 
+ * This function sorts the elements in the container using the merge-insert sort algorithm.
+ * It checks if the container is not empty before performing the sort.
+ * 
+ * @tparam T The type of elements in the container.
+ */
 template <typename T>
 void PmergeMe<T>::sort()
 {
