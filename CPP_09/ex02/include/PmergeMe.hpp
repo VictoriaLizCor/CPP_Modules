@@ -9,6 +9,7 @@
 # include <deque>
 # include <vector>
 # include <typeinfo>
+# include <cmath>
 # include "Utils.hpp"
 
 # ifndef DEBUG
@@ -67,8 +68,8 @@ class PmergeMe
 		typedef typename T::const_iterator ite;
 
 		std::size_t threshold(std::size_t size);
-		void insertionSort(std::size_t left, std::size_t right);
-		void merge(std::size_t left, std::size_t mid, std::size_t right);
+		void insertionSort(std::size_t left, std::size_t right, bool flag);
+		void merge(std::size_t left, std::size_t mid, std::size_t right, bool flag);
 		void mergeInsertSort(std::size_t left, std::size_t right, bool flag);
 
 		PmergeMe(const PmergeMe& rhs);
@@ -112,7 +113,7 @@ template <typename T>
 std::size_t PmergeMe<T>::threshold(std::size_t size)
 {
 	std::size_t threshold = 0;
-	while ((threshold + 1) * (threshold + 1) <= size)
+	while (static_cast<std::size_t>(std::pow(threshold + 1, 2)) <= size)
 	{
 		++threshold;
 	}
@@ -120,7 +121,7 @@ std::size_t PmergeMe<T>::threshold(std::size_t size)
 }
 
 template <typename T>
-void PmergeMe<T>::insertionSort(std::size_t left, std::size_t right)
+void PmergeMe<T>::insertionSort(std::size_t left, std::size_t right, bool flag)
 {
 	typename T::value_type tempVal;
 	typename T::value_type toCompare = sorted[left + 1];
@@ -145,6 +146,10 @@ void PmergeMe<T>::insertionSort(std::size_t left, std::size_t right)
 		std::cerr << C_END << getColorFmt(FLWHITE);
 		std::for_each(_cpy.begin(), _cpy.end(), PrintFunctor< T >(std::cerr, _cpy, _cpy.size(), toCompare));
 		nl(1);
+		if (flag)
+			std::cerr << getColorStr(FBLUE, "INSERT: ");
+		else
+			std::cerr << getColorStr(FLBLUE, "INSERT: ");
 		std::cerr << C_END << getColorFmt(FCYAN);
 		std::for_each(sorted.begin(), sorted.end(), PrintFunctor< T >(std::cerr, sorted, sorted.size(), toCompare));
 		_cpy.clear();
@@ -154,7 +159,7 @@ void PmergeMe<T>::insertionSort(std::size_t left, std::size_t right)
 }
 
 template <typename T>
-void PmergeMe<T>::merge(std::size_t left, std::size_t mid, std::size_t right)
+void PmergeMe<T>::merge(std::size_t left, std::size_t mid, std::size_t right, bool flag)
 {
 	typedef typename T::iterator ite;
 	typedef typename T::difference_type diff_t;
@@ -165,6 +170,10 @@ void PmergeMe<T>::merge(std::size_t left, std::size_t mid, std::size_t right)
 	std::inplace_merge(first, middle, last);
 	if (DEBUG > 1)
 	{
+		if (flag)
+			std::cerr << getColorStr(FRED, "MERGE: ");
+		else
+			std::cerr << getColorStr(FLRED, "MERGE: ");
 		std::cerr << getColorFmt(FWHITE);
 		std::for_each(sorted.begin(), sorted.end(), PrintFunctor< T >(std::cerr, sorted, sorted.size()));
 		nl(1);
@@ -195,7 +204,7 @@ void PmergeMe<T>::mergeInsertSort(std::size_t left, std::size_t right, bool flag
 			else
 				std::cerr << FORANGE;
 		}
-		T cpy(sorted.begin() + static_cast<typename T::difference_type>(left), sorted.begin() + static_cast<typename T::difference_type>(right));
+		T cpy(sorted.begin() + static_cast<typename T::difference_type>(left), sorted.begin() + static_cast<typename T::difference_type>(right + 1));
 		if (cpy.size())
 		{
 			std::for_each(cpy.begin(), cpy.end(), PrintFunctor< T >(std::cerr, cpy, cpy.size()));
@@ -205,7 +214,7 @@ void PmergeMe<T>::mergeInsertSort(std::size_t left, std::size_t right, bool flag
 	if (right - left + 1 <= _threshold)
 	{
 		std::cerr << getColorFmt(FLWHITE);
-		insertionSort(left, right);
+		insertionSort(left, right, flag);
 	}
 	else
 	{
@@ -213,7 +222,7 @@ void PmergeMe<T>::mergeInsertSort(std::size_t left, std::size_t right, bool flag
 		
 		mergeInsertSort(left, mid, 0);
 		mergeInsertSort(mid + 1, right, 1);
-		merge(left, mid, right);
+		merge(left, mid, right, flag);
 	}
 	std::cerr << C_END;
 }
