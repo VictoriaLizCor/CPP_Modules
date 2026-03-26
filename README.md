@@ -24,7 +24,41 @@ These principles, when used together, make it possible for a programmer to creat
 
 *****************************************************************
 
+## C++98 Standard
+
+This project adheres to the **C++98 (ISO/IEC 14882:1998)** standard, also known as C++03. All code is compiled with the `-std=c++98` flag to ensure compatibility and avoid modern C++ features introduced in later standards.
+
+### Why C++98?
+
+- **Legacy Compatibility**: C++98 is the foundation of modern C++ and many production systems still rely on it.
+- **Fundamental Learning**: Understanding C++98 teaches core concepts without the complexity of newer features.
+- **Constraint-Based Learning**: Working within limitations of C++98 encourages better design practices and deeper understanding of language mechanics.
+- **Predictable Behavior**: The language specification is stable and well-documented.
+
+### Key Constraints of C++98
+
+- No auto keyword type deduction
+- No range-based for loops
+- No nullptr (use NULL or 0)
+- No move semantics or rvalue references
+- Limited template features compared to modern C++
+- No variadic templates
+- No lambda functions
+- Standard Library limited to older containers and algorithms
+
+### Compilation
+
+All modules are compiled with:
+```
+g++ -Wall -Wextra -Werror -std=c++98
+```
+
+This ensures strict adherence to C++98 standards and catches potential compatibility issues early.
+
+*****************************************************************
+
 ## "Orthodox Canonical Form"
+
 The term "Orthodox Canonical Form" or "Canonical Class Form" in C++ refers to a set of rules or best practices for designing classes. These rules ensure that classes behave correctly and predictably, especially in relation to memory management and object copying. Here are the rules:
 
 1. **Rule of Three**: If a class defines any of the following, it should probably explicitly define all three:
@@ -54,4 +88,4 @@ These rules help to ensure that your classes are robust, predictable, and easy t
 * https://en.cppreference.com/w/
 * https://cplusplus.com/reference/string/string/
 * http://www.cplusplus.com/reference/iomanip/
- 
+* https://en.cppreference.com/w/cpp/language/history
