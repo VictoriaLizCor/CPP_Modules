@@ -1,5 +1,12 @@
 # CPP_Modules
 
+## Table of Contents
+- [Object-Oriented Programming](#object-oriented-programming)
+- [C++98 Standard](#c98-standard)
+- [Orthodox Canonical Form](#orthodox-canonical-form)
+- [CPP Modules Overview](#cpp-modules-overview)
+- [References](#references)
+
 ## Object-Oriented Programming
 
 OOP is a programming paradigm that uses "objects" to design software. Here are some fundamental principles or rules of OOP:
@@ -82,6 +89,161 @@ The term "Orthodox Canonical Form" or "Canonical Class Form" in C++ refers to a 
 
 These rules help to ensure that your classes are robust, predictable, and easy to use and maintain.
 
+*****************************************************************
+
+## CPP Modules Overview
+
+### [CPP_00](./CPP_00) - Namespaces, Classes, and Member Functions
+**Focus**: Introduction to basic C++ class structure and the Orthodox Canonical Form.
+
+This module covers the fundamentals of creating classes in C++98 without OOP inheritance. Students learn:
+- How to define classes with private and public members
+- Constructor and destructor implementation
+- Member functions (methods)
+- The Orthodox Canonical Form basics (Rule of Three)
+- Namespaces and code organization
+- Basic I/O operations with std::cout and std::endl
+
+**Key Concepts**: Class definition, encapsulation, constructors, destructors.
+
+---
+
+### [CPP_01](./CPP_01) - Memory Allocation and Pointers
+**Focus**: Dynamic memory management and understanding memory allocation.
+
+This module dives deep into memory management:
+- Difference between stack and heap memory allocation
+- Pointers and pointer arithmetic
+- `new` and `delete` operators for dynamic allocation
+- Memory leaks and how to prevent them
+- References vs. pointers
+- String manipulation with dynamic memory
+
+**Key Concepts**: Pointers, dynamic allocation, memory safety, references.
+
+---
+
+### [CPP_02](./CPP_02) - Ad-Hoc Polymorphism and Operator Overloading
+**Focus**: Operator overloading to create intuitive interfaces.
+
+This module teaches how to overload operators for custom types:
+- Arithmetic operators (+, -, *, /)
+- Comparison operators (==, !=, <, >, <=, >=)
+- Assignment operator (=)
+- Stream operators (<<, >>)
+- The keyword `this` and member function behavior
+- Copy semantics and assignment
+- Orthodox Canonical Form enforcement
+
+**Key Concepts**: Operator overloading, the this pointer, const correctness.
+
+---
+
+### [CPP_03](./CPP_03) - Inheritance
+**Focus**: Class hierarchies and inheritance relationships.
+
+This module introduces object-oriented inheritance:
+- Base classes and derived classes
+- Access modifiers in inheritance (public, protected, private)
+- Constructor and destructor chaining
+- Method overriding
+- Multiple inheritance and diamond problem
+- The Orthodox Canonical Form in inheritance
+
+**Key Concepts**: Inheritance, virtual functions, constructor chaining, method overriding.
+
+---
+
+### [CPP_04](./CPP_04) - Subtype Polymorphism and Virtual Functions
+**Focus**: Polymorphic behavior through virtual functions and abstract classes.
+
+This module explores runtime polymorphism:
+- Virtual functions and method overriding
+- Pure virtual functions and abstract classes
+- Upcasting and downcasting in inheritance hierarchies
+- Virtual destructors
+- Polymorphic containers
+- Interface design patterns
+
+**Key Concepts**: Virtual functions, abstract classes, polymorphism, vtable.
+
+---
+
+### [CPP_05](./CPP_05) - Exception Handling and More OOP Concepts
+**Focus**: Robust error handling and advanced OOP patterns.
+
+This module covers error handling and design patterns:
+- Try-catch-throw exception handling
+- Standard exceptions
+- Exception safety guarantees
+- Nested classes
+- Static members and static functions
+- Friend classes and functions
+
+**Key Concepts**: Exception handling, static members, friends, nested classes.
+
+---
+
+### [CPP_06](./CPP_06) - Type Casting
+**Focus**: Different casting mechanisms in C++.
+
+This module explains C++'s casting system:
+- C-style casting and its dangers
+- `static_cast<>` for safe, compile-time casts
+- `dynamic_cast<>` for polymorphic type checking
+- `const_cast<>` for removing const
+- `reinterpret_cast<>` for low-level casting
+- When and why to use each cast type
+
+**Key Concepts**: Type safety, compile-time vs. runtime casting, polymorphic type checking.
+
+---
+
+### [CPP_07](./CPP_07) - Templates
+**Focus**: Generic programming with templates.
+
+This module introduces templates for code reuse:
+- Function templates
+- Class templates
+- Template specialization
+- Template instantiation and compilation model
+- Template parameters and arguments
+- The Liskov Substitution Principle with templates
+
+**Key Concepts**: Templates, generic programming, template specialization, template parameters.
+
+---
+
+### [CPP_08](./CPP_08) - Templated Containers and Iterators
+**Focus**: Working with Standard Template Library (STL) containers.
+
+This module explores STL containers:
+- Vector, list, map, set, and other containers
+- Iterators and iterator patterns
+- Templated container operations
+- Algorithms with templates (find, sort, etc.)
+- Container adaptation (stack, queue)
+- Memory management in containers
+
+**Key Concepts**: STL containers, iterators, container algorithms, memory management.
+
+---
+
+### [CPP_09](./CPP_09) - Standard Template Library (STL) Comprehensive Study
+**Focus**: Deep dive into STL components and advanced programming techniques.
+
+This module provides comprehensive coverage of the STL:
+- All major containers and their complexities
+- Algorithms and function objects
+- The iterator hierarchy
+- Functors and predicates
+- STL string operations
+- Advanced container usage patterns
+- Best practices for STL usage
+
+**Key Concepts**: STL comprehensiveness, functors, algorithms, container selection, performance considerations.
+
+*****************************************************************
 
 ## REFERENCES
 
